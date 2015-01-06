@@ -1,0 +1,37 @@
+# vim: set ft=sh:
+
+# pip bash completion start
+if which pip > /dev/null 2>&1; then
+    eval `pip completion --bash`
+    _pip_completion()
+    {
+        COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                       COMP_CWORD=$COMP_CWORD \
+                       PIP_AUTO_COMPLETE=1 $1 ) )
+    }
+    complete -o default -F _pip_completion pip
+fi
+# pip bash completion end
+
+# fabric bash completion
+_fab_completion() {
+    COMPREPLY=()
+
+    # Fab in the path?
+    [[ -n `/usr/bin/which fab` ]] || return 0
+
+    # Fabfile in this folder?
+    [[ -e fabfile.py ]] || return 0
+
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    tasks=$(fab --shortlist)
+    COMPREPLY=( $(compgen -W "${tasks}" -- ${cur}) )
+}
+# fabric bash completion end
+
+complete -F _fab_completion fab 
+
+if [ -f ~/.bash_completion_local ]; then
+    . ~/.bash_completion_local
+fi

@@ -1,0 +1,45 @@
+#!/bin/bash
+# set -u
+set -e
+
+readonly weAreKnownAs="$(basename $0)"
+
+function printHelpAndExit {
+    exitCode=$1
+	printf "Usage %s: [BASE DIR] REMOTE_DIR\n" "$weAreKnownAs"
+    exit $exitCode
+}
+
+function printErrorMessage {
+	printf "%s: %s\n" "$1" "$2" 1>&2
+}
+function printErrorHelpAndExit {
+	printErrorMessage "$weAreKnownAs" "$1"
+	printHelpAndExit $2
+}
+
+
+DELETE=""
+while getopts "hd" optionName; do		
+    case "$optionName" in
+        h)	printHelpAndExit 0;;
+        d)  DELETE="--delete";; 
+        [?])	printErrorHelpAndExit "Option not recognised" 1;;
+    esac
+done
+if [ $# -eq 0 ]; then
+    printErrorHelpAndExit "REMOTE_DIR not specified" 1
+fi
+
+BASE_DIR="."
+if [ "$2" != "" ]; then
+    BASE_DIR=$1
+fi
+REMOTE_DIR=""
+if [ "$2" == "" ]; then
+    REMOTE_DIR=$1
+else
+    REMOTE_DIR=$2
+fi
+
+rsync -rtovz -e ssh --stats --progress --exclude="*.pyc" --exclude="*.swp" --exclude="*.rej" --exclude="*.orig" --exclude="*.bak" --exclude="*.sqlite" --exclude=".hg" --exclude="bin" --exclude="develop-eggs" --exclude="parts" --exclude="site_media" --exclude="*.egg-info" --exclude="eggs" --exclude="src" --exclude=".installed.cfg" --exclude="manage-log.txt" $DELETE $BASE_DIR $REMOTE_DIR 

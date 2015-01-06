@@ -1,0 +1,247 @@
+syntax on
+" The PC is fast enough, do syntax highlight syncing from start
+autocmd BufEnter * :syntax sync fromstart
+
+" Enable filetype plugins and indention
+filetype on
+filetype indent on
+filetype plugin on
+
+" File Encodings
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=iso-2002-jp,utf-8,euc-jp,cp932
+set fileformat=unix
+
+" Set swap file directory
+" Add two slashes at the end so the swap file name is
+" built from the full file path.
+set directory=~/.vim/swap//
+" Set backup file directory
+" Add two slashes at the end so the swap file name is
+" built from the full file path.
+set backupdir=~/.vim/backup//
+
+"Turn off annoying system bell
+set visualbell t_vb=
+
+" sets leader to ',' and localleader to "\"
+let mapleader=","
+let maplocalleader="\\"
+
+"Turn off automatic comment continuation
+autocmd FileType * setlocal fo-=r fo-=q fo-=o
+
+set modeline
+set modelines=5
+
+" Variables
+set tabstop=4
+set shiftwidth=4
+" soft tabs
+set expandtab
+"backspace mode
+set bs=2
+set backspace=2
+"Auto indent
+set cindent
+"set cinkeys=0{,0},:,0#,!,!^F
+
+" go with smartindent if there is no plugin indent file.
+" but don't outdent hashes
+set smartindent
+inoremap # X#
+set autoindent
+
+" Turn off automatic switching to Japanese input
+set iminsert=0
+set imsearch=0
+
+" Search Options
+" Japanese input during search. Doesn't work well?
+" set imactivatekey=S-space
+" set iminsert=1
+" set imsearch=1
+set ignorecase
+
+
+" incremental search
+set incsearch
+
+"limit netrw file list
+let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
+
+" Status line
+set laststatus=2
+if has("statusline")
+ set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+endif
+
+" Don't use selectmode
+set selectmode=
+
+colors desert
+
+"Hide menu and toolbar
+set guioptions-=T
+set guioptions-=m
+" Turn off cursor blinking
+set gcr=a:blinkon0
+" Allow more characters in console mode.
+set ttyfast
+
+" Auto set current path to the working directory
+autocmd BufEnter * silent! lcd %:p:h
+
+" Omnicomplete
+set ofu=syntaxcomplete#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
+
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_Use_Right_Window=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_Show_One_File=1
+
+" SQL filetype is buggy so set it to text
+au! filetypedetect BufNewFile,BufRead *.sql
+au filetypedetect BufNewFile,BufRead *.sql          setf text
+
+" Keymappings
+" Dvorak
+noremap n j
+noremap t k
+noremap s l
+noremap j n
+noremap gn gk
+noremap gt gj
+
+noremap l n
+
+" tab for brackets
+nnoremap <tab> %
+vnoremap <tab> %
+
+" toggle between number, relative number and nonumber on ,l
+nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
+function! ToggleRelativeAbsoluteNumber()
+    if &relativenumber
+        set nonumber 
+        set norelativenumber 
+    else
+        if &number
+            set relativenumber
+        else
+            set number 
+        endif
+    endif
+endfunction
+
+" disable arrow keys
+" ** But I want to use them with netrw because you can't change it's
+" keybindings so we'll leave them set.
+" map <up> <nop>
+" map <down> <nop>
+" map <left> <nop>
+" map <right> <nop>
+"imap <up> <nop>
+"imap <down> <nop>
+"imap <left> <nop>
+"imap <right> <nop>
+
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+" Ctrl-Tab toggles comments in various modes.
+nmap <C-tab> :TComment<CR>
+vmap <C-tab> :TComment<CR>
+imap <C-tab> <ESC>:TComment<CR>i<right>
+
+nmap <C-s> :w<CR>
+imap <C-s> <ESC>:w<CR>i<right>
+
+" Windows style Cut,Copy,Paste for
+" interaction with other programs.
+
+" nmap <C-x> "+x
+vmap <C-x> "+x
+
+" nmap <C-c> "+y
+vmap <C-c> "+y
+
+nmap <C-v> "+gP
+vmap <C-v> <DEL>"+gP
+imap <C-v> <ESC>"+gpi
+
+" Toggle the quick buffer by hitting semicolon twice.
+let g:qb_hotkey = ";;"
+
+" Gist
+""""""""""""""""""
+let g:gist_detect_filetype = 1
+" Show private gists with :Gist -l
+let g:gist_show_privates = 1
+" Private by default
+let g:gist_post_private = 1
+
+" Bda -  Delete all buffers.
+
+command! -nargs=0 -bang Bda
+    \ :call BufDeleteAll('<bang>')
+
+function! BufDeleteAll(bang)
+    let last_buffer = bufnr('$')
+
+    let n = 1
+    while n <= last_buffer
+        if a:bang == '' && getbufvar(n, '&modified')
+            echohl ErrorMsg
+            echomsg 'No write since last change for buffer'
+                        \ n '(add ! to override)'
+            echohl None
+            return 0
+        endif
+        let n = n+1
+    endwhile
+
+    let delete_count = 0
+    let n = 1
+    while n <= last_buffer
+        if buflisted(n)
+            silent exe 'bdel' . a:bang . ' ' . n
+            if ! buflisted(n)
+                let delete_count = delete_count+1
+            endif
+        endif
+        let n = n+1
+    endwhile
+
+    if delete_count == 1
+        echomsg delete_count "buffer deleted"
+    elseif delete_count > 1
+        echomsg delete_count "buffers deleted"
+    endif
+
+endfunction
+
+" Windows local config.
+if $OS == 'Windows_NT' && filereadable(".vimrc.windows")
+    source .vimrc.windows
+endif
+" Local config.
+if filereadable(".vimrc.local")
+    source .vimrc.local
+endif

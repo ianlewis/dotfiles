@@ -1,0 +1,17 @@
+[user]
+	name = Ian Lewis
+	email = IanMLewis@gmail.com
+[diff]
+[mergetool "meld"]
+	cmd = "meld -o  --label='local'  --label='base'  --label='other' "
+	trustExitCode = false
+[mergetool]
+	tool = meld
+[difftool]
+	tool = meld
+[difftool "meld"]
+	cmd = "meld -a --label='local'  --label='remote' "
+[alias]
+	tree = log --graph --pretty=oneline --abbrev-commit --decorate
+[github]
+	user = IanLewis

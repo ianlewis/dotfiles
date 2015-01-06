@@ -1,0 +1,7 @@
+set encoding=japan
+set fileencoding=utf-8
+
+autocmd GUIEnter * winpos 200 100
+autocmd GUIEnter * winsize 100 50
+set guifont=ＭＳ_ゴシック:h9:cSHIFTJIS
+set guifont=ＭＳ_ゴシック:h10:cSHIFTJIS
