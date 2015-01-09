@@ -1,11 +1,14 @@
+" Install pathogen
+runtime bundle/pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+
 syntax on
+
 " The PC is fast enough, do syntax highlight syncing from start
 autocmd BufEnter * :syntax sync fromstart
 
 " Enable filetype plugins and indention
-filetype on
-filetype indent on
-filetype plugin on
+filetype plugin indent on
 
 " File Encodings
 set encoding=utf-8
