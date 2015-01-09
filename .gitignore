@@ -4,3 +4,7 @@ vim/.netrwhist
 # Ignore vim's swap and backup directories
 vim/swap/*
 vim/backup/*
+
+# Ignore object files from vcprompt
+*.o
+src/vcprompt/vcprompt
