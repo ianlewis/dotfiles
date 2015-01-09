@@ -168,11 +168,6 @@ vnoremap <silent> # :<C-U>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-" Ctrl-Tab toggles comments in various modes.
-nmap <C-tab> :TComment<CR>
-vmap <C-tab> :TComment<CR>
-imap <C-tab> <ESC>:TComment<CR>i<right>
-
 nmap <C-s> :w<CR>
 imap <C-s> <ESC>:w<CR>i<right>
 
