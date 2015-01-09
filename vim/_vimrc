@@ -187,14 +187,6 @@ imap <C-v> <ESC>"+gpi
 " Toggle the quick buffer by hitting semicolon twice.
 let g:qb_hotkey = ";;"
 
-" Gist
-""""""""""""""""""
-let g:gist_detect_filetype = 1
-" Show private gists with :Gist -l
-let g:gist_show_privates = 1
-" Private by default
-let g:gist_post_private = 1
-
 " Bda -  Delete all buffers.
 
 command! -nargs=0 -bang Bda
