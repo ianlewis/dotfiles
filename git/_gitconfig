@@ -1,6 +1,6 @@
 [user]
 	name = Ian Lewis
-	email = IanMLewis@gmail.com
+	email = ianmlewis@gmail.com
 [diff]
 [mergetool "meld"]
 	cmd = "meld -o  --label='local'  --label='base'  --label='other' "
