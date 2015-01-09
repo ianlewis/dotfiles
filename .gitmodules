@@ -13,3 +13,6 @@
 [submodule "vim/bundle/pathogen"]
 	path = vim/bundle/pathogen
 	url = git@github.com:tpope/vim-pathogen.git
+[submodule "vim/bundle/QuickBuf"]
+	path = vim/bundle/QuickBuf
+	url = git@github.com:vim-scripts/QuickBuf.git
