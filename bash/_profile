@@ -21,7 +21,3 @@ fi
 if [ -d ~/bin ] ; then
     PATH=~/bin:"${PATH}"
 fi
-export LANGUAGE="ja:en"
-export LC_MESSAGES="ja_JP.UTF-8"
-export LC_CTYPE="ja_JP.UTF-8"
-export LC_COLLATE="ja_JP.UTF-8"

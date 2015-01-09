@@ -19,7 +19,9 @@ if [ -f ~/.bashrc_init_local ]; then
 fi
 
 # Add user-local bin to the PATH
-PATH=~/bin:$PATH
+if [ -d ~/bin ] ; then
+    PATH=~/bin:$PATH
+fi
 
 export VISUAL=vim
 export EDITOR=vim
