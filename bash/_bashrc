@@ -154,6 +154,6 @@ if [ -f ~/.bash_completion ]; then
 fi
 
 # Local settings
-if [ -f ~/.bashrc_local ]; then
-    . ~/.bashrc_local 
+if [ -f ~/.bashrc.local ]; then
+    . ~/.bashrc.local 
 fi
