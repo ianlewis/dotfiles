@@ -1,0 +1,6 @@
+# Ignore directory history.
+vim/.netrwhist
+
+# Ignore vim's swap and backup directories
+vim/swap/*
+vim/backup/*
