@@ -16,3 +16,6 @@
 [submodule "vim/bundle/QuickBuf"]
 	path = vim/bundle/QuickBuf
 	url = git@github.com:vim-scripts/QuickBuf.git
+[submodule "vim/bundle/go"]
+	path = vim/bundle/go
+	url = git@github.com:fsouza/go.vim.git
