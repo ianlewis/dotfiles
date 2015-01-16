@@ -30,6 +30,6 @@ alias ssh='ssh -2'
 
 alias scala='scala -deprecation -unchecked -explaintypes -i ~/.import.scala'
 
-if [ -f ~/.bash_aliases_local ]; then
-    . ~/.bash_aliases_local
+if [ -f ~/.bash_aliases.local ]; then
+    . ~/.bash_aliases.local
 fi

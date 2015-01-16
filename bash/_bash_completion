@@ -32,6 +32,6 @@ _fab_completion() {
 
 complete -F _fab_completion fab 
 
-if [ -f ~/.bash_completion_local ]; then
-    . ~/.bash_completion_local
+if [ -f ~/.bash_completion.local ]; then
+    . ~/.bash_completion.local
 fi
