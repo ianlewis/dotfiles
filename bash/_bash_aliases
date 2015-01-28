@@ -1,17 +1,15 @@
 # vim: set ft=sh:
 
 # enable color support of ls and also add handy aliases
-if [ "$TERM" != "dumb" ]; then
+if [ `uname` == "Darwin" ]; then
+    export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
+    export LC_CTYPE=en_US.utf-8
+    export LC_ALL=en_US.utf-8
+    alias ls='ls -BF'
+elif [ "$TERM" != "dumb" ]; then
     eval "`dircolors -b`"
     alias ls='ls -BF --color=auto'
-    #alias dir='ls --color=auto --format=vertical'
-    #alias vdir='ls --color=auto --format=long'
 fi
-
-# some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
 
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -23,7 +21,6 @@ alias mv='mv -i'
 
 alias df='df -h'
 alias du='du -h'
-#alias ls='ls -BF --color=auto'
 
 # Force ssh to use version 2
 alias ssh='ssh -2'

@@ -39,6 +39,14 @@ else
 fi
 IANS_VCPROMPT_EXECUTABLE=~/.bin/vcprompt
 
+if [ `uname` == "Darwin" ]; then
+    # Enable colors on Mac OSX Terminal
+    export CLICOLOR=1
+    export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
+else
+    # Enable colors on linux
+    eval "`dircolors -b`"
+fi
 
 VCPROMPT_EXECUTABLE=~/bin/vcprompt
 ians_vcprompt() {
