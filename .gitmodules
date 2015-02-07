@@ -1,21 +1,21 @@
 [submodule "vim/bundle/coffee-script"]
 	path = vim/bundle/coffee-script
-	url = git@github.com:kchmck/vim-coffee-script.git
+	url = https://github.com/kchmck/vim-coffee-script.git
 [submodule "vim/bundle/jinja"]
 	path = vim/bundle/jinja
-	url = git@github.com:mitsuhiko/vim-jinja.git
+	url = https://github.com/mitsuhiko/vim-jinja.git
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
-	url = git@github.com:scrooloose/syntastic.git
+	url = https://github.com/scrooloose/syntastic.git
 [submodule "vim/bundle/commentary"]
 	path = vim/bundle/commentary
-	url = git@github.com:tpope/vim-commentary.git
+	url = https://github.com/tpope/vim-commentary.git
 [submodule "vim/bundle/pathogen"]
 	path = vim/bundle/pathogen
-	url = git@github.com:tpope/vim-pathogen.git
+	url = https://github.com/tpope/vim-pathogen.git
 [submodule "vim/bundle/QuickBuf"]
 	path = vim/bundle/QuickBuf
-	url = git@github.com:vim-scripts/QuickBuf.git
+	url = https://github.com/vim-scripts/QuickBuf.git
 [submodule "vim/bundle/go"]
 	path = vim/bundle/go
-	url = git@github.com:fsouza/go.vim.git
+	url = https://github.com/fsouza/go.vim.git
