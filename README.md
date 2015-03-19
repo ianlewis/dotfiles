@@ -22,7 +22,7 @@ directory.
 
 # Compatibility
 
-I really don't use Mac OS much so these dotfiles aren't tested there. I try to
-make them as compatible as possible but things are just not likely to work
-properly and even if they did you're likely to find these dotfiles lacking
-convienent settings for Mac OS.
+The scripts here should work on MacOS and Linux. I have tested them on Ubuntu
+14.04 LTS and Mac OS X Yosemite. They will probably work on other setups as
+well but YMMV. If you find anything not working feel free to open up an issue
+to let me know.
