@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Unencrypts the newest Gnucash backup file in Dropbox and runs gnucash on
+# it. After gnucash closes the file it is encrypted again and saved in the
+# Dropbox folder.
+
+FILE=`ls ~/Dropbox/Finance | tail -1`
+PASSWD=`zenity --password --title="Gnucash"`
+TEMPFILE=`mktemp`
+
+openssl aes-256-cbc -d -k $PASSWD -in ~/Dropbox/Finance/$FILE | bunzip2 --stdout > $TEMPFILE
+if [ $? = "0" ]; then
+    /usr/bin/gnucash $TEMPFILE
+    # If gnucash crashes or otherwise returns an error do not encrypt the backup file.
+    EXITCODE=$?
+    if [ $EXITCODE != "0" ]; then
+        zenity --error --text="Gnucash returned exit code $EXITCODE. Please check the log files in /tmp/ for what went wrong."
+        exit $EXITCODE
+    fi
+    bzip2 --stdout $TEMPFILE | openssl aes-256-cbc -e -k $PASSWD -out ~/Dropbox/Finance/finance-`date +%Y-%m-%d_%H:%M:%S`.bz2.aes
+else
+    zenity --error --text="The password was incorrect."
+fi
+
+# Make sure the temp file is deleted.
+rm -f $TEMPFILE
+
+# Make sure the log files and backups are deleted.
+rm -f /tmp/tmp.*.log
+rm -f /tmp/tmp.*.gnucash
