@@ -174,6 +174,8 @@ imap <C-s> <ESC>:w<CR>i<right>
 " Windows style Cut,Copy,Paste for
 " interaction with other programs.
 
+noremap vb <C-v>
+
 " nmap <C-x> "+x
 vmap <C-x> "+x
 
