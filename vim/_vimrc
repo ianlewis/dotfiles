@@ -104,7 +104,13 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+" CPP files for Arduino
 autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
+
+" Terraform variables
+" See: https://www.terraform.io/intro/getting-started/variables.html
+autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 
 let Tlist_GainFocus_On_ToggleOpen=1
 let Tlist_Use_Right_Window=1
