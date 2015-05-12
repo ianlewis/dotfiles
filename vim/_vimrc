@@ -1,3 +1,5 @@
+set nocompatible
+
 " Install pathogen
 runtime bundle/pathogen/autoload/pathogen.vim
 execute pathogen#infect()
@@ -188,6 +190,9 @@ imap <C-v> <ESC>"+gpi
 
 " Toggle the quick buffer by hitting semicolon twice.
 let g:qb_hotkey = ";;"
+
+" For java syntax checking
+let g:syntastic_java_checker = 'javac'
 
 " Bda -  Delete all buffers.
 
