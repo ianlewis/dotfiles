@@ -19,3 +19,6 @@
 [submodule "vim/bundle/go"]
 	path = vim/bundle/go
 	url = https://github.com/fsouza/go.vim.git
+[submodule "vim/bundle/terraform"]
+	path = vim/bundle/terraform
+	url = https://github.com/markcornick/vim-terraform.git
