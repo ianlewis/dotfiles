@@ -1,3 +1,5 @@
+set nocompatible
+
 " Install pathogen
 runtime bundle/pathogen/autoload/pathogen.vim
 execute pathogen#infect()
@@ -102,10 +104,16 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+" CPP files for Arduino
 autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
 
 " Make .md files markdown
 au BufRead,BufNewFile *.md set filetype=markdown
+
+" Terraform variables
+" See: https://www.terraform.io/intro/getting-started/variables.html
+autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 
 let Tlist_GainFocus_On_ToggleOpen=1
 let Tlist_Use_Right_Window=1
@@ -177,6 +185,8 @@ imap <C-s> <ESC>:w<CR>i<right>
 " Windows style Cut,Copy,Paste for
 " interaction with other programs.
 
+noremap vb <C-v>
+
 " nmap <C-x> "+x
 vmap <C-x> "+x
 
@@ -189,6 +199,9 @@ imap <C-v> <ESC>"+gpi
 
 " Toggle the quick buffer by hitting semicolon twice.
 let g:qb_hotkey = ";;"
+
+" For java syntax checking
+let g:syntastic_java_checker = 'javac'
 
 " Bda -  Delete all buffers.
 
