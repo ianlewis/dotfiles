@@ -104,6 +104,9 @@ autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
 
+" Make .md files markdown
+au BufRead,BufNewFile *.md set filetype=markdown
+
 let Tlist_GainFocus_On_ToggleOpen=1
 let Tlist_Use_Right_Window=1
 let Tlist_Exit_OnlyWindow=1
