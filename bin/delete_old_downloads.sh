@@ -2,7 +2,7 @@
 
 DIR=$1
 DAYS=$2
-if [ $DAYS = "" ]; then
+if [ "$DAYS" = "" ]; then
     DAYS=14
 fi
 
