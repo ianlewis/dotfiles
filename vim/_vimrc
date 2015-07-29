@@ -182,10 +182,11 @@ vnoremap <silent> # :<C-U>
 nmap <C-s> :w<CR>
 imap <C-s> <ESC>:w<CR>i<right>
 
+" Terminal friendly visual block shortcut for the terminal
+noremap vb <C-v>
+
 " Windows style Cut,Copy,Paste for
 " interaction with other programs.
-
-noremap vb <C-v>
 
 " nmap <C-x> "+x
 vmap <C-x> "+x
