@@ -221,6 +221,9 @@ let g:syntastic_check_on_wq = 1
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
 
+" Make eclim use omnifunc so that it plays well with YCM
+let g:EclimCompletionMethod = 'omnifunc'
+
 " Bda -  Delete all buffers.
 
 command! -nargs=0 -bang Bda

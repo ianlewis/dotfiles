@@ -1,3 +1,5 @@
+HAS_CMAKE := $(shell which cmake)
+
 install: install-bin install-vim install-bash install-screen install-git install-virtualenvwrapper
 
 install-bin:
@@ -5,6 +7,11 @@ install-bin:
 	ln -sf `pwd`/bin/* ~/bin/
 
 install-vim:
+ifdef HAS_CMAKE
+	mkdir -p ycm_build
+	cd ycm_build; cmake -G "Unix Makefiles" . ../vim/bundle/YouCompleteMe/third_party/ycmd/cpp
+	cd ycm_build; make ycm_support_libs
+endif
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
 	ln -s `pwd`/vim ~/.vim
 	ln -s ~/.vim/_vimrc ~/.vimrc
@@ -35,3 +42,6 @@ install-virtualenvwrapper:
 install-mercurial:
 	rm -f ~/.hgrc
 	ln -s `pwd`/mercurial/_hgrc ~/.hgrc
+
+clean:
+	rm -rf ycm_build
