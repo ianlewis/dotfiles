@@ -18,6 +18,10 @@ set fileencoding=utf-8
 set fileencodings=iso-2002-jp,utf-8,euc-jp,cp932
 set fileformat=unix
 
+" Set the fold level so that folds are open by default.
+" See: http://vim.wikia.com/wiki/All_folds_open_when_opening_a_file
+set foldlevelstart=20
+
 " Set swap file directory
 " Add two slashes at the end so the swap file name is
 " built from the full file path.
