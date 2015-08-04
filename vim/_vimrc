@@ -82,7 +82,12 @@ let delimitMate_expand_cr = 1
 " Status line
 set laststatus=2
 if has("statusline")
- set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+  set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+
+  " Errors for syntax checking
+  set statusline+=%#warningmsg#
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
 endif
 
 " Don't use selectmode
@@ -204,8 +209,13 @@ imap <C-v> <ESC>"+gpi
 " Toggle the quick buffer by hitting semicolon twice.
 let g:qb_hotkey = ";;"
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+
 " For java syntax checking
-let g:syntastic_java_checker = 'javac'
+"let g:syntastic_java_checker = 'javac'
 
 " Bda -  Delete all buffers.
 
