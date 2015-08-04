@@ -76,6 +76,9 @@ set incsearch
 "limit netrw file list
 let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
 
+" Expand code blocks
+let delimitMate_expand_cr = 1
+
 " Status line
 set laststatus=2
 if has("statusline")
