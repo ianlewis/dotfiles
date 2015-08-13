@@ -73,6 +73,9 @@ set ignorecase
 " incremental search
 set incsearch
 
+"Run gofmt on save
+let g:go_fmt_autosave = 1
+
 "limit netrw file list
 let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
 

@@ -16,15 +16,12 @@
 [submodule "vim/bundle/QuickBuf"]
 	path = vim/bundle/QuickBuf
 	url = https://github.com/vim-scripts/QuickBuf.git
-[submodule "vim/bundle/go"]
-	path = vim/bundle/go
-	url = https://github.com/fsouza/go.vim.git
 [submodule "vim/bundle/terraform"]
 	path = vim/bundle/terraform
 	url = https://github.com/markcornick/vim-terraform.git
 [submodule "vim/bundle/delimitMate"]
 	path = vim/bundle/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
-[submodule "vim/bundle/vim-protobuf"]
-	path = vim/bundle/vim-protobuf
-	url = git://github.com/uarun/vim-protobuf.git
+[submodule "vim/bundle/vim-go"]
+	path = vim/bundle/vim-go
+	url = https://github.com/fatih/vim-go.git
