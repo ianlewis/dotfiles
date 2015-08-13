@@ -79,6 +79,8 @@ set incsearch
 
 "Run gofmt on save
 let g:go_fmt_autosave = 1
+" Set the comment string for Go to line comments.
+autocmd FileType go setlocal commentstring=//\ %s
 
 "limit netrw file list
 let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
