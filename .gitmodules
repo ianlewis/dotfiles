@@ -16,9 +16,6 @@
 [submodule "vim/bundle/QuickBuf"]
 	path = vim/bundle/QuickBuf
 	url = https://github.com/vim-scripts/QuickBuf.git
-[submodule "vim/bundle/go"]
-	path = vim/bundle/go
-	url = https://github.com/fsouza/go.vim.git
 [submodule "vim/bundle/terraform"]
 	path = vim/bundle/terraform
 	url = https://github.com/markcornick/vim-terraform.git
@@ -28,6 +25,9 @@
 [submodule "vim/bundle/YouCompleteMe"]
 	path = vim/bundle/YouCompleteMe
 	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule "vim/bundle/vim-go"]
+	path = vim/bundle/vim-go
+	url = https://github.com/fatih/vim-go.git
 [submodule "vim/bundle/vim-protobuf"]
 	path = vim/bundle/vim-protobuf
-	url = git://github.com/uarun/vim-protobuf.git
+	url = https://github.com/uarun/vim-protobuf.git
