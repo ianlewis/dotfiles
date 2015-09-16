@@ -79,6 +79,7 @@ set incsearch
 
 "Run gofmt on save
 let g:go_fmt_autosave = 1
+" let g:go_fmt_fail_silently = 1
 " Set the comment string for Go to line comments.
 autocmd FileType go setlocal commentstring=//\ %s
 
