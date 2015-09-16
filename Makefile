@@ -8,9 +8,7 @@ install-bin:
 
 install-vim:
 ifdef HAS_CMAKE
-	mkdir -p ycm_build
-	cd ycm_build; cmake -G "Unix Makefiles" . ../vim/bundle/YouCompleteMe/third_party/ycmd/cpp
-	cd ycm_build; make ycm_support_libs
+	cd vim/bundle/YouCompleteMe && ./install.sh --clang-completer --gocode-completer
 endif
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
 	ln -s `pwd`/vim ~/.vim
