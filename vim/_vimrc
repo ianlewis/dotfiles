@@ -81,9 +81,9 @@ set incsearch
 let g:go_fmt_autosave = 1
 " let g:go_fmt_fail_silently = 1
 " Set the comment string for Go to line comments.
-autocmd FileType go setlocal commentstring=//\ %s
+autocmd FileType go setlocal commentstring=//%s
 " Set the comment string for C++ to line comments.
-autocmd FileType cpp setlocal commentstring=//\ %s
+autocmd FileType cpp setlocal commentstring=//%s
 
 "limit netrw file list
 let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
