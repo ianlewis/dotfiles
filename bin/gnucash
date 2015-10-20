@@ -4,6 +4,8 @@
 # it. After gnucash closes the file it is encrypted again and saved in the
 # Dropbox folder.
 
+# TODO: Make this store the temp files in an encrypted onmemory drive
+
 FILE=`ls ~/Dropbox/Finance | tail -1`
 PASSWD=`zenity --password --title="Gnucash"`
 TEMPFILE=`mktemp`

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# A script that is eventually meant to be a drop in replacement for the
+# unix 'rm' command but instead of deleting moves the file into the
+# user's trash folder.
+
 readonly progname="$(basename $0)"
 
 function printHelpAndExit {

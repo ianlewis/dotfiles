@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# A simple script to delete files from a
+# temporary directory.
+
 DIR=$1
 DAYS=$2
 if [ "$DAYS" = "" ]; then

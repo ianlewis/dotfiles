@@ -1,2 +1,6 @@
 #!/bin/sh
+
+# Script that prefixes timestamps to the output of a program.
+# Helpful for things like cron jobs or log output.
+
 $@ | while IFS= read -r line; do printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$line"; done
