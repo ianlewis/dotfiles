@@ -1,5 +1,7 @@
 set nocompatible
 
+let g:pathogen_disabled = ["delimitMate"]
+
 " Install pathogen
 runtime bundle/pathogen/autoload/pathogen.vim
 execute pathogen#infect()
@@ -98,7 +100,9 @@ if has("statusline")
 
   " Errors for syntax checking
   set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
+  if exists(':SyntasticStatuslineFlag')
+      set statusline+=%{SyntasticStatuslineFlag()}
+  endif
   set statusline+=%*
 endif
 
