@@ -79,10 +79,6 @@ if [ ! -d ~/.vim/backup ]; then
     mkdir -p ~/.vim/backup
 fi
 
-if [ -f ~/.awsrc ]; then
-    source ~/.awsrc
-fi
-
 # export PIP_REQUIRE_VIRTUALENV=true
 #export PIP_USE_MIRRORS=true
 export PIP_RESPECT_VIRTUALENV=true
