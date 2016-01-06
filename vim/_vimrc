@@ -2,6 +2,11 @@ set nocompatible
 
 let g:pathogen_disabled = ["delimitMate"]
 
+" Local config.
+if filereadable($HOME."/.vimrc.first.local")
+    source $HOME/.vimrc.first.local
+endif
+
 " Install pathogen
 runtime bundle/pathogen/autoload/pathogen.vim
 execute pathogen#infect()
@@ -281,6 +286,6 @@ if $OS == 'Windows_NT' && filereadable(".vimrc.windows")
     source .vimrc.windows
 endif
 " Local config.
-if filereadable(".vimrc.local")
-    source .vimrc.local
+if filereadable($HOME.".vimrc.local")
+    source $HOME/.vimrc.local
 endif
