@@ -286,6 +286,6 @@ if $OS == 'Windows_NT' && filereadable(".vimrc.windows")
     source .vimrc.windows
 endif
 " Local config.
-if filereadable($HOME.".vimrc.local")
+if filereadable($HOME."/.vimrc.local")
     source $HOME/.vimrc.local
 endif
