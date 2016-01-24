@@ -1,14 +1,25 @@
 HAS_CMAKE := $(shell which cmake)
+HAS_CPP := $(shell which c++)
+HAS_C := $(shell which cc)
 
-install: install-bin install-vim install-bash install-screen install-git install-virtualenvwrapper
+install: install-bin install-vcprompt install-vim install-bash install-screen install-git install-virtualenvwrapper
 
 install-bin:
 	mkdir -p ~/bin
 	ln -sf `pwd`/bin/* ~/bin/
 
+install-vcprompt:
+ifdef HAS_C
+	cd src/vcprompt && make && ln -fs `pwd`/vcprompt ~/bin/vcprompt
+endif
+
 install-vim:
 ifdef HAS_CMAKE
+ifdef HAS_CPP
+ifdef HAS_C
 	cd vim/bundle/YouCompleteMe && ./install.sh --clang-completer --gocode-completer
+endif
+endif
 endif
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
 	ln -s `pwd`/vim ~/.vim

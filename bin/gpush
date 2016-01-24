@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# A simple script for pushing files to a Compute Engine instance
+# without resorting to running config-ssh and using scp.
+
+TARCMD="tar -czf - ${*:2}"
+GCLOUDCMD="gcloud compute ssh $1 \"tar -xzvf -\""
+
+PVPATH=$(which pv)
+if [ -x "$PVPATH" ]; then
+    $TARCMD | pv | $GCLOUDCMD
+else
+    $TARCMD | $GCLOUDCMD
+fi
