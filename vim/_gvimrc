@@ -1,2 +1,7 @@
 "Turn off annoying system bell
 set visualbell t_vb=
+
+" Local config.
+if filereadable($HOME."/.gvimrc.local")
+    source $HOME/.gvimrc.local
+endif
