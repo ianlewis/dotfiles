@@ -1,6 +1,12 @@
 "Turn off annoying system bell
 set visualbell t_vb=
 
+if has("gui_macvim")
+    " Disable pesky close key
+    macmenu File.Close key=<nop>
+    macmenu File.Close\ Window key=<nop>
+endif
+
 " Local config.
 if filereadable($HOME."/.gvimrc.local")
     source $HOME/.gvimrc.local
