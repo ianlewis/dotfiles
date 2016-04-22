@@ -8,7 +8,7 @@ GCLOUDCMD="gcloud compute ssh $1 \"tar -xzvf -\""
 
 PVPATH=$(which pv)
 if [ -x "$PVPATH" ]; then
-    $TARCMD | pv | $GCLOUDCMD
+    $TARCMD | pv | eval $GCLOUDCMD
 else
-    $TARCMD | $GCLOUDCMD
+    $TARCMD | eval $GCLOUDCMD
 fi
