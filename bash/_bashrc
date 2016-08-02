@@ -18,11 +18,6 @@ if [ -f ~/.bashrc_init_local ]; then
     . ~/.bashrc_init_local
 fi
 
-# Add user-local bin to the PATH
-if [ -d ~/bin ] ; then
-    PATH=~/bin:$PATH
-fi
-
 export VISUAL=vim
 export EDITOR=vim
 
@@ -153,4 +148,10 @@ fi
 # Local settings
 if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local 
+fi
+
+# Add user-local bin to the PATH but only after running the bashrc.local.
+# We want ~/bin to be highest priority.
+if [ -d ~/bin ] ; then
+    PATH=~/bin:$PATH
 fi
