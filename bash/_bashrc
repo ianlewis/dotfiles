@@ -135,6 +135,11 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
+# Local settings
+if [ -f ~/.bashrc.local ]; then
+    . ~/.bashrc.local 
+fi
+
 # Completion
 # Load the system wide bash completion if available.
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
@@ -143,11 +148,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 elif [ -f ~/.bash_completion ]; then
     # The system wide config is not available so just load our completion
     . ~/.bash_completion
-fi
-
-# Local settings
-if [ -f ~/.bashrc.local ]; then
-    . ~/.bashrc.local 
 fi
 
 # Add user-local bin to the PATH but only after running the bashrc.local.

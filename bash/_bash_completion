@@ -30,6 +30,12 @@ _fab_completion() {
 }
 # fabric bash completion end
 
+# kubectl bash completion
+if which kubectl > /dev/null 2>&1; then
+    source <(kubectl completion bash)
+fi
+# kubectl bash completion end
+
 complete -F _fab_completion fab 
 
 if [ -f ~/.bash_completion.local ]; then
