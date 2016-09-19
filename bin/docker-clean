@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Remove all stopped containers
+docker rm $(docker ps -a -q)
+
+# Remove remove dangling (untagged) images
+docker rmi -f $(docker images -q -a -f dangling=true)
