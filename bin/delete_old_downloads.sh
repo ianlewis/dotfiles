@@ -17,6 +17,9 @@ for DIR in $DIRS; do
         # Delete old files
         cd $DIR && find . -type f -mtime +$DAYS -delete
 
+        # Delete old symbolic links
+        cd $DIR && find . -type l -mtime +$DAYS -delete
+
         # Delete empty directories
         cd $DIR && find . -type d -empty -delete
     fi
