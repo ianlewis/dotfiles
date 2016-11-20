@@ -7,8 +7,11 @@
 # TODO: Make this store the temp files in an encrypted onmemory drive
 
 FILE=`ls ~/Dropbox/Finance | tail -1`
-PASSWD=`zenity --password --title="Gnucash"`
 TEMPFILE=`mktemp`
+PASSWD=`zenity --password --title="Gnucash"`
+if [ $? != "0" ]; then
+    exit 1
+fi
 
 openssl aes-256-cbc -d -k $PASSWD -in ~/Dropbox/Finance/$FILE | bunzip2 --stdout > $TEMPFILE
 if [ $? = "0" ]; then
