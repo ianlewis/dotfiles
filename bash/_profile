@@ -17,7 +17,14 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Local settings
+if [ -f ~/.profile.local ]; then
+    . ~/.profile.local
+fi
+
+
+# Add user-local bin to the PATH but only after running the .profile.local.
+# We want ~/bin to be highest priority.
 if [ -d ~/bin ] ; then
     PATH=~/bin:"${PATH}"
 fi

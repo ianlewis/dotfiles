@@ -149,9 +149,3 @@ elif [ -f ~/.bash_completion ]; then
     # The system wide config is not available so just load our completion
     . ~/.bash_completion
 fi
-
-# Add user-local bin to the PATH but only after running the bashrc.local.
-# We want ~/bin to be highest priority.
-if [ -d ~/bin ] ; then
-    PATH=~/bin:$PATH
-fi
