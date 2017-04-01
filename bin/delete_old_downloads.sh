@@ -23,4 +23,7 @@ for DIR in $DIRS; do
         # Delete empty directories
         find $DIR -type d -empty -delete
     fi
+
+    # Finally make sure the directory itself exists
+    mkdir -p $DIR
 done
