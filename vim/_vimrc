@@ -7,7 +7,6 @@ let g:pathogen_disabled = ["delimitMate"]
 if has("unix")
   " uname sometimes outputs with trailing whitespace so trim it.
   let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
-  echo '"'.s:uname.'"'
   if s:uname == "Darwin"
     " Disable YouCompleteMe on Mac OS X because of issues with Python.
     " See: https://github.com/Valloric/YouCompleteMe#i-get-fatal-python-error-pythreadstate_get-no-current-thread-on-startup
