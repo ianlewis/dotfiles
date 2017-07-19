@@ -250,7 +250,8 @@ let g:syntastic_check_on_wq = 1
 " Disable compile checking for syntastic since it's really slow with large
 " projects like Kubernetes.
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" Uncomment this line if setting g:syntastic_auto_loc_list = 1
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
