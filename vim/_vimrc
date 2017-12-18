@@ -1,6 +1,18 @@
 set nocompatible
 
+" disabled in favor of vim-autoclose for the time being because Japanese input
+" doesn't work well with delimitMate
 let g:pathogen_disabled = ["delimitMate"]
+
+if has("unix")
+  " uname sometimes outputs with trailing whitespace so trim it.
+  let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
+  if s:uname == "Darwin"
+    " Disable YouCompleteMe on Mac OS X because of issues with Python.
+    " See: https://github.com/Valloric/YouCompleteMe#i-get-fatal-python-error-pythreadstate_get-no-current-thread-on-startup
+    let g:pathogen_disabled = g:pathogen_disabled + ["YouCompleteMe"]
+  endif
+endif
 
 " Local config.
 if filereadable($HOME."/.vimrc.first.local")
@@ -234,6 +246,12 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
+
+" Disable compile checking for syntastic since it's really slow with large
+" projects like Kubernetes.
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+" Uncomment this line if setting g:syntastic_auto_loc_list = 1
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
