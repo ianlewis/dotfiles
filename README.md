@@ -1,6 +1,8 @@
 Ian's dotfiles
 =====================
 
+[![](https://travis-ci.org/ianlewis/dotfiles.svg?branch=master)](https://travis-ci.org/ianlewis/dotfiles)
+
 These dotfiles are based on [Armin Ronacher's dotfiles](https://github.com/mitsuhiko/dotfiles)
 where the idea was copied shamelessly.
 
