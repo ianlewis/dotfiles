@@ -5,10 +5,12 @@
 # for examples
 
 if [ -f /etc/bashrc ]; then
+    # shellcheck source=/dev/null
     . /etc/bashrc 
 fi
 # For some debian systems
 if [ -f /etc/bash.bashrc ]; then
+    # shellcheck source=/dev/null
     . /etc/bash.bashrc 
 fi
 
@@ -16,6 +18,7 @@ fi
 [ -z "$PS1" ] && return
 
 if [ -f ~/.bashrc_init_local ]; then
+    # shellcheck source=/dev/null
     . ~/.bashrc_init_local
 fi
 
@@ -25,23 +28,21 @@ export EDITOR=vim
 IANS_DEFAULT_COLOR="[00m"
 IANS_GRAY_COLOR="[37m"
 IANS_PINK_COLOR="[35m"
-IANS_GREEN_COLOR="[32m"
 IANS_ORANGE_COLOR="[33m"
 IANS_RED_COLOR="[31m"
-if [ `id -u` == '0' ]; then
+if [ "$(id -u)" == "0" ]; then
   IANS_USER_COLOR=$IANS_RED_COLOR
 else
   IANS_USER_COLOR=$IANS_PINK_COLOR
 fi
-IANS_VCPROMPT_EXECUTABLE=~/.bin/vcprompt
 
-if [ `uname` == "Darwin" ]; then
+if [ "$(uname)" == "Darwin" ]; then
     # Enable colors on Mac OSX Terminal
     export CLICOLOR=1
     export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
 else
     # Enable colors on linux
-    eval "`dircolors -b`"
+    eval "$(dircolors -b)"
 fi
 
 VCPROMPT_EXECUTABLE=~/bin/vcprompt
@@ -60,9 +61,9 @@ ians_lastcommandfailed() {
   fi
 }
 ians_virtualenv() {
-  if [ x$VIRTUAL_ENV != x ]; then
+  if [ x"$VIRTUAL_ENV" != x ]; then
     echo -n $' \033[37m(\033[31m'
-    echo -n `basename "${VIRTUAL_ENV}"`
+    echo -n "$(basename "${VIRTUAL_ENV}")"
     echo -n $'\033[37m)\033[00m'
   fi
 }
@@ -85,15 +86,16 @@ fi
 if [ ! -e ~/.buildout/download-cache ]; then
     mkdir -p ~/.buildout/download-cache
 fi
-if [ $HOME ]; then
+if [ "$HOME" ]; then
     if which virtualenvwrapper.sh > /dev/null 2>&1; then
         WORKON_HOME=$HOME/.virtualenvs
-        if [ ! -e $WORKON_HOME ]; then
-            mkdir -p $WORKON_HOME 
+        if [ ! -e "$WORKON_HOME" ]; then
+            mkdir -p "$WORKON_HOME"
         fi
         export VIRTUALENVWRAPPER_LOG_DIR="$WORKON_HOME"
         export VIRTUALENVWRAPPER_HOOK_DIR="$WORKON_HOME"
         export PIP_VIRTUALENV_BASE="$WORKON_HOME"
+        # shellcheck source=/dev/null
         source `which virtualenvwrapper.sh`
     fi
 fi
@@ -122,25 +124,26 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 #PS1='\d \t`ians_lastcommandfailed``ians_vcprompt`\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-export IANS_BASEPROMPT='\n\e${IANS_USER_COLOR}\u\
-\e${IANS_GRAY_COLOR}@\e${IANS_ORANGE_COLOR}\h\e${IANS_GRAY_COLOR} at \e${IANS_DEFAULT_COLOR}\t\
-`ians_lastcommandfailed`\
-\e${IANS_GRAY_COLOR}`ians_vcprompt`\
-`ians_virtualenv`\
-\e${IANS_DEFAULT_COLOR}'
-PS1="${IANS_BASEPROMPT}
-\W\$ "
+IANS_BASEPROMPT="\\n\\e${IANS_USER_COLOR}\\u\
+\\e${IANS_GRAY_COLOR}@\\e${IANS_ORANGE_COLOR}\\h\\e${IANS_GRAY_COLOR} at \\e${IANS_DEFAULT_COLOR}\\t\
+$(ians_lastcommandfailed)\
+\\e${IANS_GRAY_COLOR}$(ians_vcprompt)\
+$(ians_virtualenv)\
+\\e${IANS_DEFAULT_COLOR}"
+export IANS_BASEPROMPT
 
-# Load docker functions
-. ~/.dockerfunc
+PS1="${IANS_BASEPROMPT}
+\\W\$ "
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
+    # shellcheck source=bash/_bash_aliases
     . ~/.bash_aliases
 fi
 
 # Local settings
 if [ -f ~/.bashrc.local ]; then
+    # shellcheck source=/dev/null
     . ~/.bashrc.local 
 fi
 
@@ -148,8 +151,10 @@ fi
 # Load the system wide bash completion if available.
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     # The system wide config should load our local config.
+    # shellcheck source=/dev/null
     . /etc/bash_completion
 elif [ -f ~/.bash_completion ]; then
     # The system wide config is not available so just load our completion
+    # shellcheck source=bash/_bash_completion
     . ~/.bash_completion
 fi

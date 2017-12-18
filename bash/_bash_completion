@@ -3,9 +3,10 @@
 
 # pip bash completion start
 if which pip > /dev/null 2>&1; then
-    eval `pip completion --bash`
+    eval "$(pip completion --bash)"
     _pip_completion()
     {
+        # shellcheck disable=SC2207
         COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
                        COMP_CWORD=$COMP_CWORD \
                        PIP_AUTO_COMPLETE=1 $1 ) )
@@ -14,31 +15,14 @@ if which pip > /dev/null 2>&1; then
 fi
 # pip bash completion end
 
-# fabric bash completion
-_fab_completion() {
-    COMPREPLY=()
-
-    # Fab in the path?
-    [[ -n `/usr/bin/which fab` ]] || return 0
-
-    # Fabfile in this folder?
-    [[ -e fabfile.py ]] || return 0
-
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-
-    tasks=$(fab --shortlist)
-    COMPREPLY=( $(compgen -W "${tasks}" -- ${cur}) )
-}
-# fabric bash completion end
-
 # kubectl bash completion
 if which kubectl > /dev/null 2>&1; then
+    # shellcheck source=/dev/null
     source <(kubectl completion bash)
 fi
 # kubectl bash completion end
 
-complete -F _fab_completion fab 
-
 if [ -f ~/.bash_completion.local ]; then
+    # shellcheck source=/dev/null
     . ~/.bash_completion.local
 fi

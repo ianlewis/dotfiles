@@ -15,15 +15,15 @@ fi
 for DIR in $DIRS; do
     if [ -d "$DIR" ]; then
         # Delete old files
-        find $DIR -type f -mtime +$DAYS -delete
+        find "$DIR" -type f -mtime +$DAYS -delete
 
         # Delete old symbolic links
-        find $DIR -type l -mtime +$DAYS -delete
+        find "$DIR" -type l -mtime +$DAYS -delete
 
         # Delete empty directories
-        find $DIR -type d -empty -delete
+        find "$DIR" -type d -empty -delete
     fi
 
     # Finally make sure the directory itself exists
-    mkdir -p $DIR
+    mkdir -p "$DIR"
 done

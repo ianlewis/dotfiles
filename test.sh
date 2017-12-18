@@ -8,7 +8,7 @@ ERRORS=()
 for f in $(find . -path ./vim/bundle -prune -o -type f -not -iwholename '*.git*' -not -name "yubitouch.sh" | sort -u); do
 	if file "$f" | cut -d':' -f2 | grep --quiet shell; then
 		{
-			shellcheck "$f" && echo "[OK]: sucessfully linted $f"
+			shellcheck -x "$f" && echo "[OK]: sucessfully linted $f"
 		} || {
 			# add to errors
 			ERRORS+=("$f")
