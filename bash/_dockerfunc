@@ -20,7 +20,7 @@ run_shellcheck() {
     # Note that this won't support checking files outside of the
     # host's current working dir.
     docker run --rm -it \
-        -v "$PWD:/mnt" \
+        -v "$PWD:/mnt:ro" \
         -w "/mnt" \
         ${DOCKER_REPO_PREFIX}/shellcheck "$@"
 }
