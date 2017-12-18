@@ -1,0 +1,44 @@
+#!/bin/bash
+
+export DOCKER_REPO_PREFIX=gcr.io/ianlewis-dockerfiles
+
+del_stopped(){
+	local name=$1
+	local state
+	state=$(docker inspect --format "{{.State.Running}}" "$name" 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm "$name"
+	fi
+}
+
+run_shellcheck() {
+    del_stopped shellcheck
+
+    # Mounts the current working directory to /mnt in the container
+    # and set's the container's working directory to /mnt.
+    # Note that this won't support checking files outside of the
+    # host's current working dir.
+    docker run --rm -it \
+        -v "$PWD:/mnt" \
+        -w "/mnt" \
+        ${DOCKER_REPO_PREFIX}/shellcheck "$@"
+}
+
+run_slack() {
+	del_stopped slack
+
+    docker run --rm -it \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        --device /dev/snd \
+        --device /dev/dri \
+        --device /dev/video0 \
+        --group-add audio \
+        --group-add video \
+        -v "${HOME}/.slack:/root/.config/Slack" \
+        --ipc="host" \
+        --name slack \
+        ${DOCKER_REPO_PREFIX}/slack "$@"
+}

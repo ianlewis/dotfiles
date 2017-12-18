@@ -28,13 +28,14 @@ endif
 	ln -s ~/.vim/_vimrc.windows ~/.vimrc.windows
 
 install-bash:
-	rm -f ~/.inputrc ~/.profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout
+	rm -f ~/.inputrc ~/.profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc
 	ln -s `pwd`/bash/_inputrc ~/.inputrc
 	ln -s `pwd`/bash/_profile ~/.profile
 	ln -s `pwd`/bash/_bashrc ~/.bashrc
 	ln -s `pwd`/bash/_bash_aliases ~/.bash_aliases
 	ln -s `pwd`/bash/_bash_completion ~/.bash_completion
 	ln -s `pwd`/bash/_bash_logout ~/.bash_logout
+	ln -s `pwd`/bash/_dockerfunc ~/.dockerfunc
 
 install-screen:
 	rm -f ~/.screenrc
