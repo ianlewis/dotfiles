@@ -25,14 +25,21 @@ fi
 export VISUAL=vim
 export EDITOR=vim
 
+# shellcheck disable=SC2034
 IANS_DEFAULT_COLOR="[00m"
+# shellcheck disable=SC2034
 IANS_GRAY_COLOR="[37m"
+# shellcheck disable=SC2034
 IANS_PINK_COLOR="[35m"
+# shellcheck disable=SC2034
 IANS_ORANGE_COLOR="[33m"
+# shellcheck disable=SC2034
 IANS_RED_COLOR="[31m"
 if [ "$(id -u)" == "0" ]; then
+  # shellcheck disable=SC2034
   IANS_USER_COLOR=$IANS_RED_COLOR
 else
+  # shellcheck disable=SC2034
   IANS_USER_COLOR=$IANS_PINK_COLOR
 fi
 
@@ -123,13 +130,15 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
-#PS1='\d \t`ians_lastcommandfailed``ians_vcprompt`\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-IANS_BASEPROMPT="\\n\\e${IANS_USER_COLOR}\\u\
-\\e${IANS_GRAY_COLOR}@\\e${IANS_ORANGE_COLOR}\\h\\e${IANS_GRAY_COLOR} at \\e${IANS_DEFAULT_COLOR}\\t\
-$(ians_lastcommandfailed)\
-\\e${IANS_GRAY_COLOR}$(ians_vcprompt)\
-$(ians_virtualenv)\
-\\e${IANS_DEFAULT_COLOR}"
+# Disable shellcheck for literal line-breaks and single quotes. We 
+# don't want to expand variables or add line breaks.
+# shellcheck disable=SC2016 disable=SC1004
+IANS_BASEPROMPT='\n\e${IANS_USER_COLOR}\u\
+\e${IANS_GRAY_COLOR}@\e${IANS_ORANGE_COLOR}\h\e${IANS_GRAY_COLOR} at \e${IANS_DEFAULT_COLOR}\t\
+`ians_lastcommandfailed`\
+\e${IANS_GRAY_COLOR}`ians_vcprompt`\
+`ians_virtualenv`\
+\e${IANS_DEFAULT_COLOR}'
 export IANS_BASEPROMPT
 
 PS1="${IANS_BASEPROMPT}
