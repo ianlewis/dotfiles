@@ -167,3 +167,23 @@ elif [ -f ~/.bash_completion ]; then
     # shellcheck source=bash/_bash_completion
     . ~/.bash_completion
 fi
+
+SSH_ENV="$HOME/.ssh/ssh_agent_environment"
+function start_ssh_agent {
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    ssh-add
+}
+
+# Source SSH settings, if applicable
+if which ssh-agent > /dev/null 2>&1; then
+    if [ -f "${SSH_ENV}" ]; then
+        . "${SSH_ENV}" > /dev/null
+        ps -f -u ${USER} | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+            start_ssh_agent;
+        }
+    else
+        start_ssh_agent;
+    fi
+fi
