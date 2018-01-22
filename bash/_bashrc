@@ -4,6 +4,24 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# tmux/screen
+# Start a tmux or screen session if not already in one
+# Exit directly after the tmux/screen session is exited
+if [[ "$TERM" != screen* ]]; then
+    if which tmux > /dev/null 2>&1; then
+        # Attempt to discover a detached session
+        # Use the current username as the session name.
+		if tmux has-session -t "${USER}" 2>/dev/null; then
+			tmux attach-session -t "${USER}" && exit
+		else
+			tmux new-session -s "${USER}" && exit
+		fi
+    elif which screen > /dev/null 2>&1; then
+        # Attempt to discover a detached session
+        screen -q -RR && exit
+    fi
+fi
+
 if [ -f /etc/bashrc ]; then
     # shellcheck source=/dev/null
     . /etc/bashrc 
