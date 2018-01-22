@@ -162,6 +162,33 @@ export IANS_BASEPROMPT
 PS1="${IANS_BASEPROMPT}
 \\W\$ "
 
+# ssh-agent
+# Start an ssh-agent instance if an existing one isn't found.
+SSH_ENV="$HOME/.ssh/ssh_agent_environment"
+start_ssh_agent() {
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    chmod 600 "${SSH_ENV}"
+    # shellcheck source=/dev/null
+    . "${SSH_ENV}" > /dev/null
+    ssh-add
+}
+
+# Source SSH settings, if applicable
+mkdir -p "${HOME}/.ssh"
+if [[ ( -z "${SSH_AUTH_SOCK}" ) && ( -z "${SSH_AGENT_PID}" ) ]]; then
+    if which ssh-agent > /dev/null 2>&1; then
+        if [ -f "${SSH_ENV}" ]; then
+            # shellcheck source=/dev/null
+            . "${SSH_ENV}" > /dev/null
+            pgrep -u "${USER}" "ssh-agent$" | grep "${SSH_AGENT_PID}" > /dev/null || {
+                start_ssh_agent;
+            }
+        else
+            start_ssh_agent;
+        fi
+    fi
+fi
+
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
     # shellcheck source=bash/_bash_aliases
@@ -184,29 +211,4 @@ elif [ -f ~/.bash_completion ]; then
     # The system wide config is not available so just load our completion
     # shellcheck source=bash/_bash_completion
     . ~/.bash_completion
-fi
-
-SSH_ENV="$HOME/.ssh/ssh_agent_environment"
-function start_ssh_agent {
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    chmod 600 "${SSH_ENV}"
-    # shellcheck source=/dev/null
-    . "${SSH_ENV}" > /dev/null
-    ssh-add
-}
-
-# Source SSH settings, if applicable
-mkdir -p "${HOME}/.ssh"
-if [[ ( -z "${SSH_AUTH_SOCK}" ) && ( -z "${SSH_AGENT_PID}" ) ]]; then
-    if which ssh-agent > /dev/null 2>&1; then
-        if [ -f "${SSH_ENV}" ]; then
-            # shellcheck source=/dev/null
-            . "${SSH_ENV}" > /dev/null
-            pgrep -u "${USER}" "ssh-agent$" | grep "${SSH_AGENT_PID}" > /dev/null || {
-                start_ssh_agent;
-            }
-        else
-            start_ssh_agent;
-        fi
-    fi
 fi
