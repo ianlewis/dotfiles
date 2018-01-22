@@ -177,6 +177,7 @@ function start_ssh_agent {
 }
 
 # Source SSH settings, if applicable
+mkdir -p $HOME/.ssh
 if which ssh-agent > /dev/null 2>&1; then
     if [ -f "${SSH_ENV}" ]; then
         . "${SSH_ENV}" > /dev/null
