@@ -213,9 +213,6 @@ vnoremap <silent> # :<C-U>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-nmap <C-s> :w<CR>
-imap <C-s> <ESC>:w<CR>i<right>
-
 " Terminal friendly visual block shortcut for the terminal
 noremap vb <C-v>
 
