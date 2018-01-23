@@ -1,9 +1,5 @@
 set nocompatible
 
-" disabled in favor of vim-autoclose for the time being because Japanese input
-" doesn't work well with delimitMate
-let g:pathogen_disabled = ["delimitMate"]
-
 if has("unix")
   " uname sometimes outputs with trailing whitespace so trim it.
   let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
@@ -106,9 +102,6 @@ autocmd FileType cpp setlocal commentstring=//%s
 
 "limit netrw file list
 let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
-
-" Expand code blocks
-let delimitMate_expand_cr = 1
 
 " Status line
 set laststatus=2
