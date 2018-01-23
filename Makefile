@@ -28,7 +28,8 @@ endif
 	ln -s ~/.vim/_vimrc.windows ~/.vimrc.windows
 
 install-bash:
-	rm -f ~/.inputrc ~/.profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc
+	rm -f ~/.inputrc ~/.profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
+	ln -s `pwd`/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 	ln -s `pwd`/bash/_inputrc ~/.inputrc
 	ln -s `pwd`/bash/_profile ~/.profile
 	ln -s `pwd`/bash/_bashrc ~/.bashrc

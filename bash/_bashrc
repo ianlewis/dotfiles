@@ -164,29 +164,15 @@ PS1="${IANS_BASEPROMPT}
 
 # ssh-agent
 # Start an ssh-agent instance if an existing one isn't found.
-SSH_ENV="$HOME/.ssh/ssh_agent_environment"
-start_ssh_agent() {
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    chmod 600 "${SSH_ENV}"
-    # shellcheck source=/dev/null
-    . "${SSH_ENV}" > /dev/null
-    ssh-add
-}
-
-# Source SSH settings, if applicable
-mkdir -p "${HOME}/.ssh"
-if [[ ( -z "${SSH_AUTH_SOCK}" ) && ( -z "${SSH_AGENT_PID}" ) ]]; then
-    if which ssh-agent > /dev/null 2>&1; then
-        if [ -f "${SSH_ENV}" ]; then
-            # shellcheck source=/dev/null
-            . "${SSH_ENV}" > /dev/null
-            pgrep -u "${USER}" "ssh-agent$" | grep "${SSH_AGENT_PID}" > /dev/null || {
-                start_ssh_agent;
-            }
-        else
-            start_ssh_agent;
-        fi
+mkdir -p ~/.ssh
+if [ -f ~/.ssh-find-agent ]; then
+    # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
+    if [ ! -f ~/.ssh/authorized_keys ]; then
+        touch ~/.ssh/authorized_keys
     fi
+    # shellcheck source=/dev/null
+    . ~/.ssh-find-agent
+    ssh-find-agent -a || eval "$(ssh-agent -s)" > /dev/null
 fi
 
 # Alias definitions.

@@ -37,3 +37,6 @@
 [submodule "vim/bundle/vim-autoclose"]
 	path = vim/bundle/vim-autoclose
 	url = https://github.com/Townk/vim-autoclose.git
+[submodule "bash/lib/ssh-find-agent"]
+	path = bash/lib/ssh-find-agent
+	url = https://github.com/wwalker/ssh-find-agent.git
