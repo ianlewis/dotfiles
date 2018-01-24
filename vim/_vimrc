@@ -48,6 +48,10 @@ colors desert
 " The PC is fast enough, do syntax highlight syncing from start
 autocmd BufEnter * :syntax sync fromstart
 
+" new horizontal split panes show up on the bottom
+set splitbelow
+" new vertical split panes show up to the right
+set splitright
 
 " Use soft tabs of 4 spaces by default.
 set tabstop=4
