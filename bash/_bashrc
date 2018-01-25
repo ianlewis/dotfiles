@@ -9,7 +9,7 @@
 # Exit directly after the tmux/screen session is exited
 # Only run if running in a terminal.
 if [[ ( -t 1 ) && ( "$TERM" != screen* ) ]]; then
-    if which tmux > /dev/null 2>&1; then
+    if command -v tmux > /dev/null 2>&1; then
         # Attempt to discover a detached session
         # Use the current username as the session name.
 		if tmux has-session -t "${USER}" 2>/dev/null; then
@@ -17,7 +17,7 @@ if [[ ( -t 1 ) && ( "$TERM" != screen* ) ]]; then
 		else
 			exec tmux new-session -s "${USER}"
 		fi
-    elif which screen > /dev/null 2>&1; then
+    elif command -v screen > /dev/null 2>&1; then
         # Attempt to discover a detached session
         exec screen -q -RR
     fi
@@ -113,7 +113,7 @@ if [ ! -e ~/.buildout/download-cache ]; then
     mkdir -p ~/.buildout/download-cache
 fi
 if [ "$HOME" ]; then
-    if which virtualenvwrapper.sh > /dev/null 2>&1; then
+    if command -v virtualenvwrapper.sh > /dev/null 2>&1; then
         WORKON_HOME=$HOME/.virtualenvs
         if [ ! -e "$WORKON_HOME" ]; then
             mkdir -p "$WORKON_HOME"
@@ -122,7 +122,7 @@ if [ "$HOME" ]; then
         export VIRTUALENVWRAPPER_HOOK_DIR="$WORKON_HOME"
         export PIP_VIRTUALENV_BASE="$WORKON_HOME"
         # shellcheck source=/dev/null
-        source `which virtualenvwrapper.sh`
+        source $(command -v virtualenvwrapper.sh)
     fi
 fi
 
