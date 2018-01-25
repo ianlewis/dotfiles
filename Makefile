@@ -42,6 +42,10 @@ install-screen:
 	rm -f ~/.screenrc
 	ln -s `pwd`/screen/_screenrc ~/.screenrc
 
+install-tmux:
+	rm -f ~/.tmux.conf
+	ln -s `pwd`/tmux/_tmux.conf ~/.tmux.conf
+
 install-git:
 	rm -f ~/.gitconfig
 	ln -s `pwd`/git/_gitconfig ~/.gitconfig
