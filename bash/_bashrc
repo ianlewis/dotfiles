@@ -7,18 +7,19 @@
 # tmux/screen
 # Start a tmux or screen session if not already in one
 # Exit directly after the tmux/screen session is exited
-if [[ "$TERM" != screen* ]]; then
+# Only run if running in a terminal.
+if [[ ( -t 1 ) && ( "$TERM" != screen* ) ]]; then
     if which tmux > /dev/null 2>&1; then
         # Attempt to discover a detached session
         # Use the current username as the session name.
 		if tmux has-session -t "${USER}" 2>/dev/null; then
-			tmux attach-session -t "${USER}" && exit
+			exec tmux attach-session -t "${USER}"
 		else
-			tmux new-session -s "${USER}" && exit
+			exec tmux new-session -s "${USER}"
 		fi
     elif which screen > /dev/null 2>&1; then
         # Attempt to discover a detached session
-        screen -q -RR && exit
+        exec screen -q -RR
     fi
 fi
 
