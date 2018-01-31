@@ -2,7 +2,7 @@ HAS_CMAKE := $(shell which cmake)
 HAS_CPP := $(shell which c++)
 HAS_C := $(shell which cc)
 
-install: install-bin install-vcprompt install-vim install-bash install-screen install-git install-virtualenvwrapper
+install: install-bin install-vcprompt install-vim install-bash install-screen install-git install-virtualenvwrapper install-tmux
 
 install-bin:
 	mkdir -p ~/bin
