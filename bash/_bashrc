@@ -202,3 +202,11 @@ elif [ -f ~/.bash_completion ]; then
     # shellcheck source=bash/_bash_completion
     . ~/.bash_completion
 fi
+
+# Add user-local bin to the PATH but only after running the .profile.local.
+# We want ~/bin to be highest priority.
+if [ -d ~/bin ] ; then
+    PATH=~/bin:"${PATH}"
+fi
+
+export PATH

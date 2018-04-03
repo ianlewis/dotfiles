@@ -24,12 +24,3 @@ if [ -f ~/.profile.local ]; then
     # shellcheck source=/dev/null
     . ~/.profile.local
 fi
-
-
-# Add user-local bin to the PATH but only after running the .profile.local.
-# We want ~/bin to be highest priority.
-if [ -d ~/bin ] ; then
-    PATH=~/bin:"${PATH}"
-fi
-
-export PATH
