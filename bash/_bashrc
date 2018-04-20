@@ -89,10 +89,22 @@ ians_lastcommandfailed() {
     echo -n $'\033[37m'
   fi
 }
+
+# Display the currently active virtualenv
 ians_virtualenv() {
   if [ x"$VIRTUAL_ENV" != x ]; then
     echo -n $' \033[37m(\033[31m'
     echo -n "$(basename "${VIRTUAL_ENV}")"
+    echo -n $'\033[37m)\033[00m'
+  fi
+}
+
+# Display the currently active gcloud configuration
+ians_gcloud() {
+  GCLOUD_ACTIVE_CONFIG=~/.config/gcloud/active_config
+  if [ -f $GCLOUD_ACTIVE_CONFIG ]; then
+    echo -n $' \033[37m(\033[34m'
+    echo -n "$(cat ${GCLOUD_ACTIVE_CONFIG})"
     echo -n $'\033[37m)\033[00m'
   fi
 }
@@ -160,6 +172,7 @@ IANS_BASEPROMPT='\n\e${IANS_USER_COLOR}\u\
 `ians_lastcommandfailed`\
 \e${IANS_GRAY_COLOR}`ians_vcprompt`\
 `ians_virtualenv`\
+`ians_gcloud`\
 \e${IANS_DEFAULT_COLOR}'
 export IANS_BASEPROMPT
 
