@@ -80,6 +80,10 @@ else
     eval "$(dircolors -b)"
 fi
 
+ians_time() {
+    date +"%H:%M:%S%z"
+}
+
 VCPROMPT_EXECUTABLE=~/bin/vcprompt
 ians_vcprompt() {
     if [ -x $VCPROMPT_EXECUTABLE ]; then
@@ -174,7 +178,8 @@ fi
 # don't want to expand variables or add line breaks.
 # shellcheck disable=SC2016 disable=SC1004
 IANS_BASEPROMPT='\n${IANS_USER_COLOR}\u\
-${IANS_GRAY_COLOR}@${IANS_ORANGE_COLOR}\h${IANS_GRAY_COLOR} at ${IANS_DEFAULT_COLOR}\t\
+${IANS_GRAY_COLOR}@${IANS_ORANGE_COLOR}\h${IANS_GRAY_COLOR} at ${IANS_DEFAULT_COLOR}\
+`ians_time`\
 `ians_lastcommandfailed`\
 ${IANS_GRAY_COLOR}`ians_vcprompt`\
 `ians_virtualenv`\
