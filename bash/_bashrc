@@ -92,10 +92,10 @@ ians_vcprompt() {
 }
 
 ians_lastcommandfailed() {
-  code=$?
-  if [ $code != 0 ]; then
+  code=${code:-0}
+  if [ "$code" != "0" ]; then
     echo -n "${IANS_GRAY_COLOR} exited ${IANS_RED_COLOR}"
-    echo -n $code
+    echo -n "$code"
     echo -n "${IANS_DEFAULT_COLOR}"
   fi
 }
@@ -117,6 +117,19 @@ ians_gcloud() {
     echo -n "$(cat ${GCLOUD_ACTIVE_CONFIG})"
     echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
   fi
+}
+
+ians_prompt() {
+    code=$?
+    PS1=""
+
+    PS1+='\n${IANS_USER_COLOR}'
+    PS1+='\u'
+    PS1+='${IANS_GRAY_COLOR}@${IANS_ORANGE_COLOR}\h${IANS_GRAY_COLOR}'
+    PS1+=' at ${IANS_DEFAULT_COLOR}'$(ians_time)
+    PS1+=$(ians_lastcommandfailed)
+    PS1+='${IANS_GRAY_COLOR}'$(ians_vcprompt)$(ians_virtualenv)$(ians_gcloud)'${IANS_DEFAULT_COLOR}'
+    PS1+='\n\W\$ '
 }
 
 # Create vim swap file directory
@@ -176,19 +189,7 @@ fi
 # set a fancy prompt (non-color, unless we know we "want" color)
 # Disable shellcheck for literal line-breaks and single quotes. We 
 # don't want to expand variables or add line breaks.
-# shellcheck disable=SC2016 disable=SC1004
-IANS_BASEPROMPT='\n${IANS_USER_COLOR}\u\
-${IANS_GRAY_COLOR}@${IANS_ORANGE_COLOR}\h${IANS_GRAY_COLOR} at ${IANS_DEFAULT_COLOR}\
-`ians_time`\
-`ians_lastcommandfailed`\
-${IANS_GRAY_COLOR}`ians_vcprompt`\
-`ians_virtualenv`\
-`ians_gcloud`\
-${IANS_DEFAULT_COLOR}'
-export IANS_BASEPROMPT
-
-PS1="${IANS_BASEPROMPT}
-\\W\$ "
+PROMPT_COMMAND=ians_prompt
 
 # ssh-agent
 # Start an ssh-agent instance if an existing one isn't found.
