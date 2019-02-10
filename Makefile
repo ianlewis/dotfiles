@@ -2,7 +2,7 @@ HAS_CMAKE := $(shell which cmake)
 HAS_CPP := $(shell which c++)
 HAS_C := $(shell which cc)
 
-install: install-bin install-vcprompt install-vim install-bash install-screen install-git install-virtualenvwrapper install-tmux
+install: install-bin install-vcprompt install-vim install-bash install-flake8 install-screen install-git install-virtualenvwrapper install-tmux
 
 install-bin:
 	mkdir -p ~/bin
@@ -37,6 +37,11 @@ install-bash:
 	ln -s `pwd`/bash/_bash_completion ~/.bash_completion
 	ln -s `pwd`/bash/_bash_logout ~/.bash_logout
 	ln -s `pwd`/bash/_dockerfunc ~/.dockerfunc
+
+install-flake8:
+	rm -rf ~/.config/flake8
+	mkdir -p ~/.config
+	ln -s `pwd`/flake8/flake8.ini ~/.config/flake8
 
 install-screen:
 	rm -f ~/.screenrc
