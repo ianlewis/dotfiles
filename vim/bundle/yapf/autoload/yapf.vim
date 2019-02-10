@@ -50,7 +50,7 @@ function! yapf#YAPF() range
   try | silent undojoin | catch | endtry
 
   " Update the buffer.
-  execute '1,' . string(line('$')) . 'delete'
+  execute '1,' . string(line('$')) . 'delete _'
   call setline(1, l:formatted_text)
 
   " Reset cursor to first line of the formatted range.
