@@ -31,10 +31,6 @@ function! yapf#YAPF() range
   let l:line_ranges = a:firstline . '-' . a:lastline
   let l:cmd = 'yapf --lines=' . l:line_ranges
 
-  " save the cursor position
-  let l:save_cursor = getcurpos()
-  echom l:save_cursor[1]
-
   " Call YAPF with the current buffer
   if exists('*systemlist')
     let l:formatted_text = systemlist(l:cmd, join(getline(1, '$'), "\n") . "\n")
@@ -57,6 +53,6 @@ function! yapf#YAPF() range
   execute '1,' . string(line('$')) . 'delete'
   call setline(1, l:formatted_text)
 
-  " Reset cursor to the first col of line where it was previously.
-  call cursor(l:save_cursor[1], 1)
+  " Reset cursor to first line of the formatted range.
+  call cursor(a:firstline, 1) "
 endfunction
