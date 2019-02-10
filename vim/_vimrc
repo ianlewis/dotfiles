@@ -269,6 +269,9 @@ let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 " Uncomment this line if setting g:syntastic_auto_loc_list = 1
 " let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
+" Python syntax checking
+let g:syntastic_python_checkers = ["flake8"]
+
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
 
