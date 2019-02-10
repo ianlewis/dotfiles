@@ -271,6 +271,7 @@ let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 
 " Python syntax checking
 let g:syntastic_python_checkers = ["flake8"]
+autocmd BufWritePre *.py call yapf#YAPFAll()
 
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
