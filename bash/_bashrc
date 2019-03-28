@@ -191,6 +191,9 @@ fi
 # don't want to expand variables or add line breaks.
 PROMPT_COMMAND=ians_prompt
 
+# Set gpg tty
+export GPG_TTY=$(tty)
+
 # ssh-agent
 # Start an ssh-agent instance if an existing one isn't found.
 mkdir -p ~/.ssh
