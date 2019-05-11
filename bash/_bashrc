@@ -10,8 +10,8 @@
 # Only run if logged in remotely via ssh
 if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
     # Only run if running in a terminal.
-    if [[ ( -t 1 ) && ( "$TERM" != screen* ) ]]; then
-        if command -v tmux > /dev/null 2>&1; then
+    if [[ (-t 1) && ("$TERM" != screen*) ]]; then
+        if command -v tmux >/dev/null 2>&1; then
             # Attempt to discover a detached session
             # Use the current username as the session name.
             if tmux has-session -t "${USER}" 2>/dev/null; then
@@ -19,7 +19,7 @@ if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
             else
                 exec tmux new-session -s "${USER}"
             fi
-        elif command -v screen > /dev/null 2>&1; then
+        elif command -v screen >/dev/null 2>&1; then
             # Attempt to discover a detached session
             exec screen -q -RR
         fi
@@ -28,12 +28,12 @@ fi
 
 if [ -f /etc/bashrc ]; then
     # shellcheck source=/dev/null
-    . /etc/bashrc 
+    . /etc/bashrc
 fi
 # For some debian systems
 if [ -f /etc/bash.bashrc ]; then
     # shellcheck source=/dev/null
-    . /etc/bash.bashrc 
+    . /etc/bash.bashrc
 fi
 
 # If not running interactively, don't do anything
@@ -64,11 +64,11 @@ IANS_BLUE_COLOR="$ESC[34m"
 IANS_GREEN_COLOR="$ESC[32m"
 
 if [ "$(id -u)" == "0" ]; then
-  # shellcheck disable=SC2034
-  IANS_USER_COLOR=$IANS_RED_COLOR
+    # shellcheck disable=SC2034
+    IANS_USER_COLOR=$IANS_RED_COLOR
 else
-  # shellcheck disable=SC2034
-  IANS_USER_COLOR=$IANS_PINK_COLOR
+    # shellcheck disable=SC2034
+    IANS_USER_COLOR=$IANS_PINK_COLOR
 fi
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -92,31 +92,31 @@ ians_vcprompt() {
 }
 
 ians_lastcommandfailed() {
-  code=${code:-0}
-  if [ "$code" != "0" ]; then
-    echo -n "${IANS_GRAY_COLOR} exited ${IANS_RED_COLOR}"
-    echo -n "$code"
-    echo -n "${IANS_DEFAULT_COLOR}"
-  fi
+    code=${code:-0}
+    if [ "$code" != "0" ]; then
+        echo -n "${IANS_GRAY_COLOR} exited ${IANS_RED_COLOR}"
+        echo -n "$code"
+        echo -n "${IANS_DEFAULT_COLOR}"
+    fi
 }
 
 # Display the currently active virtualenv
 ians_virtualenv() {
-  if [ x"$VIRTUAL_ENV" != x ]; then
-    echo -n " ${IANS_GRAY_COLOR}(${IANS_RED_COLOR}"
-    echo -n "$(basename "${VIRTUAL_ENV}")"
-    echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
-  fi
+    if [ x"$VIRTUAL_ENV" != x ]; then
+        echo -n " ${IANS_GRAY_COLOR}(${IANS_RED_COLOR}"
+        echo -n "$(basename "${VIRTUAL_ENV}")"
+        echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
+    fi
 }
 
 # Display the currently active gcloud configuration
 ians_gcloud() {
-  GCLOUD_ACTIVE_CONFIG=~/.config/gcloud/active_config
-  if [ -f $GCLOUD_ACTIVE_CONFIG ]; then
-    echo -n " ${IANS_GRAY_COLOR}(${IANS_BLUE_COLOR}"
-    echo -n "$(cat ${GCLOUD_ACTIVE_CONFIG})"
-    echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
-  fi
+    GCLOUD_ACTIVE_CONFIG=~/.config/gcloud/active_config
+    if [ -f $GCLOUD_ACTIVE_CONFIG ]; then
+        echo -n " ${IANS_GRAY_COLOR}(${IANS_BLUE_COLOR}"
+        echo -n "$(cat ${GCLOUD_ACTIVE_CONFIG})"
+        echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
+    fi
 }
 
 ians_prompt() {
@@ -151,7 +151,7 @@ if [ ! -e ~/.buildout/download-cache ]; then
     mkdir -p ~/.buildout/download-cache
 fi
 if [ "$HOME" ]; then
-    if command -v virtualenvwrapper.sh > /dev/null 2>&1; then
+    if command -v virtualenvwrapper.sh >/dev/null 2>&1; then
         WORKON_HOME=$HOME/.virtualenvs
         if [ ! -e "$WORKON_HOME" ]; then
             mkdir -p "$WORKON_HOME"
@@ -187,7 +187,7 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
-# Disable shellcheck for literal line-breaks and single quotes. We 
+# Disable shellcheck for literal line-breaks and single quotes. We
 # don't want to expand variables or add line breaks.
 PROMPT_COMMAND=ians_prompt
 
@@ -204,7 +204,7 @@ if [ -f ~/.ssh-find-agent ]; then
     fi
     # shellcheck source=/dev/null
     . ~/.ssh-find-agent
-    ssh-find-agent -a || eval "$(ssh-agent -s)" > /dev/null
+    ssh-find-agent -a || eval "$(ssh-agent -s)" >/dev/null
 fi
 
 # Alias definitions.
@@ -216,7 +216,7 @@ fi
 # Local settings
 if [ -f ~/.bashrc.local ]; then
     # shellcheck source=/dev/null
-    . ~/.bashrc.local 
+    . ~/.bashrc.local
 fi
 
 # Completion
@@ -239,5 +239,20 @@ PATH=~/bin:"${PATH}"
 # via 'pip install --user'
 PATH=~/.local/bin:"${PATH}"
 
+# Go
+GOROOT=${HOME}/opt/go
+GOPATH=${HOME}/go
+PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"
+
+# Node.js
+for d in $(ls -d ${HOME}/opt/node-*); do
+    PATH="${d}/bin:${PATH}"
+done
 
 export PATH
+
+# Print the message if reboot is required.
+if [ -f /var/run/reboot-required ]; then
+    # Print the message if the file exists
+    cat /var/run/reboot-required
+fi
