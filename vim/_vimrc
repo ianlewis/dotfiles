@@ -1,13 +1,13 @@
 set nocompatible
 
 if has("unix")
-  " uname sometimes outputs with trailing whitespace so trim it.
-  let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
-  if s:uname == "Darwin"
-    " Disable YouCompleteMe on Mac OS X because of issues with Python.
-    " See: https://github.com/Valloric/YouCompleteMe#i-get-fatal-python-error-pythreadstate_get-no-current-thread-on-startup
-    let g:pathogen_disabled = g:pathogen_disabled + ["YouCompleteMe"]
-  endif
+    " uname sometimes outputs with trailing whitespace so trim it.
+    let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
+    if s:uname == "Darwin"
+        " Disable YouCompleteMe on Mac OS X because of issues with Python.
+        " See: https://github.com/Valloric/YouCompleteMe#i-get-fatal-python-error-pythreadstate_get-no-current-thread-on-startup
+        let g:pathogen_disabled = g:pathogen_disabled + ["YouCompleteMe"]
+    endif
 endif
 
 " Local config.
@@ -111,13 +111,13 @@ vnoremap <tab> %
 nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
 function! ToggleRelativeAbsoluteNumber()
     if &relativenumber
-        set nonumber 
-        set norelativenumber 
+        set nonumber
+        set norelativenumber
     else
         if &number
             set relativenumber
         else
-            set number 
+            set number
         endif
     endif
 endfunction
@@ -142,7 +142,8 @@ set incsearch
 " ----------------------------------------------------------------------------
 
 "Run gofmt on save
-let g:go_fmt_autosave = 1
+" defer to autoformat for gofmt
+" let g:go_fmt_autosave = 1
 " let g:go_fmt_fail_silently = 1
 
 " Set the comment string for Go to line comments.
@@ -203,14 +204,14 @@ let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
 " Status line
 set laststatus=2
 if has("statusline")
-  set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+    set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
 
-  " Errors for syntax checking
-  set statusline+=%#warningmsg#
-  if exists(':SyntasticStatuslineFlag')
-      set statusline+=%{SyntasticStatuslineFlag()}
-  endif
-  set statusline+=%*
+    " Errors for syntax checking
+    set statusline+=%#warningmsg#
+    if exists(':SyntasticStatuslineFlag')
+        set statusline+=%{SyntasticStatuslineFlag()}
+    endif
+    set statusline+=%*
 endif
 
 "Hide menu and toolbar
@@ -225,15 +226,15 @@ set ttyfast
 
 " Search for selected text, forwards or backwards.
 vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy/<C-R><C-R>=substitute(
+            \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
 vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy?<C-R><C-R>=substitute(
+            \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " Terminal friendly visual block shortcut for the terminal. This is an escape
 " hatch for when Ctrl-v doesn't work in some terminals.
@@ -256,6 +257,12 @@ imap <C-v> <ESC>"+gpi
 " Toggle the quick buffer by hitting semicolon twice.
 let g:qb_hotkey = ";;"
 
+" Autoformatter
+" ----------------------------------------------------------------------------
+au BufWrite * :Autoformat
+" Don't fall back to vim's autoindent because it breaks a lot of file types
+let g:autoformat_autoindent = 0
+
 " Syntastic
 " ----------------------------------------------------------------------------
 let g:syntastic_always_populate_loc_list = 1
@@ -271,7 +278,6 @@ let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 
 " Python syntax checking
 let g:syntastic_python_checkers = ["flake8"]
-autocmd BufWritePre *.py call yapf#YAPFAll()
 
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
@@ -285,7 +291,7 @@ let g:EclimCompletionMethod = 'omnifunc'
 " but simply deletes all buffers without closing vim. Supports
 " bang to override warnings.
 command! -nargs=0 -bang Bda
-    \ :call BufDeleteAll('<bang>')
+            \ :call BufDeleteAll('<bang>')
 
 function! BufDeleteAll(bang)
     let last_buffer = bufnr('$')

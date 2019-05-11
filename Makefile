@@ -2,11 +2,22 @@ HAS_CMAKE := $(shell which cmake)
 HAS_CPP := $(shell which c++)
 HAS_C := $(shell which cc)
 
+uname_s := $(shell uname -s)
+$(info uname_s=$(uname_s))
+uname_m := $(shell uname -m)
+$(info uname_m=$(uname_m))
+
+# system specific variables, add more here
+BINDIR.Linux.x86_64 := bin/linux/amd64
+BINDIR.Darwin.x86_64 := bin/macos/amd64
+BINDIR = $(BINDIR.$(uname_s).$(uname_m))
+
 install: install-bin install-vcprompt install-vim install-bash install-flake8 install-screen install-git install-virtualenvwrapper install-tmux
 
 install-bin:
 	mkdir -p ~/bin
-	ln -sf `pwd`/bin/* ~/bin/
+	ln -sf `pwd`/bin/all/* ~/bin/
+	ln -sf `pwd`/$(BINDIR)/* ~/bin/
 
 install-vcprompt:
 ifdef HAS_C
