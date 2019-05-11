@@ -233,8 +233,11 @@ fi
 
 # Add user-local bin to the PATH but only after running the .profile.local.
 # We want ~/bin to be highest priority.
-if [ -d ~/bin ] ; then
-    PATH=~/bin:"${PATH}"
-fi
+PATH=~/bin:"${PATH}"
+
+# The .local/bin is used for some local installs such as applications installed
+# via 'pip install --user'
+PATH=~/.local/bin:"${PATH}"
+
 
 export PATH
