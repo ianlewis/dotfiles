@@ -19,3 +19,5 @@
     path = ~/.gitconfig.local
 [credential "https://source.developers.google.com"]
 	helper = gcloud.sh
+[http]
+	cookiefile = /home/ian/.gitcookies
