@@ -12,8 +12,8 @@ BINDIR.Linux.x86_64 := bin/linux/amd64
 BINDIR.Darwin.x86_64 := bin/macos/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
-GOURL.Linux.x86_64 := https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz
-GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.12.5.darwin-amd64.tar.gz
+GOURL.Linux.x86_64 := https://dl.google.com/go/go1.12.6.linux-amd64.tar.gz
+GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.12.6.darwin-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
 
