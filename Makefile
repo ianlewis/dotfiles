@@ -22,7 +22,7 @@ NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: install
-install: install-bin install-vcprompt install-vim install-bash install-flake8 install-screen install-git install-virtualenvwrapper install-tmux
+configure: install-bin install-vcprompt configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux
 
 .PHONY: install-bin
 install-bin:
@@ -36,8 +36,8 @@ ifdef HAS_C
 	cd src/vcprompt && make && ln -fs `pwd`/vcprompt ~/bin/vcprompt
 endif
 
-.PHONY: install-vim
-install-vim:
+.PHONY: configure-vim
+configure-vim:
 ifdef HAS_CMAKE
 ifdef HAS_CPP
 ifdef HAS_C
@@ -51,8 +51,8 @@ endif
 	ln -s ~/.vim/_gvimrc ~/.gvimrc
 	ln -s ~/.vim/_vimrc.windows ~/.vimrc.windows
 
-.PHONY: install-bash
-install-bash:
+.PHONY: configure-bash
+configure-bash:
 	rm -f ~/.inputrc ~/.profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
 	ln -s `pwd`/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 	ln -s `pwd`/bash/_inputrc ~/.inputrc
@@ -63,34 +63,34 @@ install-bash:
 	ln -s `pwd`/bash/_bash_logout ~/.bash_logout
 	ln -s `pwd`/bash/_dockerfunc ~/.dockerfunc
 
-.PHONY: install-flake8
-install-flake8:
+.PHONY: configure-flake8
+configure-flake8:
 	rm -rf ~/.config/flake8
 	mkdir -p ~/.config
 	ln -s `pwd`/flake8/flake8.ini ~/.config/flake8
 
-.PHONY: install-screen
-install-screen:
+.PHONY: configure-screen
+configure-screen:
 	rm -f ~/.screenrc
 	ln -s `pwd`/screen/_screenrc ~/.screenrc
 
-.PHONY: install-tmux
-install-tmux:
+.PHONY: configure-tmux
+configure-tmux:
 	rm -f ~/.tmux.conf
 	ln -s `pwd`/tmux/_tmux.conf ~/.tmux.conf
 
-.PHONY: install-git
-install-git:
+.PHONY: configure-git
+configure-git:
 	rm -f ~/.gitconfig
 	ln -s `pwd`/git/_gitconfig ~/.gitconfig
 
-.PHONY: install-virtualenvwrapper
-install-virtualenvwrapper:
+.PHONY: configure-virtualenvwrapper
+configure-virtualenvwrapper:
 	mkdir -p ~/.virtualenvs
 	ln -sf `pwd`/virtualenvwrapper/* ~/.virtualenvs/
 
-.PHONY: install-mercurial
-install-mercurial:
+.PHONY: configure-mercurial
+configure-mercurial:
 	rm -f ~/.hgrc
 	ln -s `pwd`/mercurial/_hgrc ~/.hgrc
 
