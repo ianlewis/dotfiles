@@ -22,7 +22,7 @@ NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: install
-configure: install-bin install-vcprompt configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux
+configure: install-bin install-vcprompt configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux configure-remark
 
 .PHONY: install-bin
 install-bin:
@@ -94,6 +94,11 @@ configure-mercurial:
 	rm -f ~/.hgrc
 	ln -s `pwd`/mercurial/_hgrc ~/.hgrc
 
+.PHONY: configure-remark
+configure-remark:
+	rm -f ~/.remarkrc
+	ln -s `pwd`/remark/_remarkrc ~/.remarkrc
+
 # Extra targets
 
 .PHONY: install-opt
@@ -120,7 +125,7 @@ install-black:
 
 .PHONY: install-remark
 install-remark: install-node
-	npm install -g remark-cli
+	npm install -g remark-cli remark-frontmatter
 
 # For HTML, Javascript, CSS, JSON
 .PHONY: install-js-beautify

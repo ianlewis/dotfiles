@@ -1,5 +1,10 @@
 set nocompatible
 
+" Local config.
+if filereadable($HOME."/.vimrc.first.local")
+    source $HOME/.vimrc.first.local
+endif
+
 if has("unix")
     " uname sometimes outputs with trailing whitespace so trim it.
     let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
@@ -8,11 +13,6 @@ if has("unix")
         " See: https://github.com/Valloric/YouCompleteMe#i-get-fatal-python-error-pythreadstate_get-no-current-thread-on-startup
         let g:pathogen_disabled = g:pathogen_disabled + ["YouCompleteMe"]
     endif
-endif
-
-" Local config.
-if filereadable($HOME."/.vimrc.first.local")
-    source $HOME/.vimrc.first.local
 endif
 
 " Pathogen
