@@ -127,6 +127,10 @@ install-black:
 install-remark: install-node
 	npm install -g remark-cli remark-frontmatter
 
+.PHONY: install-prettier
+install-prettier: install-node
+	npm install -g prettier
+
 # For HTML, Javascript, CSS, JSON
 .PHONY: install-js-beautify
 install-js-beautify: install-node
