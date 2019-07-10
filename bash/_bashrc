@@ -4,6 +4,11 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+if [ -f ~/.bashrc_init_local ]; then
+    # shellcheck source=/dev/null
+    . ~/.bashrc_init_local
+fi
+
 # tmux/screen
 # Start a tmux or screen session if not already in one
 # Exit directly after the tmux/screen session is exited
@@ -38,11 +43,6 @@ fi
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
-
-if [ -f ~/.bashrc_init_local ]; then
-    # shellcheck source=/dev/null
-    . ~/.bashrc_init_local
-fi
 
 export VISUAL=vim
 export EDITOR=vim
