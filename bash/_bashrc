@@ -247,7 +247,7 @@ if [ -d ${HOME}/opt/go ]; then
 fi
 
 # Node.js
-for d in $(ls -d ${HOME}/opt/node-*); do
+for d in $(ls -d ${HOME}/opt/node-* 2>/dev/null); do
     PATH="${d}/bin:${PATH}"
 done
 
