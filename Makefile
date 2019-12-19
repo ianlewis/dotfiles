@@ -12,13 +12,12 @@ BINDIR.Linux.x86_64 := bin/linux/amd64
 BINDIR.Darwin.x86_64 := bin/macos/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
-GOURL.Linux.x86_64 := https://dl.google.com/go/go1.12.6.linux-amd64.tar.gz
-GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.12.6.darwin-amd64.tar.gz
+GOURL.Linux.x86_64 := https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz
+GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.13.5.darwin-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
-
-NODEURL.Linux.x86_64 := https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz
-NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz
+NODEURL.Linux.x86_64 := https://nodejs.org/dist/v12.14.0/node-v12.14.0-linux-x64.tar.xz
+NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v12.14.0/node-v12.14.0-darwin-x64.tar.gz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: install
