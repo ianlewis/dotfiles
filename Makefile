@@ -56,6 +56,7 @@ configure-bash:
 	ln -s `pwd`/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 	ln -s `pwd`/bash/_inputrc ~/.inputrc
 	ln -s `pwd`/bash/_profile ~/.profile
+	ln -s `pwd`/bash/_bash_profile ~/.bash_profile
 	ln -s `pwd`/bash/_bashrc ~/.bashrc
 	ln -s `pwd`/bash/_bash_aliases ~/.bash_aliases
 	ln -s `pwd`/bash/_bash_completion ~/.bash_completion
