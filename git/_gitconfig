@@ -21,3 +21,5 @@
 	helper = gcloud.sh
 [http]
 	cookiefile = /home/ian/.gitcookies
+[pull]
+	ff = only
