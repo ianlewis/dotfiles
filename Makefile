@@ -107,7 +107,7 @@ install-opt:
 .PHONY: install-go
 install-go: install-opt
 	wget -O /tmp/go.tar.gz $(GOURL)
-	cd ~/opt && tar xf /tmp/go.tar.gz
+	cd ~/opt && rm -rf go/ && tar xf /tmp/go.tar.gz
 
 .PHONY: install-node
 install-node: install-opt
