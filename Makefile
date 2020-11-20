@@ -52,8 +52,7 @@ endif
 
 .PHONY: configure-bash
 configure-bash:
-	rm -f ~/.inputrc ~/.profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
-	ln -s `pwd`/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
+	rm -f ~/.inputrc ~/.profile ~/.bash_profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
 	ln -s `pwd`/bash/_inputrc ~/.inputrc
 	ln -s `pwd`/bash/_profile ~/.profile
 	ln -s `pwd`/bash/_bash_profile ~/.bash_profile
@@ -62,6 +61,7 @@ configure-bash:
 	ln -s `pwd`/bash/_bash_completion ~/.bash_completion
 	ln -s `pwd`/bash/_bash_logout ~/.bash_logout
 	ln -s `pwd`/bash/_dockerfunc ~/.dockerfunc
+	ln -s `pwd`/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 
 .PHONY: configure-flake8
 configure-flake8:
