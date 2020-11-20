@@ -1,45 +1,42 @@
 [submodule "vim/bundle/coffee-script"]
-	path = vim/bundle/coffee-script
-	url = https://github.com/kchmck/vim-coffee-script.git
+    path = vim/bundle/coffee-script
+    url = https://github.com/kchmck/vim-coffee-script.git
 [submodule "vim/bundle/jinja"]
-	path = vim/bundle/jinja
-	url = https://github.com/mitsuhiko/vim-jinja.git
+    path = vim/bundle/jinja
+    url = https://github.com/mitsuhiko/vim-jinja.git
 [submodule "vim/bundle/syntastic"]
-	path = vim/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
+    path = vim/bundle/syntastic
+    url = https://github.com/scrooloose/syntastic.git
 [submodule "vim/bundle/commentary"]
-	path = vim/bundle/commentary
-	url = https://github.com/tpope/vim-commentary.git
+    path = vim/bundle/commentary
+    url = https://github.com/tpope/vim-commentary.git
 [submodule "vim/bundle/pathogen"]
-	path = vim/bundle/pathogen
-	url = https://github.com/tpope/vim-pathogen.git
+    path = vim/bundle/pathogen
+    url = https://github.com/tpope/vim-pathogen.git
 [submodule "vim/bundle/QuickBuf"]
-	path = vim/bundle/QuickBuf
-	url = https://github.com/vim-scripts/QuickBuf.git
+    path = vim/bundle/QuickBuf
+    url = https://github.com/vim-scripts/QuickBuf.git
 [submodule "vim/bundle/terraform"]
-	path = vim/bundle/terraform
-	url = https://github.com/markcornick/vim-terraform.git
-[submodule "vim/bundle/YouCompleteMe"]
-	path = vim/bundle/YouCompleteMe
-	url = https://github.com/Valloric/YouCompleteMe.git
+    path = vim/bundle/terraform
+    url = https://github.com/markcornick/vim-terraform.git
 [submodule "vim/bundle/vim-go"]
-	path = vim/bundle/vim-go
-	url = https://github.com/fatih/vim-go.git
+    path = vim/bundle/vim-go
+    url = https://github.com/fatih/vim-go.git
 [submodule "vim/bundle/vim-protobuf"]
-	path = vim/bundle/vim-protobuf
-	url = https://github.com/uarun/vim-protobuf.git
+    path = vim/bundle/vim-protobuf
+    url = https://github.com/uarun/vim-protobuf.git
 [submodule "vim/bundle/vim-surround"]
-	path = vim/bundle/vim-surround
-	url = https://github.com/tpope/vim-surround.git
+    path = vim/bundle/vim-surround
+    url = https://github.com/tpope/vim-surround.git
 [submodule "vim/bundle/vim-autoclose"]
-	path = vim/bundle/vim-autoclose
-	url = https://github.com/Townk/vim-autoclose.git
+    path = vim/bundle/vim-autoclose
+    url = https://github.com/Townk/vim-autoclose.git
 [submodule "bash/lib/ssh-find-agent"]
-	path = bash/lib/ssh-find-agent
-	url = https://github.com/wwalker/ssh-find-agent.git
+    path = bash/lib/ssh-find-agent
+    url = https://github.com/wwalker/ssh-find-agent.git
 [submodule "vim/bundle/vim-flake8"]
-	path = vim/bundle/vim-flake8
-	url = https://github.com/nvie/vim-flake8.git
+    path = vim/bundle/vim-flake8
+    url = https://github.com/nvie/vim-flake8.git
 [submodule "vim/bundle/vim-autoformat"]
-	path = vim/bundle/vim-autoformat
-	url = https://github.com/Chiel92/vim-autoformat.git
+    path = vim/bundle/vim-autoformat
+    url = https://github.com/Chiel92/vim-autoformat.git
