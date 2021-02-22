@@ -262,6 +262,9 @@ let g:qb_hotkey = ";;"
 au BufWrite * :Autoformat
 " Don't fall back to vim's autoindent because it breaks a lot of file types
 let g:autoformat_autoindent = 0
+" Override the default standard command as it's very picky about the input and
+" returns an error code even with warnings.
+let g:formatdef_standard_javascript = '"standard --fix --stdin 2>/dev/null || true"'
 
 " Syntastic
 " ----------------------------------------------------------------------------
