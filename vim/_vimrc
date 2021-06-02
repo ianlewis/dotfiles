@@ -255,7 +255,7 @@ vmap <C-v> <DEL>"+gP
 imap <C-v> <ESC>"+gpi
 
 " Toggle the quick buffer by hitting semicolon twice.
-let g:qb_hotkey = ";;"
+nmap ;; <Plug>quickbuf
 
 " Autoformatter
 " ----------------------------------------------------------------------------
