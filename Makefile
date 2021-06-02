@@ -12,12 +12,12 @@ BINDIR.Linux.x86_64 := bin/linux/amd64
 BINDIR.Darwin.x86_64 := bin/macos/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
-GOURL.Linux.x86_64 := https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz
-GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.13.5.darwin-amd64.tar.gz
+GOURL.Linux.x86_64 := https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz
+GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.16.4.darwin-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
-NODEURL.Linux.x86_64 := https://nodejs.org/dist/v12.14.0/node-v12.14.0-linux-x64.tar.xz
-NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v12.14.0/node-v12.14.0-darwin-x64.tar.gz
+NODEURL.Linux.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.xz
+NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-darwin-x64.tar.gz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: install
@@ -115,6 +115,9 @@ install-node: install-opt
 	wget -O /tmp/node.tar.gz $(NODEURL)
 	cd ~/opt && tar xf /tmp/node.tar.gz
 
+.PHONY: install-editor-tools
+install-editor-tools: install-flake8 install-black install-remark install-prettier install-js-beautify
+
 .PHONY: install-flake8
 install-flake8:
 	pip3 install --user flake8
@@ -124,16 +127,16 @@ install-black:
 	pip3 install --user black
 
 .PHONY: install-remark
-install-remark: install-node
+install-remark:
 	npm install -g remark-cli remark-frontmatter
 
 .PHONY: install-prettier
-install-prettier: install-node
+install-prettier:
 	npm install -g prettier
 
 # For HTML, Javascript, CSS, JSON
 .PHONY: install-js-beautify
-install-js-beautify: install-node
+install-js-beautify:
 	npm install -g js-beautify
 
 # if this session isn't interactive, then we don't want to allocate a
