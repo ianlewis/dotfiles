@@ -37,3 +37,6 @@
 [submodule "vim/bundle/QuickBuf"]
 	path = vim/bundle/QuickBuf
 	url = https://github.com/fourjay/QuickBuf.git
+[submodule "bash/kubectl-aliases"]
+	path = bash/kubectl-aliases
+	url = https://github.com/ahmetb/kubectl-aliases.git

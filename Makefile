@@ -1,5 +1,3 @@
-HAS_CMAKE := $(shell which cmake)
-HAS_CPP := $(shell which c++)
 HAS_C := $(shell which cc)
 
 uname_s := $(shell uname -s)
@@ -37,13 +35,6 @@ endif
 
 .PHONY: configure-vim
 configure-vim:
-ifdef HAS_CMAKE
-ifdef HAS_CPP
-ifdef HAS_C
-	cd vim/bundle/YouCompleteMe && ./install.sh --clang-completer --gocode-completer
-endif
-endif
-endif
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
 	ln -s `pwd`/vim ~/.vim
 	ln -s ~/.vim/_vimrc ~/.vimrc
@@ -52,12 +43,13 @@ endif
 
 .PHONY: configure-bash
 configure-bash:
-	rm -f ~/.inputrc ~/.profile ~/.bash_profile ~/.bashrc ~/.bash_aliases ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
+	rm -f ~/.inputrc ~/.profile ~/.bash_profile ~/.bashrc ~/.bash_aliases ~/.bash_aliases.kubectl ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
 	ln -s `pwd`/bash/_inputrc ~/.inputrc
 	ln -s `pwd`/bash/_profile ~/.profile
 	ln -s `pwd`/bash/_bash_profile ~/.bash_profile
 	ln -s `pwd`/bash/_bashrc ~/.bashrc
 	ln -s `pwd`/bash/_bash_aliases ~/.bash_aliases
+	ln -s `pwd`/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl
 	ln -s `pwd`/bash/_bash_completion ~/.bash_completion
 	ln -s `pwd`/bash/_bash_logout ~/.bash_logout
 	ln -s `pwd`/bash/_dockerfunc ~/.dockerfunc
@@ -116,7 +108,7 @@ install-node: install-opt
 	cd ~/opt && tar xf /tmp/node.tar.gz
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-remark install-prettier install-js-beautify
+install-editor-tools: install-flake8 install-black install-remark install-prettier install-standard install-js-beautify
 
 .PHONY: install-flake8
 install-flake8:
@@ -134,7 +126,12 @@ install-remark:
 install-prettier:
 	npm install -g prettier
 
-# For HTML, Javascript, CSS, JSON
+# For Javascript
+.PHONY: install-standard
+install-standard:
+	npm install -g standard
+
+# For HTML, CSS, JSON
 .PHONY: install-js-beautify
 install-js-beautify:
 	npm install -g js-beautify
