@@ -15,7 +15,7 @@
 # limitations under the License.
 
 BASENAME=$(basename "$0")
-EXCLUDE_PATTERNS=('*/vendor/*' '*/third_party/*' '*/node_modules/*' '*/.git/*' '*/.hg/*')
+EXCLUDE_PATTERNS=("*/vendor/*" "*/third_party/*" "*/node_modules/*" "*/.git/*" "*/.hg/*" "*/.eslintcache" "*/*.js.map")
 
 # Show an error and command line usage.
 function show_error() {
