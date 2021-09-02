@@ -275,3 +275,7 @@ if [ -f /var/run/reboot-required ]; then
     # Print the message if the file exists
     cat /var/run/reboot-required
 fi
+
+if [ -f "/google/devshell/bashrc.google" ]; then
+  source "/google/devshell/bashrc.google"
+fi
