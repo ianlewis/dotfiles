@@ -1,25 +1,15 @@
 [user]
-	name = Ian Lewis
-	email = ianmlewis@gmail.com
-[diff]
-[mergetool "meld"]
-	cmd = "meld -o  --label='local'  --label='base'  --label='other' "
-	trustExitCode = false
-[mergetool]
-	tool = meld
-[difftool]
-	tool = meld
-[difftool "meld"]
-	cmd = "meld -a --label='local'  --label='remote' "
+    name = Ian Lewis
+    email = ianmlewis@gmail.com
 [alias]
-	tree = log --graph --pretty=oneline --abbrev-commit --decorate
+    tree = log --graph --pretty=oneline --abbrev-commit --decorate
 [github]
-	user = IanLewis
+    user = IanLewis
 [include]
     path = ~/.gitconfig.local
 [credential "https://source.developers.google.com"]
-	helper = gcloud.sh
+    helper = gcloud.sh
 [http]
-	cookiefile = /home/ian/.gitcookies
+    cookiefile = /home/ian/.gitcookies
 [pull]
-	ff = only
+    ff = only
