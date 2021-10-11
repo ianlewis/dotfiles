@@ -31,11 +31,12 @@ if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
     fi
 fi
 
+# Load system bashrc
 if [ -f /etc/bashrc ]; then
     # shellcheck source=/dev/null
     . /etc/bashrc
 fi
-# For some debian systems
+# for some debian systems
 if [ -f /etc/bash.bashrc ]; then
     # shellcheck source=/dev/null
     . /etc/bash.bashrc
@@ -224,18 +225,6 @@ if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local
 fi
 
-# Completion
-# Load the system wide bash completion if available.
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    # The system wide config should load our local config.
-    # shellcheck source=/dev/null
-    . /etc/bash_completion
-elif [ -f ~/.bash_completion ]; then
-    # The system wide config is not available so just load our completion
-    # shellcheck source=bash/_bash_completion
-    . ~/.bash_completion
-fi
-
 # Add user-local bin to the PATH but only after running the .profile.local.
 # We want ~/bin to be highest priority.
 PATH=~/bin:"${PATH}"
@@ -270,12 +259,26 @@ fi
 
 export PATH
 
+# Completion
+# Load the system wide bash completion if available.
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    # The system wide config should load our local config.
+    # shellcheck source=/dev/null
+    . /etc/bash_completion
+elif [ -f ~/.bash_completion ]; then
+    # The system wide config is not available so just load our completion
+    # shellcheck source=bash/_bash_completion
+    . ~/.bash_completion
+fi
+
 # Print the message if reboot is required.
 if [ -f /var/run/reboot-required ]; then
     # Print the message if the file exists
     cat /var/run/reboot-required
 fi
 
+# Source the Google cloud devshell bashrc
 if [ -f "/google/devshell/bashrc.google" ]; then
-  source "/google/devshell/bashrc.google"
+    # shellcheck source=/dev/null
+    source "/google/devshell/bashrc.google"
 fi

@@ -2,24 +2,11 @@
 # vim: set ft=sh:
 
 # pip bash completion start
-if which pip3 >/dev/null 2>&1; then
-    eval "$(pip3 completion --bash)"
-    _pip_completion() {
-        # shellcheck disable=SC2207
-        COMPREPLY=($(COMP_WORDS="${COMP_WORDS[*]}" \
-            COMP_CWORD=$COMP_CWORD \
-            PIP_AUTO_COMPLETE=1 $1))
-    }
-    complete -o default -F _pip_completion pip3
-elif which pip >/dev/null 2>&1; then
-    eval "$(pip completion --bash)"
-    _pip_completion() {
-        # shellcheck disable=SC2207
-        COMPREPLY=($(COMP_WORDS="${COMP_WORDS[*]}" \
-            COMP_CWORD=$COMP_CWORD \
-            PIP_AUTO_COMPLETE=1 $1))
-    }
-    complete -o default -F _pip_completion pip
+if which python3 >/dev/null 2>&1; then
+    eval "$(python3 -m pip completion --bash)"
+fi
+if which python >/dev/null 2>&1; then
+    eval "$(python -m pip completion --bash --no-python-version-warning)"
 fi
 # pip bash completion end
 
