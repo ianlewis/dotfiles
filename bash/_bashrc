@@ -85,10 +85,15 @@ ians_time() {
     date +"%H:%M:%S%z"
 }
 
-VCPROMPT_EXECUTABLE=~/bin/vcprompt
 ians_vcprompt() {
-    if [ -x $VCPROMPT_EXECUTABLE ]; then
-        $VCPROMPT_EXECUTABLE -f " on ${IANS_BLUE_COLOR}%n${IANS_DEFAULT_COLOR}:${IANS_DEFAULT_COLOR}%[unknown]b${IANS_GREEN_COLOR}%m%u${IANS_DEFAULT_COLOR}"
+    export GIT_PS1_SHOWDIRTYSTATE='y'
+    export GIT_PS1_SHOWSTASHSTATE='y'
+    export GIT_PS1_SHOWUNTRACKEDFILES='y'
+    export GIT_PS1_DESCRIBE_STYLE='contains'
+    export GIT_PS1_SHOWUPSTREAM='auto'
+    export GIT_PS1="$(__git_ps1 '(%s)')"
+    if [ "${GIT_PS1}" != "" ]; then
+        echo -n " git:${IANS_RED_COLOR}${GIT_PS1}${IANS_DEFAULT_COLOR}"
     fi
 }
 

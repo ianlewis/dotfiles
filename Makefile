@@ -1,5 +1,3 @@
-HAS_C := $(shell which cc)
-
 uname_s := $(shell uname -s)
 $(info uname_s=$(uname_s))
 uname_m := $(shell uname -m)
@@ -19,19 +17,13 @@ NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-darwin-x
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: install
-configure: install-bin install-vcprompt configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux configure-remark
+configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux configure-remark
 
 .PHONY: install-bin
 install-bin:
 	mkdir -p ~/bin
 	ln -sf `pwd`/bin/all/* ~/bin/
 	ln -sf `pwd`/$(BINDIR)/* ~/bin/
-
-.PHONY: install-vcprompt
-install-vcprompt:
-ifdef HAS_C
-	cd src/vcprompt && make && ln -fs `pwd`/vcprompt ~/bin/vcprompt
-endif
 
 .PHONY: configure-vim
 configure-vim:
