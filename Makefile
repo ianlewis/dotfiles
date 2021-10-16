@@ -68,8 +68,10 @@ configure-screen:
 
 .PHONY: configure-tmux
 configure-tmux:
-	rm -f ~/.tmux.conf
+	rm -f ~/.tmux.conf ~/.tmux/plugins
 	ln -s `pwd`/tmux/_tmux.conf ~/.tmux.conf
+	mkdir -p ~/.tmux
+	ln -s `pwd`/tmux/plugins ~/.tmux/plugins
 
 .PHONY: configure-git
 configure-git:
