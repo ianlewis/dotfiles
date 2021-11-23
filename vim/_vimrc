@@ -177,13 +177,6 @@ let Tlist_Exit_OnlyWindow=1
 let Tlist_File_Fold_Auto_Close=1
 let Tlist_Show_One_File=1
 
-" SQL
-" ----------------------------------------------------------------------------
-
-" SQL filetype is buggy so set it to text
-au! filetypedetect BufNewFile,BufRead *.sql
-au filetypedetect BufNewFile,BufRead *.sql          setf text
-
 " Omnicomplete
 " ----------------------------------------------------------------------------
 set ofu=syntaxcomplete#Complete
