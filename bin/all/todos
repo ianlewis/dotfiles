@@ -100,4 +100,4 @@ for e in "${EXCLUDE_PATTERNS[@]}"; do
     EXCLUDE_FLAGS+=("-not" "-path" "${e}")
 done
 
-find "${1-.}" "${EXCLUDE_FLAGS[@]}" -type f -exec grep -ne '\(BUG[:\(]\|FIXME[:\(]\|TODO[:\(]\)\([	 ]*(.*)\)\?:\?' {} /dev/null \; | sed -e 's/:\([0-9]\+\):[	 ]*/:\1: /'
+find "${1-.}" "${EXCLUDE_FLAGS[@]}" -type f -exec grep -ne '\(BUG\|FIXME\|TODO\)\([	 ]*(.*)\)\?:\?' {} /dev/null \; | sed -e 's/:\([0-9]\+\):[	 ]*/:\1: /'
