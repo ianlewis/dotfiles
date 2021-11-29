@@ -4,8 +4,7 @@
 # pip bash completion start
 if which python3 >/dev/null 2>&1; then
     eval "$(python3 -m pip completion --bash)"
-fi
-if which python >/dev/null 2>&1; then
+elif which python >/dev/null 2>&1; then
     eval "$(python -m pip completion --bash --no-python-version-warning)"
 fi
 # pip bash completion end
