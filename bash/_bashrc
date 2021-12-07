@@ -204,14 +204,14 @@ export GPG_TTY
 # ssh-agent
 # Start an ssh-agent instance if an existing one isn't found.
 mkdir -p ~/.ssh
-if [ -f ~/.ssh-find-agent ]; then
+if [[ -z "$SSH_AUTH_SOCK" ]] && [[ -f ~/.ssh-find-agent ]]; then
     # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
     if [ ! -f ~/.ssh/authorized_keys ]; then
         touch ~/.ssh/authorized_keys
     fi
     # shellcheck source=/dev/null
     . ~/.ssh-find-agent
-    ssh-find-agent -a || eval "$(ssh-agent -s)" >/dev/null
+    ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
 fi
 
 # Alias definitions.
