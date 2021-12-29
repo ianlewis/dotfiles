@@ -188,7 +188,7 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 # less should never use the bell
-LESS="-q"
+LESS="qR"
 export LESS
 
 # set variable identifying the chroot you work in (used in the prompt below)
