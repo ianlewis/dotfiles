@@ -236,25 +236,25 @@ fi
 
 # Add user-local bin to the PATH but only after running the .profile.local.
 # We want ~/bin to be highest priority.
-PATH=~/bin:"${PATH}"
+[[ ":$PATH:" != *":${HOME}/bin:"* ]] && PATH="${HOME}/bin:${PATH}"
 
 # The .local/bin is used for some local installs such as applications installed
 # via 'pip install --user'
-PATH=~/.local/bin:"${PATH}"
+[[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
 
 # Go
 GOPATH=${HOME}/go
-PATH="${GOPATH}/bin:${PATH}"
+[[ ":$PATH:" != *":${GOPATH}/bin:"* ]] && PATH="${GOPATH}/bin:${PATH}"
 export GOPATH
 if [ -d "${HOME}/opt/go" ]; then
     GOROOT=${HOME}/opt/go
-    PATH="${GOROOT}/bin:${PATH}"
+    [[ ":$PATH:" != *":${GOROOT}/bin:"* ]] && PATH="${GOROOT}/bin:${PATH}"
     export GOROOT
 fi
 
 # Node.js
 for d in "${HOME}"/opt/node-*; do
-    PATH="${d}/bin:${PATH}"
+    [[ ":$PATH:" != *":${d}/bin:"* ]] && PATH="${d}/bin:${PATH}"
 done
 
 # The next line updates PATH for the Google Cloud SDK.
