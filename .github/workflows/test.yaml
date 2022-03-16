@@ -15,6 +15,6 @@ jobs:
           curl -Lso sc.tar.xz \
             "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz"
           tar -xf "sc.tar.xz"
-          mv "shellcheck-stable/shellcheck" "/bin/shellcheck"
+          mv "shellcheck-stable/shellcheck" "/usr/local/bin/shellcheck"
       - name: Run ShellCheck
         run: make test
