@@ -103,7 +103,8 @@ ians_vcprompt() {
     export GIT_PS1_SHOWUNTRACKEDFILES='y'
     export GIT_PS1_DESCRIBE_STYLE='contains'
     export GIT_PS1_SHOWUPSTREAM='auto'
-    export GIT_PS1="$(__git_ps1 '(%s)')"
+    GIT_PS1="$(__git_ps1 '(%s)')"
+    export GIT_PS1
     if [ "${GIT_PS1}" != "" ]; then
         echo -n " git:${IANS_RED_COLOR}${GIT_PS1}${IANS_DEFAULT_COLOR}"
     fi
