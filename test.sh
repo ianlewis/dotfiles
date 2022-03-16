@@ -5,7 +5,7 @@ set -o pipefail
 ERRORS=()
 
 # find all executables and run `shellcheck`
-for f in $(find . -path ./bash/lib -prune -o -path ./vim/bundle -prune -o -type f -not -iwholename '*.git*' -not -name "yubitouch.sh" | sort -u); do
+for f in $(find . -path ./tmux/plugins -prune -o -path ./bash/lib -prune -o -path ./vim/bundle -prune -o -type f -not -iwholename '*.git*' -not -name "yubitouch.sh" | sort -u); do
     if file "$f" | cut -d':' -f2 | grep --quiet shell; then
         {
             shellcheck -x "$f" && echo "[OK]: sucessfully linted $f"

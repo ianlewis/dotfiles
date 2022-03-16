@@ -146,12 +146,7 @@ ifeq ($(INTERACTIVE), 1)
 endif
 
 test:
-	docker run --rm -i $(DOCKER_FLAGS) \
-		--name df-shellcheck \
-		-v $(CURDIR):/mnt:ro \
-		-w /mnt \
-		--entrypoint ./test.sh \
-		gcr.io/ianlewis-dockerfiles/shellcheck
+	./test.sh
 
 clean:
 	rm -rf ycm_build

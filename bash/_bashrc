@@ -49,20 +49,13 @@ export VISUAL=vim
 export EDITOR=vim
 
 ESC=$(printf "\\e")
-# shellcheck disable=SC2034
-IANS_DEFAULT_COLOR="$ESC[00m"
-# shellcheck disable=SC2034
-IANS_GRAY_COLOR="$ESC[37m"
-# shellcheck disable=SC2034
-IANS_PINK_COLOR="$ESC[35m"
-# shellcheck disable=SC2034
-IANS_ORANGE_COLOR="$ESC[33m"
-# shellcheck disable=SC2034
-IANS_RED_COLOR="$ESC[31m"
-# shellcheck disable=SC2034
-IANS_BLUE_COLOR="$ESC[34m"
-# shellcheck disable=SC2034
-IANS_GREEN_COLOR="$ESC[32m"
+IANS_DEFAULT_COLOR="${ESC}[00m"
+IANS_GRAY_COLOR="${ESC}[37m"
+IANS_PINK_COLOR="${ESC}[35m"
+IANS_ORANGE_COLOR="${ESC}[33m"
+IANS_RED_COLOR="${ESC}[31m"
+IANS_BLUE_COLOR="${ESC}[34m"
+# IANS_GREEN_COLOR="${ESC}[32m"
 
 if [ "$(id -u)" == "0" ]; then
     # shellcheck disable=SC2034
@@ -90,7 +83,7 @@ if [[ $(type -t __git_ps1) != function ]]; then
     __git_ps1() {
         if which git >/dev/null 2>&1; then
             repo_info="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-            if [ ! -z "$repo_info" ]; then
+            if [ -n "$repo_info" ]; then
                 echo "($repo_info)"
             fi
         fi
@@ -179,7 +172,7 @@ if [ "$HOME" ]; then
         export VIRTUALENVWRAPPER_HOOK_DIR="$WORKON_HOME"
         export PIP_VIRTUALENV_BASE="$WORKON_HOME"
         # shellcheck source=/dev/null
-        source $(command -v virtualenvwrapper.sh)
+        source "$(command -v virtualenvwrapper.sh)"
     fi
 fi
 
