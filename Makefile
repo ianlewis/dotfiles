@@ -7,7 +7,8 @@ $(info uname_m=$(uname_m))
 BINDIR.Linux.x86_64 := bin/linux/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
-GOURL.Linux.x86_64 := https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz
+GOVERSION ?= 1.18
+GOURL.Linux.x86_64 := https://go.dev/dl/go$(GOVERSION).linux-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
 NODEURL.Linux.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.xz
@@ -91,7 +92,11 @@ install-opt:
 .PHONY: install-go
 install-go: install-opt
 	wget -O /tmp/go.tar.gz $(GOURL)
-	cd ~/opt && rm -rf go/ && tar xf /tmp/go.tar.gz
+	cd ~/opt && \
+		rm -rf go && \
+		tar xf /tmp/go.tar.gz && \
+		mv go go-$(GOVERSION) && \
+		ln -s go-$(GOVERSION) go
 
 .PHONY: install-node
 install-node: install-opt
