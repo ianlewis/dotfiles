@@ -1,0 +1,20 @@
+name: "Tests"
+on:
+  push:
+    branches:
+      - master
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download shellcheck
+      shell: bash
+      run: |
+        curl -Lso sc.tar.xz \
+          "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz"
+        tar -xf "sc.tar.xz"
+        mv "shellcheck-stable/shellcheck" "/bin/shellcheck"
+    - name: Run ShellCheck
+			run: make test
