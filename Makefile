@@ -5,15 +5,12 @@ $(info uname_m=$(uname_m))
 
 # system specific variables, add more here
 BINDIR.Linux.x86_64 := bin/linux/amd64
-BINDIR.Darwin.x86_64 := bin/macos/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
 GOURL.Linux.x86_64 := https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz
-GOURL.Darwin.x86_64 := https://dl.google.com/go/go1.16.4.darwin-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
 NODEURL.Linux.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.xz
-NODEURL.Darwin.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-darwin-x64.tar.gz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: install
