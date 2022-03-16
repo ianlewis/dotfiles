@@ -13,3 +13,5 @@
     cookiefile = /home/ian/.gitcookies
 [pull]
     ff = only
+[core]
+	pager = 
