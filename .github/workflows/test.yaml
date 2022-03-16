@@ -13,8 +13,8 @@ jobs:
         shell: bash
         run: |
           curl -Lso sc.tar.xz \
-            "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz" \
-          tar -xf "sc.tar.xz" \
+            "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz"
+          tar -xf "sc.tar.xz"
           mv "shellcheck-stable/shellcheck" "/bin/shellcheck"
       - name: Run ShellCheck
         run: make test
