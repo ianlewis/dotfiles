@@ -1,4 +1,0 @@
-#!/bin/bash
-# shellcheck source=bash/_dockerfunc
-. ~/.dockerfunc
-run_shellcheck "$@"
