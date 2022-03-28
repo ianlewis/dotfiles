@@ -14,7 +14,7 @@ GOURL = $(GOURL.$(uname_s).$(uname_m))
 NODEURL.Linux.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.xz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
-.PHONY: install
+.PHONY: configure
 configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux configure-remark
 
 .PHONY: install-bin
