@@ -15,7 +15,7 @@ NODEURL.Linux.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 .PHONY: configure
-configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux configure-remark
+configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux
 
 .PHONY: install-bin
 install-bin:
@@ -78,11 +78,6 @@ configure-mercurial:
 	rm -f ~/.hgrc
 	ln -s `pwd`/mercurial/_hgrc ~/.hgrc
 
-.PHONY: configure-remark
-configure-remark:
-	rm -f ~/.remarkrc
-	ln -s `pwd`/remark/_remarkrc ~/.remarkrc
-
 # Extra targets
 
 .PHONY: install-opt
@@ -104,7 +99,7 @@ install-node: install-opt
 	cd ~/opt && tar xf /tmp/node.tar.gz
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-remark install-prettier install-standard install-js-beautify install-sqlparse
+install-editor-tools: install-flake8 install-black install-prettier install-standard install-js-beautify install-sqlparse
 
 .PHONY: install-flake8
 install-flake8:
@@ -113,10 +108,6 @@ install-flake8:
 .PHONY: install-black
 install-black:
 	pip3 install --user black
-
-.PHONY: install-remark
-install-remark:
-	npm install -g remark-cli remark-frontmatter
 
 .PHONY: install-prettier
 install-prettier:

@@ -1,8 +1,0 @@
-{
-  "settings": {
-    "listItemIndent": "one"
-  },
-  "plugins": {
-    "remark-frontmatter": ["yaml", "toml"]
-  }
-}
