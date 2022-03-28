@@ -259,6 +259,7 @@ let g:autoformat_autoindent = 0
 " returns an error code even with warnings.
 let g:formatters_javascript = ['prettier']
 let g:formatters_yaml = ['prettier']
+let g:formatters_markdown = ['prettier']
 let g:formatters_sql = []
 
 " Syntastic
