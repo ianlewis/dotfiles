@@ -99,7 +99,7 @@ install-node: install-opt
 	cd ~/opt && tar xf /tmp/node.tar.gz
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-prettier install-standard install-js-beautify install-sqlparse
+install-editor-tools: install-flake8 install-black install-prettier install-standard install-js-beautify install-yamllint
 
 .PHONY: install-flake8
 install-flake8:
@@ -127,6 +127,11 @@ install-js-beautify:
 .PHONY: install-sqlparse
 install-sqlparse:
 	pip3 install --user sqlparse
+
+# For YAML
+.PHONY: install-yamllint
+install-yamllint:
+	pip3 install --user yamllint
 
 # if this session isn't interactive, then we don't want to allocate a
 # TTY, which would fail, but if it is interactive, we do want to attach
