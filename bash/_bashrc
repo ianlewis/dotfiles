@@ -226,7 +226,7 @@ fi
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
-    # shellcheck source=bash/_bash_aliases
+    # shellcheck source=/dev/null
     . ~/.bash_aliases
 fi
 if [ -f ~/.bash_aliases.kubectl ]; then
@@ -263,6 +263,11 @@ for d in "${HOME}"/opt/node-*; do
     [[ ":$PATH:" != *":${d}/bin:"* ]] && PATH="${d}/bin:${PATH}"
 done
 
+# path for shellcheck
+for d in "${HOME}"/opt/shellcheck-*; do
+    [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
+done
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
     # shellcheck source=/dev/null
@@ -285,7 +290,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 elif [ -f ~/.bash_completion ]; then
     # The system wide config is not available so just load our completion
-    # shellcheck source=bash/_bash_completion
+    # shellcheck source=/dev/null
     . ~/.bash_completion
 fi
 

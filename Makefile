@@ -11,8 +11,11 @@ GOVERSION ?= 1.18
 GOURL.Linux.x86_64 := https://go.dev/dl/go$(GOVERSION).linux-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
-NODEURL.Linux.x86_64 := https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.xz
+NODEURL.Linux.x86_64 := https://nodejs.org/dist/v16.15.1/node-v16.15.1-linux-x64.tar.xz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
+
+SHELLCHECKURL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz
+SHELLCHECKURL = $(SHELLCHECKURL.$(uname_s).$(uname_m))
 
 .PHONY: configure
 configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux
@@ -95,11 +98,11 @@ install-go: install-opt
 
 .PHONY: install-node
 install-node: install-opt
-	wget -O /tmp/node.tar.gz $(NODEURL)
-	cd ~/opt && tar xf /tmp/node.tar.gz
+	wget -O /tmp/node.tar.xz $(NODEURL)
+	cd ~/opt && tar xf /tmp/node.tar.xz
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-prettier install-js-beautify install-yamllint install-sql-formatter
+install-editor-tools: install-flake8 install-black install-prettier install-js-beautify install-yamllint install-sql-formatter install-shellcheck install-shfmt
 
 # For Python (linting)
 .PHONY: install-flake8
@@ -140,6 +143,17 @@ install-sqlparse:
 .PHONY: install-yamllint
 install-yamllint:
 	pip3 install --user yamllint
+
+# For shell (linting)
+.PHONY: install-shellcheck
+install-shellcheck:
+	wget -O /tmp/shellcheck.tar.xz $(SHELLCHECKURL)
+	cd ~/opt && tar xf /tmp/shellcheck.tar.xz
+
+# For shell (formatting)
+.PHONY: install-shfmt
+install-shfmt:
+	go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
 # if this session isn't interactive, then we don't want to allocate a
 # TTY, which would fail, but if it is interactive, we do want to attach
