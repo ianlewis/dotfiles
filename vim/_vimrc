@@ -260,7 +260,8 @@ let g:autoformat_autoindent = 0
 let g:formatters_javascript = ['prettier']
 let g:formatters_yaml = ['prettier']
 let g:formatters_markdown = ['prettier']
-let g:formatters_sql = []
+let g:formatters_sql = ['sqlformatter']
+let g:formatdef_sqlformatter = '"sql-formatter"'
 
 " Syntastic
 " ----------------------------------------------------------------------------

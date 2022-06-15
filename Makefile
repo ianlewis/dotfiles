@@ -99,36 +99,44 @@ install-node: install-opt
 	cd ~/opt && tar xf /tmp/node.tar.gz
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-prettier install-standard install-js-beautify install-yamllint
+install-editor-tools: install-flake8 install-black install-prettier install-js-beautify install-yamllint install-sql-formatter
 
+# For Python (linting)
 .PHONY: install-flake8
 install-flake8:
 	pip3 install --user flake8
 
+# For Python (formatting)
 .PHONY: install-black
 install-black:
 	pip3 install --user black
 
+# For Javascript, yaml, markdown (formatting)
 .PHONY: install-prettier
 install-prettier:
 	npm install -g prettier
 
 # For Javascript
-.PHONY: install-standard
-install-standard:
-	npm install -g standard
+# .PHONY: install-standard
+# install-standard:
+#	npm install -g standard
 
-# For HTML, CSS, JSON
+# For HTML, CSS, JSON (formatting)
 .PHONY: install-js-beautify
 install-js-beautify:
 	npm install -g js-beautify
 
 # For SQL
-.PHONY: install-sqlparse
-install-sqlparse:
-	pip3 install --user sqlparse
+# .PHONY: install-sqlparse
+# install-sqlparse:
+#	pip3 install --user sqlparse
 
-# For YAML
+# For SQL (formatting)
+.PHONY: install-sql-formatter
+install-sqlparse:
+	npm install -g sql-formatter
+
+# For YAML (linting)
 .PHONY: install-yamllint
 install-yamllint:
 	pip3 install --user yamllint
