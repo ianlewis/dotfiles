@@ -15,7 +15,7 @@ fi
 # Only run if logged in remotely via ssh
 if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
     # Only run if running in a terminal.
-    if [[ (-t 1) && ("$TERM" != screen*) ]]; then
+    if [[ (-t 1) && ("$TERM" != screen*) && -z "$TMUX" ]]; then
         if command -v tmux >/dev/null 2>&1; then
             # Attempt to discover a detached session
             # Use the current username as the session name.
