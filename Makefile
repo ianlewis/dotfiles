@@ -7,7 +7,7 @@ $(info uname_m=$(uname_m))
 BINDIR.Linux.x86_64 := bin/linux/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
-GOVERSION ?= 1.18
+GOVERSION ?= 1.18.5
 GOURL.Linux.x86_64 := https://go.dev/dl/go$(GOVERSION).linux-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
