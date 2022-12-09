@@ -28,6 +28,15 @@ if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
             # Attempt to discover a detached session
             exec screen -q -RR
         fi
+    else
+        # If in a tmux/screen session print the motd.
+        if [ -f "/etc/motd" ]; then
+            cat /etc/motd
+        elif [ -f "/var/run/motd" ]; then
+            cat /var/run/motd
+        elif [ -f "/var/run/motd.dynamic" ]; then
+            cat /var/run/motd.dynamic
+        fi
     fi
 fi
 
