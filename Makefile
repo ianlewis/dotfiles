@@ -11,7 +11,7 @@ GOVERSION ?= 1.19.6
 GOURL.Linux.x86_64 := https://go.dev/dl/go$(GOVERSION).linux-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
-NODEURL.Linux.x86_64 := https://nodejs.org/dist/v16.17.0/node-v16.17.0-linux-x64.tar.xz
+NODEURL.Linux.x86_64 := https://nodejs.org/dist/v18.15.0/node-v18.15.0-linux-x64.tar.xz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 SHELLCHECKURL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz
