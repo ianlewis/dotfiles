@@ -11,7 +11,8 @@ GOVERSION ?= 1.19.6
 GOURL.Linux.x86_64 := https://go.dev/dl/go$(GOVERSION).linux-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
-NODEURL.Linux.x86_64 := https://nodejs.org/dist/v18.15.0/node-v18.15.0-linux-x64.tar.xz
+NODEVERSION ?= 18.15.0
+NODEURL.Linux.x86_64 := https://nodejs.org/dist/v${NODEVERSION}/node-v${NODEVERSION}-linux-x64.tar.xz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
 SHELLCHECKURL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz
@@ -99,7 +100,9 @@ install-go: install-opt
 .PHONY: install-node
 install-node: install-opt
 	wget -O /tmp/node.tar.xz $(NODEURL)
-	cd ~/opt && tar xf /tmp/node.tar.xz
+	cd ~/opt && \
+		tar xf /tmp/node.tar.xz && \
+		ln -s node-v$(NODEVERSION)-linux-x64 node
 
 .PHONY: install-editor-tools
 install-editor-tools: install-flake8 install-black install-prettier install-js-beautify install-yamllint install-sql-formatter install-shellcheck install-shfmt
