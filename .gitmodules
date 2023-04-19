@@ -52,3 +52,6 @@
 [submodule "vim/bundle/typescript-vim"]
 	path = vim/bundle/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
+[submodule "vim/bundle/requirements.txt.vim"]
+	path = vim/bundle/requirements.txt.vim
+	url = https://github.com/raimon49/requirements.txt.vim.git
