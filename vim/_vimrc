@@ -249,6 +249,7 @@ au BufWrite * :Autoformat
 let g:autoformat_autoindent = 0
 " Override the default standard command as it's very picky about the input and
 " returns an error code even with warnings.
+let g:formatters_go = ['gofumpt']
 let g:formatters_javascript = ['prettier']
 let g:formatters_yaml = ['prettier']
 let g:formatters_markdown = ['prettier']
@@ -279,6 +280,12 @@ let g:syntastic_yaml_checkers = [ "yamllint" ]
 
 " Make eclim use omnifunc so that it plays well with YCM
 let g:EclimCompletionMethod = 'omnifunc'
+
+" Bp
+" ----------------------------------------------------------------------------
+" Closes the current buffer without closing the window.
+" TODO: Support bang
+map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Bda
 " ----------------------------------------------------------------------------
