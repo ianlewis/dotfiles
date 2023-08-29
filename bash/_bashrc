@@ -264,6 +264,14 @@ if [ -d "${HOME}/opt/node" ]; then
     [[ ":$PATH:" != *":${HOME}/opt/node/bin:"* ]] && PATH="${HOME}/opt/node/bin:${PATH}"
 fi
 
+# Ruby
+if [ -d "${HOME}/.gem/bin" ]; then
+    [[ ":$PATH:" != *":${HOME}/.gem/bin:"* ]] && PATH="${HOME}/.gem/bin:${PATH}"
+fi
+for d in "${HOME}"/.gem/ruby/*/bin; do
+    [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
+done
+
 # path for shellcheck
 for d in "${HOME}"/opt/shellcheck-*; do
     [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
