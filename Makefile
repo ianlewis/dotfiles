@@ -107,35 +107,29 @@ install-node: install-opt
 .PHONY: install-editor-tools
 install-editor-tools: install-flake8 install-black install-prettier install-js-beautify install-yamllint install-sql-formatter install-shellcheck install-shfmt
 
+# Python virtualenv
+$(HOME)/.local/share/venv:
+	python3 -m venv $@
+
 # For Python (linting)
 .PHONY: install-flake8
-install-flake8:
-	pip3 install --user flake8
+install-flake8: $(HOME)/.local/share/venv
+	$</bin/pip3 install flake8
 
 # For Python (formatting)
 .PHONY: install-black
-install-black:
-	pip3 install --user black
+install-black: $(HOME)/.local/share/venv
+	$</bin/pip3 install black
 
 # For Javascript, yaml, markdown (formatting)
 .PHONY: install-prettier
 install-prettier:
 	npm install -g prettier
 
-# For Javascript
-# .PHONY: install-standard
-# install-standard:
-#	npm install -g standard
-
 # For HTML, CSS, JSON (formatting)
 .PHONY: install-js-beautify
 install-js-beautify:
 	npm install -g js-beautify
-
-# For SQL
-# .PHONY: install-sqlparse
-# install-sqlparse:
-#	pip3 install --user sqlparse
 
 # For SQL (formatting)
 .PHONY: install-sql-formatter
@@ -144,8 +138,8 @@ install-sqlparse:
 
 # For YAML (linting)
 .PHONY: install-yamllint
-install-yamllint:
-	pip3 install --user yamllint
+install-yamllint: $(HOME)/.local/share/venv
+	$</bin/pip3 install yamllint
 
 # For shell (linting)
 .PHONY: install-shellcheck
