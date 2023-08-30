@@ -19,7 +19,7 @@ SHELLCHECKURL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/do
 SHELLCHECKURL = $(SHELLCHECKURL.$(uname_s).$(uname_m))
 
 .PHONY: configure
-configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-virtualenvwrapper configure-tmux
+configure: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-tmux
 
 .PHONY: install-bin
 install-bin:
@@ -71,11 +71,6 @@ configure-tmux:
 configure-git:
 	rm -f ~/.gitconfig
 	ln -s `pwd`/git/_gitconfig ~/.gitconfig
-
-.PHONY: configure-virtualenvwrapper
-configure-virtualenvwrapper:
-	mkdir -p ~/.virtualenvs
-	ln -sf `pwd`/virtualenvwrapper/* ~/.virtualenvs/
 
 # Extra targets
 
