@@ -77,11 +77,6 @@ configure-virtualenvwrapper:
 	mkdir -p ~/.virtualenvs
 	ln -sf `pwd`/virtualenvwrapper/* ~/.virtualenvs/
 
-.PHONY: configure-mercurial
-configure-mercurial:
-	rm -f ~/.hgrc
-	ln -s `pwd`/mercurial/_hgrc ~/.hgrc
-
 # Extra targets
 
 .PHONY: install-opt
