@@ -285,6 +285,7 @@ fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/opt/google-cloud-sdk/completion.bash.inc" ]; then
+    export USE_GKE_GCLOUD_AUTH_PLUGIN=True
     # shellcheck source=/dev/null
     source "$HOME"'/opt/google-cloud-sdk/completion.bash.inc'
 fi
