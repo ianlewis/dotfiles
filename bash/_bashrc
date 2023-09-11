@@ -259,6 +259,12 @@ if [ -d "${HOME}/opt/go" ]; then
     export GOROOT
 fi
 
+# Python
+if [ -f "${HOME}/.local/share/venv/bin/activate" ]; then
+    # shellcheck source=/dev/null
+    . "${HOME}/.local/share/venv/bin/activate"
+fi
+
 # Node.js
 if [ -d "${HOME}/opt/node" ]; then
     [[ ":$PATH:" != *":${HOME}/opt/node/bin:"* ]] && PATH="${HOME}/opt/node/bin:${PATH}"
