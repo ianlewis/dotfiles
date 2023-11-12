@@ -304,6 +304,12 @@ fi
 # via 'pip install --user'
 [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
 
+# Rust
+if [ -f "$HOME/.cargo/env" ]; then
+    # shellcheck source=/dev/null
+    . "$HOME/.cargo/env"
+fi
+
 export PATH
 
 # Completion
