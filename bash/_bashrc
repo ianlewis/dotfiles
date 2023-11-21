@@ -16,13 +16,13 @@ fi
 if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
     # Only run if running in a terminal.
     if [[ (-t 1) && ("$TERM" != screen*) && -z "$TMUX" ]]; then
-        if command -v tmux >/dev/null 2>&1; then
+        if command -v tmx2 >/dev/null 2>&1; then
             # Attempt to discover a detached session
             # Use the current username as the session name.
-            if tmux has-session -t "${USER}" 2>/dev/null; then
-                exec tmux attach-session -t "${USER}"
+            if tmx2 has-session -t "${USER}" 2>/dev/null; then
+                exec tmx2 attach-session -t "${USER}"
             else
-                exec tmux new-session -s "${USER}"
+                exec tmx2 new-session -s "${USER}"
             fi
         elif command -v screen >/dev/null 2>&1; then
             # Attempt to discover a detached session
