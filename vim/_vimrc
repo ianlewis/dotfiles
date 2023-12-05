@@ -252,6 +252,7 @@ let g:autoformat_autoindent = 0
 let g:formatters_go = ['gofumpt']
 let g:formatdef_gofumpt = '"gofumpt"'
 let g:formatters_javascript = ['prettier']
+let g:formatters_json = ['prettier']
 let g:formatters_yaml = ['prettier']
 let g:formatters_markdown = ['prettier']
 let g:formatters_sql = ['sqlformatter']
