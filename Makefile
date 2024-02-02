@@ -11,7 +11,7 @@ GOVERSION ?= 1.21.4
 GOURL.Linux.x86_64 := https://go.dev/dl/go$(GOVERSION).linux-amd64.tar.gz
 GOURL = $(GOURL.$(uname_s).$(uname_m))
 
-NODEVERSION ?= 18.15.0
+NODEVERSION ?= 20.11.0
 NODEURL.Linux.x86_64 := https://nodejs.org/dist/v${NODEVERSION}/node-v${NODEVERSION}-linux-x64.tar.xz
 NODEURL = $(NODEURL.$(uname_s).$(uname_m))
 
