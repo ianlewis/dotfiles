@@ -45,18 +45,16 @@ node_modules/.installed: package.json package-lock.json
 .PHONY: autogen
 autogen: ## Runs autogen on code files.
 	@set -euo pipefail; \
-		md_files=$$( \
-			find . -type f \
-				\( \
-					-name '*.go' -o \
-					-name '*.yaml' -o \
-					-name '*.yml' \
-				\) \
-				-not -iwholename '*/.git/*' \
-				-not -iwholename '*/vendor/*' \
-				-not -iwholename '*/node_modules/*' \
+		files=$$( \
+			git ls-files \
+				'*.go' '**/*.go' \
+				'*.ts' '**/*.ts' \
+				'*.js' '**/*.js' \
+				'*.py' '**/*.py' \
+				'*.yaml' '**/*.yaml' \
+				'*.yml' '**/*.yml' \
 		); \
-		for filename in $${md_files}; do \
+		for filename in $${files}; do \
 			if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
 				autogen -i --no-code --no-tlc -c "Google LLC" -l apache "$${filename}"; \
 			fi; \
@@ -70,33 +68,11 @@ format: md-format yaml-format ## Format all files
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.
-	@set -e;\
-		files=$$( \
-			find . -type f \
-				\( \
-					-name '*.md' -o \
-					-name '*.markdown' \
-				\) \
-				-not -iwholename '*/.git/*' \
-				-not -iwholename '*/vendor/*' \
-				-not -iwholename '*/node_modules/*' \
-		); \
-		./node_modules/.bin/prettier --write $${files}
+	@npx prettier --write --no-error-on-unmatched-pattern "**/*.md" "**/*.markdown"
 
 .PHONY: yaml-format
 yaml-format: node_modules/.installed ## Format YAML files.
-	@set -e;\
-		files=$$( \
-			find . -type f \
-				\( \
-					-name '*.yaml' -o \
-					-name '*.yml' \
-				\) \
-				-not -iwholename '*/.git/*' \
-				-not -iwholename '*/vendor/*' \
-				-not -iwholename '*/node_modules/*' \
-		); \
-		./node_modules/.bin/prettier --write $${files}
+	@npx prettier --write --no-error-on-unmatched-pattern "**/*.yml" "**/*.yaml"
 
 ## Linters
 #####################################################################
@@ -107,13 +83,11 @@ lint: yamllint actionlint markdownlint ## Run all linters.
 .PHONY: actionlint
 actionlint: ## Runs the actionlint linter.
 	@# NOTE: We need to ignore config files used in tests.
-	@set -e;\
+	@set -euo pipefail;\
 		files=$$( \
-			find .github/workflows/ -type f \
-				\( \
-					-name '*.yaml' -o \
-					-name '*.yml' \
-				\) \
+			git ls-files \
+				'.github/workflows/*.yml' \
+				'.github/workflows/*.yaml' \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			actionlint -format '{{range $$err := .}}::error file={{$$err.Filepath}},line={{$$err.Line}},col={{$$err.Column}}::{{$$err.Message}}%0A```%0A{{replace $$err.Snippet "\\n" "%0A"}}%0A```\n{{end}}' -ignore 'SC2016:' $${files}; \
@@ -123,7 +97,7 @@ actionlint: ## Runs the actionlint linter.
 
 .PHONY: markdownlint
 markdownlint: node_modules/.installed ## Runs the markdownlint linter.
-	@set -e;\
+	@set -euo pipefail;\
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -133,15 +107,15 @@ markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 				message=$$(echo "$$p" | jq -c -r '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-			done <<< "$$(./node_modules/.bin/markdownlint --dot --json . 2>&1 | jq -c '.[]')"; \
+			done <<< "$$(npx markdownlint --dot --json . 2>&1 | jq -c '.[]')"; \
 			exit "$${exit_code}"; \
 		else \
-			./node_modules/.bin/markdownlint --dot .; \
+			npx markdownlint --dot .; \
 		fi
 
 .PHONY: yamllint
 yamllint: ## Runs the yamllint linter.
-	@set -e;\
+	@set -euo pipefail;\
 		extraargs=""; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			extraargs="-f github"; \
