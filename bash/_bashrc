@@ -13,16 +13,20 @@ fi
 # Start a tmux or screen session if not already in one
 # Exit directly after the tmux/screen session is exited
 # Only run if logged in remotely via ssh
+TMUX_CMD=tmux
+if command -v tmx2 >/dev/null 2>&1; then
+    TMUX_CMD=tmx2
+fi
 if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
     # Only run if running in a terminal.
     if [[ (-t 1) && ("$TERM" != screen*) && -z "$TMUX" ]]; then
-        if command -v tmx2 >/dev/null 2>&1; then
+        if command -v "${TMUX_CMD}" >/dev/null 2>&1; then
             # Attempt to discover a detached session
             # Use the current username as the session name.
-            if tmx2 has-session -t "${USER}" 2>/dev/null; then
-                exec tmx2 attach-session -t "${USER}"
+            if "${TMUX_CMD}" has-session -t "${USER}" 2>/dev/null; then
+                exec "${TMUX_CMD}" attach-session -t "${USER}"
             else
-                exec tmx2 new-session -s "${USER}"
+                exec "${TMUX_CMD}" new-session -s "${USER}"
             fi
         elif command -v screen >/dev/null 2>&1; then
             # Attempt to discover a detached session
@@ -90,7 +94,7 @@ ians_time() {
 # If git completion doesn't exist define a no-op function.
 if [[ $(type -t __git_ps1) != function ]]; then
     __git_ps1() {
-        if which git >/dev/null 2>&1; then
+        if commmand -v git >/dev/null 2>&1; then
             repo_info="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
             if [ -n "$repo_info" ]; then
                 echo "($repo_info)"
