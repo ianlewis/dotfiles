@@ -247,12 +247,6 @@ if [ -f ~/.bash_aliases.kubectl ]; then
     . ~/.bash_aliases.kubectl
 fi
 
-# Local settings
-if [ -f ~/.bashrc.local ]; then
-    # shellcheck source=/dev/null
-    . ~/.bashrc.local
-fi
-
 # Go
 GOPATH=${HOME}/go
 [[ ":$PATH:" != *":${GOPATH}/bin:"* ]] && PATH="${GOPATH}/bin:${PATH}"
@@ -312,6 +306,12 @@ fi
 if [ -f "$HOME/.cargo/env" ]; then
     # shellcheck source=/dev/null
     . "$HOME/.cargo/env"
+fi
+
+# Local settings
+if [ -f ~/.bashrc.local ]; then
+    # shellcheck source=/dev/null
+    . ~/.bashrc.local
 fi
 
 export PATH
