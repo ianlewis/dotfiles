@@ -19,21 +19,25 @@ uname_m := $(shell uname -m)
 BINDIR.Linux.x86_64 := bin/linux/amd64
 BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
-# TODO: Verify checksums for downloaded files.
-
-GO_VERSION ?= 1.22.5
+# NOTE: Go shouldn't need to be upgraded since it can support toolchains and
+#       will automatically download the necessary runtime version for a project.
+GO_VERSION ?= 1.21.11
+GO_CHECKSUM ?= 54a87a9325155b98c85bc04dc50298ddd682489eb47f486f2e6cb0707554abf0
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
-GO_URL = $(GOURL.$(uname_s).$(uname_m))
+GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
-NODE_VERSION ?= 20.11.0
+NODE_VERSION ?= 20.15.1
+NODE_CHECKSUM ?= 26700f8d3e78112ad4a2618a9c8e2816e38a49ecf0213ece80e54c38cb02563f
 NODE_URL.Linux.x86_64 := https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_VERSION)-linux-x64.tar.xz
 NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
 
-SHELLCHECK_VERSION ?= 0.8.0
+SHELLCHECK_VERSION ?= 0.10.0
+SHELLCHECK_CHECKSUM ?= 6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87
 SHELLCHECK_URL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/download/v$(SHELLCHECK_VERSION)/shellcheck-v$(SHELLCHECK_VERSION).linux.x86_64.tar.xz
 SHELLCHECK_URL = $(SHELLCHECK_URL.$(uname_s).$(uname_m))
 
 GOLANGCILINT_VERSION ?= 1.59.1
+GOLANGCILINT_CHECKSUM ?= c30696f1292cff8778a495400745f0f9c0406a3f38d8bb12cef48d599f6c7791
 GOLANGCILINT_URL.Linux.x86_64 := https://github.com/golangci/golangci-lint/releases/download/v$(GOLANGCILINT_VERSION)/golangci-lint-$(GOLANGCILINT_VERSION)-linux-amd64.tar.gz
 GOLANGCILINT_URL = $(GOLANGCILINT_URL.$(uname_s).$(uname_m))
 
@@ -82,7 +86,7 @@ $(HOME)/.local/share/venv:
 
 .PHONY: install-opt
 install-opt:
-	mkdir -p ~/opt
+	@mkdir -p ~/opt
 
 ## Tools
 #####################################################################
@@ -238,14 +242,22 @@ install-yamllint: $(HOME)/.local/share/venv ## Install yamllint linter.
 # For shell (linting)
 .PHONY: install-shellcheck
 install-shellcheck: install-opt ## Install shellcheck linter.
-	wget -O /tmp/shellcheck.tar.xz $(SHELLCHECK_URL)
-	cd ~/opt && tar xf /tmp/shellcheck.tar.xz
+	@set -e; \
+		tempfile=$$(mktemp --suffix=".tar.gz"); \
+		wget -O $${tempfile} $(SHELLCHECK_URL); \
+		echo "$(SHELLCHECK_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		cd ~/opt; \
+		tar xf $${tempfile}
 
 # For Go (linting)
 .PHONY: install-golangci-lint
 install-golangci-lint: install-opt ## Install golangci-lint linter.
-	wget -O /tmp/golangci.tar.xz $(GOLANGCILINT_URL)
-	cd ~/opt && tar xf /tmp/golangci.tar.xz
+	@set -e; \
+		tempfile=$$(mktemp --suffix=".tar.gz"); \
+		wget -O $${tempfile} $(GOLANGCILINT_URL); \
+		echo "$(GOLANGCILINT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		cd ~/opt; \
+		tar xf $${tempfile}
 
 ## Install Formatters
 #####################################################################
@@ -280,18 +292,26 @@ install-shfmt: install-opt ## Install shfmt formatter.
 
 .PHONY: install-go
 install-go: install-opt ## Install the Go runtime.
-	wget -O /tmp/go.tar.gz $(GO_URL)
-	cd ~/opt && \
-		rm -rf go && \
-		tar xf /tmp/go.tar.gz && \
-		mv go go-$(GO_VERSION) && \
-		ln -s go-$(GO_VERSION) go
+	@set -e; \
+		tempfile=$$(mktemp --suffix=".tar.gz"); \
+		wget -O "$${tempfile}" $(GO_URL); \
+		echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		cd ~/opt; \
+		rm -rf go; \
+		tar xf "$${tempfile}"; \
+		mv go go-$(GO_VERSION); \
+		ln -s go-$(GO_VERSION) go; \
+		~/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto
 
 .PHONY: install-node
 install-node: install-opt ## Install the Node.js runtime.
-	wget -O /tmp/node.tar.xz $(NODE_URL)
-	cd ~/opt && \
-		tar xf /tmp/node.tar.xz && \
+	@set -e; \
+		tempfile=$$(mktemp --suffix=".tar.gz"); \
+		wget -O "$${tempfile}" $(NODE_URL); \
+		echo "$(NODE_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		cd ~/opt; \
+		tar xf "$${tempfile}"; \
+		rm -rf node; \
 		ln -s node-v$(NODE_VERSION)-linux-x64 node
 
 ## Tests
