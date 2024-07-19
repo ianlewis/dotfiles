@@ -37,6 +37,11 @@ GOLANGCILINT_VERSION ?= 1.59.1
 GOLANGCILINT_URL.Linux.x86_64 := https://github.com/golangci/golangci-lint/releases/download/v$(GOLANGCILINT_VERSION)/golangci-lint-$(GOLANGCILINT_VERSION)-linux-amd64.tar.gz
 GOLANGCILINT_URL = $(GOLANGCILINT_URL.$(uname_s).$(uname_m))
 
+SHFMT_VERSION ?= 3.8.0
+SHFMT_CHECKSUM ?= 27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0
+SHFMT_URL.Linux.x86_64 := https://github.com/mvdan/sh/releases/download/v$(SHFMT_VERSION)/shfmt_v$(SHFMT_VERSION)_linux_amd64
+SHFMT_URL = $(SHFMT_URL.$(uname_s).$(uname_m))
+
 SHELL := /bin/bash
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_NAME = $(shell basename "$$(pwd)")
@@ -70,6 +75,10 @@ package-lock.json:
 node_modules/.installed: package.json package-lock.json
 	npm ci
 	touch node_modules/.installed
+
+# Python virtualenv
+$(HOME)/.local/share/venv:
+	python3 -m venv $@
 
 .PHONY: install-opt
 install-opt:
@@ -256,6 +265,16 @@ install-prettier: ## Install prettier formatter.
 install-sqlparse: ## Install sqlparse formatter.
 	npm install -g sql-formatter
 
+# For shell (formatting)
+.PHONY: install-shfmt
+install-shfmt: install-opt ## Install shfmt formatter.
+	@set -e; \
+		tempfile=$$(mktemp); \
+		wget -O $${tempfile} $(SHFMT_URL); \
+		echo "$(SHFMT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		cp $${tempfile} ~/bin/shfmt; \
+		chmod +x ~/bin/shfmt
+
 ## Language Runtimes
 #####################################################################
 
@@ -274,16 +293,6 @@ install-node: install-opt ## Install the Node.js runtime.
 	cd ~/opt && \
 		tar xf /tmp/node.tar.xz && \
 		ln -s node-v$(NODE_VERSION)-linux-x64 node
-
-
-# Python virtualenv
-$(HOME)/.local/share/venv:
-	python3 -m venv $@
-
-# For shell (formatting)
-.PHONY: install-shfmt
-install-shfmt: ## Install shfmt formatter.
-	go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
 ## Tests
 #####################################################################
