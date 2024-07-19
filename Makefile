@@ -59,7 +59,7 @@ help: ## Shows all targets and help from the Makefile (this message).
 
 
 .PHONY: configure-all
-configure-all: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-tmux ## Configure all tools.
+configure-all: install-bin configure-vim configure-bash configure-flake8 configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-editor-tools
 install-editor-tools: install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
@@ -194,11 +194,6 @@ configure-vim: ## Configure vim.
 	ln -s ~/.vim/_vimrc ~/.vimrc
 	ln -s ~/.vim/_gvimrc ~/.gvimrc
 	ln -s ~/.vim/_vimrc.windows ~/.vimrc.windows
-
-.PHONY: configure-screen
-configure-screen: ## Configure screen.
-	rm -f ~/.screenrc
-	ln -s `pwd`/screen/_screenrc ~/.screenrc
 
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
