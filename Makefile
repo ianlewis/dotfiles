@@ -62,7 +62,7 @@ help: ## Shows all targets and help from the Makefile (this message).
 configure-all: install-bin configure-vim configure-bash configure-flake8 configure-screen configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-prettier install-js-beautify install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
+install-editor-tools: install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
 
 package-lock.json:
 	npm install
@@ -255,11 +255,6 @@ install-black: $(HOME)/.local/share/venv ## Install black (Python) formatter.
 .PHONY: install-prettier
 install-prettier: ## Install prettier formatter.
 	npm install -g prettier
-
-# For HTML, CSS, JSON (formatting)
-.PHONY: install-js-beautify
-install-js-beautify: ## Install js-beautify formatter.
-	npm install -g js-beautify
 
 # For SQL (formatting)
 .PHONY: install-sql-formatter
