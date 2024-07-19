@@ -281,6 +281,11 @@ for d in "${HOME}"/opt/shellcheck-*; do
     [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
 done
 
+# path for golangci-lint
+for d in "${HOME}"/opt/golangci-lint-*; do
+    [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
+done
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
     # shellcheck source=/dev/null
