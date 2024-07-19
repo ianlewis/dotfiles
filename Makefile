@@ -41,6 +41,11 @@ GOLANGCILINT_CHECKSUM ?= c30696f1292cff8778a495400745f0f9c0406a3f38d8bb12cef48d5
 GOLANGCILINT_URL.Linux.x86_64 := https://github.com/golangci/golangci-lint/releases/download/v$(GOLANGCILINT_VERSION)/golangci-lint-$(GOLANGCILINT_VERSION)-linux-amd64.tar.gz
 GOLANGCILINT_URL = $(GOLANGCILINT_URL.$(uname_s).$(uname_m))
 
+ACTIONLINT_VERSION ?= 1.7.1
+ACTIONLINT_CHECKSUM ?= f53c34493657dfea83b657e4b62cc68c25fbc383dff64c8d581613b037aacaa3
+ACTIONLINT_URL.Linux.x86_64 := https://github.com/rhysd/actionlint/releases/download/v$(ACTIONLINT_VERSION)/actionlint_$(ACTIONLINT_VERSION)_linux_amd64.tar.gz
+ACTIONLINT_URL = $(ACTIONLINT_URL.$(uname_s).$(uname_m))
+
 SHFMT_VERSION ?= 3.8.0
 SHFMT_CHECKSUM ?= 27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0
 SHFMT_URL.Linux.x86_64 := https://github.com/mvdan/sh/releases/download/v$(SHFMT_VERSION)/shfmt_v$(SHFMT_VERSION)_linux_amd64
@@ -258,6 +263,15 @@ install-golangci-lint: install-opt ## Install golangci-lint linter.
 		echo "$(GOLANGCILINT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
 		tar xf $${tempfile}
+
+# For Github Actions (linting)
+.PHONY: install-actionlint
+install-actionlint: install-opt ## Install golangci-lint linter.
+	@set -e; \
+		tempfile=$$(mktemp); \
+		wget -O $${tempfile} $(ACTIONLINT_URL); \
+		echo "$(ACTIONLINT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		tar xf $${tempfile} -C ~/bin actionlint
 
 ## Install Formatters
 #####################################################################
