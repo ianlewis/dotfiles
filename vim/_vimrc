@@ -5,6 +5,7 @@ if filereadable($HOME."/.vimrc.first.local")
     source $HOME/.vimrc.first.local
 endif
 
+" TODO: remove MacOS support.
 if has("unix")
     " uname sometimes outputs with trailing whitespace so trim it.
     let s:uname = substitute(system("uname -s"), '^[\n\r\s]*\(.\{-}\)[\n\r\s]*$', '\1', '')
