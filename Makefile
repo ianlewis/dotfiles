@@ -21,8 +21,8 @@ BINDIR = $(BINDIR.$(uname_s).$(uname_m))
 
 # NOTE: Go shouldn't need to be upgraded since it can support toolchains and
 #       will automatically download the necessary runtime version for a project.
-GO_VERSION ?= 1.21.11
-GO_CHECKSUM ?= 54a87a9325155b98c85bc04dc50298ddd682489eb47f486f2e6cb0707554abf0
+GO_VERSION ?= 1.23.2
+GO_CHECKSUM ?= 542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
@@ -36,8 +36,8 @@ SHELLCHECK_CHECKSUM ?= 6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8
 SHELLCHECK_URL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/download/v$(SHELLCHECK_VERSION)/shellcheck-v$(SHELLCHECK_VERSION).linux.x86_64.tar.xz
 SHELLCHECK_URL = $(SHELLCHECK_URL.$(uname_s).$(uname_m))
 
-GOLANGCILINT_VERSION ?= 1.59.1
-GOLANGCILINT_CHECKSUM ?= c30696f1292cff8778a495400745f0f9c0406a3f38d8bb12cef48d599f6c7791
+GOLANGCILINT_VERSION ?= 1.61.0
+GOLANGCILINT_CHECKSUM ?= 77cb0af99379d9a21d5dc8c38364d060e864a01bd2f3e30b5e8cc550c3a54111
 GOLANGCILINT_URL.Linux.x86_64 := https://github.com/golangci/golangci-lint/releases/download/v$(GOLANGCILINT_VERSION)/golangci-lint-$(GOLANGCILINT_VERSION)-linux-amd64.tar.gz
 GOLANGCILINT_URL = $(GOLANGCILINT_URL.$(uname_s).$(uname_m))
 
