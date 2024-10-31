@@ -61,8 +61,8 @@ jobs:
         env:
           SHELLCHECK_VERSION: "0.10.0"
           SHELLCHECK_CHECKSUM: "6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87"
-          ACTIONLINT_VERSION: "1.6.27"
-          ACTIONLINT_CHECKSUM: "5c9b6e5418f688b7f7c7e3d40c13d9e41b1ca45fb6a2c35788b0580e34b7300f"
+          ACTIONLINT_VERSION: "1.7.3"
+          ACTIONLINT_CHECKSUM: "37252b4d440b56374b0fc1726e05fd7452d30d6d774f6e9b52e65bb64475f9db"
         run: |
           set -euo pipefail
 
