@@ -46,8 +46,8 @@ ACTIONLINT_CHECKSUM ?= f53c34493657dfea83b657e4b62cc68c25fbc383dff64c8d581613b03
 ACTIONLINT_URL.Linux.x86_64 := https://github.com/rhysd/actionlint/releases/download/v$(ACTIONLINT_VERSION)/actionlint_$(ACTIONLINT_VERSION)_linux_amd64.tar.gz
 ACTIONLINT_URL = $(ACTIONLINT_URL.$(uname_s).$(uname_m))
 
-SHFMT_VERSION ?= 3.8.0
-SHFMT_CHECKSUM ?= 27b3c6f9d9592fc5b4856c341d1ff2c88856709b9e76469313642a1d7b558fe0
+SHFMT_VERSION ?= 3.10.0
+SHFMT_CHECKSUM ?= 1f57a384d59542f8fac5f503da1f3ea44242f46dff969569e80b524d64b71dbc
 SHFMT_URL.Linux.x86_64 := https://github.com/mvdan/sh/releases/download/v$(SHFMT_VERSION)/shfmt_v$(SHFMT_VERSION)_linux_amd64
 SHFMT_URL = $(SHFMT_URL.$(uname_s).$(uname_m))
 
