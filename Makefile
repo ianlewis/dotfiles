@@ -98,6 +98,11 @@ actionlint: ## Runs the actionlint linter.
 .PHONY: markdownlint
 markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 	@set -euo pipefail;\
+		files=$$( \
+			git ls-files \
+				'*.md' '**/*.md' \
+				'*.markdown' '**/*.markdown' \
+		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -107,17 +112,22 @@ markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 				message=$$(echo "$$p" | jq -c -r '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-			done <<< "$$(npx markdownlint --dot --json . 2>&1 | jq -c '.[]')"; \
+			done <<< "$$(npx markdownlint --dot --json $${files} 2>&1 | jq -c '.[]')"; \
 			exit "$${exit_code}"; \
 		else \
-			npx markdownlint --dot .; \
+			npx markdownlint --dot $${files}; \
 		fi
 
 .PHONY: yamllint
 yamllint: ## Runs the yamllint linter.
 	@set -euo pipefail;\
 		extraargs=""; \
+		files=$$( \
+			git ls-files \
+				'*.yml' '**/*.yml' \
+				'*.yaml' '**/*.yaml' \
+		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			extraargs="-f github"; \
 		fi; \
-		yamllint --strict -c .yamllint.yaml . $$extraargs
+		yamllint --strict -c .yamllint.yaml $${extraargs} $${files}
