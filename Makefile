@@ -42,8 +42,8 @@ node_modules/.installed: package.json package-lock.json
 ## Tools
 #####################################################################
 
-.PHONY: autogen
-autogen: ## Runs autogen on code files.
+.PHONY: license-headers
+license-headers: ## Update license headers.
 	@set -euo pipefail; \
 		files=$$( \
 			git ls-files \
@@ -54,13 +54,19 @@ autogen: ## Runs autogen on code files.
 				'*.yaml' '**/*.yaml' \
 				'*.yml' '**/*.yml' \
 		); \
+		name=$$(git config user.name); \
+		if [ "$${name}" == "" ]; then \
+			>&2 echo "git user.name is required."; \
+			>&2 echo "Set it up using:"; \
+			>&2 echo "git config user.name \"John Doe\""; \
+		fi; \
 		for filename in $${files}; do \
 			if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
-				autogen -i --no-code --no-tlc -c "Google LLC" -l apache "$${filename}"; \
+				autogen -i --no-code --no-tlc -c "$${name}" -l apache "$${filename}"; \
 			fi; \
 		done; \
 		if ! ( head Makefile | grep -iL "Copyright" > /dev/null ); then \
-			autogen -i --no-code --no-tlc -c "Google LLC" -l apache Makefile; \
+			autogen -i --no-code --no-tlc -c "$${name}" -l apache Makefile; \
 		fi;
 
 .PHONY: format
