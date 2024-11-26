@@ -15,7 +15,7 @@
 ---
 extends: default
 
-ignore-from-file: [.gitignore, .yamlignore]
+ignore-from-file: [.gitignore]
 
 rules:
   comments:
