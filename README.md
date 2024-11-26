@@ -81,6 +81,14 @@ This repository template includes stub documentation. Examples of
 maintained in line with [GitHub recommended community
 standards](https://opensource.guide/).
 
+## Security & Dependencies
+
+In general, dependencies for tools and GitHub Actions are pinned to improved
+overall project supply-chain security.
+
+External dependencies on GitHub actions are limited to official GitHub-owned
+actions to minimize exposure to compromise of external repositories.
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contributor documentation.
