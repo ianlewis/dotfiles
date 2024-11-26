@@ -44,6 +44,10 @@ Included tools are:
 - [`yamllint`]: For YAML (GitHub Actions workflows,
 - [`prettier`]: For formatting markdown and yaml.
 
+`Makefile` targets and linter/formatter config are designed to respect
+`.gitignore` and not cross `git` submodules boundaries. However, you will need
+to add files using `git add` for new files before they are picked up.
+
 ## Project documentation
 
 This repository template includes stub documentation. Examples of
@@ -51,6 +55,10 @@ This repository template includes stub documentation. Examples of
 [ianlewis/ianlewis](https://github.com/ianlewis/ianlewis) repository and are
 maintained in line with [GitHub recommended community
 standards](https://opensource.guide/).
+
+## Contributing
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contributor documentation.
 
 [`actionlint`]: https://github.com/rhysd/actionlint
 [`markdownlint`]: https://github.com/DavidAnson/markdownlint
