@@ -71,3 +71,4 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contributor documentation.
 [`markdownlint`]: https://github.com/DavidAnson/markdownlint
 [`yamllint`]: https://www.yamllint.com/
 [`prettier`]: https://prettier.io/
+[`shellcheck`]: https://www.shellcheck.net/
