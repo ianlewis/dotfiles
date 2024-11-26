@@ -15,9 +15,7 @@
 ---
 extends: default
 
-ignore: |
-  node_modules/
-  vendor/
+ignore-from-file: [.gitignore]
 
 rules:
   comments:
