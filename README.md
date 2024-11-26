@@ -48,6 +48,12 @@ Included tools are:
 `.gitignore` and not cross `git` submodules boundaries. However, you will need
 to add files using `git add` for new files before they are picked up.
 
+`Makefile` targets for linters will also produce human-readable output by
+default, but will produce errors as [GitHub Actions workflow
+commands](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions)
+so they can be easily interpreted when run in Pull-Request [status
+checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks).
+
 ## Project documentation
 
 This repository template includes stub documentation. Examples of
