@@ -73,7 +73,7 @@ help: ## Shows all targets and help from the Makefile (this message).
 
 
 .PHONY: configure-all
-configure-all: install-bin configure-vim configure-bash configure-flake8 configure-git configure-tmux ## Configure all tools.
+configure-all: install-bin configure-vim configure-nvim configure-bash configure-flake8 configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-editor-tools
 install-editor-tools: install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
@@ -188,42 +188,47 @@ yamllint: ## Runs the yamllint linter.
 .PHONY: install-bin
 install-bin: ## Install binary scripts.
 	mkdir -p ~/bin
-	ln -sf `pwd`/bin/all/* ~/bin/
-	ln -sf `pwd`/$(BINDIR)/* ~/bin/
+	ln -sf $$(pwd)/bin/all/* ~/bin/
+	ln -sf $$(pwd)/$(BINDIR)/* ~/bin/
 
 .PHONY: configure-bash
 configure-bash: ## Configure bash.
 	rm -f ~/.inputrc ~/.profile ~/.bash_profile ~/.bashrc ~/.bash_aliases ~/.bash_aliases.kubectl ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
-	ln -s `pwd`/bash/_inputrc ~/.inputrc
-	ln -s `pwd`/bash/_profile ~/.profile
-	ln -s `pwd`/bash/_bash_profile ~/.bash_profile
-	ln -s `pwd`/bash/_bashrc ~/.bashrc
-	ln -s `pwd`/bash/_bash_aliases ~/.bash_aliases
-	ln -s `pwd`/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl
-	ln -s `pwd`/bash/_bash_completion ~/.bash_completion
-	ln -s `pwd`/bash/_bash_logout ~/.bash_logout
-	ln -s `pwd`/bash/_dockerfunc ~/.dockerfunc
-	ln -s `pwd`/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
+	ln -s $$(pwd)/bash/_inputrc ~/.inputrc
+	ln -s $$(pwd)/bash/_profile ~/.profile
+	ln -s $$(pwd)/bash/_bash_profile ~/.bash_profile
+	ln -s $$(pwd)/bash/_bashrc ~/.bashrc
+	ln -s $$(pwd)/bash/_bash_aliases ~/.bash_aliases
+	ln -s $$(pwd)/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl
+	ln -s $$(pwd)/bash/_bash_completion ~/.bash_completion
+	ln -s $$(pwd)/bash/_bash_logout ~/.bash_logout
+	ln -s $$(pwd)/bash/_dockerfunc ~/.dockerfunc
+	ln -s $$(pwd)/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 
 .PHONY: configure-vim
 configure-vim: ## Configure vim.
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
-	ln -s `pwd`/vim ~/.vim
+	ln -s $$(pwd)/vim ~/.vim
 	ln -s ~/.vim/_vimrc ~/.vimrc
 	ln -s ~/.vim/_gvimrc ~/.gvimrc
 	ln -s ~/.vim/_vimrc.windows ~/.vimrc.windows
 
+.PHONY: configure-nvim
+configure-nvim: ## Configure neovim.
+	rm -rf ~/.config/nvim
+	ln -s $$(pwd)/nvim ~/.config/nvim
+
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
 	rm -f ~/.tmux.conf ~/.tmux/plugins
-	ln -s `pwd`/tmux/_tmux.conf ~/.tmux.conf
+	ln -s $$(pwd)/tmux/_tmux.conf ~/.tmux.conf
 	mkdir -p ~/.tmux
-	ln -s `pwd`/tmux/plugins ~/.tmux/plugins
+	ln -s $$(pwd)/tmux/plugins ~/.tmux/plugins
 
 .PHONY: configure-git
 configure-git: ## Configure git.
 	rm -f ~/.gitconfig
-	ln -s `pwd`/git/_gitconfig ~/.gitconfig
+	ln -s $$(pwd)/git/_gitconfig ~/.gitconfig
 
 ## Install Linters
 #####################################################################
@@ -232,7 +237,7 @@ configure-git: ## Configure git.
 configure-flake8: ## Configure flake8 (Python) linter.
 	rm -rf ~/.config/flake8
 	mkdir -p ~/.config
-	ln -s `pwd`/flake8/flake8.ini ~/.config/flake8
+	ln -s $$(pwd)/flake8/flake8.ini ~/.config/flake8
 
 # For Python (linting)
 .PHONY: install-flake8
