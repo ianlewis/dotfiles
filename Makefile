@@ -51,6 +51,13 @@ node_modules/.installed: package.json package-lock.json
 	npm ci
 	touch node_modules/.installed
 
+.venv/bin/activate:
+	python -m venv .venv
+
+.venv/.installed: .venv/bin/activate requirements.txt
+	./.venv/bin/pip install -r requirements.txt --require-hashes
+	touch .venv/.installed
+
 ## Tools
 #####################################################################
 
@@ -149,7 +156,7 @@ markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 		fi
 
 .PHONY: yamllint
-yamllint: ## Runs the yamllint linter.
+yamllint: .venv/.installed ## Runs the yamllint linter.
 	@set -euo pipefail;\
 		extraargs=""; \
 		files=$$( \
@@ -160,4 +167,4 @@ yamllint: ## Runs the yamllint linter.
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			extraargs="-f github"; \
 		fi; \
-		yamllint --strict -c .yamllint.yaml $${extraargs} $${files}
+		.venv/bin/yamllint --strict -c .yamllint.yaml $${extraargs} $${files}

@@ -37,13 +37,23 @@ with GitHub Actions pre-submits. Versioning of these tools is done via the
 `requirements.txt` and `packages.json`. This is so that the versions can be
 maintained and updated via `dependabot`-like tooling.
 
-Included tools are:
+Required runtimes:
+
+- [`node`]: Node.js is required to run some linters and formatters.
+- [`python`]: Node.js is required to run some linters and formatters.
+
+The following tools need to be installed:
 
 - [`actionlint`]: For linting GitHub Actions workflows.
 - [`shellcheck`]: For linting shell code in GitHub Actions workflows.
-- [`markdownlint`]: For linting markdown.
-- [`yamllint`]: For YAML (e.g. GitHub Actions workflows).
-- [`prettier`]: For formatting markdown and yaml.
+
+The following tools are installed locally:
+
+- [`yamllint`]: For YAML (e.g. GitHub Actions workflows). (installed in Python
+  virtualenv `.venv`).
+- [`prettier`]: For formatting markdown and yaml (installed in local
+  `node_modules`).
+- [`markdownlint`]: For linting markdown (installed in local `node_modules`).
 
 `Makefile` targets and linter/formatter config are designed to respect
 `.gitignore` and not cross `git` submodules boundaries. However, you will need
@@ -54,6 +64,14 @@ default, but will produce errors as [GitHub Actions workflow
 commands](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions)
 so they can be easily interpreted when run in Pull-Request [status
 checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks).
+
+## License headers
+
+The `license-headers` make target will add license headers to files that are
+missing it with the Copyright holder set to the current value of `git config
+user.name`.
+
+Files are checked for the existence license headers in pre-submits.
 
 ## Project documentation
 
@@ -72,3 +90,5 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contributor documentation.
 [`yamllint`]: https://www.yamllint.com/
 [`prettier`]: https://prettier.io/
 [`shellcheck`]: https://www.shellcheck.net/
+[`node`]: https://nodejs.org/
+[`python`]: https://www.python.org/
