@@ -39,9 +39,10 @@ maintained and updated via `dependabot`-like tooling.
 
 Included tools are:
 
-- [`actionlint`]: For linting GitHub actions
+- [`actionlint`]: For linting GitHub Actions workflows.
+- [`shellcheck`]: For linting shell code in GitHub Actions workflows.
 - [`markdownlint`]: For linting markdown.
-- [`yamllint`]: For YAML (GitHub Actions workflows,
+- [`yamllint`]: For YAML (e.g. GitHub Actions workflows).
 - [`prettier`]: For formatting markdown and yaml.
 
 `Makefile` targets and linter/formatter config are designed to respect
