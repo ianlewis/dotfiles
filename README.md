@@ -37,6 +37,13 @@ with GitHub Actions pre-submits. Versioning of these tools is done via the
 `requirements.txt` and `packages.json`. This is so that the versions can be
 maintained and updated via `dependabot`-like tooling.
 
+Included tools are:
+
+- [`actionlint`]: For linting GitHub actions
+- [`markdownlint`]: For linting markdown.
+- [`yamllint`]: For YAML (GitHub Actions workflows,
+- [`prettier`]: For formatting markdown and yaml.
+
 ## Project documentation
 
 This repository template includes stub documentation. Examples of
@@ -44,3 +51,8 @@ This repository template includes stub documentation. Examples of
 [ianlewis/ianlewis](https://github.com/ianlewis/ianlewis) repository and are
 maintained in line with [GitHub recommended community
 standards](https://opensource.guide/).
+
+[`actionlint`]: https://github.com/rhysd/actionlint
+[`markdownlint`]: https://github.com/DavidAnson/markdownlint
+[`yamllint`]: https://www.yamllint.com/
+[`prettier`]: https://prettier.io/
