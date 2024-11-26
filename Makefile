@@ -16,6 +16,18 @@ SHELL := /bin/bash
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_NAME = $(shell basename "$$(pwd)")
 
+# The help command prints targets in groups. Help documentation in the Makefile
+# uses comments with double hash marks (##). Documentation is printed by the
+# help target in the order in appears in the Makefile.
+#
+# Make targets can be documented with double hash marks as follows:
+#
+#	target-name: ## target documentation.
+#
+# Groups can be added with the following style:
+#
+#	## Group name
+
 .PHONY: help
 help: ## Shows all targets and help from the Makefile (this message).
 	@echo "$(REPO_NAME) Makefile"
