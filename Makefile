@@ -74,11 +74,23 @@ format: md-format yaml-format ## Format all files
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.
-	@npx prettier --write --no-error-on-unmatched-pattern "**/*.md" "**/*.markdown"
+	@set -euo pipefail; \
+		files=$$( \
+			git ls-files \
+				'*.md' '**/*.md' \
+				'*.markdown' '**/*.markdown' \
+		); \
+		npx prettier --write --no-error-on-unmatched-pattern $${files}
 
 .PHONY: yaml-format
 yaml-format: node_modules/.installed ## Format YAML files.
-	@npx prettier --write --no-error-on-unmatched-pattern "**/*.yml" "**/*.yaml"
+	@set -euo pipefail; \
+		files=$$( \
+			git ls-files \
+				'*.yml' '**/*.yml' \
+				'*.yaml' '**/*.yaml' \
+		); \
+		npx prettier --write --no-error-on-unmatched-pattern $${files}
 
 ## Linters
 #####################################################################
