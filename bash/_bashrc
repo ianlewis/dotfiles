@@ -157,6 +157,9 @@ ians_prompt() {
     PS1+='\n\W\$ '
 }
 
+# Create the ~/opt directory.
+mkdir -p ~/opt
+
 # Create vim swap file directory
 if [ ! -d ~/.vimswp ]; then
     mkdir -p ~/.vim/swap
