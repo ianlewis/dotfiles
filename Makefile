@@ -92,7 +92,7 @@ help: ## Shows all targets and help from the Makefile (this message).
 configure-all: install-bin configure-vim configure-nvim configure-bash configure-flake8 configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-editor-tools
-install-editor-tools: install-efm-langserver install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
+install-editor-tools: install-efm-langserver install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt install-vint ## Install all editor tools.
 
 package-lock.json:
 	npm install
@@ -178,7 +178,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: yamllint actionlint markdownlint shellcheck ## Run all linters.
+lint: yamllint actionlint markdownlint shellcheck vint ## Run all linters.
 
 .PHONY: actionlint
 actionlint: ## Runs the actionlint linter.
@@ -266,6 +266,16 @@ shellcheck: ## Runs the shellcheck linter.
 			echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS); \
 		fi
 
+.PHONY: vint
+vint: .venv/.installed ## Runs the vint linter.
+	@set -euo pipefail;\
+		extraargs=""; \
+		files=$$( \
+			git ls-files \
+				'*.vim' '**/*.vim' \
+		); \
+		.venv/bin/vint $${files}
+
 ## Base Tools
 #####################################################################
 
@@ -338,6 +348,10 @@ configure-flake8: ## Configure flake8 (Python) linter.
 	rm -rf ~/.config/flake8
 	mkdir -p ~/.config
 	ln -sf "$$(pwd)/flake8/flake8.ini" ~/.config/flake8
+
+.PHONY: install-vint
+install-vint: $(HOME)/.local/share/venv ## Install vint (VimScript) linter.
+	$</bin/pip3 install vim-vint
 
 # For YAML (linting)
 .PHONY: install-yamllint

@@ -3,8 +3,11 @@
 yamllint==1.35.1 \
     --hash=sha256:2e16e504bb129ff515b37823b472750b36b6de07963bd74b307341ef5ad8bdc3 \
     --hash=sha256:7a003809f88324fd2c877734f2d575ee7881dd9043360657cc8049c809eba6cd
+vim-vint==0.3.21 \
+    --hash=sha256:61357ebbb41e909e194a4187419ad72bde9e67cc12eb13b31c578866b99d45c0
+
 # NOTE: The following dependencies are included because it is not pinned using
-# '==' by yamllint and this is required by pip --require-hashes.
+# '==' by required packages and this is required by pip --require-hashes.
 #
 # Hashes for packages can be obtained with:
 #    pip download <package>
@@ -14,3 +17,7 @@ pathspec==0.12.1 \
     --hash=sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712
 pyyaml==6.0.2 \
     --hash=sha256:ec031d5d2feb36d1d1a24380e4db6d43695f3748343d99434e6f5f9156aaa2ed
+chardet==5.2.0 \
+    --hash=sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970
+ansicolor==0.3.2 \
+    --hash=sha256:91e9fccea5cf596c39bc015d423ed2dd74c0104fd520a42d7acccb66cbfc39e9
