@@ -239,7 +239,7 @@ au BufWrite * :Autoformat
 let g:autoformat_autoindent = 0
 " Override the default standard command as it's very picky about the input and
 " returns an error code even with warnings.
-let g:formatters_go = ['gofumpt']
+let g:formatters_go = ['gofumpt', 'gofmt_1', 'goimports', 'gofmt_2']
 let g:formatdef_gofumpt = '"gofumpt"'
 let g:formatters_javascript = ['prettier']
 let g:formatters_json = ['prettier']
@@ -248,6 +248,17 @@ let g:formatters_markdown = ['prettier']
 let g:formatters_html = ['prettier']
 let g:formatters_sql = ['sqlformatter']
 let g:formatdef_sqlformatter = '"sql-formatter"'
+
+" Terraform/OpenTofu
+if !exists('g:formatdef_terraform_format')
+    let g:formatdef_terraform_format = '"terraform fmt -"'
+endif
+
+if !exists('g:formatdef_opentofu_format')
+    let g:formatdef_opentofu_format = '"tofu fmt -"'
+endif
+
+let g:formatters_terraform = ['terraform_format', 'opentofu_format']
 
 " Syntastic
 " ----------------------------------------------------------------------------
