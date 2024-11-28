@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-uname_s := $(shell uname -s)
+# uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 
 # system specific variables, add more here

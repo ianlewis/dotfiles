@@ -10,9 +10,6 @@
 [submodule "vim/bundle/pathogen"]
     path = vim/bundle/pathogen
     url = https://github.com/tpope/vim-pathogen.git
-[submodule "vim/bundle/terraform"]
-    path = vim/bundle/terraform
-    url = https://github.com/markcornick/vim-terraform.git
 [submodule "vim/bundle/vim-go"]
     path = vim/bundle/vim-go
     url = https://github.com/fatih/vim-go.git
@@ -55,3 +52,12 @@
 [submodule "nvim/pack/nvim/start/nvim-lspconfig"]
 	path = nvim/pack/nvim/start/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule "nvim/pack/nvim/start/vim-commentary"]
+	path = nvim/pack/nvim/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule "vim/bundle/vim-terraform"]
+	path = vim/bundle/vim-terraform
+	url = https://github.com/hashivim/vim-terraform.git
+[submodule "nvim/pack/nvim/start/vim-terraform"]
+	path = nvim/pack/nvim/start/vim-terraform
+	url = https://github.com/hashivim/vim-terraform.git
