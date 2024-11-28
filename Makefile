@@ -301,9 +301,7 @@ configure-bash: ## Configure bash.
 configure-vim: ## Configure vim.
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
 	ln -sf $$(pwd)/vim ~/.vim
-	ln -sf ~/.vim/_vimrc ~/.vimrc
-	ln -sf ~/.vim/_gvimrc ~/.gvimrc
-	ln -sf ~/.vim/_vimrc.windows ~/.vimrc.windows
+	ln -sf ~/.vim/_vimrc.vim ~/.vimrc
 
 .PHONY: configure-nvim
 configure-nvim: ## Configure neovim.
