@@ -127,6 +127,8 @@ license-headers: ## Update license headers.
 				'*.py' '**/*.py' \
 				'*.yaml' '**/*.yaml' \
 				'*.yml' '**/*.yml' \
+				'*.vim' '**/*.vim' | \
+					xargs -I%% find %% -type f 2> /dev/null \
 		); \
 		name=$$(git config user.name); \
 		if [ "$${name}" == "" ]; then \
