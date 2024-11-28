@@ -51,6 +51,14 @@ noremap l n
 nnoremap <tab> %
 vnoremap <tab> %
 
+" Status line
+" ----------------------------------------------------------------------------
+"
+set laststatus=2
+if has("statusline")
+    set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+endif
+
 " File Encodings
 " ----------------------------------------------------------------------------
 
