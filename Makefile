@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# uname_s := $(shell uname -s)
+uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 
 # system specific variables, add more here
@@ -311,16 +311,16 @@ configure-git: ## Configure git.
 ## Install Linters
 #####################################################################
 
+# For Python (linting)
+.PHONY: install-flake8
+install-flake8: $(HOME)/.local/share/venv ## Install flake8 (Python) linter.
+	$</bin/pip3 install flake8
+
 .PHONY: configure-flake8
 configure-flake8: ## Configure flake8 (Python) linter.
 	rm -rf ~/.config/flake8
 	mkdir -p ~/.config
 	ln -s $$(pwd)/flake8/flake8.ini ~/.config/flake8
-
-# For Python (linting)
-.PHONY: install-flake8
-install-flake8: $(HOME)/.local/share/venv ## Install flake8 (Python) linter.
-	$</bin/pip3 install flake8
 
 # For YAML (linting)
 .PHONY: install-yamllint
