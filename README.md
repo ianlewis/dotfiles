@@ -10,6 +10,13 @@ where the many ideas were copied shamelessly.
 Dotfiles are installed using a simple Makefile in the root directory. Just run
 `make` to install the files.
 
+## Tools
+
+Tools like language runtimes, linters, and formatters can be installed via the
+respective `make` targets. For example, `make install-shellcheck`. Tools are
+installed in the `~/opt` directory. Supported tools are added to the path by
+`.bashrc`.
+
 ## Compatibility
 
 The scripts here should work on Linux. I have tested them mostly on
