@@ -278,7 +278,6 @@ configure-bash: ## Configure bash.
 	ln -s $$(pwd)/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl
 	ln -s $$(pwd)/bash/_bash_completion ~/.bash_completion
 	ln -s $$(pwd)/bash/_bash_logout ~/.bash_logout
-	ln -s $$(pwd)/bash/_dockerfunc ~/.dockerfunc
 	ln -s $$(pwd)/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 
 .PHONY: configure-vim
