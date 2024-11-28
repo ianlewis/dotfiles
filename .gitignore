@@ -3,6 +3,7 @@
 
 # Dependency directories (remove the comment below to include it)
 node_modules/
+.venv
 
 # Ignore directory history.
 vim/.netrwhist
@@ -10,8 +11,3 @@ vim/.netrwhist
 # Ignore vim's swap and backup directories
 vim/swap/*
 vim/backup/*
-
-# Ignore object files from vcprompt
-*.o
-src/vcprompt/vcprompt
-ycm_build
