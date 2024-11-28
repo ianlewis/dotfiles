@@ -150,15 +150,6 @@ autocmd FileType cpp setlocal commentstring=//%s
 
 let g:markdown_fenced_languages = [ 'html', 'go', 'python', 'typescript', 'javascript', 'bash=sh' ]
 
-" Terraform
-" ----------------------------------------------------------------------------
-
-let Tlist_GainFocus_On_ToggleOpen=1
-let Tlist_Use_Right_Window=1
-let Tlist_Exit_OnlyWindow=1
-let Tlist_File_Fold_Auto_Close=1
-let Tlist_Show_One_File=1
-
 " Omnicomplete
 " ----------------------------------------------------------------------------
 set ofu=syntaxcomplete#Complete

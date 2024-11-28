@@ -18,7 +18,7 @@ set modeline
 set modelines=5
 
 " Auto set current path to the working directory
-" autocmd BufEnter * silent! lcd %:p:h
+autocmd BufEnter * silent! lcd %:p:h
 
 syntax on
 colors desert

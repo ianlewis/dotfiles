@@ -279,12 +279,6 @@ for d in "${HOME}"/.gem/ruby/*/bin; do
     [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
 done
 
-# path for shellcheck
-SHELLCHECK_PATH=$(find "${HOME}/opt" -maxdepth 1 -type d -name "shellcheck-*" | sort -Vr | head -n1)
-if [ "${SHELLCHECK_PATH}" != "" ]; then
-    PATH="${SHELLCHECK_PATH}:${PATH}"
-fi
-
 # path for golangci-lint
 GOLANGCILINT_PATH=$(find "${HOME}/opt" -maxdepth 1 -type d -name "golangci-lint-*" | sort -Vr | head -n1)
 if [ "${GOLANGCILINT_PATH}" != "" ]; then

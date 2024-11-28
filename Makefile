@@ -14,13 +14,13 @@
 
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
+arch.x86_64 := amd64
+arch.aarch64 := arm64
+arch = $(arch.$(uname_m))
 
-# system specific variables, add more here
-BINDIR.Linux.x86_64 := bin/linux/amd64
-BINDIR = $(BINDIR.$(uname_s).$(uname_m))
-
-# NOTE: Go shouldn't need to be upgraded since it can support toolchains and
-#       will automatically download the necessary runtime version for a project.
+# NOTE: Go shouldn't necessarily need to be upgraded since it can support
+#       toolchains and will automatically download the necessary runtime
+#       version for a project.
 GO_VERSION ?= 1.23.2
 GO_CHECKSUM ?= 542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
@@ -50,6 +50,11 @@ SHFMT_VERSION ?= 3.10.0
 SHFMT_CHECKSUM ?= 1f57a384d59542f8fac5f503da1f3ea44242f46dff969569e80b524d64b71dbc
 SHFMT_URL.Linux.x86_64 := https://github.com/mvdan/sh/releases/download/v$(SHFMT_VERSION)/shfmt_v$(SHFMT_VERSION)_linux_amd64
 SHFMT_URL = $(SHFMT_URL.$(uname_s).$(uname_m))
+
+EFM_LANGSERVER_VERSION ?= 0.0.54
+EFM_LANGSERVER_CHECKSUM ?= 2d0982c4aaa944ac58a9f7e7a4daec2f0228ea1580556b770fff5e671b55e300
+EFM_LANGSERVER_URL.Linux.x86_64 := https://github.com/mattn/efm-langserver/releases/download/v$(EFM_LANGSERVER_VERSION)/efm-langserver_v$(EFM_LANGSERVER_VERSION)_linux_amd64.tar.gz
+EFM_LANGSERVER_URL = $(EFM_LANGSERVER_URL.$(uname_s).$(uname_m))
 
 SHELL := /bin/bash
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
@@ -87,7 +92,7 @@ help: ## Shows all targets and help from the Makefile (this message).
 configure-all: install-bin configure-vim configure-nvim configure-bash configure-flake8 configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-editor-tools
-install-editor-tools: install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
+install-editor-tools: install-efm-langserver install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt ## Install all editor tools.
 
 package-lock.json:
 	npm install
@@ -114,7 +119,7 @@ install-opt:
 ## Tools
 #####################################################################
 
-# TODO: Add install-autogen
+# TODO(#6): Add install-autogen
 
 .PHONY: license-headers
 license-headers: ## Update license headers.
@@ -268,45 +273,57 @@ shellcheck: ## Runs the shellcheck linter.
 install-bin: ## Install binary scripts.
 	mkdir -p ~/bin
 	ln -sf $$(pwd)/bin/all/* ~/bin/
-	ln -sf $$(pwd)/$(BINDIR)/* ~/bin/
 
 .PHONY: configure-bash
 configure-bash: ## Configure bash.
 	rm -f ~/.inputrc ~/.profile ~/.bash_profile ~/.bashrc ~/.bash_aliases ~/.bash_aliases.kubectl ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent
-	ln -s $$(pwd)/bash/_inputrc ~/.inputrc
-	ln -s $$(pwd)/bash/_profile ~/.profile
-	ln -s $$(pwd)/bash/_bash_profile ~/.bash_profile
-	ln -s $$(pwd)/bash/_bashrc ~/.bashrc
-	ln -s $$(pwd)/bash/_bash_aliases ~/.bash_aliases
-	ln -s $$(pwd)/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl
-	ln -s $$(pwd)/bash/_bash_completion ~/.bash_completion
-	ln -s $$(pwd)/bash/_bash_logout ~/.bash_logout
-	ln -s $$(pwd)/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
+	ln -sf $$(pwd)/bash/_inputrc ~/.inputrc
+	ln -sf $$(pwd)/bash/_profile ~/.profile
+	ln -sf $$(pwd)/bash/_bash_profile ~/.bash_profile
+	ln -sf $$(pwd)/bash/_bashrc ~/.bashrc
+	ln -sf $$(pwd)/bash/_bash_aliases ~/.bash_aliases
+	ln -sf $$(pwd)/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl
+	ln -sf $$(pwd)/bash/_bash_completion ~/.bash_completion
+	ln -sf $$(pwd)/bash/_bash_logout ~/.bash_logout
+	ln -sf $$(pwd)/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 
 .PHONY: configure-vim
 configure-vim: ## Configure vim.
 	rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows
-	ln -s $$(pwd)/vim ~/.vim
-	ln -s ~/.vim/_vimrc ~/.vimrc
-	ln -s ~/.vim/_gvimrc ~/.gvimrc
-	ln -s ~/.vim/_vimrc.windows ~/.vimrc.windows
+	ln -sf $$(pwd)/vim ~/.vim
+	ln -sf ~/.vim/_vimrc ~/.vimrc
+	ln -sf ~/.vim/_gvimrc ~/.gvimrc
+	ln -sf ~/.vim/_vimrc.windows ~/.vimrc.windows
 
 .PHONY: configure-nvim
 configure-nvim: ## Configure neovim.
 	rm -rf ~/.config/nvim
-	ln -s $$(pwd)/nvim ~/.config/nvim
+	ln -sf $$(pwd)/nvim ~/.config/nvim
 
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
 	rm -f ~/.tmux.conf ~/.tmux/plugins
-	ln -s $$(pwd)/tmux/_tmux.conf ~/.tmux.conf
+	ln -sf $$(pwd)/tmux/_tmux.conf ~/.tmux.conf
 	mkdir -p ~/.tmux
-	ln -s $$(pwd)/tmux/plugins ~/.tmux/plugins
+	ln -sf $$(pwd)/tmux/plugins ~/.tmux/plugins
 
 .PHONY: configure-git
 configure-git: ## Configure git.
 	rm -f ~/.gitconfig
-	ln -s $$(pwd)/git/_gitconfig ~/.gitconfig
+	ln -sf "$$(pwd)/git/_gitconfig" ~/.gitconfig
+
+## Install Tools
+#####################################################################
+
+.PHONY: install-efm-langserver
+install-efm-langserver: install-bin install-opt ## Install efm-langserver
+	 @set -e; \
+		tempfile=$$(mktemp --suffix=".tar.gz"); \
+		curl -sSLo "$${tempfile}" "$(EFM_LANGSERVER_URL)"; \
+		echo "$(EFM_LANGSERVER_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+		cd ~/opt; \
+		tar xf "$${tempfile}"; \
+		ln -sf ~/opt/efm-langserver_v$(EFM_LANGSERVER_VERSION)_$$(echo "$(uname_s)" | tr A-Z a-z)_$(arch)/efm-langserver ~/bin/efm-langserver
 
 ## Install Linters
 #####################################################################
@@ -320,7 +337,7 @@ install-flake8: $(HOME)/.local/share/venv ## Install flake8 (Python) linter.
 configure-flake8: ## Configure flake8 (Python) linter.
 	rm -rf ~/.config/flake8
 	mkdir -p ~/.config
-	ln -s $$(pwd)/flake8/flake8.ini ~/.config/flake8
+	ln -sf "$$(pwd)/flake8/flake8.ini" ~/.config/flake8
 
 # For YAML (linting)
 .PHONY: install-yamllint
@@ -329,32 +346,33 @@ install-yamllint: $(HOME)/.local/share/venv ## Install yamllint linter.
 
 # For shell (linting)
 .PHONY: install-shellcheck
-install-shellcheck: install-opt ## Install shellcheck linter.
+install-shellcheck: install-bin install-opt ## Install shellcheck linter.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		wget -O $${tempfile} $(SHELLCHECK_URL); \
+		curl -sSLo "$${tempfile}" "$(SHELLCHECK_URL)"; \
 		echo "$(SHELLCHECK_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
-		tar xf $${tempfile}
+		tar xf "$${tempfile}"; \
+		ln -sf ~/opt/shellcheck-v$(SHELLCHECK_VERSION)/shellcheck ~/bin/shellcheck
 
 # For Go (linting)
 .PHONY: install-golangci-lint
 install-golangci-lint: install-opt ## Install golangci-lint linter.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		wget -O $${tempfile} $(GOLANGCILINT_URL); \
+		curl -sSLo "${tempfile}" "$(GOLANGCILINT_URL)"; \
 		echo "$(GOLANGCILINT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
-		tar xf $${tempfile}
+		tar xf "$${tempfile}"
 
 # For Github Actions (linting)
 .PHONY: install-actionlint
-install-actionlint: install-opt ## Install golangci-lint linter.
+install-actionlint: ## Install golangci-lint linter.
 	@set -e; \
 		tempfile=$$(mktemp); \
-		wget -O $${tempfile} $(ACTIONLINT_URL); \
+		curl -sSLo "$${tempfile}" "$(ACTIONLINT_URL)"; \
 		echo "$(ACTIONLINT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-		tar xf $${tempfile} -C ~/bin actionlint
+		tar xf "$${tempfile}" -C ~/bin actionlint
 
 ## Install Formatters
 #####################################################################
@@ -376,12 +394,12 @@ install-sqlparse: ## Install sqlparse formatter.
 
 # For shell (formatting)
 .PHONY: install-shfmt
-install-shfmt: install-opt ## Install shfmt formatter.
+install-shfmt: install-bin install-opt ## Install shfmt formatter.
 	@set -e; \
 		tempfile=$$(mktemp); \
-		wget -O $${tempfile} $(SHFMT_URL); \
+		curl -sSLo "$${tempfile}" "$(SHFMT_URL)"; \
 		echo "$(SHFMT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-		cp $${tempfile} ~/bin/shfmt; \
+		cp "$${tempfile}" ~/bin/shfmt; \
 		chmod +x ~/bin/shfmt
 
 ## Language Runtimes
@@ -391,7 +409,7 @@ install-shfmt: install-opt ## Install shfmt formatter.
 install-go: install-opt ## Install the Go runtime.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		wget -O "$${tempfile}" $(GO_URL); \
+		curl -sSLo "$${tempfile}" "$(GO_URL)"; \
 		echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
 		rm -rf go; \
@@ -404,9 +422,8 @@ install-go: install-opt ## Install the Go runtime.
 install-node: install-opt ## Install the Node.js runtime.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		wget -O "$${tempfile}" $(NODE_URL); \
+		curl -sSLo "$${tempfile}" "$(NODE_URL)"; \
 		echo "$(NODE_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
 		tar xf "$${tempfile}"; \
-		rm -rf node; \
-		ln -s node-v$(NODE_VERSION)-linux-x64 node
+		ln -sf node-v$(NODE_VERSION)-linux-x64 node
