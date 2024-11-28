@@ -10,7 +10,7 @@
 [credential "https://source.developers.google.com"]
     helper = gcloud.sh
 [http]
-    cookiefile = /home/ian/.gitcookies
+    cookiefile = ~/.gitcookies
 [pull]
     ff = only
 [core]
