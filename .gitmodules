@@ -52,3 +52,6 @@
 [submodule "vim/bundle/requirements.txt.vim"]
 	path = vim/bundle/requirements.txt.vim
 	url = https://github.com/raimon49/requirements.txt.vim.git
+[submodule "nvim/pack/nvim/start/nvim-lspconfig"]
+	path = nvim/pack/nvim/start/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig.git

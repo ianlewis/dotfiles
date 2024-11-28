@@ -12,6 +12,8 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
+lua require('init')
+
 set modeline
 set modelines=5
 
