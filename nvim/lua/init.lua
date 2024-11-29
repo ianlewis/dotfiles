@@ -14,15 +14,17 @@
 
 local lspconfig = require("lspconfig")
 lspconfig.gopls.setup({
-settings = {
-    gopls = {
-      analyses = {
-        unusedparams = true,
-      },
-      staticcheck = true,
-      gofumpt = true,
+    settings = {
+        gopls = {
+            analyses = {
+                shadow = true,
+                unusedvariable = true,
+                useany = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+        },
     },
-  },
 })
 
 lspconfig.efm.setup({
@@ -30,16 +32,43 @@ lspconfig.efm.setup({
     settings = {
         rootMarkers = {".git/"},
         languages = {
-            -- TODO(#16): Formatting/linting support for markdown
-            -- TODO(#16): Formatting/linting support for TypeScript
-            -- TODO(#16): Formatting/linting support for YAML
+            -- NOTE: Go is handled by gopls server.
+            --       golangci-lint isn't used because I usually have specific
+            --       configuration per-project and checks analysis tools built
+            --       into gopls are usually good enough for normal editing.
+            -- TODO(#16): Formatting/linting support for SQL
+            javascript = {
+                -- TODO(#16): Support passing textwidth to prettier
+                --            See: https://github.com/mattn/efm-langserver/issues/144
+                {formatCommand = "prettier --stdin-filepath ${INPUT} --print-width 79 --tab-width 2", formatStdin = true},
+                -- TODO(#16): eslint config for JavaScript
+            },
+            json = {
+                -- TODO(#16): Support passing textwidth to prettier
+                --            See: https://github.com/mattn/efm-langserver/issues/144
+                {formatCommand = "prettier --stdin-filepath ${INPUT} --print-width 79 --tab-width 2", formatStdin = true},
+                -- TODO(#16): eslint config for JSON
+            },
+            markdown = {
+                -- TODO(#16): Support passing textwidth to prettier
+                --            See: https://github.com/mattn/efm-langserver/issues/144
+                {formatCommand = "prettier --stdin-filepath ${INPUT} --print-width 79 --tab-width 2", formatStdin = true},
+                {
+                    lintCommand = "markdownlint --stdin --config %USERPROFILE%.config/markdownlint.yaml",
+                    lintStdin = true,
+                    lintFormats = {
+                        "%f:%l %m",
+                        "%f:%l:%c %m",
+                        "%f: %l: %m",
+                    },
+                },
+            },
             python = {
                 -- TODO(#16): Support passing textwidth to black
                 --            See: https://github.com/mattn/efm-langserver/issues/144
-                -- TODO(#16): flake8 linter.
-                {formatCommand = "black -q -", formatStdin = true},
+                {formatCommand = "black --quiet --line-length l79 -", formatStdin = true},
+                {lintCommand = "flake8 --stdin-display-name ${INPUT} -", lintStdin = true, lintFormats = {"%f:%l:%c: %m"}},
             },
-            -- TODO(#16): golangci-lint.
             -- TODO(#21): Support lua-format
             -- lua = {
             --     {formatCommand = "lua-format -i", formatStdin = true}
@@ -47,6 +76,18 @@ lspconfig.efm.setup({
             terraform = {
                 {formatCommand = "terraform fmt -", formatStdin = true},
                 {formatCommand = "tofu fmt -", formatStdin = true}
+            },
+            typescript = {
+                -- TODO(#16): Support passing textwidth to prettier
+                --            See: https://github.com/mattn/efm-langserver/issues/144
+                {formatCommand = "prettier --stdin-filepath ${INPUT} --print-width 79 --tab-width 2", formatStdin = true},
+                -- TODO(#16): eslint config for TypeScript
+            },
+            yaml = {
+                -- TODO(#16): Support passing textwidth to prettier
+                --            See: https://github.com/mattn/efm-langserver/issues/144
+                {formatCommand = "prettier --stdin-filepath ${INPUT} --print-width 79 --tab-width 2", formatStdin = true},
+                {lintCommand = "yamllint -f parsable -", lintStdin = true},
             },
         }
     }

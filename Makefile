@@ -89,7 +89,7 @@ help: ## Shows all targets and help from the Makefile (this message).
 		}'
 
 .PHONY: configure-all
-configure-all: install-bin configure-vim configure-nvim configure-bash configure-flake8 configure-git configure-tmux ## Configure all tools.
+configure-all: install-bin configure-vim configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-editor-tools
 install-editor-tools: install-efm-langserver install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt install-vint ## Install all editor tools.
@@ -347,6 +347,11 @@ configure-flake8: ## Configure flake8 (Python) linter.
 	mkdir -p ~/.config
 	ln -sf "$$(pwd)/flake8/flake8.ini" ~/.config/flake8
 
+.PHONY: configure-markdownlint
+configure-markdownlint: ## Configure markdownlint linter.
+	mkdir -p ~/.config
+	ln -sf "$$(pwd)/markdownlint/markdownlint.yaml" ~/.config/markdownlint.yaml
+
 .PHONY: install-vint
 install-vint: $(HOME)/.local/share/venv ## Install vint (VimScript) linter.
 	$</bin/pip3 install vim-vint
@@ -355,6 +360,11 @@ install-vint: $(HOME)/.local/share/venv ## Install vint (VimScript) linter.
 .PHONY: install-yamllint
 install-yamllint: $(HOME)/.local/share/venv ## Install yamllint linter.
 	$</bin/pip3 install yamllint
+
+# For YAML (linting)
+.PHONY: install-markdownlint
+install-markdownlint: ## Install markdownlint linter.
+	npm install -g markdownlint-cli
 
 # For shell (linting)
 .PHONY: install-shellcheck
