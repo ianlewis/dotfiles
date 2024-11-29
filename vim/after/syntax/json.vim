@@ -12,5 +12,10 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
-" Make .md files markdown
-au BufRead,BufNewFile *.md set filetype=markdown
+" Allows comments in tsconfig.json files while still using json filetype.
+augroup rcjsonc
+    autocmd!
+    autocmd BufEnter tsconfig.json setlocal commentstring=//%s
+    autocmd BufEnter tsconfig.json syntax match Comment +\/\/.\+$+
+    autocmd BufEnter tsconfig.json syntax match Comment +\/\*.\+\*\/$+
+augroup END

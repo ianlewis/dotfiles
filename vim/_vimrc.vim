@@ -1,7 +1,19 @@
-set nocompatible
+" Copyright 2024 Ian Lewis
+"
+" Licensed under the Apache License, Version 2.0 (the "License");
+" you may not use this file except in compliance with the License.
+" You may obtain a copy of the License at
+"
+"      http://www.apache.org/licenses/LICENSE-2.0
+"
+" Unless required by applicable law or agreed to in writing, software
+" distributed under the License is distributed on an "AS IS" BASIS,
+" WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+" See the License for the specific language governing permissions and
+" limitations under the License.
 
 " Local config.
-if filereadable($HOME."/.vimrc.first.local")
+if filereadable($HOME.'/.vimrc.first.local')
     source $HOME/.vimrc.first.local
 endif
 
@@ -27,16 +39,23 @@ set backupdir=~/.vim/backup//
 set modeline
 set modelines=5
 
-" Auto set current path to the working directory
-autocmd BufEnter * silent! lcd %:p:h
-
 " Editing
 " ----------------------------------------------------------------------------
 syntax on
 colors desert
 
-" The PC is fast enough, do syntax highlight syncing from start
-autocmd BufEnter * :syntax sync fromstart
+augroup rcconfig
+    autocmd!
+
+    " Auto set current path to the working directory
+    autocmd BufEnter * silent! lcd %:p:h
+
+    " The PC is fast enough, do syntax highlight syncing from start
+    autocmd BufEnter * :syntax sync fromstart
+
+    "Turn off automatic comment continuation
+    autocmd FileType * setlocal fo-=r fo-=q fo-=o
+augroup END
 
 " new horizontal split panes show up on the bottom
 set splitbelow
@@ -73,12 +92,9 @@ set foldlevelstart=20
 "Turn off annoying system bell
 set visualbell t_vb=
 
-"Turn off automatic comment continuation
-autocmd FileType * setlocal fo-=r fo-=q fo-=o
-
 " sets leader to ',' and localleader to "\"
-let mapleader=","
-let maplocalleader="\\"
+let mapleader=','
+let maplocalleader='\'
 
 " Don't use selectmode
 set selectmode=
@@ -128,22 +144,12 @@ set ignorecase
 " incremental search
 set incsearch
 
-" Go
-" ----------------------------------------------------------------------------
+augroup rccomments
+    autocmd!
 
-"Run gofmt on save
-" defer to autoformat for gofmt
-" let g:go_fmt_autosave = 1
-" let g:go_fmt_fail_silently = 1
-
-" Set the comment string for Go to line comments.
-autocmd FileType go setlocal commentstring=//%s
-
-" C++
-" ----------------------------------------------------------------------------
-
-" Set the comment string for C++ to line comments.
-autocmd FileType cpp setlocal commentstring=//%s
+    " Set the comment string for C++ to line comments.
+    autocmd FileType cpp setlocal commentstring=//%s
+augroup END
 
 " Markdown
 " ----------------------------------------------------------------------------
@@ -153,10 +159,15 @@ let g:markdown_fenced_languages = [ 'html', 'go', 'python', 'typescript', 'javas
 " Omnicomplete
 " ----------------------------------------------------------------------------
 set ofu=syntaxcomplete#Complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+augroup rccomplete
+    autocmd!
+
+    autocmd FileType python set omnifunc=pythoncomplete#Complete
+    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+augroup END
 
 " netrw
 " ----------------------------------------------------------------------------
@@ -169,7 +180,7 @@ let g:netrw_list_hide='^.*\~$,^.*\.pyc$,\.exe$,\.zip$,\.gz,\.swp,\.orig$'
 
 " Status line
 set laststatus=2
-if has("statusline")
+if has('statusline')
     set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
 
     " Errors for syntax checking
@@ -225,7 +236,11 @@ nmap ;; <Plug>quickbuf
 
 " Autoformatter
 " ----------------------------------------------------------------------------
-au BufWrite * :Autoformat
+augroup autoformat
+    autocmd!
+    autocmd BufWrite * :Autoformat
+augroup END
+
 " Don't fall back to vim's autoindent because it breaks a lot of file types
 let g:autoformat_autoindent = 0
 " Override the default standard command as it's very picky about the input and
@@ -265,10 +280,10 @@ let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 " let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " Python syntax checking
-let g:syntastic_python_checkers = ["flake8"]
+let g:syntastic_python_checkers = ['flake8']
 
 " YAML checking
-let g:syntastic_yaml_checkers = [ "yamllint" ]
+let g:syntastic_yaml_checkers = ['yamllint']
 
 " For java syntax checking
 "let g:syntastic_java_checker = 'javac'
@@ -284,6 +299,6 @@ map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Local config.
 " --------------------------------------------------
-if filereadable($HOME."/.vimrc.local")
+if filereadable($HOME.'/.vimrc.local')
     source $HOME/.vimrc.local
 endif

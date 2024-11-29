@@ -12,7 +12,7 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
-" Override any style plugins
+" Override any system style plugins
 " Use soft tabs of 4 spaces by default.
 setlocal tabstop=4
 setlocal shiftwidth=4

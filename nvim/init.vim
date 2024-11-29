@@ -18,7 +18,10 @@ set modeline
 set modelines=5
 
 " Auto set current path to the working directory
-autocmd BufEnter * silent! lcd %:p:h
+augroup rcpath
+    autocmd!
+    autocmd BufEnter * silent! lcd %:p:h
+augroup END
 
 syntax on
 colors desert
@@ -55,7 +58,7 @@ vnoremap <tab> %
 " ----------------------------------------------------------------------------
 "
 set laststatus=2
-if has("statusline")
+if has('statusline')
     set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
 endif
 

@@ -12,8 +12,7 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
-" Markdown settings
-
+" Override any system style plugins
 setlocal tabstop=2
 setlocal softtabstop=2
 setlocal shiftwidth=2
