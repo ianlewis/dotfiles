@@ -14,17 +14,14 @@
 
 lua require('init')
 
-set modeline
-set modelines=5
-
-" Auto set current path to the working directory
-augroup rcpath
-    autocmd!
-    autocmd BufEnter * silent! lcd %:p:h
-augroup END
+" Editing {{{
+" ----------------------------------------------------------------------------
 
 syntax on
 colors desert
+
+set modeline
+set modelines=5
 
 " new horizontal split panes show up on the bottom
 set splitbelow
@@ -40,6 +37,17 @@ set expandtab
 set bs=2
 set backspace=2
 
+" Auto set current path to the working directory
+augroup rcpath
+    autocmd!
+    autocmd BufEnter * silent! lcd %:p:h
+augroup END
+
+" }}}
+
+" Keymappings {{{
+" ----------------------------------------------------------------------------
+
 " Keymappings for Dvorak
 noremap n j
 noremap t k
@@ -54,15 +62,12 @@ noremap l n
 nnoremap <tab> %
 vnoremap <tab> %
 
-" Status line
-" ----------------------------------------------------------------------------
-"
-set laststatus=2
-if has('statusline')
-    set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
-endif
+set foldenable
+set foldmethod=marker
 
-" File Encodings
+" }}}
+
+" File Encodings {{{
 " ----------------------------------------------------------------------------
 
 set encoding=utf-8
@@ -70,10 +75,32 @@ set fileencoding=utf-8
 set fileencodings=iso-2002-jp,utf-8,euc-jp,cp932
 set fileformat=unix
 
-" Search
+" }}}
+
+" Status line {{{
+" ----------------------------------------------------------------------------
+"
+set laststatus=2
+if has('statusline')
+    set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+endif
+
+" }}}
+
+" Search {{{
 " ----------------------------------------------------------------------------
 
 set ignorecase
-
-" incremental search
 set incsearch
+
+" }}}
+
+" File Types {{{
+" ----------------------------------------------------------------------------
+
+" Markdown {{{
+" ----------------------------------------------------------------------------
+let g:markdown_fenced_languages = [ 'html', 'go', 'python', 'typescript', 'javascript', 'bash=sh', 'shell=sh' ]
+" }}}
+
+" }}}
