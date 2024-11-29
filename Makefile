@@ -338,7 +338,7 @@ install-efm-langserver: install-bin install-opt ## Install efm-langserver
 
 # For Python (linting)
 .PHONY: install-flake8
-install-flake8: $(HOME)/.local/share/venv ## Install flake8 (Python) linter.
+install-flake8: $(HOME)/.local/share/venv ## User-install flake8 (Python) linter.
 	$</bin/pip3 install flake8
 
 .PHONY: configure-flake8
@@ -347,28 +347,30 @@ configure-flake8: ## Configure flake8 (Python) linter.
 	mkdir -p ~/.config
 	ln -sf "$$(pwd)/flake8/flake8.ini" ~/.config/flake8
 
+.PHONY: install-vint
+install-vint: $(HOME)/.local/share/venv ## User-install vint (VimScript) linter.
+	$</bin/pip3 install vim-vint
+
+.PHONY: install-yamllint
+install-yamllint: $(HOME)/.local/share/venv ## User-install yamllint linter.
+	$</bin/pip3 install yamllint
+
+.PHONY: install-markdownlint
+install-markdownlint: ## User-install markdownlint linter globally.
+	npm install -g markdownlint-cli
+
 .PHONY: configure-markdownlint
 configure-markdownlint: ## Configure markdownlint linter.
 	mkdir -p ~/.config
 	ln -sf "$$(pwd)/markdownlint/markdownlint.yaml" ~/.config/markdownlint.yaml
 
-.PHONY: install-vint
-install-vint: $(HOME)/.local/share/venv ## Install vint (VimScript) linter.
-	$</bin/pip3 install vim-vint
-
-# For YAML (linting)
-.PHONY: install-yamllint
-install-yamllint: $(HOME)/.local/share/venv ## Install yamllint linter.
-	$</bin/pip3 install yamllint
-
-# For YAML (linting)
-.PHONY: install-markdownlint
-install-markdownlint: ## Install markdownlint linter.
-	npm install -g markdownlint-cli
+.PHONY: install-eslint
+install-eslint: ## User-install eslint linter globally.
+	npm install -g eslint
 
 # For shell (linting)
 .PHONY: install-shellcheck
-install-shellcheck: install-bin install-opt ## Install shellcheck linter.
+install-shellcheck: install-bin install-opt ## User-install shellcheck linter.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
 		curl -sSLo "$${tempfile}" "$(SHELLCHECK_URL)"; \
@@ -379,7 +381,7 @@ install-shellcheck: install-bin install-opt ## Install shellcheck linter.
 
 # For Go (linting)
 .PHONY: install-golangci-lint
-install-golangci-lint: install-opt ## Install golangci-lint linter.
+install-golangci-lint: install-opt ## User-install golangci-lint linter.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
 		curl -sSLo "${tempfile}" "$(GOLANGCILINT_URL)"; \
@@ -389,7 +391,7 @@ install-golangci-lint: install-opt ## Install golangci-lint linter.
 
 # For Github Actions (linting)
 .PHONY: install-actionlint
-install-actionlint: ## Install golangci-lint linter.
+install-actionlint: ## User-install actionlint linter.
 	@set -e; \
 		tempfile=$$(mktemp); \
 		curl -sSLo "$${tempfile}" "$(ACTIONLINT_URL)"; \
@@ -401,22 +403,22 @@ install-actionlint: ## Install golangci-lint linter.
 
 # For Python (formatting)
 .PHONY: install-black
-install-black: $(HOME)/.local/share/venv ## Install black (Python) formatter.
+install-black: $(HOME)/.local/share/venv ## User-install black (Python) formatter.
 	$</bin/pip3 install black
 
 # For Javascript, yaml, markdown (formatting)
 .PHONY: install-prettier
-install-prettier: ## Install prettier formatter.
+install-prettier: ## User-install prettier formatter.
 	npm install -g prettier
 
 # For SQL (formatting)
 .PHONY: install-sql-formatter
-install-sqlparse: ## Install sqlparse formatter.
+install-sqlparse: ## User-install sqlparse formatter.
 	npm install -g sql-formatter
 
 # For shell (formatting)
 .PHONY: install-shfmt
-install-shfmt: install-bin install-opt ## Install shfmt formatter.
+install-shfmt: install-bin install-opt ## User-install shfmt formatter.
 	@set -e; \
 		tempfile=$$(mktemp); \
 		curl -sSLo "$${tempfile}" "$(SHFMT_URL)"; \

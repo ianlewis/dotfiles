@@ -61,3 +61,6 @@
 [submodule "nvim/pack/nvim/start/vim-terraform"]
 	path = nvim/pack/nvim/start/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
+[submodule "nvim/pack/nvim/start/nvim-surround"]
+	path = nvim/pack/nvim/start/nvim-surround
+	url = https://github.com/kylechui/nvim-surround.git

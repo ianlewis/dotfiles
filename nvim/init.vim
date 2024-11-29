@@ -43,8 +43,8 @@ augroup rcpath
     " Auto set current path to the working directory
     autocmd BufEnter * silent! lcd %:p:h
 
-    "Turn off automatic comment continuation
-    autocmd FileType * setlocal fo-=r fo-=q fo-=o
+    " Turn off automatic comment continuation
+    autocmd FileType * set formatoptions-=cro
 augroup END
 
 " }}}
