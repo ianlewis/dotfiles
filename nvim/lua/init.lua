@@ -108,6 +108,7 @@ lspconfig.efm.setup({
             --       configuration per-project and checks analysis tools built
             --       into gopls are usually good enough for normal editing.
             -- TODO(#16): Formatting/linting support for SQL
+            -- TODO(#16): Formatting/linting support for shell with shfmt,shellcheck
             javascript = { prettier, eslint },
             json = { prettier, eslint },
             markdown = { prettier, markdownlint },
