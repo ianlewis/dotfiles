@@ -3,4 +3,4 @@
 # eslint-efm runs eslint and parses the JSON output into a text format that
 # efm-langserver can parse. We do this because eslint is a huge pain in the ass
 # and will not allow us to install format plugins globally.
-eslint --format json --stdin --stdin-filename $1 | jq -r '.[] | .filePath as $path | .messages[] | {line: .line, column: .column, message: .message, filePath: $path} | .filePath + "(" + (.line|tostring) + "," + (.column|tostring) + "): " + .message'
+eslint --format json --stdin --stdin-filename "$1" | jq -r '.[] | .filePath as $path | .messages[] | {line: .line, column: .column, message: .message, filePath: $path} | .filePath + "(" + (.line|tostring) + "," + (.column|tostring) + "): " + .message'
