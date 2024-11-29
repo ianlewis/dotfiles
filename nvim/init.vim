@@ -37,10 +37,14 @@ set expandtab
 set bs=2
 set backspace=2
 
-" Auto set current path to the working directory
 augroup rcpath
     autocmd!
+
+    " Auto set current path to the working directory
     autocmd BufEnter * silent! lcd %:p:h
+
+    "Turn off automatic comment continuation
+    autocmd FileType * setlocal fo-=r fo-=q fo-=o
 augroup END
 
 " }}}
