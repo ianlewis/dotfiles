@@ -69,6 +69,10 @@ vnoremap <tab> %
 set foldenable
 set foldmethod=marker
 
+" Terminal friendly visual block shortcut for the terminal. This is an escape
+" hatch for when Ctrl-v doesn't work in some terminals.
+noremap vb <C-v>
+
 " }}}
 
 " File Encodings {{{
