@@ -53,6 +53,11 @@ local black = {
     formatStdin = true,
 }
 
+local rustFmt = {
+    formatCommand = "rustfmt",
+    formatStdin = true,
+}
+
 local terraformFmt = {
     formatCommand = "terraform fmt -",
     formatStdin = true,
@@ -117,6 +122,7 @@ lspconfig.efm.setup({
             -- lua = {
             --     {formatCommand = "lua-format -i", formatStdin = true}
             -- }
+            rust = { rustFmt },
             terraform = { terraformFmt, tofuFmt },
             typescript = { prettier, eslint },
             yaml = { prettier, yamllint },
