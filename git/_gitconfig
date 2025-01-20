@@ -1,6 +1,6 @@
 [user]
     name = Ian Lewis
-    email = ianmlewis@gmail.com
+    email = ian@ianlewis.org
 [alias]
     tree = log --graph --pretty=oneline --abbrev-commit --decorate
 [github]
