@@ -20,22 +20,6 @@ surround.setup()
 -- LSP {{{
 local lspconfig = require("lspconfig")
 
--- gopls {{{
-lspconfig.gopls.setup({
-    settings = {
-        gopls = {
-            analyses = {
-                shadow = true,
-                unusedvariable = true,
-                useany = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-        },
-    },
-})
--- }}}
-
 -- efm-server {{{
 
 -- formatters {{{
@@ -122,10 +106,51 @@ lspconfig.efm.setup({
             -- lua = {
             --     {formatCommand = "lua-format -i", formatStdin = true}
             -- }
-            rust = { rustFmt },
             terraform = { terraformFmt, tofuFmt },
             typescript = { prettier, eslint },
             yaml = { prettier, yamllint },
+        }
+    }
+})
+-- }}}
+
+-- gopls {{{
+lspconfig.gopls.setup({
+    settings = {
+        gopls = {
+            analyses = {
+                shadow = true,
+                unusedvariable = true,
+                useany = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+        },
+    },
+})
+-- }}}
+
+-- rust-analyzer {{{
+lspconfig.rust_analyzer.setup({
+    settings = {
+        ["rust-analyzer"] = {
+            imports = {
+                granularity = {
+                    group = "module",
+                },
+                prefix = "self",
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+            check = {
+                command = "clippy"
+            },
         }
     }
 })
