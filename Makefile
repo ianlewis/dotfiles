@@ -26,8 +26,8 @@ GO_CHECKSUM ?= 542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
-NODE_VERSION ?= 20.15.1
-NODE_CHECKSUM ?= 26700f8d3e78112ad4a2618a9c8e2816e38a49ecf0213ece80e54c38cb02563f
+NODE_VERSION ?= 22.13.1
+NODE_CHECKSUM ?= 0d2a5af33c7deab5555c8309cd3f373446fe1526c1b95833935ab3f019733b3b
 NODE_URL.Linux.x86_64 := https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_VERSION)-linux-x64.tar.xz
 NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
 
@@ -449,5 +449,6 @@ install-node: install-opt ## Install the Node.js runtime.
 		curl -sSLo "$${tempfile}" "$(NODE_URL)"; \
 		echo "$(NODE_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
+		rm -rf node; \
 		tar xf "$${tempfile}"; \
 		ln -sf node-v$(NODE_VERSION)-linux-x64 node
