@@ -21,8 +21,8 @@ arch = $(arch.$(uname_m))
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
-GO_VERSION ?= 1.23.2
-GO_CHECKSUM ?= 542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e
+GO_VERSION ?= 1.24.0
+GO_CHECKSUM ?= dea9ca38a0b852a74e81c26134671af7c0fbe65d81b0dc1c5bfe22cf7d4c8858
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
