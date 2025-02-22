@@ -36,8 +36,8 @@ SHELLCHECK_CHECKSUM ?= 6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8
 SHELLCHECK_URL.Linux.x86_64 := https://github.com/koalaman/shellcheck/releases/download/v$(SHELLCHECK_VERSION)/shellcheck-v$(SHELLCHECK_VERSION).linux.x86_64.tar.xz
 SHELLCHECK_URL = $(SHELLCHECK_URL.$(uname_s).$(uname_m))
 
-GOLANGCILINT_VERSION ?= 1.61.0
-GOLANGCILINT_CHECKSUM ?= 77cb0af99379d9a21d5dc8c38364d060e864a01bd2f3e30b5e8cc550c3a54111
+GOLANGCILINT_VERSION ?= 1.64.5
+GOLANGCILINT_CHECKSUM ?= e6bd399a0479c5fd846dcf9f3990d20448b4f0d1e5027d82348eab9f80f7ac71
 GOLANGCILINT_URL.Linux.x86_64 := https://github.com/golangci/golangci-lint/releases/download/v$(GOLANGCILINT_VERSION)/golangci-lint-$(GOLANGCILINT_VERSION)-linux-amd64.tar.gz
 GOLANGCILINT_URL = $(GOLANGCILINT_URL.$(uname_s).$(uname_m))
 
@@ -384,7 +384,7 @@ install-shellcheck: install-bin install-opt ## User-install shellcheck linter.
 install-golangci-lint: install-opt ## User-install golangci-lint linter.
 	@set -e; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		curl -sSLo "${tempfile}" "$(GOLANGCILINT_URL)"; \
+		curl -sSLo "$${tempfile}" "$(GOLANGCILINT_URL)"; \
 		echo "$(GOLANGCILINT_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		cd ~/opt; \
 		tar xf "$${tempfile}"
