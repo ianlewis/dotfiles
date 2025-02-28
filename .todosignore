@@ -1,0 +1,14 @@
+# Vendored kubectl-aliases.
+bash/kubectl-aliases
+
+# Vendored bash libraries.
+bash/lib
+
+# Vendored vim plugins.
+vim/bundle
+
+# Vendored nvim plugins.
+nvim/pack/nvim/start
+
+# Vendored tmux plugins.
+tmux/plugins
