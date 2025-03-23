@@ -43,8 +43,12 @@ augroup rcpath
     " Auto set current path to the working directory
     autocmd BufEnter * silent! lcd %:p:h
 
-    " Turn off automatic comment continuation
-    autocmd FileType * set formatoptions-=cro
+    " -cro: Turn off automatic comment continuation
+    " +2: When formatting text, use the indent of the second line of a paragraph for the rest of the paragraph
+    " +q: Allow formatting of comments with 'gq'.
+    " +l: Long lines are not broken in insert mode.
+    " +j: Remove leading comment when joining lines.
+    autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o formatoptions+=2 formatoptions+=q formatoptions+=l formatoptions+=j
 augroup END
 
 " }}}
