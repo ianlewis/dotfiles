@@ -64,7 +64,7 @@ local eslint = {
     },
 }
 
-local markdownLint = {
+local markdownlint = {
     lintCommand = "markdownlint --stdin --config %USERPROFILE%.config/markdownlint.yaml",
     lintStdin = true,
     lintFormats = {
