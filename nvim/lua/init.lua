@@ -19,8 +19,24 @@ surround.setup()
 
 -- LSP {{{
 local lspconfig = require("lspconfig")
+local util = require("lspconfig/util")
 
--- efm-server {{{
+-- completion {{{
+local cmp = require("cmp")
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
+
+cmp.setup({
+    sources = {
+        {
+            name = 'nvim_lsp'
+        },
+    },
+})
+
+cmp_capabilities = cmp_nvim_lsp.default_capabilities()
+-- }}}
+
+-- efm-langserver {{{
 
 -- formatters {{{
 local prettier = {
@@ -116,6 +132,13 @@ lspconfig.efm.setup({
 
 -- gopls {{{
 lspconfig.gopls.setup({
+    capabilities = cmp_capabilities,
+    filetypes = {
+        "go",
+        "gomod",
+        "gowork",
+        "gotmpl",
+    },
     settings = {
         gopls = {
             analyses = {
