@@ -94,10 +94,10 @@ configure-all: install-bin configure-vim configure-nvim configure-bash configure
 .PHONY: install-editor-tools
 install-editor-tools: install-efm-langserver install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-shellcheck install-shfmt install-vint ## Install all editor tools.
 
-package-lock.json:
+package-lock.json: package.json
 	@npm install
 
-node_modules/.installed: package.json package-lock.json
+node_modules/.installed: package-lock.json
 	@npm ci
 	@touch node_modules/.installed
 
@@ -135,6 +135,7 @@ license-headers: ## Update license headers.
 				'*.vim' \
 				'*.lua' \
 				'Makefile' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		name=$$(git config user.name); \
 		if [ "$${name}" == "" ]; then \
@@ -165,6 +166,7 @@ md-format: node_modules/.installed ## Format Markdown files.
 		files=$$( \
 			git ls-files --deduplicate \
 				'*.md' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		npx prettier --write --no-error-on-unmatched-pattern $${files}
 
@@ -192,6 +194,7 @@ actionlint: ## Runs the actionlint linter.
 			git ls-files --deduplicate \
 				'.github/workflows/*.yml' \
 				'.github/workflows/*.yaml' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			actionlint -format '{{range $$err := .}}::error file={{$$err.Filepath}},line={{$$err.Line}},col={{$$err.Column}}::{{$$err.Message}}%0A```%0A{{replace $$err.Snippet "\\n" "%0A"}}%0A```\n{{end}}' -ignore 'SC2016:' $${files}; \
@@ -208,6 +211,7 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 			git ls-files --deduplicate \
 				'.github/workflows/*.yml' \
 				'.github/workflows/*.yaml' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			.venv/bin/zizmor --quiet --pedantic --format sarif $${files} > zizmor.sarif.json || true; \
@@ -225,6 +229,7 @@ markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 				'*.md' \
 				':!:.github/pull_request_template.md' \
 				':!:.github/ISSUE_TEMPLATE/*.md' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
@@ -246,6 +251,7 @@ markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 			git ls-files --deduplicate \
 				'.github/pull_request_template.md' \
 				'.github/ISSUE_TEMPLATE/*.md' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
@@ -271,6 +277,7 @@ textlint: node_modules/.installed ## Runs the textlint linter.
 			git ls-files --deduplicate \
 				'*.md' \
 				'*.txt' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
@@ -297,6 +304,7 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 			git ls-files --deduplicate \
 				'*.yml' \
 				'*.yaml' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			extraargs="-f github"; \
