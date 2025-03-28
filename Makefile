@@ -311,7 +311,6 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 		fi; \
 		.venv/bin/yamllint --strict -c .yamllint.yaml $${extraargs} $${files}
 
-<<<<<<< HEAD
 SHELLCHECK_ARGS = --severity=style --external-sources
 
 .PHONY: shellcheck
