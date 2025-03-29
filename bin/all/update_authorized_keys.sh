@@ -9,13 +9,13 @@ fi
 # to avoid writing an empty authorized_keys file if github.com is
 # inaccessible.
 TEMPFILE=$(mktemp)
-if curl -s https://github.com/ianlewis.keys > "${TEMPFILE}"; then
-    cat "${TEMPFILE}" > "${HOME}/.ssh/authorized_keys"
+if curl -s https://github.com/ianlewis.keys >"${TEMPFILE}"; then
+    cat "${TEMPFILE}" >"${HOME}/.ssh/authorized_keys"
 fi
 
 # Adds local authorized_keys if not already there
 if [ -f "${HOME}/.ssh/authorized_keys.local" ]; then
     while read -r key; do
-        grep -qF "$key" "${HOME}/.ssh/authorized_keys" || echo "$key" >> "${HOME}/.ssh/authorized_keys"
-    done < "${HOME}/.ssh/authorized_keys.local"
+        grep -qF "$key" "${HOME}/.ssh/authorized_keys" || echo "$key" >>"${HOME}/.ssh/authorized_keys"
+    done <"${HOME}/.ssh/authorized_keys.local"
 fi

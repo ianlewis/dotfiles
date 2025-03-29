@@ -19,7 +19,7 @@ if command -v tmx2 >/dev/null 2>&1; then
 fi
 if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
     # Only run if running in a terminal.
-    if [[ (-t 1) && ("$TERM" != screen*) && -z "$TMUX" ]]; then
+    if [[ (-t 1) && ($TERM != screen*) && -z $TMUX ]]; then
         if command -v "${TMUX_CMD}" >/dev/null 2>&1; then
             # Attempt to discover a detached session
             # Use the current username as the session name.
@@ -61,7 +61,7 @@ fi
 export VISUAL=vim
 export EDITOR=vim
 
-ESC=$(printf "\\e")
+ESC=$(printf '\e')
 IANS_DEFAULT_COLOR="${ESC}[00m"
 IANS_GRAY_COLOR="${ESC}[37m"
 IANS_PINK_COLOR="${ESC}[35m"
@@ -230,7 +230,7 @@ export GPG_TTY
 # ssh-agent
 # Start an ssh-agent instance if an existing one isn't found.
 mkdir -p ~/.ssh
-if [[ -z "$SSH_AUTH_SOCK" ]] && [[ -f ~/.ssh-find-agent ]]; then
+if [[ -z $SSH_AUTH_SOCK ]] && [[ -f ~/.ssh-find-agent ]]; then
     # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
     if [ ! -f ~/.ssh/authorized_keys ]; then
         touch ~/.ssh/authorized_keys
@@ -298,21 +298,26 @@ if [ -f "$HOME/opt/google-cloud-sdk/completion.bash.inc" ]; then
     source "$HOME"'/opt/google-cloud-sdk/completion.bash.inc'
 fi
 
-# Add user-local bin to the PATH but only after running the .profile.local.
-# We want ~/bin to be highest priority.
-[[ ":$PATH:" != *":${HOME}/bin:"* ]] && PATH="${HOME}/bin:${PATH}"
-
-# The .local/bin is used for some local installs such as applications installed
-# via 'pip install --user'
-[[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
-
 # Rust
 if [ -f "$HOME/.cargo/env" ]; then
     # shellcheck source=/dev/null
     . "$HOME/.cargo/env"
 fi
 
-# Local settings
+# The .local/bin is used for some local installs such as applications installed via 'pip install --user'
+[[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
+
+# Add ~/bin to the PATH. We want ~/bin to be second highest priority before
+# running .bashrc.local.
+[[ ":$PATH:" != *":${HOME}/bin:"* ]] && PATH="${HOME}/bin:${PATH}"
+
+# Aqua. We want aqua to be able to override other global paths so it gets highest priority.
+if command -v aqua >/dev/null 2>&1; then
+    aqua_root="$(aqua root-dir)"
+    [[ ":$PATH:" != *":${aqua_root}/bin:"* ]] && PATH="${aqua_root}/bin:${PATH}"
+fi
+
+# Local settings.
 if [ -f ~/.bashrc.local ]; then
     # shellcheck source=/dev/null
     . ~/.bashrc.local
