@@ -2,19 +2,23 @@
 # vim: set ft=sh:
 
 # pip bash completion start
-if which python3 >/dev/null 2>&1 && python3 -m pip >/dev/null 2>&1; then
+if command -v python3 >/dev/null 2>&1 && python3 -m pip >/dev/null 2>&1; then
     eval "$(python3 -m pip completion --bash)"
-elif which python >/dev/null 2>&1 && python -m pip >/dev/null 2>&1; then
+elif command -v python >/dev/null 2>&1 && python -m pip >/dev/null 2>&1; then
     eval "$(python -m pip completion --bash --no-python-version-warning)"
 fi
-# pip bash completion end
 
 # kubectl bash completion
-if which kubectl >/dev/null 2>&1; then
+if command -v kubectl >/dev/null 2>&1; then
     # shellcheck source=/dev/null
     source <(kubectl completion bash)
 fi
-# kubectl bash completion end
+
+# Aqua completion
+if command -v aqua >/dev/null 2>&1; then
+    # shellcheck source=/dev/null
+    source <(aqua completion bash)
+fi
 
 if [ -f ~/.bash_completion.local ]; then
     # shellcheck source=/dev/null

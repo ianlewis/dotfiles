@@ -116,6 +116,7 @@ lspconfig.efm.setup({
             -- TODO(#16): Formatting/linting support for shell with shfmt,shellcheck
             javascript = { prettier, eslint },
             json = { prettier, eslint },
+            json5 = { prettier, eslint },
             markdown = { prettier, markdownlint },
             python = { black, flake8 },
             -- TODO(#21): Support lua-format
