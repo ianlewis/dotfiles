@@ -1,6 +1,46 @@
 {
   "checksums": [
     {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.0.2/stylua-linux-aarch64.zip",
+      "checksum": "AD2F1B2BCB215CA3009310F8978AD14DB78057CEC1B4767B4F73CC7F3BA8047E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.0.2/stylua-linux-x86_64-musl.zip",
+      "checksum": "A9E1436424414B73976DDC27FFDAAB61CDC18595F32A3A7F5C661E0F327E1BA7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.0.2/stylua-macos-aarch64.zip",
+      "checksum": "126BE217B089755AF3C681D0597585136D181864470232899A6DE31F68BA16FD",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.0.2/stylua-macos-x86_64.zip",
+      "checksum": "4CB47D1C0131A19F7BDB8FC10D6347F038D4853EAA13D9970A8C611FA4731606",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.0.2/stylua-windows-x86_64.zip",
+      "checksum": "B88B32417A37AF623698FA4BA0BED9ABF3A777A2CBF532B4C4313D7EC9679AEE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Kampfkarren/selene/0.28.0/selene-0.28.0-linux.zip",
+      "checksum": "5D8706751968486D46D120316B108154693052F75AF60EFB3DBF4D4CF9E4D902",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Kampfkarren/selene/0.28.0/selene-0.28.0-macos.zip",
+      "checksum": "F93AB685BF8EAD811A98F997A95522CB71D528451B11852578B62F27939EACD7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Kampfkarren/selene/0.28.0/selene-0.28.0-windows.zip",
+      "checksum": "BCF45A4CF024F32490A5AF33F7E06A2F2A97699175BFAA062F78EFF28EF70595",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/jqlang/jq/jq-1.7.1/jq-linux-amd64",
       "checksum": "5942C9B0934E510EE61EB3E30273F1B3FE2590DF93933A93D7C58B81D19C8FF5",
       "algorithm": "sha256"
@@ -103,11 +143,6 @@
     {
       "id": "github_release/github.com/rhysd/actionlint/v1.7.7/actionlint_1.7.7_windows_arm64.zip",
       "checksum": "76E9514CFAC18E5677AA04F3A89873C981F16A2F2353BB97372A86CD09B1F5A8",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.333.1/registry.yaml",
-      "checksum": "9DBB73AF6D587E7696230A00BF9AD1A4D1B62512D5C179D55A5B471F332FF52E",
       "algorithm": "sha256"
     },
     {
