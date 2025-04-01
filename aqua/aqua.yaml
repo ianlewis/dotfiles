@@ -23,7 +23,7 @@ checksum:
     - all
 registries:
   - type: standard
-    ref: v4.333.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.333.3 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: mattn/efm-langserver@v0.0.54
   - name: koalaman/shellcheck@v0.10.0
