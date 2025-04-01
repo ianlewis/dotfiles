@@ -13,7 +13,8 @@
 -- limitations under the License.
 
 --{{{ package configs
-require("treesitter")
+require("remap") -- key remappings
+require("treesitter") -- nvim-treesitter config
 --}}}
 
 -- {{{ nvim-surround
@@ -35,6 +36,16 @@ cmp.setup({
             name = 'nvim_lsp'
         },
     },
+    mapping = cmp.mapping.preset.insert({
+        -- <C-n> = next
+        -- <C-p> = previous 
+        -- <C-e> = aboriut
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
 })
 
 cmp_capabilities = cmp_nvim_lsp.default_capabilities()
@@ -160,6 +171,7 @@ lspconfig.gopls.setup({
 
 -- rust-analyzer {{{
 lspconfig.rust_analyzer.setup({
+    capabilities = cmp_capabilities,
     settings = {
         ["rust-analyzer"] = {
             imports = {
