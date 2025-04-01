@@ -13,4 +13,5 @@
 -- limitations under the License.
 
 -- Jump to definition even if in another file.
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+-- selene: allow(undefined_variable)
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)

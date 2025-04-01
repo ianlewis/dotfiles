@@ -160,7 +160,7 @@ license-headers: ## Update license headers.
 #####################################################################
 
 .PHONY: format
-format: json-format md-format shfmt yaml-format ## Format all files
+format: json-format lua-format md-format shfmt yaml-format ## Format all files
 
 .PHONY: json-format
 json-format: node_modules/.installed ## Format JSON files.
@@ -172,6 +172,18 @@ json-format: node_modules/.installed ## Format JSON files.
 				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		npx prettier --write --no-error-on-unmatched-pattern $${files}
+
+.PHONY: lua-format
+lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
+	@set -euo pipefail; \
+		files=$$( \
+			git ls-files --deduplicate \
+				'*.lua' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
+		); \
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+		stylua --config-path stylua.toml $${files}
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.
@@ -300,9 +312,46 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
 	@./node_modules/.bin/renovate-config-validator --strict
 
+.PHONY: selene
+selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
+	@set -euo pipefail; \
+		files=$$( \
+			git ls-files --deduplicate \
+				'*.lua' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
+		); \
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			exit_code=0; \
+			while IFS="" read -r p && [ -n "$$p" ]; do \
+				level=$$(echo "$$p" | jq -c '.severity // empty' | tr -d '"'); \
+				file=$$(echo "$$p" | jq -c '.primary_label.filename // empty' | tr -d '"'); \
+				line=$$(echo "$$p" | jq -c '.primary_label.span.start_line // empty' | tr -d '"'); \
+				endline=$$(echo "$$p" | jq -c '.primary_label.span.end_line // empty' | tr -d '"'); \
+				col=$$(echo "$$p" | jq -c '.primary_label.span.start_column // empty' | tr -d '"'); \
+				endcol=$$(echo "$$p" | jq -c '.primary_label.span.end_column // empty' | tr -d '"'); \
+				message=$$(echo "$$p" | jq -c '((.code // empty) + " : " + (.message // empty))' | tr -d '"'); \
+				exit_code=1; \
+				case $$level in \
+				"Warning") \
+					echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+					;; \
+				"Error") \
+					echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+					;; \
+				esac; \
+			done <<< "$$(selene --display-style Json2 $${files})"; \
+			if [ "$${exit_code}" != "0" ]; then \
+				exit "$${exit_code}"; \
+			fi; \
+		else \
+			selene --no-summary $${files}; \
+		fi
+
 .PHONY: textlint
 textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textlint linter.
-	@set -e;\
+	@set -euo pipefail; \
 		files=$$( \
 			git ls-files --deduplicate \
 				'*.md' \
