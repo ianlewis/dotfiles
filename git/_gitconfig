@@ -2,6 +2,7 @@
     name = Ian Lewis
     email = ian@ianlewis.org
 [alias]
+    co = checkout
     tree = log --graph --pretty=oneline --abbrev-commit --decorate
 [github]
     user = IanLewis
