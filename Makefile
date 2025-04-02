@@ -430,7 +430,8 @@ vint: .venv/.installed ## Runs the vint linter.
 		extraargs=""; \
 		files=$$( \
 			git ls-files \
-				'*.vim' '**/*.vim' \
+				'*.vim' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
 		); \
 		.venv/bin/vint $${files}
 
@@ -585,8 +586,7 @@ install-markdownlint: configure-markdownlint ## User-install markdownlint linter
 
 .PHONY: configure-markdownlint
 configure-markdownlint: ## Configure markdownlint linter.
-	@mkdir -p ~/.config
-	@ln -sf "$(REPO_ROOT)/markdownlint/markdownlint.yaml" ~/.config/markdownlint.yaml
+	@ln -sf "$(REPO_ROOT)/markdownlint/markdownlint.yaml" ~/.markdownlint.yaml
 
 .PHONY: install-eslint
 install-eslint: ## User-install eslint linter globally.

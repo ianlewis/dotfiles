@@ -53,27 +53,10 @@ local cmp_capabilities = cmp_nvim_lsp.default_capabilities()
 -- efm-langserver {{{
 
 -- formatters {{{
-local prettier = {
-	-- TODO(#16): Support passing textwidth to prettier
-	--            See: https://github.com/mattn/efm-langserver/issues/144
-	formatCommand = "prettier --stdin-filepath ${INPUT} --print-width 79 --tab-width 2",
-	formatStdin = true,
-}
-
-local black = {
-	-- TODO(#16): Support passing textwidth to prettier
-	--            See: https://github.com/mattn/efm-langserver/issues/144
-	formatCommand = "black --quiet --line-length l79 -",
-	formatStdin = true,
-}
-
+local black = require("efmls-configs.formatters.black")
+local prettier = require("efmls-configs.formatters.prettier")
 local stylua = require("efmls-configs.formatters.stylua")
-
-local terraformFmt = {
-	formatCommand = "terraform fmt -",
-	formatStdin = true,
-}
-
+local terraformFmt = require("efmls-configs.formatters.terraform_fmt")
 local tofuFmt = {
 	formatCommand = "tofu fmt -",
 	formatStdin = true,
@@ -81,38 +64,13 @@ local tofuFmt = {
 -- }}}
 
 -- linters {{{
-local eslint = {
-	-- NOTE: We use a script wrapper because eslint is huge PITA to use directly.
-	lintCommand = "eslint-efm ${INPUT}",
-	lintStdin = true,
-	lintIgnoreExitCode = true,
-	lintFormats = {
-		"%f(%l,%c): %m",
-	},
-}
-
-local markdownlint = {
-	lintCommand = "markdownlint --stdin --config %USERPROFILE%.config/markdownlint.yaml",
-	lintStdin = true,
-	lintFormats = {
-		"%f:%l %m",
-		"%f:%l:%c %m",
-		"%f: %l: %m",
-	},
-}
-
-local flake8 = {
-	lintCommand = "flake8 --stdin-display-name ${INPUT} -",
-	lintStdin = true,
-	lintFormats = { "%f:%l:%c: %m" },
-}
-
+-- NOTE: efmls-configs-nvim's eslint config uses the --format visualstudio
+--       option which requires eslint-formatter-visualstudio to be installed.
+local eslint = require("efmls-configs.linters.eslint")
+local flake8 = require("efmls-configs.linters.flake8")
+local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
-
-local yamllint = {
-	lintCommand = "yamllint -f parsable -",
-	lintStdin = true,
-}
+local yamllint = require("efmls-configs.linters.yamllint")
 -- }}}
 
 lspconfig.efm.setup({
@@ -154,9 +112,10 @@ lspconfig.gopls.setup({
 		gopls = {
 			analyses = {
 				shadow = true,
-				unusedvariable = true,
 				useany = true,
 			},
+			-- NOTE: The staticcheck setting is experimental and may be deleted.
+			--       https://github.com/golang/tools/blob/master/gopls/doc/settings.md#staticcheck-bool
 			staticcheck = true,
 			gofumpt = true,
 		},
