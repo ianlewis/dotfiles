@@ -1,3 +1,5 @@
+" vim: set foldmethod=marker:
+"
 " Copyright 2024 Ian Lewis
 "
 " Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,25 +19,25 @@ lua require('ianlewis.init')
 " Editing {{{
 " ----------------------------------------------------------------------------
 
-syntax on
-colors desert
+" syntax on
+" colors desert
 
-set modeline
-set modelines=5
+" set modeline
+" set modelines=5
 
 " new horizontal split panes show up on the bottom
-set splitbelow
+" set splitbelow
 " new vertical split panes show up to the right
-set splitright
+" set splitright
 
 " Use soft tabs of 4 spaces by default.
-set tabstop=4
-set shiftwidth=4
-set expandtab
+" set tabstop=4
+" set shiftwidth=4
+" set expandtab
 
 " Set backspace mode. Actually delete characters when backspace is input.
-set bs=2
-set backspace=2
+" set bs=2
+" set backspace=2
 
 augroup rcpath
     autocmd!
@@ -57,53 +59,53 @@ augroup END
 " ----------------------------------------------------------------------------
 
 " Keymappings for Dvorak
-noremap n j
-noremap t k
-noremap s l
-noremap j n
-noremap gn gk
-noremap gt gj
+" noremap n j
+" noremap t k
+" noremap s l
+" noremap j n
+" noremap gn gk
+" noremap gt gj
 
-noremap l n
+" noremap l n
 
 " tab for brackets
-nnoremap <tab> %
-vnoremap <tab> %
+" nnoremap <tab> %
+" vnoremap <tab> %
 
-set foldenable
-set foldmethod=marker
+" set foldenable
+" set foldmethod=marker
 
 " Terminal friendly visual block shortcut for the terminal. This is an escape
 " hatch for when Ctrl-v doesn't work in some terminals.
-noremap vb <C-v>
+" noremap vb <C-v>
 
 " }}}
 
 " File Encodings {{{
 " ----------------------------------------------------------------------------
 
-set encoding=utf-8
-set fileencoding=utf-8
-set fileencodings=iso-2002-jp,utf-8,euc-jp,cp932
-set fileformat=unix
+" set encoding=utf-8
+" set fileencoding=utf-8
+" set fileencodings=iso-2002-jp,utf-8,euc-jp,cp932
+" set fileformat=unix
 
 " }}}
 
 " Status line {{{
 " ----------------------------------------------------------------------------
 "
-set laststatus=2
-if has('statusline')
-    set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
-endif
+" set laststatus=2
+" if has('statusline')
+"     set statusline=%<%f\ %h%m%r%=%y(%{&ff})\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
+" endif
 
 " }}}
 
 " Search {{{
 " ----------------------------------------------------------------------------
 
-set ignorecase
-set incsearch
+" set ignorecase
+" set incsearch
 
 " }}}
 
@@ -112,7 +114,7 @@ set incsearch
 
 " Markdown {{{
 " ----------------------------------------------------------------------------
-let g:markdown_fenced_languages = [ 'html', 'go', 'python', 'typescript', 'javascript', 'bash=sh', 'shell=sh' ]
+" let g:markdown_fenced_languages = [ 'html', 'go', 'python', 'typescript', 'javascript', 'bash=sh', 'shell=sh' ]
 " }}}
 
 " }}}
