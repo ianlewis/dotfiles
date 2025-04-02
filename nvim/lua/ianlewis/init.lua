@@ -13,6 +13,9 @@
 -- limitations under the License.
 
 require("ianlewis.mason")
+require("ianlewis.globals")
+require("ianlewis.options")
+require("ianlewis.colors")
 require("ianlewis.remap")
 
 -- Autoformat {{{
