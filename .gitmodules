@@ -79,3 +79,12 @@
 [submodule "nvim/pack/nvim/start/efmls-configs-nvim"]
 	path = nvim/pack/nvim/start/efmls-configs-nvim
 	url = https://github.com/creativenull/efmls-configs-nvim.git
+[submodule "nvim/pack/nvim/start/mason.nvim"]
+	path = nvim/pack/nvim/start/mason.nvim
+	url = https://github.com/williamboman/mason.nvim.git
+[submodule "nvim/pack/nvim/start/mason-lspconfig.nvim"]
+	path = nvim/pack/nvim/start/mason-lspconfig.nvim
+	url = https://github.com/williamboman/mason-lspconfig.nvim.git
+[submodule "nvim/pack/nvim/start/mason-tool-installer.nvim"]
+	path = nvim/pack/nvim/start/mason-tool-installer.nvim
+	url = https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim.git

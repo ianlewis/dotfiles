@@ -12,6 +12,5 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Jump to definition even if in another file.
--- selene: allow(undefined_variable)
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+-- TODO(#62): Revisit remaps
+-- TODO(#67): Convert init.vim to lua
