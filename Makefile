@@ -83,7 +83,7 @@ help: ## Print all Makefile targets (this message).
 		}'
 
 .PHONY: configure-all
-configure-all: configure-aqua configure-vim configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
+configure-all: configure-aqua configure-efm-langserver configure-vim configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
 install-all: install-aqua install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-vint ## Install all tools
@@ -466,10 +466,25 @@ configure-bash: ## Configure bash.
 		ln -sf $(REPO_ROOT)/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
 
 $(HOME)/.aqua.yaml:
-	ln -sf $(REPO_ROOT)/aqua/aqua.yaml ~/.aqua.yaml
+	@ln -sf $(REPO_ROOT)/aqua/aqua.yaml ~/.aqua.yaml
+
+aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+	@.bin/aqua-$(AQUA_VERSION)/aqua --config aqua/aqua.yaml update-checksum
+
+$(HOME)/.aqua-checksums.json:
+	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json ~/.aqua-checksums.json
 
 .PHONY: configure-aqua
-configure-aqua: $(HOME)/.aqua.yaml ## Configure aqua.
+configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
+
+$(HOME)/.config/efm-langserver/config.yaml: efm-langserver/config.yaml
+	@set -euo pipefail; \
+		mkdir -p $$(dirname $@); \
+		mkdir -p $(HOME)/.local/var/log; \
+		envsubst < $< > $@
+
+.PHONY: configure-efm-langserver
+configure-efm-langserver: $(HOME)/.config/efm-langserver/config.yaml ## Configure efm-langserver.
 
 .PHONY: configure-vim
 configure-vim: ## Configure vim.
@@ -520,7 +535,7 @@ $(HOME)/bin/slsa-verifier: $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/s
 
 .PHONY: install-aqua
 install-aqua: $(HOME)/bin/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
-	@aqua --config ~/.aqua.yaml install
+	@$(HOME)/bin/aqua --config $(HOME)/.aqua.yaml install
 
 $(HOME)/opt/aqua-v$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verifier
 	@set -euo pipefail; \
