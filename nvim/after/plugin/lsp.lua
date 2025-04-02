@@ -12,18 +12,24 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
---{{{ package configs
-require("remap") -- key remappings
-require("treesitter") -- nvim-treesitter config
---}}}
-
--- {{{ nvim-surround
-local surround = require("nvim-surround")
-surround.setup()
--- }}}
-
--- LSP {{{
 local lspconfig = require("lspconfig")
+
+-- selene: allow(undefined_variable)
+vim.api.nvim_create_autocmd("LspAttach", {
+	-- selene: allow(undefined_variable)
+	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+	callback = function(ev)
+		-- Jump to definition even if in another file.
+		-- selene: allow(undefined_variable)
+		local bufopts = { buffer = ev.buf }
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+		vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, bufopts)
+		vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, bufopts)
+	end,
+})
 
 -- completion {{{
 local cmp = require("cmp")
@@ -64,9 +70,6 @@ local tofuFmt = {
 -- }}}
 
 -- linters {{{
--- NOTE: efmls-configs-nvim's eslint config uses the --format visualstudio
---       option which requires eslint-formatter-visualstudio to be installed.
-local eslint = require("efmls-configs.linters.eslint")
 local flake8 = require("efmls-configs.linters.flake8")
 local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
@@ -85,14 +88,14 @@ lspconfig.efm.setup({
 			--       into gopls are usually good enough for normal editing.
 			-- TODO(#16): Formatting/linting support for SQL
 			-- TODO(#16): Formatting/linting support for shell with shfmt,shellcheck
-			javascript = { prettier, eslint },
-			json = { prettier, eslint },
-			json5 = { prettier, eslint },
+			javascript = { prettier },
+			json = { prettier },
+			json5 = { prettier },
 			markdown = { prettier, markdownlint },
 			python = { black, flake8 },
 			lua = { stylua, selene },
 			terraform = { terraformFmt, tofuFmt },
-			typescript = { prettier, eslint },
+			typescript = { prettier },
 			yaml = { prettier, yamllint },
 		},
 	},
@@ -123,6 +126,22 @@ lspconfig.gopls.setup({
 })
 -- }}}
 
+--{{{ pylsp
+-- TODO(#94): Setup python-lsp-server
+-- lspconfig.pylsp.setup({
+-- 	settings = {
+-- 		pylsp = {
+-- 			plugins = {
+-- 				pycodestyle = {
+-- 					-- Use black's default max line length
+-- 					maxLineLength = 88,
+-- 				},
+-- 			},
+-- 		},
+-- 	},
+-- })
+--}}}
+
 -- rust-analyzer {{{
 lspconfig.rust_analyzer.setup({
 	capabilities = cmp_capabilities,
@@ -150,17 +169,8 @@ lspconfig.rust_analyzer.setup({
 })
 -- }}}
 
--- }}}
-
--- Autoformat {{{
--- selene: allow(undefined_variable)
-vim.api.nvim_create_autocmd("BufWritePre", {
-	callback = function()
-		local mode = vim.api.nvim_get_mode().mode
-		-- TODO(#16): Does this need to check if it's a normal file buffer?
-		if vim.bo.modified == true and mode == "n" then
-			vim.cmd("lua vim.lsp.buf.format()")
-		end
-	end,
+-- {{{ typescript-language-server
+lspconfig.ts_ls.setup({
+	capabilities = cmp_capabilities,
 })
 -- }}}
