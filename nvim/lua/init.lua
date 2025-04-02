@@ -67,6 +67,8 @@ local black = {
 	formatStdin = true,
 }
 
+local stylua = require("efmls-configs.formatters.stylua")
+
 local terraformFmt = {
 	formatCommand = "terraform fmt -",
 	formatStdin = true,
@@ -105,6 +107,8 @@ local flake8 = {
 	lintFormats = { "%f:%l:%c: %m" },
 }
 
+local selene = require("efmls-configs.linters.selene")
+
 local yamllint = {
 	lintCommand = "yamllint -f parsable -",
 	lintStdin = true,
@@ -128,10 +132,7 @@ lspconfig.efm.setup({
 			json5 = { prettier, eslint },
 			markdown = { prettier, markdownlint },
 			python = { black, flake8 },
-			-- TODO(#21): Support lua-format
-			-- lua = {
-			--     {formatCommand = "lua-format -i", formatStdin = true}
-			-- }
+			lua = { stylua, selene },
 			terraform = { terraformFmt, tofuFmt },
 			typescript = { prettier, eslint },
 			yaml = { prettier, yamllint },
