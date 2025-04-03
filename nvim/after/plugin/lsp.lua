@@ -61,6 +61,12 @@ local cmp_capabilities = cmp_nvim_lsp.default_capabilities()
 -- {{{ bash-language-server
 lspconfig.bashls.setup({
 	capabilities = cmp_capabilities,
+	-- TODO(#109): Use a local explainshell instance.
+	-- settings = {
+	-- 	bashIde = {
+	-- 		explainshellEndpoint = "https://explainshell.com",
+	-- 	},
+	-- },
 })
 -- }}}
 
