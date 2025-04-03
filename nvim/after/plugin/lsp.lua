@@ -58,6 +58,12 @@ cmp.setup({
 local cmp_capabilities = cmp_nvim_lsp.default_capabilities()
 -- }}}
 
+-- {{{ bash-language-server
+lspconfig.bashls.setup({
+	capabilities = cmp_capabilities,
+})
+-- }}}
+
 -- efm-langserver {{{
 
 -- formatters {{{
@@ -88,8 +94,6 @@ lspconfig.efm.setup({
 			--       golangci-lint isn't used because I usually have specific
 			--       configuration per-project and checks analysis tools built
 			--       into gopls are usually good enough for normal editing.
-			-- TODO(#16): Formatting/linting support for SQL
-			-- TODO(#16): Formatting/linting support for shell with shfmt,shellcheck
 			javascript = { prettier },
 			json = { prettier },
 			json5 = { prettier },
