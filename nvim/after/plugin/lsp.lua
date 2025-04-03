@@ -1,3 +1,5 @@
+-- vim:foldmethod=marker:
+--
 -- Copyright 2024 Ian Lewis
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -147,21 +149,8 @@ lspconfig.rust_analyzer.setup({
 	capabilities = cmp_capabilities,
 	settings = {
 		["rust-analyzer"] = {
-			imports = {
-				granularity = {
-					group = "module",
-				},
-				prefix = "self",
-			},
-			cargo = {
-				buildScripts = {
-					enable = true,
-				},
-			},
-			procMacro = {
-				enable = true,
-			},
 			check = {
+				-- Use clippy instead of check for more suggestions.
 				command = "clippy",
 			},
 		},
