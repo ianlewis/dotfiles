@@ -23,8 +23,6 @@ require("ianlewis.remap")
 vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
 		local mode = vim.api.nvim_get_mode().mode
-		-- TODO(#16): Does this need to check if it's a normal file buffer?
-		-- TODO(#16): This doesn't seem to always work on file save.
 		if vim.bo.modified == true and mode == "n" then
 			vim.cmd("lua vim.lsp.buf.format()")
 		end

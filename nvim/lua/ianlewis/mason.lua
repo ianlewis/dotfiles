@@ -58,6 +58,9 @@ require("mason").setup({
 require("mason-lspconfig").setup({
 	-- Ensure LSP servers are installed.
 	ensure_installed = {
+		-- bash-language-server
+		"bashls",
+
 		-- efm-langserver
 		"efm",
 
@@ -92,6 +95,8 @@ require("mason-tool-installer").setup({
 		"prettier",
 		"stylua",
 		"selene",
+		"shellcheck",
+		"shfmt",
 		"yamllint",
 		-- TODO(#95): install terraform with Aqua
 	},
