@@ -37,6 +37,10 @@ structs:
     cmd:
       any: true
 
+    # Vim filetypes.
+    filetype:
+      any: true
+
     # Vim globals.
     g:
       any: true

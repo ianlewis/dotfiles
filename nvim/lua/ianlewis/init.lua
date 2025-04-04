@@ -18,13 +18,17 @@ require("ianlewis.options")
 require("ianlewis.colors")
 require("ianlewis.remap")
 
--- Autoformat {{{
+vim.filetype.add({
+	pattern = {
+		-- Add a special file type extension to indicate a GitHub Actions
+		-- workflow. This is used to run GitHub Actions linters.
+		[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
+	},
+})
+
+-- Autoformat
 vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
-		local mode = vim.api.nvim_get_mode().mode
-		if vim.bo.modified == true and mode == "n" then
-			vim.lsp.buf.format()
-		end
+		vim.lsp.buf.format()
 	end,
 })
--- }}}
