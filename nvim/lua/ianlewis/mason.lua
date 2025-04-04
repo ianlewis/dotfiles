@@ -28,7 +28,6 @@ require("mason-registry"):on("package:install:success", function(pkg)
 	local venv = pkg:get_install_path() .. "/venv"
 	local job = require("plenary.job")
 
-	print(venv .. "/bin/pip")
 	job:new({
 		command = venv .. "/bin/pip",
 		args = {
