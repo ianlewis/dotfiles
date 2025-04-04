@@ -12,7 +12,6 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- selene: allow(undefined_variable, unscoped_variables)
 do
 	-- Open new split panes below and to the right.
 	vim.opt.splitbelow = true

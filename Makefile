@@ -341,12 +341,12 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 					echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
 					;; \
 				esac; \
-			done <<< "$$(selene --display-style Json2 $${files})"; \
+			done <<< "$$(selene --config selene.toml --display-style Json2 $${files})"; \
 			if [ "$${exit_code}" != "0" ]; then \
 				exit "$${exit_code}"; \
 			fi; \
 		else \
-			selene --no-summary $${files}; \
+			selene --config selene.toml --no-summary $${files}; \
 		fi
 
 .PHONY: textlint
