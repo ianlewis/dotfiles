@@ -19,12 +19,11 @@ require("ianlewis.colors")
 require("ianlewis.remap")
 
 -- Autoformat {{{
--- selene: allow(undefined_variable)
 vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
 		local mode = vim.api.nvim_get_mode().mode
 		if vim.bo.modified == true and mode == "n" then
-			vim.cmd("lua vim.lsp.buf.format()")
+			vim.lsp.buf.format()
 		end
 	end,
 })

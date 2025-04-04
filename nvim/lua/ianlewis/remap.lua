@@ -16,7 +16,6 @@
 -- TODO(#67): Convert init.vim to lua
 
 -- Dvorak keymappings
--- selene: allow(undefined_variable)
 do
 	-- Remap default movement keys to Dvorak home row.
 	vim.keymap.set({ "n", "v", "o" }, "n", "j")
@@ -28,7 +27,6 @@ do
 	vim.keymap.set({ "n", "v", "o" }, "l", "n")
 end
 
--- selene: allow(undefined_variable)
 do
 	-- Use tab to move between open and close braces.
 	vim.keymap.set({ "n", "v" }, "<tab>", "%")

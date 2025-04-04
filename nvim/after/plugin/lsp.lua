@@ -16,13 +16,10 @@
 
 local lspconfig = require("lspconfig")
 
--- selene: allow(undefined_variable)
 vim.api.nvim_create_autocmd("LspAttach", {
-	-- selene: allow(undefined_variable)
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
 		-- Jump to definition even if in another file.
-		-- selene: allow(undefined_variable)
 		local bufopts = { buffer = ev.buf }
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)

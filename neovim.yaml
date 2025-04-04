@@ -1,0 +1,103 @@
+# Copyright 2024 Ian Lewis
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This is a selene Lua standard libary definition file for neovim.
+# It defines globals for neovim's environment.
+# See the documentation for the format:
+# https://kampfkarren.github.io/selene/usage/std.html
+
+base: lua51
+name: vim
+
+structs:
+  # Vim is a definition of the 'vim' global.
+  # It is currently a non-exhaustive definition.
+  # TODO(#112): Generate an exhaustive neovim stdlib definition.
+  Vim:
+    # Vim API.
+    api:
+      any: true
+
+    # Vim buffer scoped options.
+    bo:
+      any: true
+
+    # Vim command.
+    cmd:
+      any: true
+
+    # Vim globals.
+    g:
+      any: true
+
+    # Vim keymap.
+    keymap:
+      any: true
+
+    # Vim lsp client.
+    lsp:
+      any: true
+
+    # Vim options.
+    opt:
+      any: true
+
+    # Vim print function.
+    print:
+      args:
+        - type: any
+
+    # Vim schedule function.
+    schedule:
+      args:
+        - type: function
+
+    schedule_wrap:
+      args:
+        - type: function
+
+    # Vim ui module.
+    ui:
+      any: true
+
+globals:
+  vim:
+    struct: Vim
+
+  jit:
+    any: true
+
+  assert:
+    args:
+      - type: bool
+      - type: string
+        required: false
+
+  describe:
+    args:
+      - type: string
+      - type: function
+
+  after_each:
+    args:
+      - type: function
+
+  before_each:
+    args:
+      - type: function
+
+  it:
+    args:
+      - type: string
+      - type: function

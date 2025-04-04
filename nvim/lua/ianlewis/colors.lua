@@ -12,7 +12,6 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- selene: allow(undefined_variable, unscoped_variables)
 do
 	vim.cmd.colorscheme("desert")
 
