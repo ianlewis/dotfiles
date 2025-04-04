@@ -85,3 +85,12 @@
 [submodule "nvim/pack/nvim/start/mason-tool-installer.nvim"]
 	path = nvim/pack/nvim/start/mason-tool-installer.nvim
 	url = https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim.git
+[submodule "nvim/pack/nvim/start/telescope.nvim"]
+	path = nvim/pack/nvim/start/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim.git
+[submodule "nvim/pack/nvim/start/telescope-fzf-native.nvim"]
+	path = nvim/pack/nvim/start/telescope-fzf-native.nvim
+	url = https://github.com/nvim-telescope/telescope-fzf-native.nvim.git
+[submodule "nvim/pack/nvim/start/plenary.nvim"]
+	path = nvim/pack/nvim/start/plenary.nvim
+	url = https://github.com/nvim-lua/plenary.nvim.git

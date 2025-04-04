@@ -94,6 +94,8 @@ require("mason-tool-installer").setup({
 		"flake8",
 		"markdownlint",
 		"prettier",
+		-- TODO(#116): Add ripgrep to mason-registry
+		-- "ripgrep",
 		"stylua",
 		"selene",
 		"shellcheck",
