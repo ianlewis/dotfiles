@@ -89,6 +89,7 @@ require("mason-tool-installer").setup({
 	-- Ensure linting/formatting tools are installed.
 	-- Some of these are used by efm-langserver
 	ensure_installed = {
+		"actionlint",
 		"black",
 		"flake8",
 		"markdownlint",

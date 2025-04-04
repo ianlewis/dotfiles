@@ -81,6 +81,7 @@ local tofuFmt = {
 -- }}}
 
 -- linters {{{
+local actionlint = require("efmls-configs.linters.actionlint")
 local flake8 = require("efmls-configs.linters.flake8")
 local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
@@ -106,6 +107,7 @@ lspconfig.efm.setup({
 			terraform = { terraformFmt, tofuFmt },
 			typescript = { prettier },
 			yaml = { prettier, yamllint },
+			["yaml.ghaction"] = { prettier, actionlint, yamllint },
 		},
 	},
 })
