@@ -83,7 +83,7 @@ help: ## Print all Makefile targets (this message).
 		}'
 
 .PHONY: configure-all
-configure-all: configure-aqua configure-efm-langserver configure-vim configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
+configure-all: configure-aqua configure-efm-langserver configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
 install-all: install-aqua install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-vint ## Install all tools
@@ -486,13 +486,6 @@ $(HOME)/.config/efm-langserver/config.yaml: efm-langserver/config.yaml
 
 .PHONY: configure-efm-langserver
 configure-efm-langserver: $(HOME)/.config/efm-langserver/config.yaml ## Configure efm-langserver.
-
-.PHONY: configure-vim
-configure-vim: ## Configure vim.
-	@set -euo pipefail; \
-		rm -rf ~/.vim ~/.vimrc ~/.gvimrc ~/.vimrc.windows; \
-		ln -sf $(REPO_ROOT)/vim ~/.vim; \
-		ln -sf ~/.vim/_vimrc.vim ~/.vimrc
 
 .PHONY: configure-nvim
 configure-nvim: ## Configure neovim.
