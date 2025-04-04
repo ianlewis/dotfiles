@@ -70,7 +70,6 @@ lspconfig.bashls.setup({
 -- efm-langserver {{{
 
 -- formatters {{{
-local black = require("efmls-configs.formatters.black")
 local prettier = require("efmls-configs.formatters.prettier")
 local stylua = require("efmls-configs.formatters.stylua")
 local terraformFmt = require("efmls-configs.formatters.terraform_fmt")
@@ -82,7 +81,6 @@ local tofuFmt = {
 
 -- linters {{{
 local actionlint = require("efmls-configs.linters.actionlint")
-local flake8 = require("efmls-configs.linters.flake8")
 local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
 local yamllint = require("efmls-configs.linters.yamllint")
@@ -102,7 +100,6 @@ lspconfig.efm.setup({
 			json = { prettier },
 			json5 = { prettier },
 			markdown = { prettier, markdownlint },
-			python = { black, flake8 },
 			lua = { stylua, selene },
 			terraform = { terraformFmt, tofuFmt },
 			typescript = { prettier },
@@ -138,19 +135,22 @@ lspconfig.gopls.setup({
 -- }}}
 
 --{{{ pylsp
--- TODO(#94): Setup python-lsp-server
--- lspconfig.pylsp.setup({
--- 	settings = {
--- 		pylsp = {
--- 			plugins = {
--- 				pycodestyle = {
--- 					-- Use black's default max line length
--- 					maxLineLength = 88,
--- 				},
--- 			},
--- 		},
--- 	},
--- })
+lspconfig.pylsp.setup({
+	settings = {
+		pylsp = {
+			plugins = {
+				-- pycodestyle, pyflakes, mccabe, autopep8, and yapf are disabled by ruff.
+				ruff = {
+					enabled = true,
+				},
+				pycodestyle = {
+					-- Use ruff's max line length.
+					maxLineLength = 88,
+				},
+			},
+		},
+	},
+})
 --}}}
 
 -- rust-analyzer {{{

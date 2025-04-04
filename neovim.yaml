@@ -53,6 +53,10 @@ structs:
     lsp:
       any: true
 
+    # Vim notifications.
+    notify:
+      any: true
+
     # Vim options.
     opt:
       any: true

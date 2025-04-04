@@ -19,41 +19,42 @@ require("mason").setup({
 	},
 })
 
--- TODO(#94): Install python-lsp-server plugins automatically.
--- require("mason-registry"):on("package:install:success", function(pkg)
---     if pkg.name ~= "python-lsp-server" then
---         return
---     end
+-- Install python-lsp-server plugins automatically.
+require("mason-registry"):on("package:install:success", function(pkg)
+	if pkg.name ~= "python-lsp-server" then
+		return
+	end
 
---     local notify = require("mason-lspconfig.notify")
---     local pip3 = require("mason-core.managers.pip3")
---     local process = require("mason-core.process")
---     local spawn = require("mason-core.spawn")
+	local venv = pkg:get_install_path() .. "/venv"
+	local job = require("plenary.job")
 
---     local plugins = {
---         "python-lsp-black",
---     }
---     local plugins_str = table.concat(plugins, ", ")
---     notify(("Installing %s..."):format(plugins_str))
---     local result = spawn.pip {
---         "install",
---         "-U",
---         "--disable-pip-version-check",
---         plugins,
---         stdio_sink = process.simple_sink(),
---         with_paths = { pip3.venv_path(install_dir) },
---     }
---     if vim.in_fast_event() then
---         a.scheduler()
---     end
---     result
---         :on_success(function()
---             notify(("Successfully installed pylsp plugins %s"):format(plugins_str))
---         end)
---         :on_failure(function()
---             notify("Failed to install requested pylsp plugins.", vim.log.levels.ERROR)
---         end)
--- end)
+	print(venv .. "/bin/pip")
+	job:new({
+		command = venv .. "/bin/pip",
+		args = {
+			"--disable-pip-version-check",
+			"install",
+			"-U",
+			"python-lsp-ruff==2.2.2",
+		},
+		cwd = venv,
+		env = { VIRTUAL_ENV = venv },
+		on_exit = function(_, return_val)
+			vim.schedule(function()
+				if return_val == 0 then
+					vim.notify("Finished installing pylsp modules.")
+				else
+					vim.notify("Failed installing pylsp modules.")
+				end
+			end)
+		end,
+		on_start = function()
+			vim.schedule(function()
+				vim.notify("Installing pylsp modules...")
+			end)
+		end,
+	}):start()
+end)
 
 require("mason-lspconfig").setup({
 	-- Ensure LSP servers are installed.
@@ -72,8 +73,7 @@ require("mason-lspconfig").setup({
 		-- "lua_ls",
 
 		-- Python
-		-- TODO(#94): Use python-lsp-server
-		-- "pylsp",
+		"pylsp",
 
 		-- Rust
 		"rust_analyzer",
@@ -90,12 +90,12 @@ require("mason-tool-installer").setup({
 	-- Some of these are used by efm-langserver
 	ensure_installed = {
 		"actionlint",
-		"black",
 		"flake8",
 		"markdownlint",
 		"prettier",
 		-- TODO(#116): Add ripgrep to mason-registry
 		-- "ripgrep",
+		"ruff",
 		"stylua",
 		"selene",
 		"shellcheck",
