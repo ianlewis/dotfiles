@@ -72,7 +72,6 @@ lspconfig.bashls.setup({
 -- formatters {{{
 local prettier = require("efmls-configs.formatters.prettier")
 local stylua = require("efmls-configs.formatters.stylua")
-local terraformFmt = require("efmls-configs.formatters.terraform_fmt")
 local tofuFmt = {
 	formatCommand = "tofu fmt -",
 	formatStdin = true,
@@ -101,7 +100,7 @@ lspconfig.efm.setup({
 			json5 = { prettier },
 			markdown = { prettier, markdownlint },
 			lua = { stylua, selene },
-			terraform = { terraformFmt, tofuFmt },
+			terraform = { tofuFmt },
 			typescript = { prettier },
 			yaml = { prettier, yamllint },
 			["yaml.ghaction"] = { prettier, actionlint, yamllint },

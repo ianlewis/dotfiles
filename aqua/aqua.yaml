@@ -32,3 +32,4 @@ packages:
   - name: Kampfkarren/selene@0.28.0
   - name: JohnnyMorganz/StyLua@v2.0.2
   - name: BurntSushi/ripgrep@14.1.1
+  - name: opentofu/opentofu@v1.9.0
