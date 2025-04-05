@@ -86,7 +86,7 @@ help: ## Print all Makefile targets (this message).
 configure-all: configure-aqua configure-efm-langserver configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
-install-all: install-aqua install-flake8 install-black install-prettier install-yamllint install-sql-formatter install-vint ## Install all tools
+install-all: install-aqua install-flake8 install-black install-prettier install-yamllint install-sql-formatter ## Install all tools
 
 package-lock.json: package.json
 	@npm install
@@ -218,7 +218,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint markdownlint renovate-config-validator textlint yamllint vint zizmor ## Run all linters.
+lint: actionlint markdownlint renovate-config-validator textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -424,17 +424,6 @@ shellcheck: ## Runs the shellcheck linter.
 			echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS); \
 		fi
 
-.PHONY: vint
-vint: .venv/.installed ## Runs the vint linter.
-	@set -euo pipefail;\
-		extraargs=""; \
-		files=$$( \
-			git ls-files \
-				'*.vim' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}"; done \
-		); \
-		.venv/bin/vint $${files}
-
 ## Base Tools
 #####################################################################
 
@@ -564,10 +553,6 @@ configure-flake8: ## Configure flake8 (Python) linter.
 	@rm -rf ~/.config/flake8
 	@mkdir -p ~/.config
 	@ln -sf "$(REPO_ROOT)/flake8/flake8.ini" ~/.config/flake8
-
-.PHONY: install-vint
-install-vint: $(HOME)/.local/share/venv ## User-install vint (VimScript) linter.
-	@$</bin/pip3 install vim-vint
 
 .PHONY: install-yamllint
 install-yamllint: $(HOME)/.local/share/venv ## User-install yamllint linter.
