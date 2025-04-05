@@ -1,5 +1,4 @@
 -- vim:foldmethod=marker:
---
 -- Copyright 2024 Ian Lewis
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");

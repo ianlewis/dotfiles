@@ -1,4 +1,4 @@
--- Copyright 2024 Ian Lewis
+-- Copyright 2025 Ian Lewis
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -12,10 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-require("ianlewis.mason")
-require("ianlewis.globals")
-require("ianlewis.filetype")
-require("ianlewis.options")
-require("ianlewis.autocmd")
-require("ianlewis.colors")
-require("ianlewis.remap")
+-- Lua-specific options. 
+
+-- Use tabs to align with default config of StyLua.
+vim.opt.expandtab = false

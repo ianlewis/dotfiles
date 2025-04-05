@@ -12,10 +12,5 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-require("ianlewis.mason")
-require("ianlewis.globals")
-require("ianlewis.filetype")
-require("ianlewis.options")
-require("ianlewis.autocmd")
-require("ianlewis.colors")
-require("ianlewis.remap")
+-- Import my Neovim config.
+require("ianlewis")

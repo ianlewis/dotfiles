@@ -1,3 +1,4 @@
+-- vim:foldmethod=marker:
 -- Copyright 2024 Ian Lewis
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +13,12 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-require("ianlewis.mason")
-require("ianlewis.globals")
-require("ianlewis.filetype")
-require("ianlewis.options")
-require("ianlewis.autocmd")
-require("ianlewis.colors")
-require("ianlewis.remap")
+-- GitHub Action Workflow {{{
+vim.filetype.add({
+	pattern = {
+		-- Add a special file type extension to indicate a GitHub Actions
+		-- workflow. This is used to run GitHub Actions linters.
+		[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
+	},
+})
+-- }}}
