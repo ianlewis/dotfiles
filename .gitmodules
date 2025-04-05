@@ -55,3 +55,6 @@
 [submodule "nvim/pack/nvim/start/plenary.nvim"]
 	path = nvim/pack/nvim/start/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim.git
+[submodule "nvim/pack/nvim/start/tokyonight.nvim"]
+	path = nvim/pack/nvim/start/tokyonight.nvim
+	url = https://github.com/folke/tokyonight.nvim.git
