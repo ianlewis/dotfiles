@@ -141,6 +141,9 @@ lspconfig.pylsp.setup({
 				-- pycodestyle, pyflakes, mccabe, autopep8, and yapf are disabled by ruff.
 				ruff = {
 					enabled = true,
+					-- Enable all rules and exclude rules explicitly.
+					-- https://docs.astral.sh/ruff/rules/
+					select = { "ALL" },
 				},
 				pycodestyle = {
 					-- Use ruff's max line length.
