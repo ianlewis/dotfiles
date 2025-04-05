@@ -58,3 +58,6 @@
 [submodule "nvim/pack/nvim/start/tokyonight.nvim"]
 	path = nvim/pack/nvim/start/tokyonight.nvim
 	url = https://github.com/folke/tokyonight.nvim.git
+[submodule "nvim/pack/nvim/start/lualine.nvim"]
+	path = nvim/pack/nvim/start/lualine.nvim
+	url = https://github.com/nvim-lualine/lualine.nvim.git
