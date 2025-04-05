@@ -12,6 +12,18 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require("telescope").setup({
+	pickers = {
+		help_tags = {
+			mappings = {
+				i = {
+					["<C-v>"] = "select_vertical",
+				},
+			},
+		},
+	},
+})
+
 local builtin = require("telescope.builtin")
 
 -- NOTE: telescope-fzf-native needs to be manually compiled.
