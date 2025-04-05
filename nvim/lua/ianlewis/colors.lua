@@ -13,8 +13,12 @@
 -- limitations under the License.
 
 do
-	vim.cmd.colorscheme("desert")
+	-- vim.cmd.colorscheme("desert")
 
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	-- `tokyonight` is equivalent to `tokyonight-moon`
+	vim.cmd.colorscheme("tokyonight")
+	-- vim.cmd.colorscheme("tokyonight-moon")
+	-- vim.cmd.colorscheme(tokyonight-storm")
+	-- vim.cmd.colorscheme("tokyonight-night")
+	-- vim.cmd.colorscheme("tokyonight-day")
 end
