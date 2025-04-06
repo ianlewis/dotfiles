@@ -13,25 +13,20 @@
 -- limitations under the License.
 
 -- TODO(#62): Revisit remaps
--- TODO(#67): Convert init.vim to lua
 
 -- Dvorak keymappings
-do
-	-- Remap default movement keys to Dvorak home row.
-	vim.keymap.set({ "n", "v", "o" }, "n", "j")
-	vim.keymap.set({ "n", "v", "o" }, "t", "k")
-	vim.keymap.set({ "n", "v", "o" }, "s", "l")
-	vim.keymap.set({ "n", "v", "o" }, "j", "l")
+-- Remap default movement keys to Dvorak home row.
+vim.keymap.set({ "n", "v", "o" }, "n", "j")
+vim.keymap.set({ "n", "v", "o" }, "t", "k")
+vim.keymap.set({ "n", "v", "o" }, "s", "l")
+vim.keymap.set({ "n", "v", "o" }, "j", "l")
 
-	-- Remap the 'n' key to 'l' because it's on the Dvorak home row.
-	vim.keymap.set({ "n", "v", "o" }, "l", "n")
-end
+-- Remap the 'n' key to 'l' because it's on the Dvorak home row.
+vim.keymap.set({ "n", "v", "o" }, "l", "n")
 
-do
-	-- Use tab to move between open and close braces.
-	vim.keymap.set({ "n", "v" }, "<tab>", "%")
+-- Use tab to move between open and close braces.
+vim.keymap.set({ "n", "v" }, "<tab>", "%")
 
-	-- Terminal friendly visual block shortcut for the terminal. This is an escape
-	-- hatch for when Ctrl-v doesn't work in some terminals.
-	vim.keymap.set({ "n", "v", "o" }, "vb", "<C-v>")
-end
+-- Terminal friendly visual block shortcut for the terminal. This is an escape
+-- hatch for when Ctrl-v doesn't work in some terminals.
+vim.keymap.set({ "n", "v", "o" }, "vb", "<C-v>")
