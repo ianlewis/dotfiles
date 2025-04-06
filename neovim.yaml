@@ -37,8 +37,16 @@ structs:
     cmd:
       any: true
 
+    # Environment variables.
+    env:
+      any: true
+
     # Vim filetypes.
     filetype:
+      any: true
+
+    # Vim functions.
+    fn:
       any: true
 
     # Vim globals.
@@ -47,6 +55,10 @@ structs:
 
     # Vim keymap.
     keymap:
+      any: true
+
+    # Vim Lua bindings.
+    loop:
       any: true
 
     # Vim lsp client.
@@ -75,8 +87,18 @@ structs:
       args:
         - type: function
 
+    tbl_deep_extend:
+      args:
+        - type: string
+        - type: any
+        - type: any
+
     # Vim ui module.
     ui:
+      any: true
+
+    # Vim Lua bindings.
+    uv:
       any: true
 
 globals:

@@ -68,8 +68,7 @@ require("mason-lspconfig").setup({
 		"gopls",
 
 		-- Lua
-		-- TODO(#98): Setup Lua language server
-		-- "lua_ls",
+		"lua_ls",
 
 		-- Python
 		"pylsp",
