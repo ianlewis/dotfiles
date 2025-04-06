@@ -325,6 +325,10 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
+				type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"'); \
+				if [ "$${type}" != "Diagnostic" ]; then \
+					continue; \
+				fi; \
 				level=$$(echo "$$p" | jq -c '.severity // empty' | tr -d '"'); \
 				file=$$(echo "$$p" | jq -c '.primary_label.filename // empty' | tr -d '"'); \
 				line=$$(echo "$$p" | jq -c '.primary_label.span.start_line // empty' | tr -d '"'); \
