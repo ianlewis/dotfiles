@@ -61,3 +61,6 @@
 [submodule "nvim/pack/nvim/start/lualine.nvim"]
 	path = nvim/pack/nvim/start/lualine.nvim
 	url = https://github.com/nvim-lualine/lualine.nvim.git
+[submodule "nvim/pack/nvim/start/trouble.nvim"]
+	path = nvim/pack/nvim/start/trouble.nvim
+	url = https://github.com/folke/trouble.nvim.git
