@@ -12,13 +12,11 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-do
-	-- vim.cmd.colorscheme("desert")
+-- vim.cmd.colorscheme("desert")
 
-	-- `tokyonight` is equivalent to `tokyonight-moon`
-	vim.cmd.colorscheme("tokyonight")
-	-- vim.cmd.colorscheme("tokyonight-moon")
-	-- vim.cmd.colorscheme(tokyonight-storm")
-	-- vim.cmd.colorscheme("tokyonight-night")
-	-- vim.cmd.colorscheme("tokyonight-day")
-end
+-- `tokyonight` is equivalent to `tokyonight-moon`
+vim.cmd.colorscheme("tokyonight")
+-- vim.cmd.colorscheme("tokyonight-moon")
+-- vim.cmd.colorscheme(tokyonight-storm")
+-- vim.cmd.colorscheme("tokyonight-night")
+-- vim.cmd.colorscheme("tokyonight-day")
