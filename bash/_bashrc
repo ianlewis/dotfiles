@@ -58,8 +58,14 @@ fi
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-export VISUAL=vim
-export EDITOR=vim
+EDITOR=vim
+if command -v nvim >/dev/null 2>&1; then
+    EDITOR=nvim
+fi
+VISUAL=${EDITOR}
+
+export EDITOR
+export VISUAL
 
 ESC=$(printf '\e')
 IANS_DEFAULT_COLOR="${ESC}[00m"
