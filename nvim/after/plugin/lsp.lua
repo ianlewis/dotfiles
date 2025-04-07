@@ -46,7 +46,7 @@ cmp.setup({
 	mapping = cmp.mapping.preset.insert({
 		-- <C-n> = next
 		-- <C-p> = previous
-		-- <C-e> = aboriut
+		-- <C-e> = abort
 		["<C-b>"] = cmp.mapping.scroll_docs(-4),
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-Space>"] = cmp.mapping.complete(),
@@ -139,8 +139,9 @@ lspconfig.gopls.setup({
 				shadow = true,
 				useany = true,
 			},
-			-- NOTE: The staticcheck setting is experimental and may be deleted.
-			--       https://github.com/golang/tools/blob/master/gopls/doc/settings.md#staticcheck-bool
+			-- NOTE: The staticcheck setting is experimental and may be
+			-- deleted.
+			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#staticcheck-bool
 			staticcheck = true,
 			gofumpt = true,
 		},
@@ -150,6 +151,11 @@ lspconfig.gopls.setup({
 
 -- lua_ls {{{
 lspconfig.lua_ls.setup({
+	format = {
+		-- Disable CppCXY/EmmyLuaCodeStyle in favor of stylua via
+		-- efm-langserver.
+		enable = false,
+	},
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name

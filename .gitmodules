@@ -67,3 +67,6 @@
 [submodule "nvim/pack/nvim/start/indent-blankline.nvim"]
 	path = nvim/pack/nvim/start/indent-blankline.nvim
 	url = https://github.com/lukas-reineke/indent-blankline.nvim.git
+[submodule "nvim/pack/nvim/start/virt-column.nvim"]
+	path = nvim/pack/nvim/start/virt-column.nvim
+	url = https://github.com/lukas-reineke/virt-column.nvim.git
