@@ -1,3 +1,4 @@
+-- vim:foldmethod=marker:
 -- Copyright 2025 Ian Lewis
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +20,7 @@ require("mason").setup({
 	},
 })
 
--- Install python-lsp-server plugins automatically.
+-- Install python-lsp-server plugins automatically {{{
 require("mason-registry"):on("package:install:success", function(pkg)
 	if pkg.name ~= "python-lsp-server" then
 		return
@@ -54,7 +55,9 @@ require("mason-registry"):on("package:install:success", function(pkg)
 		end,
 	}):start()
 end)
+-- }}}
 
+-- mason-lspconfig {{{
 require("mason-lspconfig").setup({
 	-- Ensure LSP servers are installed.
 	ensure_installed = {
@@ -77,12 +80,13 @@ require("mason-lspconfig").setup({
 		"rust_analyzer",
 
 		-- TypeScript/JavaScript
-		-- TODO(#99): Setup eslint language server.
-		-- "eslint",
+		"eslint",
 		"ts_ls",
 	},
 })
+-- }}}
 
+-- mason-tool-installer {{{
 require("mason-tool-installer").setup({
 	-- Ensure linting/formatting tools are installed.
 	-- Some of these are used by efm-langserver
@@ -102,3 +106,4 @@ require("mason-tool-installer").setup({
 		-- TODO(#95): install terraform with Aqua
 	},
 })
+-- }}}
