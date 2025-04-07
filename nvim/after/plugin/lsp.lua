@@ -112,6 +112,18 @@ lspconfig.efm.setup({
 })
 -- }}}
 
+-- eslint-language-server {{{
+lspconfig.eslint.setup({
+	on_attach = function(_, bufnr)
+		-- Fix all fixable problems on write.
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			buffer = bufnr,
+			command = "EslintFixAll",
+		})
+	end,
+})
+-- }}}
+
 -- gopls {{{
 lspconfig.gopls.setup({
 	capabilities = cmp_capabilities,
