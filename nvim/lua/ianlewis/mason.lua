@@ -70,7 +70,7 @@ require("mason-lspconfig").setup({
 		-- Go
 		"gopls",
 
-		-- Lua
+		-- lua-language-server
 		"lua_ls",
 
 		-- Python
