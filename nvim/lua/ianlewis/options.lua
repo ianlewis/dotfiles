@@ -49,3 +49,10 @@ vim.opt.scrolloff = 8
 -- Always show the signcolumn so it's not jittering the screen when there
 -- are errors in the file.
 vim.opt.signcolumn = "yes"
+
+-- Set the default textwidth
+vim.opt.textwidth = 80
+
+-- Set the colorcolumn width. Make it one column left of textwidth so that the
+-- last character doesn't overlap the color column.
+vim.opt.colorcolumn = "81"

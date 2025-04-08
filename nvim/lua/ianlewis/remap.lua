@@ -12,17 +12,26 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- TODO(#62): Revisit remaps
-
 -- Dvorak keymappings
--- Remap default movement keys to Dvorak home row.
+-- Remap default movement keys to Dvorak right-hand home keys.
 vim.keymap.set({ "n", "v", "o" }, "n", "j")
 vim.keymap.set({ "n", "v", "o" }, "t", "k")
 vim.keymap.set({ "n", "v", "o" }, "s", "l")
-vim.keymap.set({ "n", "v", "o" }, "j", "l")
+-- NOTE: We still use the 'h' key for left movement even for Dvorak.
 
--- Remap the 'n' key to 'l' because it's on the Dvorak home row.
-vim.keymap.set({ "n", "v", "o" }, "l", "n")
+-- Close the current buffer in a split without closing the split itself.
+-- This switches to the "previously opened buffer" before closing the original
+-- buffer so it could be better as sometimes there isn't really a "previously
+-- opened buffer".
+vim.keymap.set({ "n", "v", "o" }, "<leader>bd", ":b#|bd#<cr>")
+
+-- Open files in the directory of the currently opened file.
+vim.keymap.set({ "n", "v", "o" }, "<leader>e", ":e %:h/")
+
+-- Remap the 'n' key to 'l' because 'n' on the Dvorak home row. Maintain cursor
+-- in the center of the screen.
+vim.keymap.set({ "n", "v", "o" }, "l", "nzzzv")
+vim.keymap.set({ "n", "v", "o" }, "L", "Nzzzv")
 
 -- Use tab to move between open and close braces.
 vim.keymap.set({ "n", "v" }, "<tab>", "%")
@@ -30,3 +39,33 @@ vim.keymap.set({ "n", "v" }, "<tab>", "%")
 -- Terminal friendly visual block shortcut for the terminal. This is an escape
 -- hatch for when Ctrl-v doesn't work in some terminals.
 vim.keymap.set({ "n", "v", "o" }, "vb", "<C-v>")
+
+-- Drag selected lines up and down.
+vim.keymap.set("v", "N", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "T", ":m '<-2<CR>gv=gv")
+
+-- Append next line at the end of current line and move cursor to where the
+-- lines were joined.
+vim.keymap.set("n", "j", "J")
+-- Append next line at the end of current line while maintaining cursor
+-- position.
+vim.keymap.set("n", "J", "mzJ`z")
+
+-- Page up and down without moving cursor positon on screen.
+vim.keymap.set("n", "<C-n>", "<C-d>zz")
+vim.keymap.set("n", "<C-t>", "<C-u>zz")
+
+-- Move the cursor left and right by word.
+vim.keymap.set("n", "<C-h>", "b")
+vim.keymap.set("n", "<C-s>", "w")
+
+-- Paste over currently selected value without overwriting the paste buffer.
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- Yank into system clipboard. Almost always using neovim over a ssh terminal so
+-- this doesn't work.
+-- vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+-- vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+-- Replace the current word under the cursor.
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
