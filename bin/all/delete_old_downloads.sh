@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash
 #
 # Copyright 2025 Ian Lewis
 #
@@ -14,15 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/bin/bash
-
 # A simple script to clean up files from a
 # list of temporary directories.
+
+set -euo pipefail
 
 # Explicitly specify the directories for safety.
 DIRS="$HOME/tmp/ $HOME/Downloads/"
 
-DAYS=$1
+DAYS=${1:-""}
 
 if [ "$DAYS" = "" ]; then
     DAYS=14

@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash
 #
 # Copyright 2025 Ian Lewis
 #
@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/bin/bash
+set -euo pipefail
+
 # Adds public certs from Github to authorized_keys
 mkdir -p "${HOME}/.ssh"
 if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
