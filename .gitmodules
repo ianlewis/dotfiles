@@ -5,13 +5,13 @@
 	path = bash/kubectl-aliases
 	url = https://github.com/ahmetb/kubectl-aliases.git
 [submodule "tmux/plugins/tpm"]
-	path = tmux/plugins/tpm
+	path = tmux/_tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
 [submodule "tmux/plugins/tmux-sensible"]
-	path = tmux/plugins/tmux-sensible
+	path = tmux/_tmux/plugins/tmux-sensible
 	url = https://github.com/tmux-plugins/tmux-sensible
 [submodule "tmux/plugins/tmux-cpu"]
-	path = tmux/plugins/tmux-cpu
+	path = tmux/_tmux/plugins/tmux-cpu
 	url = https://github.com/tmux-plugins/tmux-cpu
 [submodule "nvim/pack/nvim/start/nvim-lspconfig"]
 	path = nvim/pack/nvim/start/nvim-lspconfig
