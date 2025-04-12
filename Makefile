@@ -502,8 +502,8 @@ configure-tmux: ## Configure tmux.
 	@set -euo pipefail; \
 		rm -f ~/.tmux.conf ~/.tmux/plugins; \
 		ln -sf $(REPO_ROOT)/tmux/_tmux.conf ~/.tmux.conf; \
-		mkdir -p ~/.tmux; \
-		ln -sf $(REPO_ROOT)/tmux/plugins ~/.tmux/plugins
+		rm -f ~/.tmux; \
+		ln -sf $(REPO_ROOT)/tmux/_tmux ~/.tmux
 
 .PHONY: configure-git
 configure-git: ## Configure git.
