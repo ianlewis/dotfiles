@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Lua-specific options. 
+-- Lua-specific options.
 
 -- Use tabs to align with default config of StyLua.
 vim.opt.expandtab = false

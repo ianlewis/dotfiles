@@ -459,7 +459,21 @@ install-bin: $(BIN_OBJS) ## Install binary scripts.
 .PHONY: configure-bash
 configure-bash: ## Configure bash.
 	@set -euo pipefail; \
-		rm -f ~/.inputrc ~/.profile ~/.bash_profile ~/.bashrc ~/.bash_aliases ~/.bash_aliases.kubectl ~/.bash_completion ~/.bash_logout ~/.dockerfunc ~/.ssh-find-agent; \
+		rm -f \
+			~/.inputrc \
+			~/.profile \
+			~/.bash_profile \
+			~/.bashrc \
+			~/.bash_aliases \
+			~/.bash_aliases.kubectl \
+			~/.bash_completion \
+			~/.bash_logout \
+			~/.dockerfunc \
+			~/.local/share/bash/lib/ssh-find-agent \
+			~/.local/share/bash/lib/sbp \
+			~/.config/sbp \
+			~/.local/share/bash/lib/fzf; \
+		mkdir -p ~/.local/share/bash/lib; \
 		ln -sf $(REPO_ROOT)/bash/_inputrc ~/.inputrc; \
 		ln -sf $(REPO_ROOT)/bash/_profile ~/.profile; \
 		ln -sf $(REPO_ROOT)/bash/_bash_profile ~/.bash_profile; \
@@ -468,7 +482,12 @@ configure-bash: ## Configure bash.
 		ln -sf $(REPO_ROOT)/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl; \
 		ln -sf $(REPO_ROOT)/bash/_bash_completion ~/.bash_completion; \
 		ln -sf $(REPO_ROOT)/bash/_bash_logout ~/.bash_logout; \
-		ln -sf $(REPO_ROOT)/bash/lib/ssh-find-agent/ssh-find-agent.sh ~/.ssh-find-agent
+		ln -sf $(REPO_ROOT)/bash/lib/ssh-find-agent \
+			~/.local/share/bash/lib/ssh-find-agent; \
+		ln -sf $(REPO_ROOT)/bash/lib/sbp ~/.local/share/bash/lib/sbp; \
+		ln -sf $(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/fzf \
+			~/.local/share/bash/lib/fzf; \
+		ln -sf $(REPO_ROOT)/bash/sbp ~/.config/sbp
 
 $(HOME)/.aqua.yaml:
 	@ln -sf $(REPO_ROOT)/aqua/aqua.yaml ~/.aqua.yaml

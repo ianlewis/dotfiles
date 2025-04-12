@@ -82,23 +82,6 @@ VISUAL=${EDITOR}
 export EDITOR
 export VISUAL
 
-ESC=$(printf '\e')
-IANS_DEFAULT_COLOR="${ESC}[00m"
-IANS_GRAY_COLOR="${ESC}[37m"
-IANS_PINK_COLOR="${ESC}[35m"
-IANS_ORANGE_COLOR="${ESC}[33m"
-IANS_RED_COLOR="${ESC}[31m"
-IANS_BLUE_COLOR="${ESC}[34m"
-# IANS_GREEN_COLOR="${ESC}[32m"
-
-if [ "$(id -u)" == "0" ]; then
-    # shellcheck disable=SC2034
-    IANS_USER_COLOR=$IANS_RED_COLOR
-else
-    # shellcheck disable=SC2034
-    IANS_USER_COLOR=$IANS_PINK_COLOR
-fi
-
 if [ "$(uname)" == "Darwin" ]; then
     # Enable colors on Mac OSX Terminal
     export CLICOLOR=1
@@ -107,76 +90,6 @@ else
     # Enable colors on linux
     eval "$(dircolors -b)"
 fi
-
-ians_time() {
-    date +"%H:%M:%S%z"
-}
-
-# If git completion doesn't exist define a no-op function.
-if [[ $(type -t __git_ps1) != function ]]; then
-    __git_ps1() {
-        if commmand -v git >/dev/null 2>&1; then
-            repo_info="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-            if [ -n "$repo_info" ]; then
-                echo "($repo_info)"
-            fi
-        fi
-    }
-fi
-
-ians_vcprompt() {
-    export GIT_PS1_SHOWDIRTYSTATE='y'
-    export GIT_PS1_SHOWSTASHSTATE='y'
-    export GIT_PS1_SHOWUNTRACKEDFILES='y'
-    export GIT_PS1_DESCRIBE_STYLE='contains'
-    export GIT_PS1_SHOWUPSTREAM='auto'
-    GIT_PS1="$(__git_ps1 '(%s)')"
-    export GIT_PS1
-    if [ "${GIT_PS1}" != "" ]; then
-        echo -n " git:${IANS_RED_COLOR}${GIT_PS1}${IANS_DEFAULT_COLOR}"
-    fi
-}
-
-ians_lastcommandfailed() {
-    code=${code:-0}
-    if [ "$code" != "0" ]; then
-        echo -n "${IANS_GRAY_COLOR} exited ${IANS_RED_COLOR}"
-        echo -n "$code"
-        echo -n "${IANS_DEFAULT_COLOR}"
-    fi
-}
-
-# Display the currently active virtualenv
-ians_virtualenv() {
-    if [ x"$VIRTUAL_ENV" != x ]; then
-        echo -n " ${IANS_GRAY_COLOR}(${IANS_RED_COLOR}"
-        echo -n "$(basename "${VIRTUAL_ENV}")"
-        echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
-    fi
-}
-
-# Display the currently active gcloud configuration
-ians_gcloud() {
-    GCLOUD_ACTIVE_CONFIG=~/.config/gcloud/active_config
-    if [ -f $GCLOUD_ACTIVE_CONFIG ]; then
-        echo -n " ${IANS_GRAY_COLOR}(${IANS_BLUE_COLOR}"
-        echo -n "$(cat ${GCLOUD_ACTIVE_CONFIG})"
-        echo -n "${IANS_GRAY_COLOR})${IANS_DEFAULT_COLOR}"
-    fi
-}
-
-ians_prompt() {
-    code=$?
-    PS1=""
-
-    PS1+='\n${IANS_USER_COLOR}'
-    PS1+='\u'
-    PS1+='${IANS_GRAY_COLOR}@${IANS_ORANGE_COLOR}\h${IANS_GRAY_COLOR}'
-    PS1+=' at ${IANS_DEFAULT_COLOR}'$(ians_time)
-    PS1+=$(ians_lastcommandfailed)
-    PS1+='${IANS_GRAY_COLOR}'$(ians_vcprompt)$(ians_virtualenv)$(ians_gcloud)'${IANS_DEFAULT_COLOR}'
-    PS1+='\n\W\$ '
-}
 
 # Create the ~/opt directory.
 mkdir -p ~/opt
@@ -239,10 +152,17 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-# Disable shellcheck for literal line-breaks and single quotes. We
-# don't want to expand variables or add line breaks.
-PROMPT_COMMAND=ians_prompt
+# Simple Bash Prompt
+# shellcheck source=/dev/null
+SBP_PATH="${HOME}/.local/share/bash/lib/sbp"
+if [[ -f "${SBP_PATH}/sbp.bash" ]]; then
+    # shellcheck source=/dev/null
+    source "${SBP_PATH}/sbp.bash"
+fi
+
+# fzf Theme.
+# shellcheck source=/dev/null
+source "${HOME}/.local/share/bash/lib/fzf/tokyonight_moon.sh"
 
 # Set and export gpg tty
 GPG_TTY=$(tty)
@@ -251,13 +171,13 @@ export GPG_TTY
 # ssh-agent
 # Start an ssh-agent instance if an existing one isn't found.
 mkdir -p ~/.ssh
-if [[ -z $SSH_AUTH_SOCK ]] && [[ -f ~/.ssh-find-agent ]]; then
+if [[ -z $SSH_AUTH_SOCK ]] && [[ -f ~/.local/share/bash/lib/ssh-find-agent/ssh-find-agent.sh ]]; then
     # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
     if [ ! -f ~/.ssh/authorized_keys ]; then
         touch ~/.ssh/authorized_keys
     fi
     # shellcheck source=/dev/null
-    . ~/.ssh-find-agent
+    . ~/.local/share/bash/lib/ssh-find-agent/ssh-find-agent.sh
     ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
 fi
 
