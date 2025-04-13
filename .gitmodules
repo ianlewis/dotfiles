@@ -76,3 +76,6 @@
 [submodule "nvim/pack/nvim/start/copilot.vim"]
 	path = nvim/pack/nvim/start/copilot.vim
 	url = https://github.com/github/copilot.vim.git
+[submodule "nvim/pack/nvim/start/undotree"]
+	path = nvim/pack/nvim/start/undotree
+	url = https://github.com/mbbill/undotree.git

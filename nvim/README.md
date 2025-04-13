@@ -42,3 +42,4 @@ configures the servers to work with
 - `rust_analyzer`
 - `vscode-eslint-language-server`
 - `typescript-language-server`
+- [`undotree`](https://github.com/mbbill/undotree)
