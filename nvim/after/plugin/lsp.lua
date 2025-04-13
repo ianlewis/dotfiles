@@ -85,6 +85,7 @@ local tofuFmt = {
 local actionlint = require("efmls-configs.linters.actionlint")
 local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
+local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
 -- }}}
 
@@ -98,11 +99,14 @@ lspconfig.efm.setup({
 			--       golangci-lint isn't used because I usually have specific
 			--       configuration per-project and checks analysis tools built
 			--       into gopls are usually good enough for normal editing.
+			css = { prettier, stylelint },
+			html = { prettier },
 			javascript = { prettier },
 			json = { prettier },
 			json5 = { prettier },
 			markdown = { prettier, markdownlint },
 			lua = { stylua, selene },
+			scss = { prettier, stylelint },
 			terraform = { tofuFmt },
 			typescript = { prettier },
 			yaml = { prettier, yamllint },
