@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- gomod-specific options. 
+-- gomod-specific options.
 
 -- Use tabs.
 vim.opt.expandtab = false

@@ -70,3 +70,6 @@
 [submodule "nvim/pack/nvim/start/virt-column.nvim"]
 	path = nvim/pack/nvim/start/virt-column.nvim
 	url = https://github.com/lukas-reineke/virt-column.nvim.git
+[submodule "bash/lib/sbp"]
+	path = bash/lib/sbp
+	url = https://github.com/brujoand/sbp.git

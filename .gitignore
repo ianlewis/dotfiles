@@ -16,3 +16,6 @@ vim/.netrwhist
 # Ignore vim's swap and backup directories
 vim/swap/*
 vim/backup/*
+
+# Ignore sbp's hook.log
+bash/sbp/hook.log
