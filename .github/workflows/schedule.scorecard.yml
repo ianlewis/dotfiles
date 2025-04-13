@@ -77,7 +77,6 @@ jobs:
       - name: "Upload to code-scanning"
         uses: github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # v3.28.13
         # NOTE: Uploading SARIF requires GitHub Enterprise and GitHub Advanced Security license for private repositories.
-        # TODO: Remove the next line for private repositories with GitHub Advanced Security.
         if: github.event.repository.private == false
         with:
           sarif_file: results.sarif

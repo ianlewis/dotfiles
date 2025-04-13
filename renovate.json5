@@ -23,14 +23,35 @@
   // issues is more intuitive.
   configWarningReuseIssue: false,
 
-  // Update the Aqua version set in the Makefile.
+  // Update the versions set in the Makefile.
   customManagers: [
     {
       customType: "regex",
       fileMatch: ["Makefile"],
-      matchStrings: ["AQUA_VERSION \??= *(?<currentValue>\\S+)"],
+      matchStrings: ["AQUA_VERSION *\\??= *(?<currentValue>\\S+)"],
       depNameTemplate: "aquaproj/aqua",
       datasourceTemplate: "github-releases",
+    },
+    {
+      customType: "regex",
+      fileMatch: ["Makefile"],
+      matchStrings: ["SLSA_VERIFIER_VERSION *\\??= *(?<currentValue>\\S+)"],
+      depNameTemplate: "slsa-framework/slsa-verifier",
+      datasourceTemplate: "github-releases",
+    },
+    {
+      customType: "regex",
+      fileMatch: ["Makefile"],
+      matchStrings: ["GO_VERSION *\\??= *(?<currentValue>\\S+)"],
+      depNameTemplate: "golang",
+      datasourceTemplate: "golang-version",
+    },
+    {
+      customType: "regex",
+      fileMatch: ["Makefile"],
+      matchStrings: ["NODE_VERSION *\\??= *(?<currentValue>\\S+)"],
+      depNameTemplate: "node",
+      datasourceTemplate: "node-version",
     },
   ],
 
