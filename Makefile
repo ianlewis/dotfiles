@@ -93,11 +93,14 @@ help: ## Print all Makefile targets (this message).
 					} \
 				}'
 
+.PHONY: all
+all: install-all configure-all ## Install and configure everything.
+
 .PHONY: configure-all
 configure-all: configure-aqua configure-efm-langserver configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
-install-all: install-aqua install-flake8 install-black install-prettier install-yamllint install-sql-formatter ## Install all tools.
+install-all: install-aqua ## Install all tools.
 
 package-lock.json: package.json
 	@npm install
@@ -123,7 +126,8 @@ node_modules/.installed: package-lock.json
 		tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
 
 $(AQUA_ROOT_DIR)/.installed: aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
-	@AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua --config aqua.yaml install
+	@AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
+		--config aqua.yaml install
 	@touch $@
 
 # User-local Python virtualenv
@@ -573,54 +577,6 @@ $(HOME)/bin/aqua: $(HOME)/opt/aqua-v$(AQUA_VERSION)/.installed
 	@set -euo pipefail; \
 		touch $(HOME)/opt/aqua-v$(AQUA_VERSION)/aqua; \
 		ln -sf $(HOME)/opt/aqua-v$(AQUA_VERSION)/aqua $@
-
-## Linters
-#####################################################################
-
-# For Python (linting)
-.PHONY: install-flake8
-install-flake8: $(HOME)/.local/share/venv configure-flake8 ## User-install flake8 (Python) linter.
-	@$</bin/pip3 install flake8
-
-.PHONY: configure-flake8
-configure-flake8: ## Configure flake8 (Python) linter.
-	@rm -rf ~/.config/flake8
-	@mkdir -p ~/.config
-	@ln -sf "$(REPO_ROOT)/flake8/flake8.ini" ~/.config/flake8
-
-.PHONY: install-yamllint
-install-yamllint: $(HOME)/.local/share/venv ## User-install yamllint linter.
-	@$</bin/pip3 install yamllint
-
-.PHONY: install-markdownlint
-install-markdownlint: configure-markdownlint ## User-install markdownlint linter globally.
-	@npm install -g markdownlint-cli
-
-.PHONY: configure-markdownlint
-configure-markdownlint: ## Configure markdownlint linter.
-	@ln -sf "$(REPO_ROOT)/markdownlint/markdownlint.yaml" ~/.markdownlint.yaml
-
-.PHONY: install-eslint
-install-eslint: ## User-install eslint linter globally.
-	@npm install -g eslint
-
-## Formatters
-#####################################################################
-
-# For Python (formatting)
-.PHONY: install-black
-install-black: $(HOME)/.local/share/venv ## User-install black (Python) formatter.
-	@$</bin/pip3 install black
-
-# For Javascript, yaml, markdown (formatting)
-.PHONY: install-prettier
-install-prettier: ## User-install prettier formatter.
-	@npm install -g prettier
-
-# For SQL (formatting)
-.PHONY: install-sql-formatter
-install-sqlparse: ## User-install sqlparse formatter.
-	@npm install -g sql-formatter
 
 ## Language Runtimes
 #####################################################################

@@ -13,11 +13,11 @@ Dotfiles are installed using a simple Makefile in the root directory.
 
 ```shell
 $ make
-
 dotfiles Makefile
 Usage: make [COMMAND]
 
   help                      Print all Makefile targets (this message).
+  all                       Install and configure everything.
   configure-all             Configure all tools.
   install-all               Install all tools.
 Tools
@@ -50,17 +50,6 @@ Base Tools
 Install Tools
   install-slsa-verifier     Install slsa-verifier
   install-aqua              Install aqua and aqua-managed CLI tools
-Linters
-  install-flake8            User-install flake8 (Python) linter.
-  configure-flake8          Configure flake8 (Python) linter.
-  install-yamllint          User-install yamllint linter.
-  install-markdownlint      User-install markdownlint linter globally.
-  configure-markdownlint    Configure markdownlint linter.
-  install-eslint            User-install eslint linter globally.
-Formatters
-  install-black             User-install black (Python) formatter.
-  install-prettier          User-install prettier formatter.
-  install-sqlparse          User-install sqlparse formatter.
 Language Runtimes
   install-go                Install the Go runtime.
   install-node              Install the Node.js runtime.
@@ -68,7 +57,7 @@ Maintenance
   clean                     Delete temporary files.
 ```
 
-Run `make configure-all install-all` to install tools and configuration files.
+Run `make all` to install tools and configuration files.
 
 ## Tools
 
