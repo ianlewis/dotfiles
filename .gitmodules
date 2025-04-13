@@ -73,3 +73,6 @@
 [submodule "bash/lib/sbp"]
 	path = bash/lib/sbp
 	url = https://github.com/brujoand/sbp.git
+[submodule "nvim/pack/nvim/start/copilot.vim"]
+	path = nvim/pack/nvim/start/copilot.vim
+	url = https://github.com/github/copilot.vim.git
