@@ -18,6 +18,7 @@ vim.opt.splitright = true
 
 -- A real tabstop is 4. 2 is too short, and 8 is too long.
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 
 -- Use spaces instead of tabs by default.
