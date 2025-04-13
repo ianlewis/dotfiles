@@ -14,12 +14,19 @@
 
 require("telescope").setup({
 	pickers = {
+		find_files = {
+			hidden = true,
+			theme = "ivy",
+		},
+		buffers = {
+			hidden = true,
+			theme = "dropdown",
+		},
+		live_grep = {
+			recurse_submodules = false,
+		},
 		help_tags = {
-			mappings = {
-				i = {
-					["<C-v>"] = "select_vertical",
-				},
-			},
+			theme = "dropdown",
 		},
 	},
 })
