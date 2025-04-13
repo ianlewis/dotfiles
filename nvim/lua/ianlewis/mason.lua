@@ -102,6 +102,7 @@ require("mason-tool-installer").setup({
 		"selene",
 		"shellcheck",
 		"shfmt",
+		"stylelint",
 		"yamllint",
 		-- TODO(#95): install terraform with Aqua
 	},
