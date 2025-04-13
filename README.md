@@ -7,6 +7,17 @@ dotfiles](https://github.com/mitsuhiko/dotfiles) where the many ideas were
 copied shamelessly. Files are symbolically linked from the git checkout into the
 home directory which makes it easy to test out configuration.
 
+<table>
+  <tr>
+    <td>
+        <img src="nvim/nvim.png" alt="Neovim Screenshot" width="300"/>
+    </td>
+    <td>
+        <img src="tmux/tmux.png" alt="Tmux Screenshot" width="530"/>
+    </td>
+   </tr>
+</table>
+
 ## Install
 
 Dotfiles are installed using a simple Makefile in the root directory.

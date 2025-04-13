@@ -97,7 +97,7 @@ help: ## Print all Makefile targets (this message).
 all: install-all configure-all ## Install and configure everything.
 
 .PHONY: configure-all
-configure-all: configure-aqua configure-efm-langserver configure-nvim configure-bash configure-flake8 configure-markdownlint configure-git configure-tmux ## Configure all tools.
+configure-all: configure-aqua configure-efm-langserver configure-nvim configure-bash configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
 install-all: install-aqua ## Install all tools.
@@ -523,9 +523,8 @@ configure-nvim: ## Configure neovim.
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
 	@set -euo pipefail; \
-		rm -f ~/.tmux.conf ~/.tmux/plugins; \
+		rm -f ~/.tmux.conf ~/.tmux; \
 		ln -sf $(REPO_ROOT)/tmux/_tmux.conf ~/.tmux.conf; \
-		rm -f ~/.tmux; \
 		ln -sf $(REPO_ROOT)/tmux/_tmux ~/.tmux
 
 .PHONY: configure-git
