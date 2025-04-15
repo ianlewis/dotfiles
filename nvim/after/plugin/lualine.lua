@@ -14,8 +14,6 @@
 
 require("lualine").setup({
 	options = {
-		-- This sucks, but I can't use NerdFonds with the native Chrome OS terminal.
-		icons_enabled = false,
 		theme = "tokyonight",
 	},
 })
