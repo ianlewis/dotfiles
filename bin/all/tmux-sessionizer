@@ -33,6 +33,11 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
+# Session name can't be a number so add a trailing underscore.
+if [[ ${selected_name} =~ ^[0-9]+$ ]]; then
+    selected_name="${selected_name}_"
+fi
+
 if [[ -z $TMUX ]] && [[ -z ${tmux_running} ]]; then
     tmux new-session -s "${selected_name}" -c "${selected}"
     tmux new-window -t "${selected_name}" -c "${selected}" \; \
