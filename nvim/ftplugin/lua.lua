@@ -15,4 +15,4 @@
 -- Lua-specific options.
 
 -- Use tabs to align with default config of StyLua.
-vim.opt.expandtab = false
+vim.bo.expandtab = false
