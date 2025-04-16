@@ -105,6 +105,23 @@ lspconfig.efm.setup({
 			json = { prettier },
 			json5 = { prettier },
 			markdown = { prettier, markdownlint },
+			-- NOTE: The @shopify/prettier-plugin-liquid plugin is required in
+			-- the target project. Install it with:
+			--
+			--	 npm install --save-dev @shopify/prettier-plugin-liquid
+			--
+			-- Add the following to the project's
+			-- package.json:
+			--
+			--   {
+			--     "prettier": {
+			--       "plugins": [
+			--         "@shopify/prettier-plugin-liquid"
+			--       ]
+			--     }
+			--   }
+			--
+			liquid = { prettier },
 			lua = { stylua, selene },
 			scss = { prettier, stylelint },
 			terraform = { tofuFmt },
