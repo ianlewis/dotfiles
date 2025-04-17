@@ -63,6 +63,8 @@ require("nvim-treesitter.configs").setup({
 
 	highlight = {
 		enable = true,
+		-- TODO(#78): Latex needs the treesitter CLI.
+		disable = { "latex" },
 
 		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
 		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
