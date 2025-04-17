@@ -17,6 +17,12 @@
 vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
 		vim.lsp.buf.format()
+		-- Reopen the fold at the cursor position. The result is that formatting
+		-- the file will close all folds other that the one at the cursor
+		-- position.
+		if vim.opt.foldenable then
+			vim.cmd("normal! zv")
+		end
 	end,
 })
 -- }}}
