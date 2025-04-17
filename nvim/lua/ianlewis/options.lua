@@ -54,6 +54,6 @@ vim.opt.signcolumn = "yes"
 -- Set the default textwidth
 vim.opt.textwidth = 80
 
--- Set the colorcolumn width. Make it one column left of textwidth so that the
+-- Set the colorcolumn width. Make it one column right of textwidth so that the
 -- last character doesn't overlap the color column.
-vim.opt.colorcolumn = "81"
+vim.opt.colorcolumn = "+1"

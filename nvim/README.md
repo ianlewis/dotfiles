@@ -11,9 +11,9 @@ This directory contains my Neovim configuration. It gets symbolically linked to
 
 This directory contains files that configure various plugins.
 
-### `ftplugin`
+### `after/ftplugin`
 
-`ftplugin/` contains files that set file type specific options.
+`after/ftplugin/` contains files that set file type specific options.
 
 ### `lua/ianlewis`
 
