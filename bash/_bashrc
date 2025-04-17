@@ -220,12 +220,6 @@ for d in "${HOME}"/.gem/ruby/*/bin; do
     [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
 done
 
-# path for golangci-lint
-GOLANGCILINT_PATH=$(find "${HOME}/opt" -maxdepth 1 -type d -name "golangci-lint-*" | sort -Vr | head -n1)
-if [ "${GOLANGCILINT_PATH}" != "" ]; then
-    PATH="${GOLANGCILINT_PATH}:${PATH}"
-fi
-
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
     # shellcheck source=/dev/null
