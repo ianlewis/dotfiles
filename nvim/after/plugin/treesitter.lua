@@ -54,6 +54,9 @@ require("nvim-treesitter.configs").setup({
 		"yaml",
 	},
 
+	-- TODO(#78): Latex needs the treesitter CLI.
+	ignore_install = { "latex" }, -- List of parsers to ignore installing
+
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,
 
