@@ -186,10 +186,6 @@ if [ -f ~/.bash_aliases ]; then
     # shellcheck source=/dev/null
     . ~/.bash_aliases
 fi
-if [ -f ~/.bash_aliases.kubectl ]; then
-    # shellcheck source=/dev/null
-    . ~/.bash_aliases.kubectl
-fi
 
 # Go
 GOPATH=${HOME}/go
