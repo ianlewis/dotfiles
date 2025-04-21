@@ -66,6 +66,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_linux_amd64.tar.gz",
+      "checksum": "664B70C80AADDF7B45C4DF890324D3876762E630CFFB429971791B8E2FB2E04B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_linux_arm64.tar.gz",
+      "checksum": "15518CE7455BEB67E91928CC0B5D8431D491AFECED45D173929D29F2647810AC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_macOS_amd64.zip",
+      "checksum": "E765FC9B8291A5BEEC699824A8A4E58AADBD9A487B414F2891C31CC69B38A963",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_macOS_arm64.zip",
+      "checksum": "AEDF5982CFDA5E8F27AE6C67D9ED0C0ED6079C4D7CF051784197AB1896A7976B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_windows_amd64.zip",
+      "checksum": "8BD71DAF9DCF8A8D11FE92A9645F9882EB304C0AE36320F1F88C9ADF193E86C3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_windows_arm64.zip",
+      "checksum": "35DA7518A40263A2A9A3C4BFEC5F947E05CA2BCFC22D633387589FD1F345BA20",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/golangci/golangci-lint/v1.64.8/golangci-lint-1.64.8-darwin-amd64.tar.gz",
       "checksum": "B52AEBB8CB51E00BFD5976099083FBE2C43EF556CEF9C87E58A8AE656E740444",
       "algorithm": "sha256"
