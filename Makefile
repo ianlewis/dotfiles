@@ -483,9 +483,9 @@ configure-bash: ## Configure bash.
 		ln -sf $(REPO_ROOT)/bash/_bash_profile ~/.bash_profile; \
 		ln -sf $(REPO_ROOT)/bash/_bashrc ~/.bashrc; \
 		ln -sf $(REPO_ROOT)/bash/_bash_aliases ~/.bash_aliases; \
-		ln -sf $(REPO_ROOT)/bash/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl; \
 		ln -sf $(REPO_ROOT)/bash/_bash_completion ~/.bash_completion; \
 		ln -sf $(REPO_ROOT)/bash/_bash_logout ~/.bash_logout; \
+		ln -sf $(REPO_ROOT)/bash/lib/kubectl-aliases/.kubectl_aliases ~/.bash_aliases.kubectl; \
 		ln -sf $(REPO_ROOT)/bash/lib/ssh-find-agent \
 			~/.local/share/bash/lib/ssh-find-agent; \
 		ln -sf $(REPO_ROOT)/bash/lib/sbp ~/.local/share/bash/lib/sbp; \

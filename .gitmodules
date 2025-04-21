@@ -2,7 +2,7 @@
     path = bash/lib/ssh-find-agent
     url = https://github.com/wwalker/ssh-find-agent.git
 [submodule "bash/kubectl-aliases"]
-	path = bash/kubectl-aliases
+	path = bash/lib/kubectl-aliases
 	url = https://github.com/ahmetb/kubectl-aliases.git
 [submodule "tmux/plugins/tpm"]
 	path = tmux/_tmux/plugins/tpm

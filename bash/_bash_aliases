@@ -45,6 +45,12 @@ alias scala='scala -deprecation -unchecked -explaintypes -i ~/.import.scala'
 # Create a new dev session.
 alias ns='tmux-sessionizer'
 
+# Load kubectl aliases.
+if [ -f ~/.bash_aliases.kubectl ]; then
+    # shellcheck source=/dev/null
+    . ~/.bash_aliases.kubectl
+fi
+
 if [ -f ~/.bash_aliases.local ]; then
     # shellcheck source=/dev/null
     . ~/.bash_aliases.local
