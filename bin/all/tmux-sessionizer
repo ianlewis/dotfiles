@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # vim: set ft=bash:
 #
 # Copyright 2024 Ian Lewis
@@ -17,42 +17,82 @@
 
 set -euo pipefail
 
-query=${1:-""}
+function _main() {
+    # These variables are used by the argsparse library.
+    local program_params
+    local program_options
 
-# Project directories are <user>/<repo>
-selected=$(find \
-    ~/src \
-    -mindepth 2 \
-    -maxdepth 2 \
-    -type d | fzf --query="${query}")
+    # argsparse_usage_description is used by the argsparse library.
+    local argsparse_usage_description
 
-if [[ -z ${selected} ]]; then
-    exit 0
-fi
+    # shellcheck source=/dev/null
+    . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
 
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
+    argsparse_use_option "dir" "Project source directory." "value" "default:${HOME}/src" "short:d" "type:directory"
+    argsparse_use_option "windows" "Number of tmux windows to open." "value" "default:1" "short:w" "type:uint"
+    # Project directories are GitHub style <user>/<repo> thus default depth of 2.
+    argsparse_use_option "mindepth" "Minimum directory search depth." "value" "default:2" "short:m" "type:uint"
+    argsparse_use_option "maxdepth" "Maximum directory search depth." "value" "default:2" "short:x" "type:uint"
 
-# Session name can't be a number so add a trailing underscore.
-if [[ ${selected_name} =~ ^[0-9]+$ ]]; then
-    selected_name="${selected_name}_"
-fi
+    argsparse_describe_parameters "[ QUERY ]"
+    # QUERY is optional.
+    argsparse_minimum_parameters 0
 
-if [[ -z $TMUX ]] && [[ -z ${tmux_running} ]]; then
-    tmux new-session -s "${selected_name}" -c "${selected}"
-    tmux new-window -t "${selected_name}" -c "${selected}" \; \
-        select-window -t 1 # tmux sessions are 1-based.
-    exit 0
-fi
+    # Options are not required.
+    argsparse_allow_no_argument "true"
 
-if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
-    tmux new-session -ds "${selected_name}" -c "${selected}"
-    tmux new-window -t "${selected_name}" -c "${selected}" \; \
-        select-window -t 1 # tmux sessions are 1-based.
-fi
+    # shellcheck disable=SC2034
+    argsparse_usage_description="Open a new tmux session for a project."
 
-if [[ -z $TMUX ]]; then
-    tmux attach -t "${selected_name}"
-else
-    tmux switch-client -t "${selected_name}"
-fi
+    # Command line parsing is done here.
+    argsparse_parse_options "$@"
+
+    local query=${program_params[0]:-""}
+
+    local selected
+    local selected_name
+    local tmux_running
+
+    selected=$(find \
+        ~/src \
+        -mindepth "${program_options['mindepth']}" \
+        -maxdepth "${program_options['maxdepth']}" \
+        -type d | fzf --query="${query}")
+
+    if [[ -z ${selected} ]]; then
+        exit 0
+    fi
+
+    selected_name=$(basename "$selected" | tr . _)
+    tmux_running=$(pgrep tmux)
+
+    # Session name can't be a number so add a trailing underscore.
+    if [[ ${selected_name} =~ ^[0-9]+$ ]]; then
+        selected_name="${selected_name}_"
+    fi
+
+    if [[ -z $TMUX ]] && [[ -z ${tmux_running} ]]; then
+        tmux new-session -s "${selected_name}" -c "${selected}"
+        # NOTE: new-session opens the first window.
+        for ((i = 2; i <= program_options['windows']; i++)); do
+            tmux new-window -dt "${selected_name}" -c "${selected}"
+        done
+        exit 0
+    fi
+
+    if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
+        tmux new-session -ds "${selected_name}" -c "${selected}"
+        # NOTE: new-session opens the first window.
+        for ((i = 2; i <= program_options['windows']; i++)); do
+            tmux new-window -dt "${selected_name}" -c "${selected}"
+        done
+    fi
+
+    if [[ -z $TMUX ]]; then
+        tmux attach -t "${selected_name}"
+    else
+        tmux switch-client -t "${selected_name}"
+    fi
+}
+
+_main "$@"

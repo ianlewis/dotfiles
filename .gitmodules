@@ -79,3 +79,6 @@
 [submodule "nvim/pack/nvim/start/undotree"]
 	path = nvim/pack/nvim/start/undotree
 	url = https://github.com/mbbill/undotree.git
+[submodule "bash/lib/bash-argsparse"]
+	path = bash/lib/bash-argsparse
+	url = https://github.com/Anvil/bash-argsparse.git
