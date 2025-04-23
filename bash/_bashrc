@@ -19,263 +19,260 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-if [ -f ~/.bashrc_init_local ]; then
-    # shellcheck source=/dev/null
-    . ~/.bashrc_init_local
-fi
-
-# tmux/screen
-# Start a tmux or screen session if not already in one
-# Exit directly after the tmux/screen session is exited
-# Only run if logged in remotely via ssh
-TMUX_CMD=tmux
-if command -v tmx2 >/dev/null 2>&1; then
-    TMUX_CMD=tmx2
-fi
-if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
-    # Only run if running in a terminal.
-    if [[ (-t 1) && ($TERM != screen*) && -z $TMUX ]]; then
-        if command -v "${TMUX_CMD}" >/dev/null 2>&1; then
-            # Attempt to discover a detached session
-            # Use the current username as the session name.
-            if "${TMUX_CMD}" has-session -t "${USER}" 2>/dev/null; then
-                exec "${TMUX_CMD}" attach-session -t "${USER}"
-            else
-                exec "${TMUX_CMD}" new-session -s "${USER}"
-            fi
-        elif command -v screen >/dev/null 2>&1; then
-            # Attempt to discover a detached session
-            exec screen -q -RR
-        fi
-    else
-        # If in a tmux/screen session print the motd.
-        if [ -f "/etc/motd" ]; then
-            cat /etc/motd
-        elif [ -f "/var/run/motd" ]; then
-            cat /var/run/motd
-        elif [ -f "/var/run/motd.dynamic" ]; then
-            cat /var/run/motd.dynamic
-        fi
-    fi
-fi
-
-# Load system bashrc
-if [ -f /etc/bashrc ]; then
-    # shellcheck source=/dev/null
-    . /etc/bashrc
-fi
-# for some debian systems
-if [ -f /etc/bash.bashrc ]; then
-    # shellcheck source=/dev/null
-    . /etc/bash.bashrc
-fi
-
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
-
-EDITOR=vim
-if command -v nvim >/dev/null 2>&1; then
-    EDITOR=nvim
-fi
-VISUAL=${EDITOR}
-
-export EDITOR
-export VISUAL
-
-if [ "$(uname)" == "Darwin" ]; then
-    # Enable colors on Mac OSX Terminal
-    export CLICOLOR=1
-    export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
-else
-    # Enable colors on linux
-    eval "$(dircolors -b)"
-fi
-
-# Create the ~/opt directory.
-mkdir -p ~/opt
-
-# Create vim swap file directory
-if [ ! -d ~/.vimswp ]; then
-    mkdir -p ~/.vim/swap
-fi
-if [ ! -d ~/.vim/backup ]; then
-    mkdir -p ~/.vim/backup
-fi
-
-# export PIP_REQUIRE_VIRTUALENV=true
-#export PIP_USE_MIRRORS=true
-export PIP_RESPECT_VIRTUALENV=true
-export PIP_DOWNLOAD_CACHE=~/.pip_cache
-if [ ! -e ~/.pip_cache ]; then
-    mkdir ~/.pip_cache
-fi
-if [ ! -e ~/.buildout/download-cache ]; then
-    mkdir -p ~/.buildout/download-cache
-fi
-if [ "$HOME" ]; then
-    if command -v virtualenvwrapper.sh >/dev/null 2>&1; then
-        WORKON_HOME=$HOME/.virtualenvs
-        if [ ! -e "$WORKON_HOME" ]; then
-            mkdir -p "$WORKON_HOME"
-        fi
-        export VIRTUALENVWRAPPER_LOG_DIR="$WORKON_HOME"
-        export VIRTUALENVWRAPPER_HOOK_DIR="$WORKON_HOME"
-        export PIP_VIRTUALENV_BASE="$WORKON_HOME"
+function _bashrc_main() {
+    if [ -f "${HOME}/.bashrc_init_local" ]; then
         # shellcheck source=/dev/null
-        source "$(command -v virtualenvwrapper.sh)"
+        . "${HOME}/.bashrc_init_local"
     fi
-fi
 
-# Create local hgrc file
-if [ ! -e ~/.hgrc.local ]; then
-    touch ~/.hgrc.local
-fi
-
-# don't put duplicate lines in the history. See bash(1) for more options
-export HISTCONTROL=ignoredups
-# ... and ignore same sucessive entries.
-export HISTCONTROL=ignoreboth
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
-
-# less should never use the bell and not paginate if less than one page.
-export LESS="qR -F -X ${LESS}"
-export LESS
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# Simple Bash Prompt
-# shellcheck source=/dev/null
-SBP_PATH="${HOME}/.local/share/bash/lib/sbp"
-if [[ -f "${SBP_PATH}/sbp.bash" ]]; then
-    # shellcheck source=/dev/null
-    source "${SBP_PATH}/sbp.bash"
-fi
-
-# fzf Theme.
-# shellcheck source=/dev/null
-source "${HOME}/.local/share/bash/lib/fzf/tokyonight_moon.sh"
-
-# Set and export gpg tty
-GPG_TTY=$(tty)
-export GPG_TTY
-
-# ssh-agent
-# Start an ssh-agent instance if an existing one isn't found.
-mkdir -p ~/.ssh
-if [[ -z $SSH_AUTH_SOCK ]] && [[ -f ~/.local/share/bash/lib/ssh-find-agent/ssh-find-agent.sh ]]; then
-    # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
-    if [ ! -f ~/.ssh/authorized_keys ]; then
-        touch ~/.ssh/authorized_keys
+    # tmux/screen
+    # Start a tmux or screen session if not already in one
+    # Exit directly after the tmux/screen session is exited
+    # Only run if logged in remotely via ssh
+    local tmux_cmd=tmux
+    if command -v tmx2 >/dev/null 2>&1; then
+        tmux_cmd=tmx2
     fi
+    if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
+        # Only run if running in a terminal.
+        if [[ (-t 1) && ($TERM != screen*) && -z $TMUX ]]; then
+            if command -v "${tmux_cmd}" >/dev/null 2>&1; then
+                # Attempt to discover a detached session
+                # Use the current username as the session name.
+                if "${tmux_cmd}" has-session -t "${USER}" 2>/dev/null; then
+                    exec "${tmux_cmd}" attach-session -t "${USER}"
+                else
+                    exec "${tmux_cmd}" new-session -s "${USER}"
+                fi
+            elif command -v screen >/dev/null 2>&1; then
+                # Attempt to discover a detached session
+                exec screen -q -RR
+            fi
+        else
+            # If in a tmux/screen session print the motd.
+            if [ -f "/etc/motd" ]; then
+                cat /etc/motd
+            elif [ -f "/var/run/motd" ]; then
+                cat /var/run/motd
+            elif [ -f "/var/run/motd.dynamic" ]; then
+                cat /var/run/motd.dynamic
+            fi
+        fi
+    fi
+
+    # Load system bashrc
+    if [ -f /etc/bashrc ]; then
+        # shellcheck source=/dev/null
+        . /etc/bashrc
+    fi
+    # for some debian systems
+    if [ -f /etc/bash.bashrc ]; then
+        # shellcheck source=/dev/null
+        . /etc/bash.bashrc
+    fi
+
+    # If not running interactively, don't do anything
+    [ -z "$PS1" ] && return
+
+    EDITOR=vim
+    if command -v nvim >/dev/null 2>&1; then
+        EDITOR=nvim
+    fi
+    VISUAL=${EDITOR}
+
+    export EDITOR
+    export VISUAL
+
+    if [ "$(uname)" == "Darwin" ]; then
+        # Enable colors on Mac OSX Terminal
+        export CLICOLOR=1
+        export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
+    else
+        # Enable colors on linux
+        eval "$(dircolors -b)"
+    fi
+
+    # Create the ~/opt directory.
+    mkdir -p "${HOME}/opt"
+
+    # Create vim swap file directory
+    if [ ! -d "${HOME}/.vimswp" ]; then
+        mkdir -p "${HOME}/.vim/swap"
+    fi
+    if [ ! -d "${HOME}/.vim/backup" ]; then
+        mkdir -p "${HOME}/.vim/backup"
+    fi
+
+    export PIP_RESPECT_VIRTUALENV=true
+    export PIP_DOWNLOAD_CACHE="${HOME}/.pip_cache"
+    if [ ! -e "${HOME}/.pip_cache" ]; then
+        mkdir "${HOME}/.pip_cache"
+    fi
+    if [ "${HOME}" ]; then
+        if command -v virtualenvwrapper.sh >/dev/null 2>&1; then
+            WORKON_HOME=${HOME}/.virtualenvs
+            if [ ! -e "${WORKON_HOME}" ]; then
+                mkdir -p "${WORKON_HOME}"
+            fi
+            export VIRTUALENVWRAPPER_LOG_DIR="${WORKON_HOME}"
+            export VIRTUALENVWRAPPER_HOOK_DIR="${WORKON_HOME}"
+            export PIP_VIRTUALENV_BASE="${WORKON_HOME}"
+            # shellcheck source=/dev/null
+            source "$(command -v virtualenvwrapper.sh)"
+        fi
+    fi
+
+    # don't put duplicate lines in the history. See bash(1) for more options
+    export HISTCONTROL=ignoredups
+    # ... and ignore same sucessive entries.
+    export HISTCONTROL=ignoreboth
+
+    # check the window size after each command and, if necessary,
+    # update the values of LINES and COLUMNS.
+    shopt -s checkwinsize
+
+    # make less more friendly for non-text input files, see lesspipe(1)
+    [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+
+    # less should never use the bell and not paginate if less than one page.
+    export LESS="qR -F -X ${LESS}"
+    export LESS
+
+    local bash_lib_dir="${HOME}/.local/share/bash/lib"
+    local nvim_plugin_dir="${HOME}/.config/nvim/pack/nvim/start"
+
+    # Simple Bash Prompt
     # shellcheck source=/dev/null
-    . ~/.local/share/bash/lib/ssh-find-agent/ssh-find-agent.sh
-    ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
-fi
+    SBP_PATH="${bash_lib_dir}/sbp"
+    if [[ -f "${SBP_PATH}/sbp.bash" ]]; then
+        # shellcheck source=/dev/null
+        source "${SBP_PATH}/sbp.bash"
+    fi
+    export SBP_PATH
 
-# Alias definitions.
-if [ -f ~/.bash_aliases ]; then
+    # fzf Theme.
     # shellcheck source=/dev/null
-    . ~/.bash_aliases
-fi
+    local moon_theme_path="${nvim_plugin_dir}/tokyonight.nvim/extras/fzf/tokyonight_moon.sh"
+    if [[ -f ${moon_theme_path} ]]; then
+        # shellcheck source=/dev/null
+        source "${moon_theme_path}"
+    fi
 
-# Go
-GOPATH=${HOME}/go
-[[ ":$PATH:" != *":${GOPATH}/bin:"* ]] && PATH="${GOPATH}/bin:${PATH}"
-export GOPATH
-if [ -d "${HOME}/opt/go" ]; then
-    GOROOT=${HOME}/opt/go
-    [[ ":$PATH:" != *":${GOROOT}/bin:"* ]] && PATH="${GOROOT}/bin:${PATH}"
-    export GOROOT
-fi
+    # Set and export gpg tty
+    GPG_TTY=$(tty)
+    export GPG_TTY
 
-# Python
-if [ -f "${HOME}/.local/share/venv/bin/activate" ]; then
-    # shellcheck source=/dev/null
-    . "${HOME}/.local/share/venv/bin/activate"
-fi
+    # ssh-agent
+    # Start an ssh-agent instance if an existing one isn't found.
+    mkdir -p "${HOME}/.ssh"
+    if [[ -z $SSH_AUTH_SOCK ]] && [[ -f "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
+        # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
+        if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
+            touch "${HOME}/.ssh/authorized_keys"
+        fi
+        # shellcheck source=/dev/null
+        . "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh"
+        ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
+    fi
 
-# Node.js
-if [ -d "${HOME}/opt/node" ]; then
-    [[ ":$PATH:" != *":${HOME}/opt/node/bin:"* ]] && PATH="${HOME}/opt/node/bin:${PATH}"
-fi
+    # Alias definitions.
+    if [ -f "${HOME}/.bash_aliases" ]; then
+        # shellcheck source=/dev/null
+        . "${HOME}/.bash_aliases"
+    fi
 
-# Ruby
-if [ -d "${HOME}/.gem/bin" ]; then
-    [[ ":$PATH:" != *":${HOME}/.gem/bin:"* ]] && PATH="${HOME}/.gem/bin:${PATH}"
-fi
-for d in "${HOME}"/.gem/ruby/*/bin; do
-    [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
-done
+    # Go
+    GOPATH=${HOME}/go
+    [[ ":$PATH:" != *":${GOPATH}/bin:"* ]] && PATH="${GOPATH}/bin:${PATH}"
+    export GOPATH
+    if [ -d "${HOME}/opt/go" ]; then
+        GOROOT=${HOME}/opt/go
+        [[ ":$PATH:" != *":${GOROOT}/bin:"* ]] && PATH="${GOROOT}/bin:${PATH}"
+        export GOROOT
+    fi
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
-    # shellcheck source=/dev/null
-    source "$HOME"'/opt/google-cloud-sdk/path.bash.inc'
-fi
+    # Python
+    if [ -f "${HOME}/.local/share/venv/bin/activate" ]; then
+        # shellcheck source=/dev/null
+        . "${HOME}/.local/share/venv/bin/activate"
+    fi
 
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/opt/google-cloud-sdk/completion.bash.inc" ]; then
-    export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-    # shellcheck source=/dev/null
-    source "$HOME"'/opt/google-cloud-sdk/completion.bash.inc'
-fi
+    # Node.js
+    if [ -d "${HOME}/opt/node" ]; then
+        [[ ":$PATH:" != *":${HOME}/opt/node/bin:"* ]] && PATH="${HOME}/opt/node/bin:${PATH}"
+    fi
 
-# Rust
-if [ -f "$HOME/.cargo/env" ]; then
-    # shellcheck source=/dev/null
-    . "$HOME/.cargo/env"
-fi
+    # Ruby
+    if [ -d "${HOME}/.gem/bin" ]; then
+        [[ ":$PATH:" != *":${HOME}/.gem/bin:"* ]] && PATH="${HOME}/.gem/bin:${PATH}"
+    fi
+    for d in "${HOME}"/.gem/ruby/*/bin; do
+        [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
+    done
 
-# The .local/bin is used for some local installs such as applications installed via 'pip install --user'
-[[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
+    # The next line updates PATH for the Google Cloud SDK.
+    if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
+        # shellcheck source=/dev/null
+        source "$HOME"'/opt/google-cloud-sdk/path.bash.inc'
+    fi
 
-# Add ~/bin to the PATH. We want ~/bin to be second highest priority before
-# running .bashrc.local.
-[[ ":$PATH:" != *":${HOME}/bin:"* ]] && PATH="${HOME}/bin:${PATH}"
+    # The next line enables shell command completion for gcloud.
+    if [ -f "$HOME/opt/google-cloud-sdk/completion.bash.inc" ]; then
+        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+        # shellcheck source=/dev/null
+        source "$HOME"'/opt/google-cloud-sdk/completion.bash.inc'
+    fi
 
-# Aqua. We want aqua to be able to override other global paths so it gets highest priority.
-if command -v aqua >/dev/null 2>&1; then
-    aqua_root="$(aqua root-dir)"
-    [[ ":$PATH:" != *":${aqua_root}/bin:"* ]] && PATH="${aqua_root}/bin:${PATH}"
-fi
+    # Rust
+    if [ -f "$HOME/.cargo/env" ]; then
+        # shellcheck source=/dev/null
+        . "$HOME/.cargo/env"
+    fi
 
-# Local settings.
-if [ -f ~/.bashrc.local ]; then
-    # shellcheck source=/dev/null
-    . ~/.bashrc.local
-fi
+    # The .local/bin is used for some local installs such as applications installed via 'pip install --user'
+    [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
 
-export PATH
+    # Add ~/bin to the PATH. We want ~/bin to be second highest priority before
+    # running .bashrc.local.
+    [[ ":$PATH:" != *":${HOME}/bin:"* ]] && PATH="${HOME}/bin:${PATH}"
 
-# Completion
-# Load the system wide bash completion if available.
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    # The system wide config should load our local config.
-    # shellcheck source=/dev/null
-    . /etc/bash_completion
-elif [ -f ~/.bash_completion ]; then
-    # The system wide config is not available so just load our completion
-    # shellcheck source=/dev/null
-    . ~/.bash_completion
-fi
+    # Aqua. We want aqua to be able to override other global paths so it gets highest priority.
+    if command -v aqua >/dev/null 2>&1; then
+        aqua_root="$(aqua root-dir)"
+        [[ ":$PATH:" != *":${aqua_root}/bin:"* ]] && PATH="${aqua_root}/bin:${PATH}"
+    fi
 
-# Print the message if reboot is required.
-if [ -f /var/run/reboot-required ]; then
-    # Print the message if the file exists
-    cat /var/run/reboot-required
-fi
+    # Local settings.
+    if [ -f "${HOME}/.bashrc.local" ]; then
+        # shellcheck source=/dev/null
+        . "${HOME}/.bashrc.local"
+    fi
 
-# Source the Google cloud devshell bashrc
-if [ -f "/google/devshell/bashrc.google" ]; then
-    # shellcheck source=/dev/null
-    source "/google/devshell/bashrc.google"
-fi
+    export PATH
+
+    # Completion
+    # Load the system wide bash completion if available.
+    if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+        # The system wide config should load our local config.
+        # shellcheck source=/dev/null
+        . /etc/bash_completion
+    elif [ -f "${HOME}/.bash_completion" ]; then
+        # The system wide config is not available so just load our completion
+        # shellcheck source=/dev/null
+        . "${HOME}/.bash_completion"
+    fi
+
+    # Print the message if reboot is required.
+    if [ -f /var/run/reboot-required ]; then
+        # Print the message if the file exists
+        cat /var/run/reboot-required
+    fi
+
+    # Source the Google cloud devshell bashrc
+    if [ -f "/google/devshell/bashrc.google" ]; then
+        # shellcheck source=/dev/null
+        source "/google/devshell/bashrc.google"
+    fi
+}
+
+_bashrc_main

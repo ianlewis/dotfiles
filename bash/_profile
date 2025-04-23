@@ -24,17 +24,21 @@
 # the default umask is set in /etc/profile
 #umask 022
 
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f ~/.bashrc ]; then
-        # shellcheck source=/dev/null
-        . ~/.bashrc
+function _profile() {
+    # if running bash
+    if [ -n "$BASH_VERSION" ]; then
+        # include .bashrc if it exists
+        if [ -f ~/.bashrc ]; then
+            # shellcheck source=/dev/null
+            . ~/.bashrc
+        fi
     fi
-fi
 
-# Local settings
-if [ -f ~/.profile.local ]; then
-    # shellcheck source=/dev/null
-    . ~/.profile.local
-fi
+    # Local settings
+    if [ -f ~/.profile.local ]; then
+        # shellcheck source=/dev/null
+        . ~/.profile.local
+    fi
+}
+
+_profile
