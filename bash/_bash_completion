@@ -15,26 +15,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# pip bash completion start
-if command -v python3 >/dev/null 2>&1 && python3 -m pip >/dev/null 2>&1; then
-    eval "$(python3 -m pip completion --bash)"
-elif command -v python >/dev/null 2>&1 && python -m pip >/dev/null 2>&1; then
-    eval "$(python -m pip completion --bash --no-python-version-warning)"
-fi
+function _bash_completion() {
+    # pip bash completion start
+    if command -v python3 >/dev/null 2>&1 && python3 -m pip >/dev/null 2>&1; then
+        eval "$(python3 -m pip completion --bash)"
+    elif command -v python >/dev/null 2>&1 && python -m pip >/dev/null 2>&1; then
+        eval "$(python -m pip completion --bash --no-python-version-warning)"
+    fi
 
-# kubectl bash completion
-if command -v kubectl >/dev/null 2>&1; then
-    # shellcheck source=/dev/null
-    source <(kubectl completion bash)
-fi
+    # kubectl bash completion
+    if command -v kubectl >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(kubectl completion bash)
+    fi
 
-# Aqua completion
-if command -v aqua >/dev/null 2>&1; then
-    # shellcheck source=/dev/null
-    source <(aqua completion bash)
-fi
+    # Aqua completion
+    if command -v aqua >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(aqua completion bash)
+    fi
 
-if [ -f ~/.bash_completion.local ]; then
-    # shellcheck source=/dev/null
-    . ~/.bash_completion.local
-fi
+    if [ -f ~/.bash_completion.local ]; then
+        # shellcheck source=/dev/null
+        . ~/.bash_completion.local
+    fi
+}
+
+_bash_completion

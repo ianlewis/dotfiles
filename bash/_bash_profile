@@ -15,7 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -f ~/.bashrc ]; then
-    # shellcheck source=/dev/null
-    source ~/.bashrc
-fi
+function _bash_profile() {
+    if [ -f "${HOME}/.bashrc" ]; then
+        # shellcheck source=/dev/null
+        source "${HOME}/.bashrc"
+    fi
+}
+
+_bash_profile

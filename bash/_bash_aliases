@@ -15,43 +15,50 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# enable color support of ls and also add handy aliases
-if [ "$(uname)" == "Darwin" ]; then
-    export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
-    export LC_CTYPE=en_US.utf-8
-    export LC_ALL=en_US.utf-8
-    alias ls='ls -BF'
-elif [ "$TERM" != "dumb" ]; then
-    eval "$(dircolors -b)"
-    alias ls='ls -BF --color=auto'
-fi
+function _bash_aliases() {
+    # Enable color support for ls
+    if [ "$(uname)" == "Darwin" ]; then
+        export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
+        export LC_CTYPE=en_US.utf-8
+        export LC_ALL=en_US.utf-8
+        alias ls='ls -BF'
+    elif [ "$TERM" != "dumb" ]; then
+        eval "$(dircolors -b)"
+        alias ls='ls -BF --color=auto'
+    fi
 
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias grep='grep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias grep='grep --color=auto'
 
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
+    # Make rm,cp,mv interactive so you don't accidentally delete files.
+    alias rm='rm -i'
+    alias cp='cp -i'
+    alias mv='mv -i'
 
-alias df='df -h'
-alias du='du -h'
+    # Make df,du output human readable values by default.
+    alias df='df -h'
+    alias du='du -h'
 
-# Force ssh to use version 2
-alias ssh='ssh -2'
+    # Force ssh to use version 2
+    alias ssh='ssh -2'
 
-alias scala='scala -deprecation -unchecked -explaintypes -i ~/.import.scala'
+    alias scala='scala -deprecation -unchecked -explaintypes -i ~/.import.scala'
 
-# Create a new dev session.
-alias ns='tmux-sessionizer'
+    # Create a new dev session.
+    alias ns='tmux-sessionizer'
 
-# Load kubectl aliases.
-if [ -f ~/.bash_aliases.kubectl ]; then
-    # shellcheck source=/dev/null
-    . ~/.bash_aliases.kubectl
-fi
+    # Load kubectl aliases.
+    local bash_lib_dir="${HOME}/.local/share/bash/lib"
+    if [ -f "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases" ]; then
+        # shellcheck source=/dev/null
+        . "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases"
+    fi
 
-if [ -f ~/.bash_aliases.local ]; then
-    # shellcheck source=/dev/null
-    . ~/.bash_aliases.local
-fi
+    if [ -f "${HOME}/.bash_aliases.local" ]; then
+        # shellcheck source=/dev/null
+        . "${HOME}/.bash_aliases.local"
+    fi
+}
+
+_bash_aliases

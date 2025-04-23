@@ -83,23 +83,48 @@ lint`, `make format`, and `make license-header` commands.
 
 ### General use tools
 
-Tools like language runtimes, linters, and formatters installed for general use
-can be installed via the respective `make` targets. For example, `make
-install-yamllint`.
+Tools like language runtimes, linters, and formatters installed for global use
+are installed by `make install-all`.
 
-Tools are installed in several places.
+Tools are installed using several methods and are installed in several
+locations.
 
-- Tools installed via Python like `yamllint` are installed in a Python venv in
-  the home directory under `~/.local/share/venv`.
-- Tools written in JavaScript/TypeScript are installed globally by `npm`.
+- Tools installed via Python are installed in a Python venv in the home
+  directory under `~/.local/share/venv`. The `~/.local/share/venv/bin` directory
+  is added to the `$PATH`.
+- Tools written in JavaScript/TypeScript are installed globally by `npm` into
+  the global `node_modules`. This is located at `~/opt/node/lib/node_modules`
+  and `~/opt/node/bin` is added to the `$PATH`.
 - Pre-compiled binary tools are installed via
-  [`Aqua`](https://aquaproj.github.io/) to the `.local/share/aquaproj-aqua`
-  directory.
+  [`Aqua`](https://aquaproj.github.io/) to the `~/.local/share/aquaproj-aqua`
+  directory. The `~/.local/share/aquaproj-aqua/bin` directory is added to the
+  `$PATH`.
 
 ## Language Runtimes
 
 Language runtimes are installed in the `~/opt` directory. Their binaries
 directory is added to the `$PATH`.
+
+### Go
+
+The Go runtime is installed in the `~/opt/go` directory. This is a symbolic link
+to the installed Go runtime version. The `~/opt/go/bin` directory is added to
+the `$PATH`.
+
+The default `GOBIN` directory of `~/opt/go/bin` is used for installing Go
+packages. This directory is added to the `$PATH`.
+
+### Node.js
+
+The Node.js runtime is installed in the `~/opt/node` directory. This is a
+symbolic link to the installed Node.js runtime version. The `~/opt/node/bin`
+directory is added to the `$PATH`.
+
+### Python
+
+Python is assumed to be installed on the system and available in the `$PATH`.
+The scripts located here will use the installed system Python but any required  
+packages will be installed in a virtualenv in `~/.local/share/venv`.
 
 ## Bash
 
@@ -117,5 +142,5 @@ Tmux configuration is contained in the [`tmux`](./tmux) directory.
 
 ## Compatibility
 
-The scripts here should work on Linux. I have tested them mostly on Debian-based
-systems. YMMV.
+The scripts here should work on most Linux systems. I have tested them mostly on
+Debian-based systems. YMMV.
