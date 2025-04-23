@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # vim: set ft=sh:
 #
 # Copyright 2025 Ian Lewis
