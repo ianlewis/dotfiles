@@ -62,10 +62,9 @@ vim.keymap.set("n", "<C-s>", "w")
 -- Paste over currently selected value without overwriting the paste buffer.
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
--- Yank into system clipboard. Almost always using neovim over a ssh terminal so
--- this doesn't work.
--- vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
--- vim.keymap.set("n", "<leader>Y", [["+Y]])
+-- Yank into system clipboard.
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 -- Replace the current word under the cursor.
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
