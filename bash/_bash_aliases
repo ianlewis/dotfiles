@@ -48,6 +48,9 @@ function _bash_aliases() {
     # Create a new dev session.
     alias ns='tmux-sessionizer'
 
+    # Split window and start nvim.
+    alias pw='project-windowizer'
+
     # Load kubectl aliases.
     local bash_lib_dir="${HOME}/.local/share/bash/lib"
     if [ -f "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases" ]; then
