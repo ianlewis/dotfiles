@@ -555,7 +555,7 @@ $(HOME)/opt/aqua-v$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verif
 		tempjsonl=$$(mktemp --suffix=".aqua-v$(AQUA_VERSION).intoto.jsonl"); \
 		curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
 		curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
-		slsa-verifier verify-artifact \
+		$(HOME)/bin/slsa-verifier verify-artifact \
 			"$${tempfile}" \
 			--provenance-path "$${tempjsonl}" \
 			--source-uri "$(AQUA_REPO)" \
