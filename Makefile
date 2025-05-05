@@ -501,7 +501,7 @@ $(HOME)/.config/efm-langserver/config.yaml: efm-langserver/config.yaml
 	@set -euo pipefail; \
 		mkdir -p $$(dirname $@); \
 		mkdir -p $(HOME)/.local/var/log; \
-		envsubst < $< > $@
+		sed 's|$${HOME}|'"$${HOME}"'|'< $< > $@
 
 .PHONY: configure-efm-langserver
 configure-efm-langserver: $(HOME)/.config/efm-langserver/config.yaml ## Configure efm-langserver.
