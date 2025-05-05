@@ -20,7 +20,7 @@ arch = $(arch.$(uname_m))
 kernel.Linux := linux
 kernel = $(kernel.$(uname_s))
 
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")

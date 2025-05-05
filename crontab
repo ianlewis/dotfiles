@@ -20,9 +20,8 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 # m h  dom mon dow   command
-*/10 * * * * /bin/bash /home/ian/bin/update_authorized_keys.sh
-*/10 * * * * /bin/bash $HOME/bin/update_authorized_keys.sh
-25   6 * * * /bin/bash -c 'cd $HOME/src/dotfiles && git pull origin-ro master && git submodule update --init --recursive && make'
+*/10 * * * * $HOME/bin/update_authorized_keys.sh
+25   6 * * * bash -c 'cd $HOME/src/dotfiles && git pull origin-ro master && git submodule update --init --recursive && make'
 25   5 * * * docker image prune -a -f --filter "until=48h"
 30   5 * * * docker container prune -f --filter "until=48h"
-35   5 * * * /bin/bash $HOME/bin/delete_old_downloads.sh
+35   5 * * * $HOME/bin/delete_old_downloads.sh
