@@ -1,83 +1,104 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: [
-    // Use the best-practices preset. Adds options to pin dependencies.
-    // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
-    "config:best-practices",
-    // Update dependencies monthly
-    "schedule:monthly",
-    // Add DCO sign-off
-    ":gitSignOff",
-    // Add Aqua present to allow updating CLI tools.
-    // https://aquaproj.github.io/docs/guides/renovate/
-    "github>aquaproj/aqua-renovate-config#2.7.5",
+    'config:best-practices',
+    'schedule:monthly',
+    ':gitSignOff',
+    'github>aquaproj/aqua-renovate-config#2.7.5',
   ],
-
-  // Security alerts/updates happen more frequently.
   vulnerabilityAlerts: {
-    schedule: "* 0-4 * * *",
+    schedule: '* 0-4 * * *',
   },
-
-  // Create a new issue for each config warning. By default, Renovate re-opens
-  // an existing issue which can be very old and is easily missed. Opening new
-  // issues is more intuitive.
   configWarningReuseIssue: false,
-
-  // Update the versions set in the Makefile.
   customManagers: [
     {
-      customType: "regex",
-      fileMatch: ["Makefile"],
-      matchStrings: ["AQUA_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "aquaproj/aqua",
-      datasourceTemplate: "github-releases",
+      customType: 'regex',
+      managerFilePatterns: [
+        '/Makefile/',
+      ],
+      matchStrings: [
+        'AQUA_VERSION *\\??= *(?<currentValue>\\S+)',
+      ],
+      depNameTemplate: 'aquaproj/aqua',
+      datasourceTemplate: 'github-releases',
     },
     {
-      customType: "regex",
-      fileMatch: ["Makefile"],
-      matchStrings: ["SLSA_VERIFIER_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "slsa-framework/slsa-verifier",
-      datasourceTemplate: "github-releases",
+      customType: 'regex',
+      managerFilePatterns: [
+        '/Makefile/',
+      ],
+      matchStrings: [
+        'SLSA_VERIFIER_VERSION *\\??= *(?<currentValue>\\S+)',
+      ],
+      depNameTemplate: 'slsa-framework/slsa-verifier',
+      datasourceTemplate: 'github-releases',
     },
     {
-      customType: "regex",
-      fileMatch: ["Makefile"],
-      matchStrings: ["GO_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "golang",
-      datasourceTemplate: "golang-version",
+      customType: 'regex',
+      managerFilePatterns: [
+        '/Makefile/',
+      ],
+      matchStrings: [
+        'GO_VERSION *\\??= *(?<currentValue>\\S+)',
+      ],
+      depNameTemplate: 'golang',
+      datasourceTemplate: 'golang-version',
     },
     {
-      customType: "regex",
-      fileMatch: ["Makefile"],
-      matchStrings: ["NODE_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "node",
-      datasourceTemplate: "node-version",
+      customType: 'regex',
+      managerFilePatterns: [
+        '/Makefile/',
+      ],
+      matchStrings: [
+        'NODE_VERSION *\\??= *(?<currentValue>\\S+)',
+      ],
+      depNameTemplate: 'node',
+      datasourceTemplate: 'node-version',
     },
   ],
-
-  // Group various ecosystem updates. Security updates are always separate.
   packageRules: [
     {
-      matchManagers: ["github-actions"],
-      matchUpdateTypes: ["minor", "patch"],
-      groupName: "github-actions",
+      matchManagers: [
+        'github-actions',
+      ],
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      groupName: 'github-actions',
       pinDigests: true,
     },
     {
-      matchManagers: ["pip_requirements"],
-      matchUpdateTypes: ["minor", "patch"],
-      groupName: "python",
+      matchManagers: [
+        'pip_requirements',
+      ],
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      groupName: 'python',
     },
     {
-      matchManagers: ["npm"],
-      matchDepTypes: ["dependencies"],
-      matchUpdateTypes: ["minor", "patch"],
-      groupName: "npm",
+      matchManagers: [
+        'npm',
+      ],
+      matchDepTypes: [
+        'dependencies',
+      ],
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      groupName: 'npm',
     },
     {
-      matchManagers: ["npm"],
-      matchDepTypes: ["devDependencies"],
-      groupName: "npm dev",
+      matchManagers: [
+        'npm',
+      ],
+      matchDepTypes: [
+        'devDependencies',
+      ],
+      groupName: 'npm dev',
     },
   ],
 }
