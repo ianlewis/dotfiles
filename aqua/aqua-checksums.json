@@ -126,6 +126,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-darwin-amd64",
+      "checksum": "6F5A294D197A0435490D0416F7F3D8B43652691C1BF9683719157E4A198C866E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-darwin-arm64",
+      "checksum": "5183B349216D58048BFFFB2FCD7E449C5A593A47DD3AB95A7CF044E8DA26F6A1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-linux-amd64",
+      "checksum": "B3C1497420A023622B4ED045708F7E741472F042522C2299D839E03B8AE2A11D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-linux-arm64",
+      "checksum": "2DF23EA47B4156310A541D2B8E8690E758A24DF370D32277CAA55919A4819349",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-windows-amd64.exe",
+      "checksum": "65E5278BFCAAE6C0A180FB0D00A663F0EBA5051D4850569083CCCEE6C24A8E57",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-windows-arm64.exe",
+      "checksum": "30A6CB23278AD6B6F9D22DF862275EB029EEC35E07A26480E30188FE6BC7A192",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/junegunn/fzf/v0.61.1/fzf-0.61.1-darwin_amd64.tar.gz",
       "checksum": "1BFEAD33F9401D6DDF4D6128C5A5F55266209557FBC1D9FD41B0ABF78DF1752B",
       "algorithm": "sha256"
@@ -291,9 +321,44 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-darwin-amd64",
+      "checksum": "36694B43AB23BE234ADD09272E5FAF77349D7E267BF65C01DC9BCDF58C4F496E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-darwin-arm64",
+      "checksum": "84D9122CE12E0C79080844285FD5C4976407ED3463E434A1B21B0979C46B1E55",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-linux-amd64",
+      "checksum": "499BEFB675EFCCA9001AFE6E5156891B91E71F9C07AB120A8943979F85CC82E6",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-linux-arm64",
+      "checksum": "DC3845D7605F666A0938389C1C5735230E50B32A547867FFD351FB14DF928167",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-windows-amd64.exe",
+      "checksum": "61FF8B1CCA6AC0012B0BA906367836F64A389444766BE437DF2A69F71285F43B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/slsa-framework/slsa-verifier/v2.7.0/slsa-verifier-windows-arm64.exe",
+      "checksum": "DDF58798049599C44CAF299B6A9CF8A41760DAA94EE208BDAE8AA78FC75DCB2B",
+      "algorithm": "sha256"
+    },
+    {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.333.3/registry.yaml",
       "checksum": "47DFBBB1D1F6ED6D97E7511DEA14002FC679CA3C59526DD27204083B9779299F",
       "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.367.0/registry.yaml",
+      "checksum": "FC4DE058017413AF4D890CD3931C6E724332EDA8AFD099998AA2DB3530C465B07220D3EBAECA2B79D215A9066F847AE92A37A55937C3908CC6DF195E6AC48161",
+      "algorithm": "sha512"
     }
   ]
 }
