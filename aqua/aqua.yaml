@@ -37,3 +37,4 @@ packages:
   - name: cli/cli@v2.70.0
   - name: ianlewis/todos@v0.12.0
   - name: slsa-framework/slsa-verifier@v2.7.0
+  - name: sigstore/cosign@v2.5.0
