@@ -64,7 +64,12 @@ vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- Yank into system clipboard.
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+-- Yank the line to the system clipboard.
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 -- Replace the current word under the cursor.
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- Search for the word under the cursor.
+vim.keymap.set("n", "<leader>l", [[/<C-r><C-w><Enter>]])
+vim.keymap.set("n", "<leader>?", [[?<C-r><C-w><Enter>]])
