@@ -25,14 +25,14 @@ OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
 
-AQUA_VERSION ?= 2.46.0
+AQUA_VERSION ?= 2.51.2
 AQUA_REPO ?= github.com/aquaproj/aqua
 # NOTE: Aqua's checksum forms the trust root for install dev tools local to this repository.
-AQUA_CHECKSUM.Linux.x86_64 = 6908509aa0c985ea60ed4bfdc69a69f43059a6b539fb16111387e1a7a8d87a9f
+AQUA_CHECKSUM.Linux.x86_64 = 17db2da427bde293b1942e3220675ef796a67f1207daf89e6e80fea8d2bb8c22
+AQUA_CHECKSUM.Linux.aarch64 = b3f0d573e762ce9d104c671b8224506c4c4a32eedd1e6d7ae1e1e39983cdb6a8
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/v$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
-AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/v$(AQUA_VERSION)/multiple.intoto.jsonl
-AQUA_ROOT_DIR = .aqua
+AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 
 # NOTE: slsa-verifier establishes the trust root for installed CLI tools in the home directory.
 SLSA_VERIFIER_VERSION ?= 2.7.0
@@ -68,7 +68,6 @@ NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
 
 .PHONY: help
 help: ## Print all Makefile targets (this message).
-	@# NOTE: Only print colors to terminals. 
 	@echo "$(REPO_NAME) Makefile"
 	@echo "Usage: make [COMMAND]"
 	@echo ""
@@ -104,17 +103,19 @@ install-all: install-aqua ## Install all tools.
 
 package-lock.json: package.json
 	@npm install
+	@npm audit signatures
 
 node_modules/.installed: package-lock.json
-	@npm ci
+	@npm clean-install
+	@npm audit signatures
 	@touch node_modules/.installed
 
 .venv/bin/activate:
 	@python -m venv .venv
 
-.venv/.installed: .venv/bin/activate requirements.txt
-	@./.venv/bin/pip install -r requirements.txt --require-hashes
-	@touch .venv/.installed
+.venv/.installed: requirements.txt .venv/bin/activate
+	@./.venv/bin/pip install -r $< --require-hashes
+	@touch $@
 
 # Aqua
 .bin/aqua-$(AQUA_VERSION)/aqua:
@@ -145,14 +146,21 @@ license-headers: ## Update license headers.
 	@set -euo pipefail; \
 		files=$$( \
 			git ls-files --deduplicate \
+				'*.c' \
+				'*.cpp' \
 				'*.go' \
+				'*.h' \
+				'*.hpp' \
 				'*.ts' \
 				'*.js' \
+				'*.lua' \
 				'*.py' \
+				'*.rb' \
+				'*.rs' \
+				'*.toml' \
+				'*.vim' \
 				'*.yaml' \
 				'*.yml' \
-				'*.vim' \
-				'*.lua' \
 				'Makefile' \
 				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 		); \
@@ -186,7 +194,10 @@ json-format: node_modules/.installed ## Format JSON files.
 				'*.json5' \
 				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 		); \
-		npx prettier --write --no-error-on-unmatched-pattern $${files}
+		./node_modules/.bin/prettier \
+			--write \
+			--no-error-on-unmatched-pattern \
+			$${files}
 
 .PHONY: lua-format
 lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
@@ -202,13 +213,18 @@ lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.
+	@#NOTE: tab-width of 4 is recommended for Markdown files.
 	@set -euo pipefail; \
 		files=$$( \
 			git ls-files --deduplicate \
 				'*.md' \
 				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 		); \
-		npx prettier --write --no-error-on-unmatched-pattern $${files}
+		./node_modules/.bin/prettier \
+			--tab-width 4 \
+			--write \
+			--no-error-on-unmatched-pattern \
+			$${files}
 
 .PHONY: shfmt
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
@@ -227,13 +243,13 @@ yaml-format: node_modules/.installed ## Format YAML files.
 				'*.yml' \
 				'*.yaml' \
 		); \
-		npx prettier --write --no-error-on-unmatched-pattern $${files}
+		./node_modules/.bin/prettier --write --no-error-on-unmatched-pattern $${files}
 
 ## Linting
 #####################################################################
 
 .PHONY: lint
-lint: actionlint markdownlint renovate-config-validator textlint yamllint zizmor ## Run all linters.
+lint: actionlint markdownlint renovate-config-validator textlint todos yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -293,12 +309,12 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 				message=$$(echo "$$p" | jq -c -r '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-			done <<< "$$(npx markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
+			done <<< "$$(./node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
 			if [ "$${exit_code}" != "0" ]; then \
 				exit "$${exit_code}"; \
 			fi; \
 		else \
-			npx markdownlint --config .markdownlint.yaml --dot $${files}; \
+			./node_modules/.bin/markdownlint --config .markdownlint.yaml --dot $${files}; \
 		fi; \
 		files=$$( \
 			git ls-files --deduplicate \
@@ -315,12 +331,12 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 				message=$$(echo "$$p" | jq -c -r '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-			done <<< "$$(npx markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
+			done <<< "$$(./node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
 			if [ "$${exit_code}" != "0" ]; then \
 				exit "$${exit_code}"; \
 			fi; \
 		else \
-			npx markdownlint  --config .github/template.markdownlint.yaml --dot $${files}; \
+			./node_modules/.bin/markdownlint  --config .github/template.markdownlint.yaml --dot $${files}; \
 		fi
 
 .PHONY: renovate-config-validator
@@ -375,6 +391,7 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 			git ls-files --deduplicate \
 				'*.md' \
 				'*.txt' \
+				':!:requirements.txt' \
 				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
@@ -386,12 +403,33 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 					line=$$(echo "$$m" | jq -c -r '.loc.start.line'); \
 					endline=$$(echo "$$m" | jq -c -r '.loc.end.line'); \
 					message=$$(echo "$$m" | jq -c -r '.message'); \
+					exit_code=1; \
 					echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
 				done <<<"$$(echo "$$p" | jq -c -r '.messages[] // empty')"; \
-			done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.json --format json $${files} 2>&1 | jq -c '.[]')"; \
+			done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
 			exit "$${exit_code}"; \
 		else \
-			./node_modules/.bin/textlint -c .textlintrc.json $${files}; \
+			./node_modules/.bin/textlint -c .textlintrc.yaml $${files}; \
+		fi
+
+.PHONY: todos
+todos: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding TODOs.
+	@set -euo pipefail;\
+		files=$$( \
+			git ls-files --deduplicate \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+		); \
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+		output="default"; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			output="github"; \
+		fi; \
+		TODOS=$$(todos --output "$${output}" --todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"); \
+		# TODO: remove when todos v0.13.0 is released. \
+		if [ "$${TODOS}" != "" ]; then \
+			echo "$${TODOS}"; \
+			exit 1; \
 		fi
 
 .PHONY: yamllint
@@ -412,9 +450,11 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 SHELLCHECK_ARGS = --severity=style --external-sources
 
 .PHONY: shellcheck
-shellcheck: ## Runs the shellcheck linter.
+shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
 	@set -e;\
 		files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \

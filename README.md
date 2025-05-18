@@ -1,6 +1,7 @@
 # Ian's dotfiles
 
-[![tests](https://github.com/ianlewis/dotfiles/actions/workflows/pre-submit.units.yml/badge.svg)](https://github.com/ianlewis/dotfiles/actions/workflows/pre-submit.units.yml) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ianlewis/dotfiles/badge)](https://securityscorecards.dev/viewer/?uri=github.com%2Fianlewis%2Fdotfiles)
+[![tests](https://github.com/ianlewis/dotfiles/actions/workflows/pre-submit.units.yml/badge.svg)](https://github.com/ianlewis/dotfiles/actions/workflows/pre-submit.units.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ianlewis/dotfiles/badge)](https://securityscorecards.dev/viewer/?uri=github.com%2Fianlewis%2Fdotfiles)
 
 These dotfiles were originally based on [Armin Ronacher's
 dotfiles](https://github.com/mitsuhiko/dotfiles) where the many ideas were
@@ -89,9 +90,9 @@ are installed by `make install-all`.
 Tools are installed using several methods and are installed in several
 locations.
 
-- Tools installed via Python are installed in a Python venv in the home
-  directory under `~/.local/share/venv`. The `~/.local/share/venv/bin` directory
-  is added to the `$PATH`.
+- Tools installed via Python are installed in a Python virtual environment the
+  home directory under `~/.local/share/venv`. The `~/.local/share/venv/bin`
+  directory is added to the `$PATH`.
 - Tools written in JavaScript/TypeScript are installed globally by `npm` into
   the global `node_modules`. This is located at `~/opt/node/lib/node_modules`
   and `~/opt/node/bin` is added to the `$PATH`.
@@ -123,7 +124,7 @@ directory is added to the `$PATH`.
 ### Python
 
 Python is assumed to be installed on the system and available in the `$PATH`.
-The scripts located here will use the installed system Python but any required  
+The scripts located here will use the installed system Python but any required
 packages will be installed in a virtualenv in `~/.local/share/venv`.
 
 ## Bash

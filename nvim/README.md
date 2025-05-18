@@ -3,7 +3,7 @@
 This directory contains my Neovim configuration. It gets symbolically linked to
 `~/.config/nvim`.
 
-![nvim](./nvim.png)
+![Neovim](./nvim.png)
 
 ## Layout
 
