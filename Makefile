@@ -425,12 +425,7 @@ todos: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding TODOs.
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			output="github"; \
 		fi; \
-		TODOS=$$(todos --output "$${output}" --todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"); \
-		# TODO: remove when todos v0.13.0 is released. \
-		if [ "$${TODOS}" != "" ]; then \
-			echo "$${TODOS}"; \
-			exit 1; \
-		fi
+		todos --output "$${output}" --todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
 .PHONY: yamllint
 yamllint: .venv/.installed ## Runs the yamllint linter.
