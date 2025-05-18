@@ -1,9 +1,9 @@
 # Bash configuration
 
-This directory contains bash specific resource configuration, libaries, and
+This directory contains bash specific resource configuration, libraries, and
 scripts.
 
-## Bash resource configuration (rc)
+## Bash resource configuration (`rc`)
 
 Resource configuration for different purposes are broken into separate files
 using their standard names, such as `.bash_aliases` and `.bash_completion`.
@@ -22,7 +22,7 @@ terminal session.
 ## Bash libraries
 
 The `lib` directory contains bash libraries that are used in resource
-configuratione etc..
+configuration etc..
 
 - [`sbp`]: A simple bash prompt library that provides a simple way to customize
   the bash prompt. It is used in `.bashrc` to set the prompt.

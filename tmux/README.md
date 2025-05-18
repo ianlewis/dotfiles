@@ -15,8 +15,8 @@ folke.
 
 The configuration uses the following plugins:
 
-- [tpm](https://github.com/tmux-plugins/tpm): Tmux Plugin Manager.
-- [tmux-sensible](https://github.com/tmux-plugins/tmux-sensible): A set of
+- [`tpm`](https://github.com/tmux-plugins/tpm): Tmux Plugin Manager.
+- [`tmux-sensible`](https://github.com/tmux-plugins/tmux-sensible): A set of
   sensible defaults for tmux.
-- [tmux-cpu](https://github.com/tmux-plugins/tmux-cpu): CPU and Memory usage
+- [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu): CPU and Memory usage
   stats.

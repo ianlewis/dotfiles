@@ -4,10 +4,13 @@
     // Use the best-practices preset. Adds options to pin dependencies.
     // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
     "config:best-practices",
+
     // Update dependencies monthly
     "schedule:monthly",
+
     // Add DCO sign-off
     ":gitSignOff",
+
     // Add Aqua present to allow updating CLI tools.
     // https://aquaproj.github.io/docs/guides/renovate/
     "github>aquaproj/aqua-renovate-config#2.7.5",
@@ -27,28 +30,28 @@
   customManagers: [
     {
       customType: "regex",
-      fileMatch: ["Makefile"],
+      managerFilePatterns: ["/Makefile/"],
       matchStrings: ["AQUA_VERSION *\\??= *(?<currentValue>\\S+)"],
       depNameTemplate: "aquaproj/aqua",
       datasourceTemplate: "github-releases",
     },
     {
       customType: "regex",
-      fileMatch: ["Makefile"],
+      managerFilePatterns: ["/Makefile/"],
       matchStrings: ["SLSA_VERIFIER_VERSION *\\??= *(?<currentValue>\\S+)"],
       depNameTemplate: "slsa-framework/slsa-verifier",
       datasourceTemplate: "github-releases",
     },
     {
       customType: "regex",
-      fileMatch: ["Makefile"],
+      managerFilePatterns: ["/Makefile/"],
       matchStrings: ["GO_VERSION *\\??= *(?<currentValue>\\S+)"],
       depNameTemplate: "golang",
       datasourceTemplate: "golang-version",
     },
     {
       customType: "regex",
-      fileMatch: ["Makefile"],
+      managerFilePatterns: ["/Makefile/"],
       matchStrings: ["NODE_VERSION *\\??= *(?<currentValue>\\S+)"],
       depNameTemplate: "node",
       datasourceTemplate: "node-version",

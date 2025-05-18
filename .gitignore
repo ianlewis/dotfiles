@@ -5,7 +5,7 @@
 node_modules/
 .bin/
 .venv/
-.aqua
+.aqua/
 
 # SARIF files
 *.sarif.json
