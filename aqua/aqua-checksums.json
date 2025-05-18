@@ -156,6 +156,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/ianlewis/todos/v0.13.0/todos-darwin-amd64",
+      "checksum": "64DFB2F6928B543F86734F4C943CCA4726B9D33FA198A450390755E3A6A8C970",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.13.0/todos-darwin-arm64",
+      "checksum": "48E1A1F1433351AC7E6D392EECDD5D6FA0E533A6F5F3161ED6E66F26AEDC4C06",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.13.0/todos-linux-amd64",
+      "checksum": "1BC59C0274960B8D16B41B96D1ECF57D7C1BD2759EF75D6098D923C6C3845DB2",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.13.0/todos-linux-arm64",
+      "checksum": "B61656F43EB38258BFAB44D29304BFC239FF8BB262888B8F1DBAA6702A45B0EE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.13.0/todos-windows-amd64.exe",
+      "checksum": "15F06471A1D1D56CFC7E7C97AAFF437001197351B463507ECFD325838040BA92",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/ianlewis/todos/v0.13.0/todos-windows-arm64.exe",
+      "checksum": "456E06977AE35521447017FF2D15865BB8F55501FA40B3F3963C8582B1CBCCFE",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/junegunn/fzf/v0.61.1/fzf-0.61.1-darwin_amd64.tar.gz",
       "checksum": "1BFEAD33F9401D6DDF4D6128C5A5F55266209557FBC1D9FD41B0ABF78DF1752B",
       "algorithm": "sha256"
