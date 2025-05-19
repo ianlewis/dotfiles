@@ -45,7 +45,7 @@ vim.opt.statusline =
 vim.opt.incsearch = true
 
 -- Always keep this many lines visible above and below the cursor.
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 15
 
 -- Always show the signcolumn so it's not jittering the screen when there
 -- are errors in the file.
