@@ -14,7 +14,12 @@
 -- limitations under the License.
 
 -- Autoformat {{{
+local buf_autoformat = vim.api.nvim_create_augroup("BufAutoformat", {
+	clear = true,
+})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
+	group = buf_autoformat,
 	callback = function()
 		vim.lsp.buf.format()
 		-- Reopen the fold at the cursor position. The result is that formatting
@@ -37,11 +42,12 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt.formatoptions = {
 			-- Auto-wrap text using 'textwidth'
 			t = true,
-			-- Auto-wrap comments using 'textwidth', inserting the current comment
-			-- leader automatically.
+			-- Auto-wrap comments using 'textwidth', inserting the current
+			-- comment leader automatically.
 			c = true,
-			-- Automatically insert the current comment leader after hitting <Enter> in
-			-- Insert mode.
+
+			-- Automatically insert the current comment leader after hitting
+			-- <Enter> in Insert mode.
 			r = true,
 			-- Allow formatting of comments with "gq".
 			q = true,
