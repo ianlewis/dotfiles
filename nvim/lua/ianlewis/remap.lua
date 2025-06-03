@@ -23,7 +23,7 @@ vim.keymap.set({ "n", "v", "o" }, "s", "l")
 -- This switches to the "previously opened buffer" before closing the original
 -- buffer so it could be better as sometimes there isn't really a "previously
 -- opened buffer".
-vim.keymap.set({ "n", "v", "o" }, "<leader>bd", ":b#|bd#<cr>")
+vim.keymap.set({ "n", "v", "o" }, "<leader>bd", ":bp|sp|bn|bd<cr>")
 
 -- Open files in the directory of the currently opened file.
 vim.keymap.set({ "n", "v", "o" }, "<leader>e", ":e %:h/")
