@@ -32,10 +32,11 @@ AQUA_CHECKSUM.Linux.x86_64 = 17db2da427bde293b1942e3220675ef796a67f1207daf89e6e8
 AQUA_CHECKSUM.Linux.aarch64 = b3f0d573e762ce9d104c671b8224506c4c4a32eedd1e6d7ae1e1e39983cdb6a8
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/v$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
+AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/v$(AQUA_VERSION)/multiple.intoto.jsonl
 AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 
-# NOTE: slsa-verifier establishes the trust root for installed CLI tools in the home directory.
 SLSA_VERIFIER_VERSION ?= 2.7.0
+# NOTE: slsa-verifier establishes the trust root for installed CLI tools in the home directory.
 SLSA_VERIFIER_CHECKSUM.Linux.x86_64 = 499befb675efcca9001afe6e5156891b91e71f9c07ab120a8943979f85cc82e6
 SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(uname_s).$(uname_m))
 SLSA_VERIFIER_URL.Linux.x86_64 = https://github.com/slsa-framework/slsa-verifier/releases/download/v$(SLSA_VERIFIER_VERSION)/slsa-verifier-linux-amd64
