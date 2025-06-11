@@ -7,8 +7,8 @@ This directory contains my Neovim configuration. It gets symbolically linked to
 
 ## Features
 
-- Tokyonight color scheme.
-- Autoformatting code on save.
+- [Tokyo Night](https://github.com/folke/tokyonight.nvim) color scheme.
+- Auto-formatting code on save.
 - Auto-installation and configuration of required linting tools, formatting
   tools, and LSP servers via [Mason](https://github.com/mason-org/mason.nvim)
   and
@@ -47,7 +47,7 @@ This directory contains my Neovim configuration. It gets symbolically linked to
 - [Neovim](https://neovim.io) 0.11.1 or later (it may work with earlier
   versions, but it has not been tested).
 - A C compiler (e.g., `gcc` or `clang`) to build some plugins (e.g.
-  [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)).
+  [`nvim-treesitter`](https://github.com/nvim-treesitter/nvim-treesitter)).
 
 ## Installation
 

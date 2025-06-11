@@ -21,7 +21,7 @@ home directory which makes it easy to test out configuration.
 
 ## Features
 
-- Tokyonight color scheme for Neovim, Tmux, and Bash prompt.
+- Tokyo Night color scheme for Neovim, Tmux, and Bash prompt.
 - [Bash](./bash) prompt with git, Python virtualenv, and Nix shell integration.
 - [Bash](./bash) completion with git, Python virtualenv, and Nix shell integration.
 - [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful plugins.

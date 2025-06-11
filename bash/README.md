@@ -5,7 +5,7 @@ scripts.
 
 ## Features
 
-- [SBP](https://github.com/brujoand/sbp) prompt in Tokyo Night color scheme with
+- [`sbp`](https://github.com/brujoand/sbp) prompt in Tokyo Night color scheme with
   git, Python virtualenv, and Nix shell integration.
 - [Bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
   addition to the system default completions.
