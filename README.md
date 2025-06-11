@@ -19,6 +19,13 @@ home directory which makes it easy to test out configuration.
    </tr>
 </table>
 
+## Features
+
+- Tokyo Night color scheme for Neovim, Tmux, and Bash prompt.
+- [Bash](./bash) prompt with git, Python virtualenv, and Nix shell integration.
+- [Bash](./bash) completion with git, Python virtualenv, and Nix shell integration.
+- [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful plugins.
+
 ## Install
 
 Dotfiles are installed using a simple Makefile in the root directory.
@@ -79,13 +86,16 @@ installed globally for general use.
 
 ### Project-local tools
 
-Project-local tools are installed and run in the project directory via the `make
-lint`, `make format`, and `make license-header` commands.
+Project-local tools are used to maintain the files in this repository. They are
+installed and run in the project directory via the `make lint`, `make format`,
+and `make license-header` commands.
 
 ### General use tools
 
 Tools like language runtimes, linters, and formatters installed for global use
-are installed by `make install-all`.
+are installed by `make install-all`. They can also be individually installed by
+their appropriate `install-<tool>` command, such as `make install-go` or
+`make install-aqua`.
 
 Tools are installed using several methods and are installed in several
 locations.

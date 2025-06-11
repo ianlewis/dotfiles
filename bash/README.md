@@ -3,6 +3,21 @@
 This directory contains bash specific resource configuration, libraries, and
 scripts.
 
+## Features
+
+- [`sbp`](https://github.com/brujoand/sbp) prompt in Tokyo Night color scheme with
+  git, Python virtualenv, and Nix shell integration.
+- [Bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
+  addition to the system default completions.
+- [Bash aliases](./_bash_aliases) for common commands, including
+  [`kubectl-aliases`](https://github.com/ahmetb/kubectl-aliases).
+- `ssh-agent` integration to find the running ssh-agent and set the
+  `SSH_AUTH_SOCK` environment variable.
+- `tmux` integration to set the terminal title and display the current working
+  directory in the status bar. Tmux session reuse is enabled by default.
+- Integration with Google Cloud SDK, including `gcloud`, `gsutil`, and `bq`
+  commands installed in `~/opt/google-cloud-sdk`.
+
 ## Bash resource configuration (`rc`)
 
 Resource configuration for different purposes are broken into separate files
