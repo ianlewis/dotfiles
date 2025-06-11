@@ -31,9 +31,7 @@ AQUA_CHECKSUM.Linux.x86_64 = 831991f27315f6b14308c85b8750d67ad27c45b2e0399d9300b
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
-AQUA_VERSION ?= 2.51.2
-AQUA_REPO ?= github.com/aquaproj/aqua
-AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/v$(AQUA_VERSION)/multiple.intoto.jsonl
+AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/multiple.intoto.jsonl
 
 # renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
 SLSA_VERIFIER_VERSION ?= 2.7.0
@@ -660,25 +658,25 @@ $(HOME)/bin/slsa-verifier: $(HOME)/bin $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIE
 install-aqua: $(HOME)/bin/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
 	@$(HOME)/bin/aqua --config $(HOME)/.aqua.yaml install
 
-$(HOME)/opt/aqua-v$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verifier
+$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verifier
 	@set -euo pipefail; \
-		tempfile=$$(mktemp --suffix=".aqua-v$(AQUA_VERSION).tar.gz"); \
-		tempjsonl=$$(mktemp --suffix=".aqua-v$(AQUA_VERSION).intoto.jsonl"); \
+		tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+		tempjsonl=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).intoto.jsonl"); \
 		curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
 		curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
 		$(HOME)/bin/slsa-verifier verify-artifact \
 			"$${tempfile}" \
 			--provenance-path "$${tempjsonl}" \
 			--source-uri "$(AQUA_REPO)" \
-			--source-tag "v$(AQUA_VERSION)"; \
-	 	mkdir -p $(HOME)/opt/aqua-v$(AQUA_VERSION); \
-		tar -x -C $(HOME)/opt/aqua-v$(AQUA_VERSION) -f "$${tempfile}"; \
-		touch $(HOME)/opt/aqua-v$(AQUA_VERSION)/.installed
+			--source-tag "$(AQUA_VERSION)"; \
+		mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
+		tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
+		touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
-$(HOME)/bin/aqua: $(HOME)/opt/aqua-v$(AQUA_VERSION)/.installed
+$(HOME)/bin/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 	@set -euo pipefail; \
-		touch $(HOME)/opt/aqua-v$(AQUA_VERSION)/aqua; \
-		ln -sf $(HOME)/opt/aqua-v$(AQUA_VERSION)/aqua $@
+		touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
+		ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
 
 ## Language Runtimes
 #####################################################################
