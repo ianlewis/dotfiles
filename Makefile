@@ -25,7 +25,7 @@ OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
 
-AQUA_VERSION ?= 2.51.2
+AQUA_VERSION ?= 2.53.1
 AQUA_REPO ?= github.com/aquaproj/aqua
 # NOTE: Aqua's checksum forms the trust root for install dev tools local to this repository.
 AQUA_CHECKSUM.Linux.x86_64 = 17db2da427bde293b1942e3220675ef796a67f1207daf89e6e80fea8d2bb8c22
