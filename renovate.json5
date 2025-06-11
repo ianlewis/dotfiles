@@ -13,7 +13,11 @@
 
     // Add Aqua present to allow updating CLI tools.
     // https://aquaproj.github.io/docs/guides/renovate/
-    "github>aquaproj/aqua-renovate-config#2.7.5",
+    "github>aquaproj/aqua-renovate-config#2.8.1",
+
+    // Update version numbers in Makefile.
+    // https://docs.renovatebot.com/presets-customManagers/#custommanagersmakefileversions
+    "customManagers:makefileVersions",
   ],
 
   // Security alerts/updates happen more frequently.
@@ -26,40 +30,18 @@
   // issues is more intuitive.
   configWarningReuseIssue: false,
 
-  // Update the versions set in the Makefile.
-  customManagers: [
-    {
-      customType: "regex",
-      managerFilePatterns: ["/Makefile/"],
-      matchStrings: ["AQUA_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "aquaproj/aqua",
-      datasourceTemplate: "github-releases",
-    },
-    {
-      customType: "regex",
-      managerFilePatterns: ["/Makefile/"],
-      matchStrings: ["SLSA_VERIFIER_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "slsa-framework/slsa-verifier",
-      datasourceTemplate: "github-releases",
-    },
-    {
-      customType: "regex",
-      managerFilePatterns: ["/Makefile/"],
-      matchStrings: ["GO_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "golang",
-      datasourceTemplate: "golang-version",
-    },
-    {
-      customType: "regex",
-      managerFilePatterns: ["/Makefile/"],
-      matchStrings: ["NODE_VERSION *\\??= *(?<currentValue>\\S+)"],
-      depNameTemplate: "node",
-      datasourceTemplate: "node-version",
-    },
-  ],
-
   // Group various ecosystem updates. Security updates are always separate.
   packageRules: [
+    {
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "aqua",
+      matchFileNames: ["aqua.yaml", "aqua-checksums.yaml"],
+    },
+    {
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "makefile",
+      matchFileNames: ["Makefile"],
+    },
     {
       matchManagers: ["github-actions"],
       matchUpdateTypes: ["minor", "patch"],

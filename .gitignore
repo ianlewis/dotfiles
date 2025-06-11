@@ -10,12 +10,6 @@ node_modules/
 # SARIF files
 *.sarif.json
 
-# Ignore directory history.
-vim/.netrwhist
-
-# Ignore vim's swap and backup directories
-vim/swap/*
-vim/backup/*
-
 # Ignore sbp's hook.log
+# TODO(#214): Remove log file location is configurable
 bash/sbp/hook.log

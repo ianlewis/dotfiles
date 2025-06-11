@@ -126,6 +126,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/jqlang/jq/jq-1.8.0/jq-linux-amd64",
+      "checksum": "8926C33326111BCD67A47A970B5A5DB933EF9194AD925994934C639C76A0605C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/jqlang/jq/jq-1.8.0/jq-linux-arm64",
+      "checksum": "1084E6BF5060A463DAF77193888D326C83E56BCFBC18A52E6EAA99DBE82A8B54",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/jqlang/jq/jq-1.8.0/jq-macos-amd64",
+      "checksum": "A594F3740BF570F0DBC43FF102A9034C17719D1BB5B40F0192751234D67F172A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/jqlang/jq/jq-1.8.0/jq-macos-arm64",
+      "checksum": "AAF1EFBB376D6E3EAF61F63807C32C1DF519F5857DFC4F581826FA2DF4B715AE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/jqlang/jq/jq-1.8.0/jq-windows-amd64.exe",
+      "checksum": "B45FCBB27DCB9E9848AC39889A8BF86457B8D9D31E7C56387C6EAB80008FD1F4",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/koalaman/shellcheck/v0.10.0/shellcheck-v0.10.0.darwin.aarch64.tar.xz",
       "checksum": "BBD2F14826328EEE7679DA7221F2BC3AFB011F6A928B848C80C321F6046DDF81",
       "algorithm": "sha256"
@@ -212,6 +237,7 @@
     },
     {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.333.3/registry.yaml",
+
       "checksum": "4D80F1A055D9541848D8CF6E57075B9D41D610FACE1272131B216CF185D3E2668898ED848186E74E8F967600DDE41C3820E88DE024D652B894DF59B6CCB25018",
       "algorithm": "sha512"
     },
@@ -233,6 +259,16 @@
     {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.367.0/registry.yaml",
       "checksum": "389B404423ABFBB25C944D156C5A88921864DB1E5FC253C356AE77E69352F3C2",
+      "algorithm": "sha512"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.374.0/registry.yaml",
+      "checksum": "F6EF8FAE28FDCD869BA071BB763686FA3B117E10F32A414B460924336F83B22B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.377.0/registry.yaml",
+      "checksum": "35E6916821352C8E73A3A0394D86528F44012D1EC08B6CD690CF114CECA4F88F",
       "algorithm": "sha256"
     }
   ]

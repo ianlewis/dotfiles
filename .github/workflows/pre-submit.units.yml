@@ -112,7 +112,7 @@ jobs:
         # NOTE: Uploading SARIF requires GitHub Enterprise and GitHub Advanced Security license for private repositories.
         # TODO: Remove the next line for private repositories with GitHub Advanced Security.
         if: github.event.repository.private == false
-        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
+        uses: github/codeql-action/upload-sarif@fca7ace96b7d713c7035871441bd52efbe39e27e # v3.28.19
         with:
           sarif_file: zizmor.sarif.json
           category: zizmor
