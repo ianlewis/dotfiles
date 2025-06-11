@@ -660,7 +660,7 @@ install-aqua: $(HOME)/bin/aqua configure-aqua ## Install aqua and aqua-managed C
 
 $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verifier
 	@set -euo pipefail; \
-		tempfile=$$(mktemp --suffix=".aqua-).tar.gz"); \
+		tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 		tempjsonl=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).intoto.jsonl"); \
 		curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
 		curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
