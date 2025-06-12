@@ -37,6 +37,8 @@ jobs:
         with:
           node-version-file: "package.json"
       - name: Install all
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make clean all
 
   # Check license headers
