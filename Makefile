@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+SHELL := /usr/bin/env bash
+
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 arch.x86_64 := amd64
@@ -19,7 +21,8 @@ arch = $(arch.$(uname_m))
 kernel.Linux := linux
 kernel = $(kernel.$(uname_s))
 
-SHELL := /usr/bin/env bash
+XDG_CONFIG_HOME ?= $(HOME)/.config
+
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
@@ -576,7 +579,7 @@ configure-bash: ## Configure bash.
 			~/.bash_logout \
 			~/.dockerfunc \
 			~/.local/share/bash/lib \
-			~/.config/sbp; \
+			$(XDG_CONFIG_HOME)/sbp; \
 		mkdir -p ~/.local/share/bash; \
 		ln -sf $(REPO_ROOT)/bash/lib ~/.local/share/bash/lib; \
 		ln -sf $(REPO_ROOT)/bash/_inputrc ~/.inputrc; \
@@ -586,7 +589,7 @@ configure-bash: ## Configure bash.
 		ln -sf $(REPO_ROOT)/bash/_bash_aliases ~/.bash_aliases; \
 		ln -sf $(REPO_ROOT)/bash/_bash_completion ~/.bash_completion; \
 		ln -sf $(REPO_ROOT)/bash/_bash_logout ~/.bash_logout; \
-		ln -sf $(REPO_ROOT)/bash/sbp ~/.config/sbp
+		ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
 
 $(HOME)/.aqua.yaml:
 	@ln -sf $(REPO_ROOT)/aqua/aqua.yaml ~/.aqua.yaml
@@ -600,26 +603,26 @@ $(HOME)/.aqua-checksums.json:
 .PHONY: configure-aqua
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
 
-$(HOME)/.config/efm-langserver/config.yaml: efm-langserver/config.yaml
+$(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml
 	@set -euo pipefail; \
 		mkdir -p $$(dirname $@); \
 		mkdir -p $(HOME)/.local/var/log; \
 		sed 's|$${HOME}|'"$${HOME}"'|'< $< > $@
 
 .PHONY: configure-efm-langserver
-configure-efm-langserver: $(HOME)/.config/efm-langserver/config.yaml ## Configure efm-langserver.
+configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Configure efm-langserver.
 
 .PHONY: configure-nix
 configure-nix: ## Configure nix.
 	@set -euo pipefail; \
-		rm -f ~/.config/nix; \
-		ln -sf $(REPO_ROOT)/nix ~/.config/nix
+		rm -f $(XDG_CONFIG_HOME)/nix; \
+		ln -sf $(REPO_ROOT)/nix $(XDG_CONFIG_HOME)/nix
 
 .PHONY: configure-nvim
 configure-nvim: ## Configure neovim.
 	@set -euo pipefail; \
-		rm -rf ~/.config/nvim; \
-		ln -sf $(REPO_ROOT)/nvim ~/.config/nvim
+		rm -rf $(XDG_CONFIG_HOME)/nvim; \
+		ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
 
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
