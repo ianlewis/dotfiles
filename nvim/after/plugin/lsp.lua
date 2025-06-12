@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
 		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-		vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, bufopts)
+		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 		vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, bufopts)
 	end,
 })
