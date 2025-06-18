@@ -87,6 +87,17 @@ local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
+
+local todos = {
+	prefix = "todos",
+	lintCommand = "todos",
+	lintStdin = true,
+	lintIgnoreExitCode = true,
+	lintSeverity = 2, -- 2 = warning
+	lintFormats = {
+		"%f:%l:%m",
+	},
+}
 -- }}}
 
 lspconfig.efm.setup({
@@ -99,12 +110,17 @@ lspconfig.efm.setup({
 			--       golangci-lint isn't used because I usually have specific
 			--       configuration per-project and checks analysis tools built
 			--       into gopls are usually good enough for normal editing.
-			css = { prettier, stylelint },
-			html = { prettier },
-			javascript = { prettier },
-			json = { prettier },
-			json5 = { prettier },
-			markdown = { prettier, markdownlint },
+			sh = { todos },
+			bash = { todos },
+			conf = { todos },
+			css = { prettier, stylelint, todos },
+			gitignore = { todos },
+			go = { todos },
+			html = { prettier, todos },
+			javascript = { prettier, todos },
+			json = { prettier, todos },
+			json5 = { prettier, todos },
+			markdown = { prettier, markdownlint, todos },
 			-- NOTE: The @shopify/prettier-plugin-liquid plugin is required in
 			-- the target project. Install it with:
 			--
@@ -121,13 +137,15 @@ lspconfig.efm.setup({
 			--     }
 			--   }
 			--
-			liquid = { prettier },
-			lua = { stylua, selene },
-			scss = { prettier, stylelint },
-			terraform = { tofuFmt },
-			typescript = { prettier },
-			yaml = { prettier, yamllint },
-			["yaml.ghaction"] = { prettier, actionlint, yamllint },
+			liquid = { prettier, todos },
+			lua = { stylua, selene, todos },
+			python = { todos },
+			rust = { todos },
+			scss = { prettier, stylelint, todos },
+			terraform = { tofuFmt, todos },
+			typescript = { prettier, todos },
+			yaml = { prettier, yamllint, todos },
+			["yaml.ghaction"] = { prettier, actionlint, yamllint, todos },
 		},
 	},
 })
