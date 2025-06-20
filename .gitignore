@@ -9,7 +9,3 @@ node_modules/
 
 # SARIF files
 *.sarif.json
-
-# Ignore sbp's hook.log
-# TODO(#214): Remove log file location is configurable
-bash/sbp/hook.log
