@@ -85,3 +85,6 @@
 [submodule "nvim/pack/nvim/start/nvim-ts-context-commentstring"]
 	path = nvim/pack/nvim/start/nvim-ts-context-commentstring
 	url = https://github.com/JoosepAlviste/nvim-ts-context-commentstring.git
+[submodule "nvim/pack/nvim/start/diffview.nvim"]
+	path = nvim/pack/nvim/start/diffview.nvim
+	url = https://github.com/sindrets/diffview.nvim.git
