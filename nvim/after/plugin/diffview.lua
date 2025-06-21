@@ -12,10 +12,8 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-require("ts_context_commentstring").setup({
-	enable_autocmd = false,
-})
-local comment_nvim_integration = require("ts_context_commentstring.integrations.comment_nvim")
-require("Comment").setup({
-	pre_hook = comment_nvim_integration.create_pre_hook(),
-})
+local diffview = require("diffview")
+diffview.setup()
+
+vim.keymap.set("n", "<leader>do", "<cmd>DiffviewOpen<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>dc", "<cmd>DiffviewClose<cr>", { silent = true, noremap = true })
