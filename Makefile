@@ -108,8 +108,7 @@ configure-all: configure-aqua configure-efm-langserver configure-nix configure-n
 install-all: install-bin install-aqua ## Install all tools.
 
 package-lock.json: package.json
-	@npm install
-	@npm audit signatures
+	@npm install --package-lock-only --no-audit --no-fund
 
 node_modules/.installed: package-lock.json
 	@npm clean-install
@@ -131,9 +130,10 @@ node_modules/.installed: package-lock.json
 		echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 		tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
 
-$(AQUA_ROOT_DIR)/.installed: aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+$(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 	@AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
-		--config aqua.yaml install
+		--config .aqua.yaml \
+		install
 	@touch $@
 
 # User-local Python virtualenv
@@ -269,7 +269,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint markdownlint renovate-config-validator textlint todos yamllint zizmor ## Run all linters.
+lint: actionlint fixme markdownlint renovate-config-validator textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -295,32 +295,21 @@ actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
 			actionlint $${files}; \
 		fi
 
-.PHONY: zizmor
-zizmor: .venv/.installed ## Runs the zizmor linter.
-	@# NOTE: On GitHub actions this outputs SARIF format to zizmor.sarif.json
-	@#       in addition to outputting errors to the terminal.
+.PHONY: fixme
+fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
 	@set -euo pipefail;\
-		files=$$( \
-			git ls-files --deduplicate \
-				'.github/workflows/*.yml' \
-				'.github/workflows/*.yaml' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+		output="default"; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			.venv/bin/zizmor \
-				--quiet \
-				--pedantic \
-				--format sarif \
-				$${files} > zizmor.sarif.json || true; \
+			output="github"; \
 		fi; \
-		.venv/bin/zizmor \
-			--quiet \
-			--pedantic \
-			--format plain \
-			$${files}
+		# NOTE: todos does not use `git ls-files` because many files might be \
+		# 		unsupported and generate an error if passed directly on the \
+		# 		command line. \
+		todos \
+			--output "$${output}" \
+			--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
 .PHONY: markdownlint
 markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the markdownlint linter.
@@ -439,78 +428,6 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 				$${files}; \
 		fi
 
-.PHONY: textlint
-textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textlint linter.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.md' \
-				'*.txt' \
-				':!:requirements.txt' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			exit_code=0; \
-			while IFS="" read -r p && [ -n "$$p" ]; do \
-				filePath=$$(echo "$$p" | jq -c -r '.filePath // empty'); \
-				file=$$(realpath --relative-to="." "$${filePath}"); \
-				while IFS="" read -r m && [ -n "$$m" ]; do \
-					line=$$(echo "$$m" | jq -c -r '.loc.start.line'); \
-					endline=$$(echo "$$m" | jq -c -r '.loc.end.line'); \
-					message=$$(echo "$$m" | jq -c -r '.message'); \
-					exit_code=1; \
-					echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-				done <<<"$$(echo "$$p" | jq -c -r '.messages[] // empty')"; \
-			done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
-			exit "$${exit_code}"; \
-		else \
-			./node_modules/.bin/textlint \
-				--config .textlintrc.yaml \
-				$${files}; \
-		fi
-
-.PHONY: todos
-todos: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding TODOs.
-	@set -euo pipefail;\
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		output="default"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			output="github"; \
-		fi; \
-		# NOTE: todos does not use `git ls-files` because many files might be \
-		# 		unsupported and generate an error if passed directly on the \
-		# 		command line. \
-		todos \
-			--output "$${output}" \
-			--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
-
-.PHONY: yamllint
-yamllint: .venv/.installed ## Runs the yamllint linter.
-	@set -euo pipefail;\
-		extraargs=""; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.yml' \
-				'*.yaml' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		format="standard"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			format="github"; \
-		fi; \
-		.venv/bin/yamllint \
-			--strict \
-			--config-file .yamllint.yaml \
-			--format "$${format}" \
-			$${files}
-
 SHELLCHECK_ARGS = --severity=style --external-sources
 
 .PHONY: shellcheck
@@ -549,6 +466,90 @@ shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
 		else \
 			echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS); \
 		fi
+
+.PHONY: textlint
+textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textlint linter.
+	@set -euo pipefail; \
+		files=$$( \
+			git ls-files --deduplicate \
+				'*.md' \
+				'*.txt' \
+				':!:requirements.txt' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+		); \
+		if [ "$${files}" == "" ]; then \
+			exit 0; \
+		fi; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			exit_code=0; \
+			while IFS="" read -r p && [ -n "$$p" ]; do \
+				filePath=$$(echo "$$p" | jq -c -r '.filePath // empty'); \
+				file=$$(realpath --relative-to="." "$${filePath}"); \
+				while IFS="" read -r m && [ -n "$$m" ]; do \
+					line=$$(echo "$$m" | jq -c -r '.loc.start.line'); \
+					endline=$$(echo "$$m" | jq -c -r '.loc.end.line'); \
+					message=$$(echo "$$m" | jq -c -r '.message'); \
+					exit_code=1; \
+					echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
+				done <<<"$$(echo "$$p" | jq -c -r '.messages[] // empty')"; \
+			done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
+			exit "$${exit_code}"; \
+		else \
+			./node_modules/.bin/textlint \
+				--config .textlintrc.yaml \
+				$${files}; \
+		fi
+
+.PHONY: yamllint
+yamllint: .venv/.installed ## Runs the yamllint linter.
+	@set -euo pipefail;\
+		extraargs=""; \
+		files=$$( \
+			git ls-files --deduplicate \
+				'*.yml' \
+				'*.yaml' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+		); \
+		if [ "$${files}" == "" ]; then \
+			exit 0; \
+		fi; \
+		format="standard"; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			format="github"; \
+		fi; \
+		.venv/bin/yamllint \
+			--strict \
+			--config-file .yamllint.yaml \
+			--format "$${format}" \
+			$${files}
+
+.PHONY: zizmor
+zizmor: .venv/.installed ## Runs the zizmor linter.
+	@# NOTE: On GitHub actions this outputs SARIF format to zizmor.sarif.json
+	@#       in addition to outputting errors to the terminal.
+	@set -euo pipefail;\
+		files=$$( \
+			git ls-files --deduplicate \
+				'.github/workflows/*.yml' \
+				'.github/workflows/*.yaml' \
+				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+		); \
+		if [ "$${files}" == "" ]; then \
+			exit 0; \
+		fi; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			.venv/bin/zizmor \
+				--quiet \
+				--pedantic \
+				--format sarif \
+				$${files} > zizmor.sarif.json || true; \
+		fi; \
+		.venv/bin/zizmor \
+			--config .zizmor.yml \
+			--quiet \
+			--pedantic \
+			--format plain \
+			$${files}
 
 ## Base Tools
 #####################################################################
@@ -711,6 +712,22 @@ install-node: $(HOME)/opt ## Install the Node.js runtime.
 
 ## Maintenance
 #####################################################################
+
+.PHONY: todos
+todos: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding TODOs.
+	@set -euo pipefail;\
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+		output="default"; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			output="github"; \
+		fi; \
+		# NOTE: todos does not use `git ls-files` because many files might be \
+		# 		unsupported and generate an error if passed directly on the \
+		# 		command line. \
+		todos \
+			--output "$${output}" \
+			--todo-types="TODO,Todo,todo,FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
 .PHONY: clean
 clean: ## Delete temporary files.
