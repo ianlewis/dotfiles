@@ -22,6 +22,7 @@ kernel.Linux := linux
 kernel = $(kernel.$(uname_s))
 
 XDG_CONFIG_HOME ?= $(HOME)/.config
+XDG_BIN_HOME ?= $(HOME)/.local/bin
 
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -104,7 +105,7 @@ all: install-all configure-all ## Install and configure everything.
 configure-all: configure-aqua configure-efm-langserver configure-nix configure-nvim configure-bash configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
-install-all: install-aqua ## Install all tools.
+install-all: install-bin install-aqua ## Install all tools.
 
 package-lock.json: package.json
 	@npm install
@@ -552,16 +553,16 @@ shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
 ## Base Tools
 #####################################################################
 
-$(HOME)/bin:
+$(XDG_BIN_HOME):
 	@set -euo pipefail; \
-		mkdir -p $(HOME)/bin; \
-		ln -sf $(REPO_ROOT)/bin/all/* $(HOME)/bin/
+		mkdir -p $(XDG_BIN_HOME); \
+		ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME)/
 
-$(HOME)/bin/%: $(HOME)/bin bin/all/%
-	@ln -sf "$(REPO_ROOT)"/bin/all/* $(HOME)/bin/
+$(XDG_BIN_HOME)/%: $(XDG_BIN_HOME) bin/all/%
+	@ln -sf "$(REPO_ROOT)"/bin/all/* $(XDG_BIN_HOME)/
 
 BIN_SRCS := $(wildcard bin/all/*)
-BIN_OBJS := $(subst bin/all,$(HOME)/bin,$(BIN_SRCS))
+BIN_OBJS := $(subst bin/all,$(XDG_BIN_HOME),$(BIN_SRCS))
 
 .PHONY: install-bin
 install-bin: $(BIN_OBJS) ## Install binary scripts.
@@ -641,7 +642,7 @@ configure-git: ## Configure git.
 #####################################################################
 
 .PHONY: install-slsa-verifier
-install-slsa-verifier: $(HOME)/bin/slsa-verifier ## Install slsa-verifier
+install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
 
 $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier: $(HOME)/opt
 	@set -euo pipefail; \
@@ -652,22 +653,22 @@ $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier: $(HOME)/opt
 		mv "$${tempfile}" $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier; \
 		chmod +x $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
 
-$(HOME)/bin/slsa-verifier: $(HOME)/bin $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
+$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME) $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
 	@set -euo pipefail; \
 		ln -sf $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier $@; \
 		touch $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
 
 .PHONY: install-aqua
-install-aqua: $(HOME)/bin/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
-	@$(HOME)/bin/aqua --config $(HOME)/.aqua.yaml install
+install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
+	@$(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
 
-$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verifier
+$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(XDG_BIN_HOME)/slsa-verifier
 	@set -euo pipefail; \
 		tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 		tempjsonl=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).intoto.jsonl"); \
 		curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
 		curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
-		$(HOME)/bin/slsa-verifier verify-artifact \
+		$(XDG_BIN_HOME)/slsa-verifier verify-artifact \
 			"$${tempfile}" \
 			--provenance-path "$${tempjsonl}" \
 			--source-uri "$(AQUA_REPO)" \
@@ -676,7 +677,7 @@ $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(HOME)/bin/slsa-verifi
 		tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
 		touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
-$(HOME)/bin/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
+$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 	@set -euo pipefail; \
 		touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
 		ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
