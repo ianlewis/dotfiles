@@ -229,14 +229,12 @@ function _bashrc_main() {
         . "$HOME/.cargo/env"
     fi
 
-    # The .local/bin is used for some local installs such as applications installed via 'pip install --user'
+    # The .local/bin is used for some local installs such as applications
+    # installed via 'pip install --user'
     [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
 
-    # Add ~/bin to the PATH. We want ~/bin to be second highest priority before
-    # running .bashrc.local.
-    [[ ":$PATH:" != *":${HOME}/bin:"* ]] && PATH="${HOME}/bin:${PATH}"
-
-    # Aqua. We want aqua to be able to override other global paths so it gets highest priority.
+    # Aqua. We want aqua to be able to override other global paths so it gets
+    # highest priority.
     if command -v aqua >/dev/null 2>&1; then
         aqua_root="$(aqua root-dir)"
         [[ ":$PATH:" != *":${aqua_root}/bin:"* ]] && PATH="${aqua_root}/bin:${PATH}"

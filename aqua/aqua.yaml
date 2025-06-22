@@ -38,3 +38,4 @@ packages:
   - name: ianlewis/todos@v0.13.0
   - name: slsa-framework/slsa-verifier@v2.7.0
   - name: sigstore/cosign@v2.5.0
+  - name: go-acme/lego@v4.23.1
