@@ -66,6 +66,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-aarch64-apple-darwin.tar.gz",
+      "checksum": "A72D648A24030D9B34C65043B348CC3AB40B157E7B78E65098FB88EA317774F1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-aarch64-pc-windows-msvc.zip",
+      "checksum": "366EF0D9CC20C2D9F396F81FF3365D18A1EBDF1C7D2CBCBBB10C6FE82987F2B1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "B58A162E297BA70E36C788D4C576025E939D29F11F46F22E448867571CAD7D10",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-x86_64-apple-darwin.tar.gz",
+      "checksum": "DF314C2C6623C0BBA40C988842EFCD249D7A9A2480D0DE9570CA18F75A2E4B9A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-x86_64-pc-windows-msvc.zip",
+      "checksum": "B2206E1DA2F08CDB46E1E5CDAFDB6B1D307BB568CC299111742173843D340DB3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "03C554016D0638182694E69AA222341C4C762D9EA982B8DFE712D757C806C76A",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/cli/cli/v2.70.0/gh_2.70.0_linux_amd64.tar.gz",
       "checksum": "664B70C80AADDF7B45C4DF890324D3876762E630CFFB429971791B8E2FB2E04B",
       "algorithm": "sha256"
@@ -408,6 +438,36 @@
     {
       "id": "github_release/github.com/rhysd/actionlint/v1.7.7/actionlint_1.7.7_windows_arm64.zip",
       "checksum": "76E9514CFAC18E5677AA04F3A89873C981F16A2F2353BB97372A86CD09B1F5A8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rust-lang/rust-analyzer/2025-06-16/rust-analyzer-aarch64-apple-darwin.gz",
+      "checksum": "CB8340E23D3FADEA60C33F695941E1ADD92F25D232D1C3D4A4E81F05C2D1A066",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rust-lang/rust-analyzer/2025-06-16/rust-analyzer-aarch64-pc-windows-msvc.zip",
+      "checksum": "5A6EE479D280434CEB993844039A47EBF87E1DAC088DA91689FD82BD113A1210",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rust-lang/rust-analyzer/2025-06-16/rust-analyzer-aarch64-unknown-linux-gnu.gz",
+      "checksum": "A8471CFAF871B8ACF7988F7D3B671ADB2366FA7B6D5379DEBCC9F8DC34EA26AD",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rust-lang/rust-analyzer/2025-06-16/rust-analyzer-x86_64-apple-darwin.gz",
+      "checksum": "05F734CBBA5EFFF04244C86B495A94E5FB07A54411F47F18AFE98DF0F72BFCD7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rust-lang/rust-analyzer/2025-06-16/rust-analyzer-x86_64-pc-windows-msvc.zip",
+      "checksum": "41AEB6F352CF38D04BAD77889503A4B733EF3A78DD38A5A189917C6CBE86EF55",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rust-lang/rust-analyzer/2025-06-16/rust-analyzer-x86_64-unknown-linux-gnu.gz",
+      "checksum": "89A06395EAEE9D2DBE8FA41F9406E8650DA321C9DD00298B9A1294E6D30209E3",
       "algorithm": "sha256"
     },
     {

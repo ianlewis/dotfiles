@@ -64,9 +64,6 @@ require("mason-lspconfig").setup({
 		-- bash-language-server
 		"bashls",
 
-		-- efm-langserver
-		"efm",
-
 		-- Go
 		"gopls",
 
@@ -75,9 +72,6 @@ require("mason-lspconfig").setup({
 
 		-- Python
 		"pylsp",
-
-		-- Rust
-		"rust_analyzer",
 
 		-- TypeScript/JavaScript
 		"eslint",
@@ -91,17 +85,9 @@ require("mason-tool-installer").setup({
 	-- Ensure linting/formatting tools are installed.
 	-- Some of these are used by efm-langserver
 	ensure_installed = {
-		"actionlint",
 		"flake8",
 		"markdownlint",
 		"prettier",
-		-- TODO(#116): Add ripgrep to mason-registry
-		-- "ripgrep",
-		"ruff",
-		"stylua",
-		"selene",
-		"shellcheck",
-		"shfmt",
 		"stylelint",
 		"yamllint",
 		-- TODO(#95): install terraform with Aqua
