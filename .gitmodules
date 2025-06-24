@@ -88,3 +88,6 @@
 [submodule "nvim/pack/nvim/start/diffview.nvim"]
 	path = nvim/pack/nvim/start/diffview.nvim
 	url = https://github.com/sindrets/diffview.nvim.git
+[submodule "pyenv/pyenv-installer"]
+	path = pyenv/pyenv-installer
+	url = https://github.com/pyenv/pyenv-installer.git
