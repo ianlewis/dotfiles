@@ -23,6 +23,8 @@ kernel = $(kernel.$(uname_s))
 
 XDG_CONFIG_HOME ?= $(HOME)/.config
 XDG_BIN_HOME ?= $(HOME)/.local/bin
+XDG_DATA_HOME ?= $(HOME)/.local/share
+XDG_STATE_HOME ?= $(HOME)/.local/state
 
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -62,7 +64,7 @@ NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.3
-# NOTE: PYENV_SHA is used to validate the pyenv installation.
+# NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= f1c5371752c6dccecac612d5bac840203f72e5d8
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
 # the 'master' branch. We validate the SHA here but it may be updated from time
@@ -70,7 +72,14 @@ PYENV_INSTALL_SHA ?= f1c5371752c6dccecac612d5bac840203f72e5d8
 PYENV_DOCTOR_SHA ?= bad83e51e1409665de6cb37537cfc1e02e154bec
 PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
 PYENV_VIRTUALENV_SHA ?= 4b3f5f8468c6c7e2b2e55ba8d1bd192f03489d3a
-PYENV_ROOT ?= $(HOME)/.pyenv
+PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
+
+# renovate: datasource=githubnn-releases depName=nodenv/nodenv versioning=loose
+NODENV_INSTALL_VERSION ?= master
+NODENV_INSTALL_SHA ?= c2bda62623165f2b9bab646844f22fc20a48f944
+NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
+NODENV_BUILD_VERSION ?= v5.4.4
+NODENV_BUILD_SHA ?= a43a8397b0f4b14f9a7cdf9cf26fff099b3d0fe5
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
@@ -117,24 +126,28 @@ all: install-all configure-all ## Install and configure everything.
 configure-all: configure-aqua configure-efm-langserver configure-nix configure-nvim configure-bash configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
-install-all: install-bin install-aqua install-python ## Install all tools and runtimes.
+install-all: install-bin install-aqua install-node install-python ## Install all tools and runtimes.
 
-package-lock.json: package.json
-	@npm install --package-lock-only --no-audit --no-fund
+package-lock.json: package.json $(NODENV_ROOT)/.installed
+	@set -euo pipefail; \
+		eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
+		npm install --package-lock-only --no-audit --no-fund
 
 node_modules/.installed: package-lock.json
-	@npm clean-install
-	@npm audit signatures
-	@touch node_modules/.installed
+	@set -euo pipefail; \
+		eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
+		npm clean-install; \
+		npm audit signatures; \
+		touch node_modules/.installed
 
 .venv/bin/activate: $(PYENV_ROOT)/.installed
 	@set -euo pipefail; \
-		eval "$(pyenv init - bash)"; \
+		eval "$(PYENV_ROOT=$(PYENV_ROOT) $(PYENV_ROOT)/bin/pyenv init - bash)"; \
 		python -m venv .venv
 
 .venv/.installed: requirements-dev.txt .venv/bin/activate
 	@set -euo pipefail; \
-		./.venv/bin/pip install -r $< --require-hashes; \
+		$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
 		touch $@
 
 .bin/aqua-$(AQUA_VERSION)/aqua:
@@ -583,35 +596,35 @@ install-bin: $(BIN_OBJS) ## Install binary scripts.
 configure-bash: ## Configure bash.
 	@set -euo pipefail; \
 		rm -f \
-			~/.inputrc \
-			~/.profile \
-			~/.bash_profile \
-			~/.bashrc \
-			~/.bash_aliases \
-			~/.bash_completion \
-			~/.bash_logout \
-			~/.dockerfunc \
-			~/.local/share/bash/lib \
+			$(HOME)/.inputrc \
+			$(HOME)/.profile \
+			$(HOME)/.bash_profile \
+			$(HOME)/.bashrc \
+			$(HOME)/.bash_aliases \
+			$(HOME)/.bash_completion \
+			$(HOME)/.bash_logout \
+			$(HOME)/.dockerfunc \
+			$(HOME)/.local/share/bash/lib \
 			$(XDG_CONFIG_HOME)/sbp; \
-		mkdir -p ~/.local/share/bash; \
-		ln -sf $(REPO_ROOT)/bash/lib ~/.local/share/bash/lib; \
-		ln -sf $(REPO_ROOT)/bash/_inputrc ~/.inputrc; \
-		ln -sf $(REPO_ROOT)/bash/_profile ~/.profile; \
-		ln -sf $(REPO_ROOT)/bash/_bash_profile ~/.bash_profile; \
-		ln -sf $(REPO_ROOT)/bash/_bashrc ~/.bashrc; \
-		ln -sf $(REPO_ROOT)/bash/_bash_aliases ~/.bash_aliases; \
-		ln -sf $(REPO_ROOT)/bash/_bash_completion ~/.bash_completion; \
-		ln -sf $(REPO_ROOT)/bash/_bash_logout ~/.bash_logout; \
+		mkdir -p $(HOME)/.local/share/bash; \
+		ln -sf $(REPO_ROOT)/bash/lib $(HOME)/.local/share/bash/lib; \
+		ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
+		ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile; \
+		ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile; \
+		ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc; \
+		ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
+		ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
+		ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
 		ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
 
 $(HOME)/.aqua.yaml:
-	@ln -sf $(REPO_ROOT)/aqua/aqua.yaml ~/.aqua.yaml
+	@ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
 
 aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 	@.bin/aqua-$(AQUA_VERSION)/aqua --config aqua/aqua.yaml update-checksum
 
 $(HOME)/.aqua-checksums.json:
-	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json ~/.aqua-checksums.json
+	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
 
 .PHONY: configure-aqua
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
@@ -640,15 +653,15 @@ configure-nvim: ## Configure neovim.
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
 	@set -euo pipefail; \
-		rm -f ~/.tmux.conf ~/.tmux; \
-		ln -sf $(REPO_ROOT)/tmux/_tmux.conf ~/.tmux.conf; \
-		ln -sf $(REPO_ROOT)/tmux/_tmux ~/.tmux
+		rm -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
+		ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
+		ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
 
 .PHONY: configure-git
 configure-git: ## Configure git.
 	@set -euo pipefail; \
-		rm -f ~/.gitconfig; \
-		ln -sf "$(REPO_ROOT)/git/_gitconfig" ~/.gitconfig
+		rm -f $(HOME)/.gitconfig; \
+		ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
 
 ## Install Tools
 #####################################################################
@@ -711,27 +724,63 @@ install-go: $(HOME)/opt ## Install the Go runtime.
 		$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto
 
 .PHONY: install-node
-install-node: $(HOME)/opt ## Install the Node.js runtime.
+install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
+
+# Installs nodeenv and Node.js
+$(NODENV_ROOT)/.installed:
 	@set -euo pipefail; \
-		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		curl -sSLo "$${tempfile}" "$(NODE_URL)"; \
-		echo "$(NODE_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-		cd $(HOME)/opt; \
-		rm -rf node; \
-		tar xf "$${tempfile}"; \
-		ln -sf node-v$(NODE_VERSION)-linux-x64 node
+		# Install the nodenv. \
+		git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
+		nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD); \
+		if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then \
+			echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"; \
+			rm -rf $(NODENV_ROOT); \
+			exit 1; \
+		fi; \
+		# Install the nodenv plugins. \
+		git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$(NODENV_ROOT)"/plugins/node-build; \
+		nodenv_build_sha=$$(git -C $(NODENV_ROOT)/plugins/node-build rev-parse HEAD); \
+		if [ "$${nodenv_build_sha}" != "$(NODENV_BUILD_SHA)" ]; then \
+			echo "Invalid node-build: '$${nodenv_build_sha}' != '$(NODENV_BUILD_SHA)'"; \
+			rm -rf $(NODENV_ROOT); \
+			exit 1; \
+		fi; \
+		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv install --skip-existing; \
+		ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
+		touch $@
+
+nodenv/package-lock.json: nodenv/package.json
+	@set -euo pipefail; \
+		cd $(REPO_ROOT)/nodenv; \
+		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm \
+			install \
+			--package-lock-only \
+			--no-audit \
+			--no-fund
+
+# Installs tools in the user node_modules.
+$(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.installed
+	@set -euo pipefail; \
+		cd $(REPO_ROOT)/nodenv; \
+		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm clean-install; \
+		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm audit signatures; \
+		ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
+		touch $@
 
 .PHONY: install-python
 install-python: $(PYENV_ROOT)/versions/$(USER)/.installed ## Install the Python environment.
 
 # Installs the requirements in the Python virtualenv.
 $(PYENV_ROOT)/versions/$(USER)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
-	@$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes
-	@touch $@
+	@set -euo pipefail; \
+		export PYENV_ROOT=$(PYENV_ROOT); \
+		$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes; \
+		touch $@
 
 # Creates a Python virtualenv using pyenv.
 $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 	@set -euo pipefail; \
+		export PYENV_ROOT=$(PYENV_ROOT); \
 		# NOTE: We unset the `PYENV_VERSION` environment variable to \
 		# 		ensure that we don't depend on a virtualenv that is not \
 		# 		yet installed. \
@@ -739,7 +788,9 @@ $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 
 $(PYENV_ROOT)/.installed:
 	@set -euo pipefail; \
-		PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION) ./pyenv/pyenv-installer/bin/pyenv-installer; \
+		export PYENV_ROOT=$(PYENV_ROOT) \
+		export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
+		$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
 		# Validate the pyenv installation. \
 		pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
 		if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
@@ -766,8 +817,8 @@ $(PYENV_ROOT)/.installed:
 			exit 1; \
 		fi; \
 		$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
-		ln -sf $(REPO_ROOT)/.python-version ~/.python-version; \
-		touch $(PYENV_ROOT)/.installed
+		ln -sf $(REPO_ROOT)/.python-version $(HOME)/.python-version; \
+		touch $@
 
 ## Maintenance
 #####################################################################

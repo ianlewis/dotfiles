@@ -20,6 +20,9 @@
 # for examples
 
 function _bashrc_main() {
+    XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+    export XDG_DATA_HOME
+
     if [ -f "${HOME}/.bashrc_init_local" ]; then
         # shellcheck source=/dev/null
         . "${HOME}/.bashrc_init_local"
@@ -192,18 +195,27 @@ function _bashrc_main() {
     fi
 
     # Python
-    export PYENV_ROOT="$HOME/.pyenv"
-    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init - bash)"
+    export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+    if [ -d "${PYENV_ROOT}/bin" ]; then
+        export PATH="${PYENV_ROOT}/bin:${PATH}"
+        eval "$(pyenv init - bash)"
+    fi
 
     # Activate the 'ian' virtualenv if it exists.
     if [ -f "${PYENV_ROOT}/versions/ian/bin/activate" ]; then
         pyenv activate ian
     fi
 
-    # Node.js
-    if [ -d "${HOME}/opt/node" ]; then
-        [[ ":$PATH:" != *":${HOME}/opt/node/bin:"* ]] && PATH="${HOME}/opt/node/bin:${PATH}"
+    # Nodenv
+    export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
+    if [ -d "${NODENV_ROOT}/bin" ]; then
+        export PATH="${NODENV_ROOT}/bin:${PATH}"
+        eval "$(nodenv init - bash)"
+    fi
+
+    # Activate the local node_modules.
+    if [ -d "${XDG_DATA_HOME}/node_modules" ]; then
+        export PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
     fi
 
     # Ruby

@@ -1,0 +1,14 @@
+{
+  "name": "dotfiles",
+  "dependencies": {
+    "bash-language-server": "5.6.0",
+    "eslint-lsp": "0.1.2",
+    "markdownlint-cli": "0.45.0",
+    "prettier": "3.5.3",
+    "stylelint": "16.20.0",
+    "stylelint-config-standard-scss": "14.0.0",
+    "stylelint-scss": "6.12.0",
+    "typescript": "5.8.3",
+    "typescript-language-server": "4.3.4"
+  }
+}

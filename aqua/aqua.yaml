@@ -42,3 +42,5 @@ packages:
   - name: astral-sh/ruff@0.12.0
   - name: mattn/efm-langserver@v0.0.54
   - name: rust-lang/rust-analyzer@2025-06-16
+  - name: LuaLS/lua-language-server@3.14.0
+  - name: golang.org/x/tools/gopls@v0.19.1
