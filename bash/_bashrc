@@ -197,7 +197,7 @@ function _bashrc_main() {
     eval "$(pyenv init - bash)"
 
     # Activate the 'ian' virtualenv if it exists.
-    if [ -f "${HOME}/.pyenv/versions/ian/bin/activate" ]; then
+    if [ -f "${PYENV_ROOT}/versions/ian/bin/activate" ]; then
         pyenv activate ian
     fi
 

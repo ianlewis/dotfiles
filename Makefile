@@ -61,15 +61,16 @@ NODE_URL.Linux.x86_64 := https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_V
 NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_VERSION ?= v2.6.3
+PYENV_INSTALL_VERSION ?= v2.6.3
 # NOTE: PYENV_SHA is used to validate the pyenv installation.
-PYENV_SHA ?= f1c5371752c6dccecac612d5bac840203f72e5d8
+PYENV_INSTALL_SHA ?= f1c5371752c6dccecac612d5bac840203f72e5d8
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
 # the 'master' branch. We validate the SHA here but it may be updated from time
 # to time and cause validation errors.
 PYENV_DOCTOR_SHA ?= bad83e51e1409665de6cb37537cfc1e02e154bec
 PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
 PYENV_VIRTUALENV_SHA ?= 4b3f5f8468c6c7e2b2e55ba8d1bd192f03489d3a
+PYENV_ROOT ?= $(HOME)/.pyenv
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
@@ -116,7 +117,7 @@ all: install-all configure-all ## Install and configure everything.
 configure-all: configure-aqua configure-efm-langserver configure-nix configure-nvim configure-bash configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
-install-all: install-bin install-aqua ## Install all tools.
+install-all: install-bin install-aqua install-python ## Install all tools and runtimes.
 
 package-lock.json: package.json
 	@npm install --package-lock-only --no-audit --no-fund
@@ -125,6 +126,16 @@ node_modules/.installed: package-lock.json
 	@npm clean-install
 	@npm audit signatures
 	@touch node_modules/.installed
+
+.venv/bin/activate: $(PYENV_ROOT)/.installed
+	@set -euo pipefail; \
+		eval "$(pyenv init - bash)"; \
+		python -m venv .venv
+
+.venv/.installed: requirements-dev.txt .venv/bin/activate
+	@set -euo pipefail; \
+		./.venv/bin/pip install -r $< --require-hashes; \
+		touch $@
 
 .bin/aqua-$(AQUA_VERSION)/aqua:
 	@set -euo pipefail; \
@@ -139,10 +150,6 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 		--config .aqua.yaml \
 		install
 	@touch $@
-
-# User-local Python virtualenv
-$(HOME)/.local/share/venv:
-	python3 -m venv $@
 
 $(HOME)/opt:
 	@mkdir -p $(HOME)/opt
@@ -478,7 +485,7 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 			git ls-files --deduplicate \
 				'*.md' \
 				'*.txt' \
-				':!:requirements.txt' \
+				':!:requirements*.txt' \
 				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 		); \
 		if [ "$${files}" == "" ]; then \
@@ -692,7 +699,7 @@ $(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
 .PHONY: install-go
 install-go: $(HOME)/opt ## Install the Go runtime.
-	@set -e; \
+	@set -euo pipefail; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
 		curl -sSLo "$${tempfile}" "$(GO_URL)"; \
 		echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c; \
@@ -705,7 +712,7 @@ install-go: $(HOME)/opt ## Install the Go runtime.
 
 .PHONY: install-node
 install-node: $(HOME)/opt ## Install the Node.js runtime.
-	@set -e; \
+	@set -euo pipefail; \
 		tempfile=$$(mktemp --suffix=".tar.gz"); \
 		curl -sSLo "$${tempfile}" "$(NODE_URL)"; \
 		echo "$(NODE_CHECKSUM)  $${tempfile}" | sha256sum -c; \
@@ -714,55 +721,53 @@ install-node: $(HOME)/opt ## Install the Node.js runtime.
 		tar xf "$${tempfile}"; \
 		ln -sf node-v$(NODE_VERSION)-linux-x64 node
 
-	@python -m venv .venv
-
 .PHONY: install-python
-install-python: $(HOME)/.pyenv/versions/ian/.installed ## Install the Python environment.
-	@ln -sf $(REPO_ROOT)/.python-version ~/.python-version
-
-# Creates a Python virtualenv using pyenv.
-$(HOME)/.pyenv/versions/ian/bin/activate: $(HOME)/.pyenv/.installed
-	@set -euo pipefail; \
-		if [ ! -d "$(HOME)/.pyenv/versions/ian" ]; then \
-			$(HOME)/.pyenv/bin/pyenv virtualenv $(PYTHON_VERSION) ian; \
-		fi; \
-		touch $@
+install-python: $(PYENV_ROOT)/versions/$(USER)/.installed ## Install the Python environment.
 
 # Installs the requirements in the Python virtualenv.
-$(HOME)/.pyenv/versions/ian/.installed: requirements.txt $(HOME)/.pyenv/versions/ian/bin/activate
-	@$(HOME)/.pyenv/versions/ian/bin/pip install -r $< --require-hashes
+$(PYENV_ROOT)/versions/$(USER)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
+	@$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes
 	@touch $@
 
-$(HOME)/.pyenv/.installed:
+# Creates a Python virtualenv using pyenv.
+$(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 	@set -euo pipefail; \
-		PYENV_GIT_TAG=$(PYENV_VERSION) ./pyenv/pyenv-installer/bin/pyenv-installer; \
+		# NOTE: We unset the `PYENV_VERSION` environment variable to \
+		# 		ensure that we don't depend on a virtualenv that is not \
+		# 		yet installed. \
+		PYENV_VERSION= $(PYENV_ROOT)/bin/pyenv virtualenv $(USER)
+
+$(PYENV_ROOT)/.installed:
+	@set -euo pipefail; \
+		PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION) ./pyenv/pyenv-installer/bin/pyenv-installer; \
 		# Validate the pyenv installation. \
-		pyenv_sha=$$(git -C ~/.pyenv rev-parse HEAD); \
-		if [ "$${pyenv_sha}" != "$(PYENV_SHA)" ]; then \
-			echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_SHA)'"; \
-			rm -rf $(HOME)/.pyenv; \
+		pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
+		if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
+			echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
+			rm -rf $(PYENV_ROOT); \
 			exit 1; \
 		fi; \
-		pyenv_doctor_sha=$$(git -C ~/.pyenv/plugins/pyenv-doctor rev-parse HEAD); \
+		pyenv_doctor_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-doctor rev-parse HEAD); \
 		if [ "$${pyenv_doctor_sha}" != "$(PYENV_DOCTOR_SHA)" ]; then \
 			echo "Invalid pyenv_doctor: '$${pyenv_doctor_sha}' != '$(PYENV_DOCTOR_SHA)'"; \
-			rm -rf $(HOME)/.pyenv; \
+			rm -rf $(PYENV_ROOT); \
 			exit 1; \
 		fi; \
-		pyenv_update_sha=$$(git -C ~/.pyenv/plugins/pyenv-update rev-parse HEAD); \
+		pyenv_update_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-update rev-parse HEAD); \
 		if [ "$${pyenv_update_sha}" != "$(PYENV_UPDATE_SHA)" ]; then \
 			echo "Invalid pyenv_update: '$${pyenv_update_sha}' != '$(PYENV_UPDATE_SHA)'"; \
-			rm -rf $(HOME)/.pyenv; \
+			rm -rf $(PYENV_ROOT); \
 			exit 1; \
 		fi; \
-		pyenv_virtualenv_sha=$$(git -C ~/.pyenv/plugins/pyenv-virtualenv rev-parse HEAD); \
+		pyenv_virtualenv_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-virtualenv rev-parse HEAD); \
 		if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
 			echo "Invalid pyenv_virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
-			rm -rf $(HOME)/.pyenv; \
+			rm -rf $(PYENV_ROOT); \
 			exit 1; \
 		fi; \
-		$(HOME)/.pyenv/bin/pyenv install --skip-existing; \
-		touch $(HOME)/.pyenv/.installed
+		$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
+		ln -sf $(REPO_ROOT)/.python-version ~/.python-version; \
+		touch $(PYENV_ROOT)/.installed
 
 ## Maintenance
 #####################################################################
