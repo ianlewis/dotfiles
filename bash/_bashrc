@@ -192,9 +192,13 @@ function _bashrc_main() {
     fi
 
     # Python
-    if [ -f "${HOME}/.local/share/venv/bin/activate" ]; then
-        # shellcheck source=/dev/null
-        . "${HOME}/.local/share/venv/bin/activate"
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init - bash)"
+
+    # Activate the 'ian' virtualenv if it exists.
+    if [ -f "${HOME}/.pyenv/versions/ian/bin/activate" ]; then
+        pyenv activate ian
     fi
 
     # Node.js
