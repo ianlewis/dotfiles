@@ -23,7 +23,7 @@ home directory which makes it easy to test out configuration.
 
 - Tokyo Night color scheme for Neovim, Tmux, and Bash prompt.
 - [Bash](./bash) prompt with git, Python virtualenv, and Nix shell integration.
-- [Bash](./bash) completion with git, Python virtualenv, and Nix shell integration.
+- [Bash completion](./bash/_bash_completion) with custom completions for various tools.
 - [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful plugins.
 
 ## Install
@@ -38,7 +38,7 @@ Usage: make [COMMAND]
   help                      Print all Makefile targets (this message).
   all                       Install and configure everything.
   configure-all             Configure all tools.
-  install-all               Install all tools.
+  install-all               Install all tools and runtimes.
 Tools
   license-headers           Update license headers.
 Formatting
@@ -51,18 +51,20 @@ Formatting
 Linting
   lint                      Run all linters.
   actionlint                Runs the actionlint linter.
-  zizmor                    Runs the zizmor linter.
+  fixme                     Check for outstanding FIXMEs.
   markdownlint              Runs the markdownlint linter.
   renovate-config-validator Validate Renovate configuration.
   selene                    Runs the selene (Lua) linter.
+  shellcheck                Runs the shellcheck linter.
   textlint                  Runs the textlint linter.
   yamllint                  Runs the yamllint linter.
-  shellcheck                Runs the shellcheck linter.
+  zizmor                    Runs the zizmor linter.
 Base Tools
   install-bin               Install binary scripts.
   configure-bash            Configure bash.
   configure-aqua            Configure aqua.
   configure-efm-langserver  Configure efm-langserver.
+  configure-nix             Configure nix.
   configure-nvim            Configure neovim.
   configure-tmux            Configure tmux.
   configure-git             Configure git.
@@ -71,8 +73,10 @@ Install Tools
   install-aqua              Install aqua and aqua-managed CLI tools
 Language Runtimes
   install-go                Install the Go runtime.
-  install-node              Install the Node.js runtime.
+  install-node              Install the Node.js environment.
+  install-python            Install the Python environment.
 Maintenance
+  todos                     Check for outstanding TODOs.
   clean                     Delete temporary files.
 ```
 
@@ -100,12 +104,11 @@ their appropriate `install-<tool>` command, such as `make install-go` or
 Tools are installed using several methods and are installed in several
 locations.
 
-- Tools installed via Python are installed in a Python virtual environment the
-  home directory under `~/.local/share/venv`. The `~/.local/share/venv/bin`
-  directory is added to the `$PATH`.
+- Tools installed via Python are installed in a Python virtual environment
+  managed by `pyenv`. This virtual environment is activated automatically by
+  `bashrc`.
 - Tools written in JavaScript/TypeScript are installed globally by `npm` into
-  the global `node_modules`. This is located at `~/opt/node/lib/node_modules`
-  and `~/opt/node/bin` is added to the `$PATH`.
+  the global `node_modules`.
 - Pre-compiled binary tools are installed via
   [`Aqua`](https://aquaproj.github.io/) to the `~/.local/share/aquaproj-aqua`
   directory. The `~/.local/share/aquaproj-aqua/bin` directory is added to the
@@ -127,15 +130,15 @@ packages. This directory is added to the `$PATH`.
 
 ### Node.js
 
-The Node.js runtime is installed in the `~/opt/node` directory. This is a
-symbolic link to the installed Node.js runtime version. The `~/opt/node/bin`
-directory is added to the `$PATH`.
+The Node.js runtime versions are installed and managed by
+[`nodenv`](https://github.com/nodenv/nodenv) in the `~/.local/share/nodenv`
+directory.
 
 ### Python
 
-Python is assumed to be installed on the system and available in the `$PATH`.
-The scripts located here will use the installed system Python but any required
-packages will be installed in a virtualenv in `~/.local/share/venv`.
+The Python runtime is installed and managed by
+[`pyenv`](https://github.com/pyenv/pyenv) in the `~/.local/share/pyenv`
+directory.
 
 ## Bash
 
