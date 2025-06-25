@@ -38,7 +38,9 @@ Usage: make [COMMAND]
   help                      Print all Makefile targets (this message).
   all                       Install and configure everything.
   configure-all             Configure all tools.
-  install-all               Install all tools and runtimes.
+  install-all               Install all CLI tools and runtimes.
+  install-tools             Install all CLI tools.
+  install-runtimes          Install all runtimes.
 Tools
   license-headers           Update license headers.
 Formatting
@@ -75,6 +77,7 @@ Language Runtimes
   install-go                Install the Go runtime.
   install-node              Install the Node.js environment.
   install-python            Install the Python environment.
+  install-ruby              Install the Ruby environment.
 Maintenance
   todos                     Check for outstanding TODOs.
   clean                     Delete temporary files.
@@ -138,6 +141,12 @@ directory.
 
 The Python runtime is installed and managed by
 [`pyenv`](https://github.com/pyenv/pyenv) in the `~/.local/share/pyenv`
+directory.
+
+### Ruby
+
+The Ruby runtime is installed and managed by
+[`rbenv`](https://github.com/rbenv/rbenv) in the `~/.local/share/rbenv`
 directory.
 
 ## Bash

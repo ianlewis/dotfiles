@@ -74,12 +74,19 @@ PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
 PYENV_VIRTUALENV_SHA ?= 4b3f5f8468c6c7e2b2e55ba8d1bd192f03489d3a
 PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
-# renovate: datasource=githubnn-releases depName=nodenv/nodenv versioning=loose
+# renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
 NODENV_INSTALL_VERSION ?= master
 NODENV_INSTALL_SHA ?= c2bda62623165f2b9bab646844f22fc20a48f944
 NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 NODENV_BUILD_VERSION ?= v5.4.4
 NODENV_BUILD_SHA ?= a43a8397b0f4b14f9a7cdf9cf26fff099b3d0fe5
+
+# renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
+RBENV_INSTALL_VERSION ?= v1.3.2
+RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
+RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
+RBENV_BUILD_VERSION ?= v20250610
+RBENV_BUILD_SHA ?= 1195268593b80a0a1bcd518e11efb4b4de115984
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
@@ -126,7 +133,12 @@ all: install-all configure-all ## Install and configure everything.
 configure-all: configure-aqua configure-efm-langserver configure-nix configure-nvim configure-bash configure-git configure-tmux ## Configure all tools.
 
 .PHONY: install-all
-install-all: install-bin install-aqua install-node install-python ## Install all tools and runtimes.
+install-all: install-tools install-runtimes ## Install all CLI tools and runtimes.
+
+.PHONY: install-tools
+install-tools: install-bin install-aqua ## Install all CLI tools.
+
+install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
 
 package-lock.json: package.json $(NODENV_ROOT)/.installed
 	@set -euo pipefail; \
@@ -818,6 +830,33 @@ $(PYENV_ROOT)/.installed:
 		fi; \
 		$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
 		ln -sf $(REPO_ROOT)/.python-version $(HOME)/.python-version; \
+		touch $@
+
+.PHONY: install-ruby
+install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
+
+$(RBENV_ROOT)/.installed:
+	@set -euo pipefail; \
+		export RBENV_ROOT=$(RBENV_ROOT) \
+		export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
+		git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
+		# Validate the rbenv installation. \
+		rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
+		if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then \
+			echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"; \
+			rm -rf $(RBENV_ROOT); \
+			exit 1; \
+		fi; \
+		# Install the nodenv plugins. \
+		git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$(RBENV_ROOT)"/plugins/ruby-build; \
+		rbenv_build_sha=$$(git -C $(RBENV_ROOT)/plugins/ruby-build rev-parse HEAD); \
+		if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then \
+			echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"; \
+			rm -rf $(RBENV_ROOT); \
+			exit 1; \
+		fi; \
+		$(RBENV_ROOT)/bin/rbenv install --skip-existing; \
+		ln -sf $(REPO_ROOT)/.ruby-version $(HOME)/.ruby-version; \
 		touch $@
 
 ## Maintenance
