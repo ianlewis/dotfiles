@@ -44,3 +44,4 @@ packages:
   - name: rust-lang/rust-analyzer@2025-06-16
   - name: LuaLS/lua-language-server@3.14.0
   - name: golang.org/x/tools/gopls@v0.19.1
+  - name: mvdan/gofumpt@v0.8.0
