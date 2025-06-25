@@ -218,13 +218,12 @@ function _bashrc_main() {
         export PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
     fi
 
-    # Ruby
-    if [ -d "${HOME}/.gem/bin" ]; then
-        [[ ":$PATH:" != *":${HOME}/.gem/bin:"* ]] && PATH="${HOME}/.gem/bin:${PATH}"
+    # Rbenv
+    export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
+    if [ -d "${RBENV_ROOT}/bin" ]; then
+        export PATH="${RBENV_ROOT}/bin:${PATH}"
+        eval "$(rbenv init - bash)"
     fi
-    for d in "${HOME}"/.gem/ruby/*/bin; do
-        [[ ":$PATH:" != *":${d}:"* ]] && PATH="${d}:${PATH}"
-    done
 
     # The next line updates PATH for the Google Cloud SDK.
     if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
