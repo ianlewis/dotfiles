@@ -82,3 +82,6 @@
 [submodule "pyenv/pyenv-installer"]
 	path = pyenv/pyenv-installer
 	url = https://github.com/pyenv/pyenv-installer.git
+[submodule "nvim/pack/nvim/start/vim-easy-align"]
+	path = nvim/pack/nvim/start/vim-easy-align
+	url = https://github.com/junegunn/vim-easy-align.git
