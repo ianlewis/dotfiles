@@ -885,4 +885,5 @@ clean: ## Delete temporary files.
 		$(AQUA_ROOT_DIR) \
 		.venv \
 		node_modules \
-		*.sarif.json
+		*.sarif.json \
+		nodeenv/node_modules \

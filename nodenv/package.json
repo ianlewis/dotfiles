@@ -4,6 +4,7 @@
     "bash-language-server": "5.6.0",
     "eslint-lsp": "0.1.2",
     "markdownlint-cli": "0.45.0",
+    "opencode-ai": "0.1.162",
     "prettier": "3.5.3",
     "stylelint": "16.20.0",
     "stylelint-config-standard-scss": "14.0.0",
