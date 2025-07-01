@@ -40,9 +40,9 @@ AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/multiple.intoto.jsonl
 
 # renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
-SLSA_VERIFIER_VERSION ?= 2.7.0
+SLSA_VERIFIER_VERSION ?= 2.7.1
 # NOTE: slsa-verifier establishes the trust root for installed CLI tools in the home directory.
-SLSA_VERIFIER_CHECKSUM.Linux.x86_64 = 499befb675efcca9001afe6e5156891b91e71f9c07ab120a8943979f85cc82e6
+SLSA_VERIFIER_CHECKSUM.Linux.x86_64 = 946dbec729094195e88ef78e1734324a27869f03e2c6bd2f61cbc06bd5350339
 SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(uname_s).$(uname_m))
 SLSA_VERIFIER_URL.Linux.x86_64 = https://github.com/slsa-framework/slsa-verifier/releases/download/v$(SLSA_VERIFIER_VERSION)/slsa-verifier-linux-amd64
 SLSA_VERIFIER_URL ?= $(SLSA_VERIFIER_URL.$(uname_s).$(uname_m))
@@ -78,10 +78,11 @@ PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 NODENV_INSTALL_VERSION ?= master
 NODENV_INSTALL_SHA ?= c2bda62623165f2b9bab646844f22fc20a48f944
 NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
-NODENV_BUILD_VERSION ?= v5.4.4
-NODENV_BUILD_SHA ?= a43a8397b0f4b14f9a7cdf9cf26fff099b3d0fe5
+# renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
+NODENV_BUILD_VERSION ?= v5.4.5
+NODENV_BUILD_SHA ?= 73a5315be96e41d33a26b14281a557679300e50f
 
-# renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
+# renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
