@@ -30,5 +30,5 @@ packages:
   - name: jqlang/jq@jq-1.8.0
   - name: ianlewis/todos@v0.13.0
   - name: mvdan/sh@v3.11.0
-  - name: JohnnyMorganz/StyLua@v2.0.2
+  - name: JohnnyMorganz/StyLua@v2.1.0
   - name: Kampfkarren/selene@0.28.0
