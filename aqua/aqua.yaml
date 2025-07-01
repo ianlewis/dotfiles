@@ -37,7 +37,7 @@ packages:
   - name: cli/cli@v2.70.0
   - name: ianlewis/todos@v0.13.0
   - name: slsa-framework/slsa-verifier@v2.7.0
-  - name: sigstore/cosign@v2.5.0
+  - name: sigstore/cosign@v2.5.2
   - name: go-acme/lego@v4.23.1
   - name: astral-sh/ruff@0.12.0
   - name: mattn/efm-langserver@v0.0.54
