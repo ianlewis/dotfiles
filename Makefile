@@ -40,7 +40,7 @@ AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/multiple.intoto.jsonl
 
 # renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
-SLSA_VERIFIER_VERSION ?= 2.7.0
+SLSA_VERIFIER_VERSION ?= 2.7.1
 # NOTE: slsa-verifier establishes the trust root for installed CLI tools in the home directory.
 SLSA_VERIFIER_CHECKSUM.Linux.x86_64 = 499befb675efcca9001afe6e5156891b91e71f9c07ab120a8943979f85cc82e6
 SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(uname_s).$(uname_m))
@@ -82,7 +82,7 @@ NODENV_BUILD_VERSION ?= v5.4.4
 NODENV_BUILD_SHA ?= a43a8397b0f4b14f9a7cdf9cf26fff099b3d0fe5
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
-RBENV_INSTALL_VERSION ?= v1.3.2
+RBENV_INSTALL_VERSION ?= v1.5.0
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 RBENV_BUILD_VERSION ?= v20250610
