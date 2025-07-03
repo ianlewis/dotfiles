@@ -23,6 +23,7 @@ permissions: {}
 
 jobs:
   issue-reopener:
+    name: Reopen TODO issues
     runs-on: ubuntu-latest
     permissions:
       # NOTE: contents: read is necessary for private repositories.

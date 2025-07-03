@@ -14,7 +14,6 @@ This directory contains my Neovim configuration. It gets symbolically linked to
   and
   [`mason-lspconfig.nvim`](https://github.com/mason-org/mason-lspconfig.nvim).
 - LSP server support for:
-
     - [`efm-langserver`](https://github.com/mattn/efm-langserver) (formatting,
       linting): `css`, `html`, `javascript`, `json`, `json5`, `markdown`,
       `liquid`, `lua`, `scss`, `terraform`, `typescript`, `yaml`, and GitHub
