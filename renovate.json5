@@ -31,6 +31,12 @@
   },
   osvVulnerabilityAlerts: true,
 
+  // Enable the lock file maintenance feature to keep transitive dependencies up
+  // to date.
+  lockFileMaintenance: {
+    enabled: true,
+  },
+
   // Create a new issue for each config warning. By default, Renovate re-opens
   // an existing issue which can be very old and is easily missed. Opening new
   // issues is more intuitive.
