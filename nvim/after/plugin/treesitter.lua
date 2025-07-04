@@ -12,6 +12,9 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+-- e.g. ~/.local/share/nvim/treesitter
+local parser_dir = vim.fn.stdpath("data") .. "/treesitter"
+
 require("nvim-treesitter.configs").setup({
 	-- A list of parser names, or "all" (the listed parsers MUST always be installed)
 	ensure_installed = {
@@ -64,6 +67,9 @@ require("nvim-treesitter.configs").setup({
 	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
 	auto_install = true,
 
+	-- Path to the tree-sitter parser directory.
+	parser_install_dir = parser_dir,
+
 	highlight = {
 		enable = true,
 		-- TODO(#78): Latex needs the treesitter CLI.
@@ -76,3 +82,6 @@ require("nvim-treesitter.configs").setup({
 		additional_vim_regex_highlighting = false,
 	},
 })
+
+-- NOTE: treesitter parser dir must be added to the runtime path.
+vim.opt.runtimepath:append(parser_dir)
