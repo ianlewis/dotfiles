@@ -517,6 +517,8 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 		if [ "$${files}" == "" ]; then \
 			exit 0; \
 		fi; \
+		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -540,7 +542,6 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 .PHONY: yamllint
 yamllint: .venv/.installed ## Runs the yamllint linter.
 	@set -euo pipefail;\
-		extraargs=""; \
 		files=$$( \
 			git ls-files --deduplicate \
 				'*.yml' \
@@ -576,10 +577,11 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 		fi; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			.venv/bin/zizmor \
+				--config .zizmor.yml \
 				--quiet \
 				--pedantic \
 				--format sarif \
-				$${files} > zizmor.sarif.json || true; \
+				$${files} > zizmor.sarif.json; \
 		fi; \
 		.venv/bin/zizmor \
 			--config .zizmor.yml \
