@@ -83,6 +83,7 @@ local tofuFmt = {
 
 -- linters {{{
 local actionlint = require("efmls-configs.linters.actionlint")
+local hadolint = require("efmls-configs.linters.hadolint")
 local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
@@ -114,6 +115,7 @@ lspconfig.efm.setup({
 			bash = { todos },
 			conf = { todos },
 			css = { prettier, stylelint, todos },
+			dockerfile = { hadolint, todos },
 			gitignore = { todos },
 			go = { todos },
 			html = { prettier, todos },

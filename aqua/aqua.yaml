@@ -45,3 +45,4 @@ packages:
   - name: LuaLS/lua-language-server@3.14.0
   - name: golang.org/x/tools/gopls@v0.19.1
   - name: mvdan/gofumpt@v0.8.0
+  - name: hadolint/hadolint@v2.12.0
