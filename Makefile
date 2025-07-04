@@ -656,8 +656,8 @@ configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Confi
 .PHONY: configure-nix
 configure-nix: ## Configure nix.
 	@set -euo pipefail; \
-		rm -f $(XDG_CONFIG_HOME)/nix; \
-		ln -sf $(REPO_ROOT)/nix $(XDG_CONFIG_HOME)/nix
+		mkdir -p $(XDG_CONFIG_HOME)/nix; \
+		ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
 
 .PHONY: configure-nvim
 configure-nvim: ## Configure neovim.
