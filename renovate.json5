@@ -46,8 +46,13 @@
   packageRules: [
     {
       matchUpdateTypes: ["minor", "patch"],
-      groupName: "aqua",
+      groupName: "aqua-dev",
       matchFileNames: [".aqua.yaml", ".aqua-checksums.yaml"],
+    },
+    {
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "aqua",
+      matchFileNames: ["aqua/aqua.yaml", "aqua/aqua-checksums.yaml"],
     },
     {
       matchUpdateTypes: ["minor", "patch"],
