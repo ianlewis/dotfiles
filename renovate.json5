@@ -47,12 +47,12 @@
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua-dev",
-      matchFileNames: [".aqua.yaml", ".aqua-checksums.yaml"],
+      matchFileNames: [".aqua.yaml"],
     },
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
-      matchFileNames: ["aqua/aqua.yaml", "aqua/aqua-checksums.yaml"],
+      matchFileNames: ["aqua/aqua.yaml"],
     },
     {
       matchUpdateTypes: ["minor", "patch"],
