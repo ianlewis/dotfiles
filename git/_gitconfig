@@ -16,3 +16,5 @@
     ff = only
 [core]
     pager = less
+[init]
+	defaultBranch = main
