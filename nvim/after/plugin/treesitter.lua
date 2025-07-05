@@ -15,6 +15,9 @@
 -- e.g. ~/.local/share/nvim/treesitter
 local parser_dir = vim.fn.stdpath("data") .. "/treesitter"
 
+-- NOTE: treesitter parser dir must be added to the runtime path.
+vim.opt.runtimepath:append(parser_dir)
+
 require("nvim-treesitter.configs").setup({
 	-- A list of parser names, or "all" (the listed parsers MUST always be installed)
 	ensure_installed = {
@@ -82,6 +85,3 @@ require("nvim-treesitter.configs").setup({
 		additional_vim_regex_highlighting = false,
 	},
 })
-
--- NOTE: treesitter parser dir must be added to the runtime path.
-vim.opt.runtimepath:append(parser_dir)
