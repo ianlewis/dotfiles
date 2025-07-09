@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v docker >/dev/null 2>&1; then
+    echo "Docker is not installed. Please install Docker first." >&2
+    exit 1
+fi
+
+runsc_path=$(docker system info --format '{{.Runtimes.runsc.Path}}')
+if [ -z "${runsc_path}" ]; then
+    echo "runsc runtime not found. Please ensure runsc is installed and configured." >&2
+    exit 1
+fi
+
+# Only trust runsc release-20250625.0
+runsc_checksum=2193da9a4a2a072bfb1fb314964528ac0da4bd56482552458da6ecb557aaa2f2e939fede3545933608ce2daf43897fff173f1c272375a331647a2bd27588f3be
+if ! echo "${runsc_checksum}  ${runsc_path}" | sha256sum; then
+    echo "runsc version mismatch." >&2
+    exit 1
+fi
+
+# renovate: datasource=docker depName=ghcr.io/ianlewis/claude-code versioning=loose
+CLAUDE_CODE_VERSION="2.7.1"
+CLAUDE_CODE_SHA="sha256:5647f25747cadb74977a70f1a6ef4faef384c5c58409c18557fb7beef16a4aca"
+CLAUDE_CODE_IMAGE="ghcr.io/ianlewis/claude-code:${CLAUDE_CODE_VERSION}@${CLAUDE_CODE_SHA}"
+
+XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+CLAUDE_DATA_HOME="${XDG_DATA_HOME}/claude-code-docker"
+
+mkdir -p "${CLAUDE_DATA_HOME}"
+
+# Ensure the .claude.json file exists, as we need to bind mount it into the
+# container.
+if [ ! -f "${CLAUDE_DATA_HOME}/claude.json" ]; then
+    echo "{}" >"${CLAUDE_DATA_HOME}/claude.json"
+fi
+
+docker run \
+    --rm \
+    --interactive \
+    --tty \
+    --name claude-code \
+    --runtime runsc \
+    --volume "$(pwd):/workspace" \
+    --volume "${CLAUDE_DATA_HOME}/claude.json:/claude.json" \
+    --volume "${CLAUDE_DATA_HOME}:/claude" \
+    "${CLAUDE_CODE_IMAGE}"
