@@ -5,8 +5,8 @@
     // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
     "config:best-practices",
 
-    // Update dependencies monthly
-    "schedule:monthly",
+    // Update dependencies weekly.
+    "schedule:weekly",
 
     // Add DCO sign-off
     ":gitSignOff",
