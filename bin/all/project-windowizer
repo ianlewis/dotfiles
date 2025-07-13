@@ -17,22 +17,26 @@
 
 set -euo pipefail
 
+# project-windowizer splits the current tmux window into two panes. The left
+# pane is sized to 80 columns. The right pane is size to fill the rest of the
+# window and runs the command provided as an argument. If no command is
+# provided, it defaults to running `nvim`.
+
 function _main() {
     if [[ -z $TMUX ]]; then
         echo "This script requires tmux to be running." >&2
         exit 1
     fi
 
-    tmux split-window -hd
-    tmux resize-pane -x 80
-    tmux send-keys -t 2 "nvim" Enter
+    # Calculate the nuw size by subtracting 80 columns from the current window
+    # width.
+    local new_window_size=$(($(tmux display-message -p "#{window_width}") - 80))
 
-    # Wait for the split to happen before clearing to allow the sbp prompt to
-    # display properly.
-    sleep 0.5
+    # Run the command in the right pane, defaulting to `nvim`.
+    tmux split-window -hd -l "${new_window_size}" "${*:-nvim}"
 
-    # clear the screen
+    # clear the left window
     clear
 }
 
-_main
+_main "$@"
