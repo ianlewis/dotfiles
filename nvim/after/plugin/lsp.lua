@@ -190,6 +190,10 @@ lspconfig.gopls.setup({
 })
 -- }}}
 
+-- harper {{{
+lspconfig.harper_ls.setup({})
+-- }}}
+
 -- lua_ls {{{
 lspconfig.lua_ls.setup({
 	format = {
