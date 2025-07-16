@@ -774,7 +774,7 @@ nodenv/package-lock.json: nodenv/package.json
 			--no-fund
 
 # Installs tools in the user node_modules.
-$(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.installed
+$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed
 	@set -euo pipefail; \
 		cd $(REPO_ROOT)/nodenv; \
 		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm clean-install; \
