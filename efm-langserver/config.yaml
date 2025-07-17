@@ -13,5 +13,5 @@
 # limitations under the License.
 
 version: 2
-# log-file: ${HOME}/.local/var/log/efm-langserver.log
-# log-level: 1
+log-file: ${XDG_STATE_HOME}/efm-langserver/efm-langserver.log
+log-level: 1

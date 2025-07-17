@@ -647,8 +647,8 @@ configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqu
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml
 	@set -euo pipefail; \
 		mkdir -p $$(dirname $@); \
-		mkdir -p $(HOME)/.local/var/log; \
-		sed 's|$${HOME}|'"$${HOME}"'|'< $< > $@
+		mkdir -p $(XDG_STATE_HOME)/efm-langserver; \
+		sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
 
 .PHONY: configure-efm-langserver
 configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Configure efm-langserver.
