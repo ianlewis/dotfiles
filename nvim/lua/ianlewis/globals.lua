@@ -20,8 +20,10 @@ do
 		"go",
 		"python",
 		"typescript",
+		"java",
 		"javascript",
-		"bash=sh",
+		"bash",
+		"sh",
 		"shell=sh",
 	}
 end
