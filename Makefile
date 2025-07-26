@@ -144,14 +144,17 @@ install-runtimes: install-go install-node install-python install-ruby ## Install
 package-lock.json: package.json $(NODENV_ROOT)/.installed
 	@set -euo pipefail; \
 		eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
-		npm install --package-lock-only --no-audit --no-fund
+		npm install \
+			--package-lock-only \
+			--no-audit \
+			--no-fund
 
 node_modules/.installed: package-lock.json
 	@set -euo pipefail; \
 		eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
 		npm clean-install; \
 		npm audit signatures; \
-		touch node_modules/.installed
+		touch $@
 
 .venv/bin/activate: $(PYENV_ROOT)/.installed
 	@set -euo pipefail; \
@@ -174,7 +177,7 @@ node_modules/.installed: package-lock.json
 $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 	@AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
 		--config .aqua.yaml \
-		install
+		install; \
 	@touch $@
 
 $(HOME)/opt:
@@ -243,6 +246,7 @@ json-format: node_modules/.installed ## Format JSON files.
 			exit 0; \
 		fi; \
 		./node_modules/.bin/prettier \
+			--no-error-on-unmatched-pattern \
 			--write \
 			$${files}
 
@@ -272,6 +276,7 @@ md-format: node_modules/.installed ## Format Markdown files.
 		fi; \
 		# NOTE: prettier uses .editorconfig for tab-width. \
 		./node_modules/.bin/prettier \
+			--no-error-on-unmatched-pattern \
 			--write \
 			$${files}
 
@@ -299,6 +304,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 			exit 0; \
 		fi; \
 		./node_modules/.bin/prettier \
+			--no-error-on-unmatched-pattern \
 			--write \
 			$${files}
 
@@ -306,7 +312,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint fixme markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
+lint: actionlint commitlint fixme markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -331,6 +337,30 @@ actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
 		else \
 			actionlint $${files}; \
 		fi
+
+.PHONY: commitlint
+commitlint: node_modules/.installed ## Run commitlint linter.
+	@set -euo pipefail;\
+		commitlint_from=$(COMMITLINT_FROM_REF); \
+		commitlint_to=$(COMMITLINT_TO_REF); \
+		if [ "$${commitlint_from}" == "" ]; then \
+			commitlint_from=$$(git remote show origin | grep 'HEAD branch' | awk '{print $$NF}'); \
+		fi; \
+		if [ "$${commitlint_to}" == "" ]; then \
+			# if head is on the commitlint_from branch, then we will lint the \
+			# last commit by default. \
+			current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+			if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
+				commintlint_from="HEAD~1"; \
+			fi; \
+			commitlint_to="HEAD"; \
+		fi; \
+		./node_modules/.bin/commitlint \
+			--config commitlint.config.mjs \
+			--from "$${commitlint_from}" \
+			--to "$${commitlint_to}" \
+			--verbose \
+			--strict
 
 .PHONY: fixme
 fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
@@ -369,10 +399,10 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
-				file=$$(echo "$$p" | jq -c -r '.fileName // empty'); \
-				line=$$(echo "$$p" | jq -c -r '.lineNumber // empty'); \
+				file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
+				line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
 				endline=$${line}; \
-				message=$$(echo "$$p" | jq -c -r '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
+				message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
 			done <<< "$$(./node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
@@ -397,10 +427,10 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
-				file=$$(echo "$$p" | jq -c -r '.fileName // empty'); \
-				line=$$(echo "$$p" | jq -c -r '.lineNumber // empty'); \
+				file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
+				line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
 				endline=$${line}; \
-				message=$$(echo "$$p" | jq -c -r '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
+				message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
 			done <<< "$$(./node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
@@ -522,15 +552,17 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
 			while IFS="" read -r p && [ -n "$$p" ]; do \
-				filePath=$$(echo "$$p" | jq -c -r '.filePath // empty'); \
+				filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
 				file=$$(realpath --relative-to="." "$${filePath}"); \
 				while IFS="" read -r m && [ -n "$$m" ]; do \
-					line=$$(echo "$$m" | jq -c -r '.loc.start.line'); \
-					endline=$$(echo "$$m" | jq -c -r '.loc.end.line'); \
-					message=$$(echo "$$m" | jq -c -r '.message'); \
+					line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
+					endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
+					col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
+					endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
+					message=$$(echo "$$m" | jq -cr '.message // empty'); \
 					exit_code=1; \
-					echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-				done <<<"$$(echo "$$p" | jq -c -r '.messages[] // empty')"; \
+					echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+				done <<<"$$(echo "$$p" | jq -cr '.messages[] // empty')"; \
 			done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
 			exit "$${exit_code}"; \
 		else \
@@ -869,7 +901,7 @@ $(RBENV_ROOT)/.installed:
 #####################################################################
 
 .PHONY: todos
-todos: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding TODOs.
+todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 	@set -euo pipefail;\
 		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
 		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
