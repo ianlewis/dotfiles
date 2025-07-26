@@ -177,7 +177,7 @@ node_modules/.installed: package-lock.json
 $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 	@AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
 		--config .aqua.yaml \
-		install; \
+		install
 	@touch $@
 
 $(HOME)/opt:
