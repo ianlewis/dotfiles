@@ -76,7 +76,7 @@ PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
 NODENV_INSTALL_VERSION ?= master
-NODENV_INSTALL_SHA ?= 55cfc1e615446fe4e482b00d96ecff29f80524fa
+NODENV_INSTALL_SHA ?= e9f84ae35a3c1646dc2eb007e33decd35ad53b54
 NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
 NODENV_BUILD_VERSION ?= v5.4.5
@@ -746,6 +746,9 @@ $(NODENV_ROOT)/.installed:
 	@set -euo pipefail; \
 		# Install the nodenv. \
 		git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
+		if [ "$(NODENV_INSTALL_VERSION)" == "master" ]; then \
+			git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"; \
+		fi; \
 		nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD); \
 		if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then \
 			echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"; \
