@@ -821,7 +821,7 @@ $(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT
 install-python: $(PYENV_ROOT)/versions/$(USER)/.installed ## Install the Python environment.
 
 # Installs the requirements in the Python virtualenv.
-$(PYENV_ROOT)/versions/$(USER)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
+$(PYENV_ROOT)/versions/$(USER)/.installed: requirements-dev.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
 	@set -euo pipefail; \
 		export PYENV_ROOT=$(PYENV_ROOT); \
 		$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes; \
