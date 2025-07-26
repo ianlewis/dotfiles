@@ -13,12 +13,13 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- GitHub Action Workflow {{{
 vim.filetype.add({
 	pattern = {
-		-- Add a special file type extension to indicate a GitHub Actions
+		-- Add a special filetype extension to indicate a GitHub Actions
 		-- workflow. This is used to run GitHub Actions linters.
 		[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
+		-- Allow requirements.txt files with extra labels like
+		-- "requirements-dev.txt"
+		["requirements.*.txt"] = "requirements",
 	},
 })
--- }}}
