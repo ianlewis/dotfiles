@@ -111,13 +111,13 @@ git add .
 ```
 
 Commit your code to your branch. For most repositories, messages should follow
-the [Conventional Commits] format but this isn't always required.
+the [Conventional Commits] format.
 
 Commits should include a [Developer Certificate of Origin] (DCO). This can be
-included automatically in commits using the `-s` flag.
+included automatically in commits using the `-s`/`--signoff` flag.
 
 ```shell
-git commit -sm "feat: My new feature"
+git commit --signoff -m "feat: My new feature"
 ```
 
 You can now push your changes to your fork.
@@ -210,10 +210,12 @@ number MAJOR.MINOR.PATCH, increment the:
 
 ### Conventional Commits
 
-PR titles should be in [Conventional Commits] format. Usually this is required
-by not always.
+PR titles and commit messages should be in [Conventional Commits] format.
+Usually this is required by not always.
 
-In general, the following prefixes are supported:
+The following prefixes are supported and are checked using the
+[`@commitlint/config-conventional`](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional)
+`commitlint` preset.
 
 1. `fix`: patches a bug
 2. `feat`: introduces a new feature
