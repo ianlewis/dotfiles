@@ -33,7 +33,7 @@ REPO_NAME = $(shell basename "$(REPO_ROOT)")
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.53.6
 AQUA_REPO ?= github.com/aquaproj/aqua
-AQUA_CHECKSUM.Linux.x86_64 = 2450bcf687c93e91ec892d49e5787b5b856796d38eb7283f52a351d82a8e31ee
+AQUA_CHECKSUM.Linux.x86_64 = 3e191bb2939ae55fffe770bfa54a6dfc25a3a05cce869670a03c4b0c53b62def
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
@@ -65,7 +65,7 @@ NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.5
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= f1c5371752c6dccecac612d5bac840203f72e5d8
+PYENV_INSTALL_SHA ?= df84c4265319adc775957eb16b714fcec526fcc7
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
 # the 'master' branch. We validate the SHA here but it may be updated from time
 # to time and cause validation errors.
@@ -80,7 +80,7 @@ NODENV_INSTALL_SHA ?= 55cfc1e615446fe4e482b00d96ecff29f80524fa
 NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
 NODENV_BUILD_VERSION ?= v5.4.7
-NODENV_BUILD_SHA ?= 73a5315be96e41d33a26b14281a557679300e50f
+NODENV_BUILD_SHA ?= 9632092695f18330ac2059d18b3283645f848adb
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
