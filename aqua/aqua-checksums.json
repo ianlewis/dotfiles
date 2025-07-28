@@ -616,6 +616,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-darwin_amd64.tar.gz",
+      "checksum": "202A353F790633455B3A04B7253C6292D8C70E069A5C8CF4766DE0D652F74BC5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-darwin_arm64.tar.gz",
+      "checksum": "9E4DFE01A67020A19861C881FD2FFBB8DD19B118B15E82E8FAE83C578CA61AB7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-linux_amd64.tar.gz",
+      "checksum": "EEB492AE609E437A648BEC0D0B09647D97C648BFD910B95987FFA64577A5A665",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-linux_arm64.tar.gz",
+      "checksum": "10FA2AA653FE031FBCB008A7737BA4C2D5F519BB8A2702726B13696D959A7891",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-windows_amd64.zip",
+      "checksum": "0965EEF0B767D4CB73F068B6F6E30EF21F6BA747CE978E0C9AB36105AD4E2854",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-windows_arm64.zip",
+      "checksum": "7A9A5733394EC3013AB2E13E9322BFDE8544ABC133AB74839325D46557767251",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/koalaman/shellcheck/v0.10.0/shellcheck-v0.10.0.darwin.aarch64.tar.xz",
       "checksum": "BBD2F14826328EEE7679DA7221F2BC3AFB011F6A928B848C80C321F6046DDF81",
       "algorithm": "sha256"
@@ -978,6 +1008,11 @@
     {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.393.0/registry.yaml",
       "checksum": "5BB278033A117F8B0CE465A93A2723C46FC3C3A899A0799C70E9EF895AB7B23D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.395.0/registry.yaml",
+      "checksum": "C028EDCCA61C3E896B63FF787B90056E755883DB44FB9EB42329D2CB1FB0EFEF",
       "algorithm": "sha256"
     }
   ]
