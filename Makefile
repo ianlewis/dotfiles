@@ -75,8 +75,8 @@ PYENV_VIRTUALENV_SHA ?= 4b3f5f8468c6c7e2b2e55ba8d1bd192f03489d3a
 PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
-NODENV_INSTALL_VERSION ?= master
-NODENV_INSTALL_SHA ?= e9f84ae35a3c1646dc2eb007e33decd35ad53b54
+NODENV_INSTALL_VERSION ?= v1.6.2
+NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
 NODENV_BUILD_VERSION ?= v5.4.7
