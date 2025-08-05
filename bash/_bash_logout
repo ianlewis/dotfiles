@@ -19,13 +19,13 @@
 
 function _bash_logout() {
     # When leaving the console, clear the screen to increase privacy
-    if [ "$SHLVL" = 1 ]; then
+    if [ "${SHLVL}" = 1 ]; then
         [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
     fi
 
     if [ -f "${HOME}/.bash_logout.local" ]; then
         # shellcheck source=/dev/null
-        . "${HOME}/.bash_logout.local"
+        source "${HOME}/.bash_logout.local"
     fi
 }
 
