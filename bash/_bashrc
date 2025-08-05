@@ -25,7 +25,7 @@ function _bashrc_main() {
 
     if [ -f "${HOME}/.bashrc_init_local" ]; then
         # shellcheck source=/dev/null
-        . "${HOME}/.bashrc_init_local"
+        source "${HOME}/.bashrc_init_local"
     fi
 
     # tmux/screen
@@ -36,9 +36,9 @@ function _bashrc_main() {
     if command -v tmx2 >/dev/null 2>&1; then
         tmux_cmd=tmx2
     fi
-    if shopt -q login_shell && [ -n "$SSH_CLIENT" ]; then
+    if shopt -q login_shell && [ -n "${SSH_CLIENT}" ]; then
         # Only run if running in a terminal.
-        if [[ (-t 1) && ($TERM != screen*) && -z $TMUX ]]; then
+        if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
             if command -v "${tmux_cmd}" >/dev/null 2>&1; then
                 # Attempt to discover a detached session
                 # Use the current username as the session name.
@@ -63,19 +63,19 @@ function _bashrc_main() {
         fi
     fi
 
+    # If not running interactively, don't do anything
+    [ -z "${PS1}" ] && return
+
     # Load system bashrc
     if [ -f /etc/bashrc ]; then
         # shellcheck source=/dev/null
-        . /etc/bashrc
+        source /etc/bashrc
     fi
     # for some debian systems
     if [ -f /etc/bash.bashrc ]; then
         # shellcheck source=/dev/null
-        . /etc/bash.bashrc
+        source /etc/bash.bashrc
     fi
-
-    # If not running interactively, don't do anything
-    [ -z "$PS1" ] && return
 
     EDITOR=vim
     if command -v nvim >/dev/null 2>&1; then
@@ -120,6 +120,7 @@ function _bashrc_main() {
             export VIRTUALENVWRAPPER_LOG_DIR="${WORKON_HOME}"
             export VIRTUALENVWRAPPER_HOOK_DIR="${WORKON_HOME}"
             export PIP_VIRTUALENV_BASE="${WORKON_HOME}"
+
             # shellcheck source=/dev/null
             source "$(command -v virtualenvwrapper.sh)"
         fi
@@ -168,20 +169,21 @@ function _bashrc_main() {
     # ssh-agent
     # Start an ssh-agent instance if an existing one isn't found.
     mkdir -p "${HOME}/.ssh"
-    if [[ -z $SSH_AUTH_SOCK ]] && [[ -f "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
+    if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -f "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
         # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
         if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
             touch "${HOME}/.ssh/authorized_keys"
         fi
         # shellcheck source=/dev/null
-        . "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh"
+        source "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh"
+
         ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
     fi
 
     # Alias definitions.
     if [ -f "${HOME}/.bash_aliases" ]; then
         # shellcheck source=/dev/null
-        . "${HOME}/.bash_aliases"
+        source "${HOME}/.bash_aliases"
     fi
 
     # Go
@@ -204,7 +206,7 @@ function _bashrc_main() {
     fi
 
     # Activate the 'ian' virtualenv if it exists.
-    if [ -f "${PYENV_ROOT}/versions/ian/bin/activate" ]; then
+    if [[ ${VIRTUAL_ENV##*/} != "ian" && -f "${PYENV_ROOT}/versions/ian/bin/activate" ]]; then
         pyenv activate ian
     fi
 
@@ -228,22 +230,22 @@ function _bashrc_main() {
     fi
 
     # The next line updates PATH for the Google Cloud SDK.
-    if [ -f "$HOME/opt/google-cloud-sdk/path.bash.inc" ]; then
+    if [ -f "${HOME}/opt/google-cloud-sdk/path.bash.inc" ]; then
         # shellcheck source=/dev/null
-        source "$HOME"'/opt/google-cloud-sdk/path.bash.inc'
+        source "${HOME}/opt/google-cloud-sdk/path.bash.inc"
     fi
 
     # The next line enables shell command completion for gcloud.
-    if [ -f "$HOME/opt/google-cloud-sdk/completion.bash.inc" ]; then
+    if [ -f "${HOME}/opt/google-cloud-sdk/completion.bash.inc" ]; then
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
         # shellcheck source=/dev/null
-        source "$HOME"'/opt/google-cloud-sdk/completion.bash.inc'
+        source "${HOME}/opt/google-cloud-sdk/completion.bash.inc"
     fi
 
     # Rust
-    if [ -f "$HOME/.cargo/env" ]; then
+    if [ -f "${HOME}/.cargo/env" ]; then
         # shellcheck source=/dev/null
-        . "$HOME/.cargo/env"
+        source "${HOME}/.cargo/env"
     fi
 
     # The .local/bin is used for some local installs such as applications
@@ -260,7 +262,7 @@ function _bashrc_main() {
     # Local settings.
     if [ -f "${HOME}/.bashrc.local" ]; then
         # shellcheck source=/dev/null
-        . "${HOME}/.bashrc.local"
+        source "${HOME}/.bashrc.local"
     fi
 
     export PATH
@@ -270,11 +272,11 @@ function _bashrc_main() {
     if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
         # The system wide config should load our local config.
         # shellcheck source=/dev/null
-        . /etc/bash_completion
+        source /etc/bash_completion
     elif [ -f "${HOME}/.bash_completion" ]; then
         # The system wide config is not available so just load our completion
         # shellcheck source=/dev/null
-        . "${HOME}/.bash_completion"
+        source "${HOME}/.bash_completion"
     fi
 
     # Print the message if reboot is required.

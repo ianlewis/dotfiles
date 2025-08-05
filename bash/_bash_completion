@@ -49,7 +49,7 @@ function _bash_completion() {
 
     if [ -f ~/.bash_completion.local ]; then
         # shellcheck source=/dev/null
-        . ~/.bash_completion.local
+        source ~/.bash_completion.local
     fi
 }
 
