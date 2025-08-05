@@ -12,7 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-SHELL := /usr/bin/env bash
+# Set the initial shell so we can determine extra options.
+SHELL := /usr/bin/env bash -ueo pipefail
+DEBUG_LOGGING ?= $(shell if [[ "${GITHUB_ACTIONS}" == "true" ]] && [[ -n "${RUNNER_DEBUG}" || "${ACTIONS_RUNNER_DEBUG}" == "true" || "${ACTIONS_STEP_DEBUG}" == "true" ]]; then echo "true"; else echo ""; fi)
+BASH_OPTIONS ?= $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
+
+# Add extra options for debugging.
+SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
 
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
@@ -103,29 +109,31 @@ RBENV_BUILD_SHA ?= 1195268593b80a0a1bcd518e11efb4b4de115984
 
 .PHONY: help
 help: ## Print all Makefile targets (this message).
-	@echo "$(REPO_NAME) Makefile"
-	@echo "Usage: make [COMMAND]"
-	@echo ""
-	@set -euo pipefail; \
-		normal=""; \
-		cyan=""; \
+	@# bash \
+	echo "$(REPO_NAME) Makefile"; \
+	echo "Usage: make [COMMAND]"; \
+	echo ""; \
+	normal=""; \
+	cyan=""; \
+	if command -v tput >/dev/null 3>&1; then \
 		if [ -t 1 ]; then \
 			normal=$$(tput sgr0); \
 			cyan=$$(tput setaf 6); \
 		fi; \
-		grep --no-filename -E '^([/a-z.A-Z0-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
-			awk \
-				--assign=normal="$${normal}" \
-				--assign=cyan="$${cyan}" \
-				'BEGIN {FS = "(:.*?|)## ?"}; { \
-					if (length($$1) > 0) { \
-						printf("  " cyan "%-25s" normal " %s\n", $$1, $$2); \
-					} else { \
-						if (length($$2) > 0) { \
-							printf("%s\n", $$2); \
-						} \
+	fi; \
+	grep --no-filename -E '^([/a-z.A-Z0-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
+		awk \
+			--assign=normal="$${normal}" \
+			--assign=cyan="$${cyan}" \
+			'BEGIN {FS = "(:.*?|)## ?"}; { \
+				if (length($$1) > 0) { \
+					printf("  " cyan "%-25s" normal " %s\n", $$1, $$2); \
+				} else { \
+					if (length($$2) > 0) { \
+						printf("%s\n", $$2); \
 					} \
-				}'
+				} \
+			}'
 
 .PHONY: all
 all: install-all configure-all ## Install and configure everything.
@@ -141,44 +149,58 @@ install-tools: install-bin install-aqua ## Install all CLI tools.
 
 install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
 
-package-lock.json: package.json $(NODENV_ROOT)/.installed
-	@set -euo pipefail; \
-		eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
-		npm install \
-			--package-lock-only \
-			--no-audit \
-			--no-fund
+package-lock.json: package.json
+	@# bash \
+	loglevel="silent"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="verbose"; \
+	fi; \
+	eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
+	npm --loglevel="$${loglevel}" install \
+		--package-lock-only \
+		--no-audit \
+		--no-fund
 
 node_modules/.installed: package-lock.json
-	@set -euo pipefail; \
-		eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
-		npm clean-install; \
-		npm audit signatures; \
-		touch $@
+	@# bash \
+	loglevel="silent"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="verbose"; \
+	fi; \
+	eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
+	npm --loglevel="$${loglevel}" clean-install; \
+	npm --loglevel="$${loglevel}" audit signatures; \
+	touch $@
 
-.venv/bin/activate: $(PYENV_ROOT)/.installed
-	@set -euo pipefail; \
-		eval "$(PYENV_ROOT=$(PYENV_ROOT) $(PYENV_ROOT)/bin/pyenv init - bash)"; \
-		python -m venv .venv
+.venv/bin/activate:
+	@# bash \
+	eval "$(PYENV_ROOT=$(PYENV_ROOT) $(PYENV_ROOT)/bin/pyenv init - bash)"; \
+	python -m venv .venv
 
 .venv/.installed: requirements-dev.txt .venv/bin/activate
-	@set -euo pipefail; \
-		$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
-		touch $@
+	@# bash \
+	./.venv/bin/pip install -r $< --require-hashes; \
+	touch $@
 
 .bin/aqua-$(AQUA_VERSION)/aqua:
-	@set -euo pipefail; \
-		mkdir -p .bin/aqua-$(AQUA_VERSION); \
-		tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-		curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-		echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-		tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
+	@# bash \
+	mkdir -p .bin/aqua-$(AQUA_VERSION); \
+	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
+	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
 
 $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
-	@AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
+		--log-level "$${loglevel}" \
 		--config .aqua.yaml \
-		install
-	@touch $@
+		install; \
+	touch $@
 
 $(HOME)/opt:
 	@mkdir -p $(HOME)/opt
@@ -188,44 +210,42 @@ $(HOME)/opt:
 
 .PHONY: license-headers
 license-headers: ## Update license headers.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.c' \
-				'*.cpp' \
-				'*.go' \
-				'*.h' \
-				'*.hpp' \
-				'*.ts' \
-				'*.js' \
-				'*.lua' \
-				'*.py' \
-				'*.rb' \
-				'*.rs' \
-				'*.toml' \
-				'*.vim' \
-				'*.yaml' \
-				'*.yml' \
-				'Makefile' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		name=$$(git config user.name); \
-		if [ "$${name}" == "" ]; then \
-			>&2 echo "git user.name is required."; \
-			>&2 echo "Set it up using:"; \
-			>&2 echo "git config user.name \"John Doe\""; \
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.c' \
+			'*.cpp' \
+			'*.go' \
+			'*.h' \
+			'*.hpp' \
+			'*.js' \
+			'*.lua' \
+			'*.py' \
+			'*.rb' \
+			'*.rs' \
+			'*.toml' \
+			'*.yaml' \
+			'*.yml' \
+			'Makefile' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	name=$$(git config user.name); \
+	if [ "$${name}" == "" ]; then \
+		>&2 echo "git user.name is required."; \
+		>&2 echo "Set it up using:"; \
+		>&2 echo "git config user.name \"John Doe\""; \
+	fi; \
+	for filename in $${files}; do \
+		if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
+			./third_party/mbrukman/autogen/autogen.sh \
+				--in-place \
+				--no-code \
+				--no-tlc \
+				--copyright "$${name}" \
+				--license apache \
+				"$${filename}"; \
 		fi; \
-		for filename in $${files}; do \
-			if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
-				./third_party/mbrukman/autogen/autogen.sh \
-					--in-place \
-					--no-code \
-					--no-tlc \
-					--copyright "$${name}" \
-					--license apache \
-					"$${filename}"; \
-			fi; \
-		done
+	done
 
 ## Formatting
 #####################################################################
@@ -235,78 +255,92 @@ format: json-format lua-format md-format shfmt yaml-format ## Format all files
 
 .PHONY: json-format
 json-format: node_modules/.installed ## Format JSON files.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.json' \
-				'*.json5' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		./node_modules/.bin/prettier \
-			--no-error-on-unmatched-pattern \
-			--write \
-			$${files}
+	@# bash \
+	loglevel="log"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.json' \
+			'*.json5' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	./node_modules/.bin/prettier \
+		--log-level "$${loglevel}" \
+		--no-error-on-unmatched-pattern \
+		--write \
+		$${files}
 
 .PHONY: lua-format
 lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.lua' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		stylua --config-path stylua.toml $${files}
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.lua' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	stylua --config-path stylua.toml $${files}
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.
-	@#NOTE: tab-width of 4 is recommended for Markdown files.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.md' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		# NOTE: prettier uses .editorconfig for tab-width. \
-		./node_modules/.bin/prettier \
-			--no-error-on-unmatched-pattern \
-			--write \
-			$${files}
+	@# bash \
+	loglevel="log"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.md' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	# NOTE: prettier uses .editorconfig for tab-width. \
+	./node_modules/.bin/prettier \
+		--log-level "$${loglevel}" \
+		--no-error-on-unmatched-pattern \
+		--write \
+		$${files}
 
 .PHONY: shfmt
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	@# NOTE: We need to ignore config files used in tests.
-	@set -euo pipefail;\
-		files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		shfmt --write --simplify --indent 4 $${files}
+	@# bash \
+	files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	shfmt --write --simplify --indent 4 $${files}
 
 .PHONY: yaml-format
 yaml-format: node_modules/.installed ## Format YAML files.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.yml' \
-				'*.yaml' \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		./node_modules/.bin/prettier \
-			--no-error-on-unmatched-pattern \
-			--write \
-			$${files}
+	@# bash \
+	loglevel="log"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.yml' \
+			'*.yaml' \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	./node_modules/.bin/prettier \
+		--log-level "$${loglevel}" \
+		--no-error-on-unmatched-pattern \
+		--write \
+		$${files}
 
 ## Linting
 #####################################################################
@@ -316,322 +350,325 @@ lint: actionlint commitlint fixme markdownlint renovate-config-validator selene 
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
-	@# NOTE: We need to ignore config files used in tests.
-	@set -euo pipefail;\
-		files=$$( \
-			git ls-files --deduplicate \
-				'.github/workflows/*.yml' \
-				'.github/workflows/*.yaml' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			actionlint \
-				-format '{{range $$err := .}}::error file={{$$err.Filepath}},line={{$$err.Line}},col={{$$err.Column}}::{{$$err.Message}}%0A```%0A{{replace $$err.Snippet "\\n" "%0A"}}%0A```\n{{end}}' \
-				-ignore 'SC2016:' \
-				$${files}; \
-		else \
-			actionlint $${files}; \
-		fi
+	@# bash \
+	# NOTE: We need to ignore config files used in tests. \
+	files=$$( \
+		git ls-files --deduplicate \
+			'.github/workflows/*.yml' \
+			'.github/workflows/*.yaml' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		actionlint \
+			-format '{{range $$err := .}}::error file={{$$err.Filepath}},line={{$$err.Line}},col={{$$err.Column}}::{{$$err.Message}}%0A```%0A{{replace $$err.Snippet "\\n" "%0A"}}%0A```\n{{end}}' \
+			-ignore 'SC2016:' \
+			$${files}; \
+	else \
+		actionlint $${files}; \
+	fi
 
 .PHONY: commitlint
 commitlint: node_modules/.installed ## Run commitlint linter.
-	@set -euo pipefail;\
-		commitlint_from=$(COMMITLINT_FROM_REF); \
-		commitlint_to=$(COMMITLINT_TO_REF); \
-		if [ "$${commitlint_from}" == "" ]; then \
-			commitlint_from=$$(git remote show origin | grep 'HEAD branch' | awk '{print $$NF}'); \
+	@# bash \
+	commitlint_from=$(COMMITLINT_FROM_REF); \
+	commitlint_to=$(COMMITLINT_TO_REF); \
+	if [ "$${commitlint_from}" == "" ]; then \
+		commitlint_from=$$(git remote show origin | grep 'HEAD branch' | awk '{print $$NF}'); \
+	fi; \
+	if [ "$${commitlint_to}" == "" ]; then \
+		# if head is on the commitlint_from branch, then we will lint the \
+		# last commit by default. \
+		current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+		if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
+			commintlint_from="HEAD~1"; \
 		fi; \
-		if [ "$${commitlint_to}" == "" ]; then \
-			# if head is on the commitlint_from branch, then we will lint the \
-			# last commit by default. \
-			current_branch=$$(git rev-parse --abbrev-ref HEAD); \
-			if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
-				commintlint_from="HEAD~1"; \
-			fi; \
-			commitlint_to="HEAD"; \
-		fi; \
-		./node_modules/.bin/commitlint \
-			--config commitlint.config.mjs \
-			--from "$${commitlint_from}" \
-			--to "$${commitlint_to}" \
-			--verbose \
-			--strict
+		commitlint_to="HEAD"; \
+	fi; \
+	./node_modules/.bin/commitlint \
+		--config commitlint.config.mjs \
+		--from "$${commitlint_from}" \
+		--to "$${commitlint_to}" \
+		--verbose \
+		--strict
 
 .PHONY: fixme
 fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
-	@set -euo pipefail;\
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		output="default"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			output="github"; \
-		fi; \
-		# NOTE: todos does not use `git ls-files` because many files might be \
-		# 		unsupported and generate an error if passed directly on the \
-		# 		command line. \
-		todos \
-			--output "$${output}" \
-			--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
+	@# bash \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	output="default"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		output="github"; \
+	fi; \
+	# NOTE: todos does not use `git ls-files` because many files might be \
+	# 		unsupported and generate an error if passed directly on the \
+	# 		command line. \
+	todos \
+		--output "$${output}" \
+		--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
+
 
 .PHONY: markdownlint
 markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the markdownlint linter.
-	@# NOTE: Issue and PR templates are handled specially so we can disable
-	@# MD041/first-line-heading/first-line-h1 without adding an ugly html comment
-	@# at the top of the file.
-	@set -euo pipefail;\
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.md' \
-				':!:.github/pull_request_template.md' \
-				':!:.github/ISSUE_TEMPLATE/*.md' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
+	@# bash \
+	# NOTE: Issue and PR templates are handled specially so we can disable \
+	# MD041/first-line-heading/first-line-h1 without adding an ugly html comment \
+	# at the top of the file. \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.md' \
+			':!:.github/pull_request_template.md' \
+			':!:.github/ISSUE_TEMPLATE/*.md' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		exit_code=0; \
+		while IFS="" read -r p && [ -n "$$p" ]; do \
+			file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
+			line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
+			endline=$${line}; \
+			message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
+			exit_code=1; \
+			echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
+		done <<< "$$(./node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
+		if [ "$${exit_code}" != "0" ]; then \
+			exit "$${exit_code}"; \
 		fi; \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			exit_code=0; \
-			while IFS="" read -r p && [ -n "$$p" ]; do \
-				file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
-				line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
-				endline=$${line}; \
-				message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
-				exit_code=1; \
-				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-			done <<< "$$(./node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
-			if [ "$${exit_code}" != "0" ]; then \
-				exit "$${exit_code}"; \
-			fi; \
-		else \
-			./node_modules/.bin/markdownlint \
-				--config .markdownlint.yaml \
-				--dot \
-				$${files}; \
+	else \
+		./node_modules/.bin/markdownlint \
+			--config .markdownlint.yaml \
+			--dot \
+			$${files}; \
+	fi; \
+	files=$$( \
+		git ls-files --deduplicate \
+			'.github/pull_request_template.md' \
+			'.github/ISSUE_TEMPLATE/*.md' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		exit_code=0; \
+		while IFS="" read -r p && [ -n "$$p" ]; do \
+			file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
+			line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
+			endline=$${line}; \
+			message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
+			exit_code=1; \
+			echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
+		done <<< "$$(./node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
+		if [ "$${exit_code}" != "0" ]; then \
+			exit "$${exit_code}"; \
 		fi; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'.github/pull_request_template.md' \
-				'.github/ISSUE_TEMPLATE/*.md' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			exit_code=0; \
-			while IFS="" read -r p && [ -n "$$p" ]; do \
-				file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
-				line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
-				endline=$${line}; \
-				message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
-				exit_code=1; \
-				echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-			done <<< "$$(./node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
-			if [ "$${exit_code}" != "0" ]; then \
-				exit "$${exit_code}"; \
-			fi; \
-		else \
-			./node_modules/.bin/markdownlint \
-				--config .github/template.markdownlint.yaml \
-				--dot \
-				$${files}; \
-		fi
+	else \
+		./node_modules/.bin/markdownlint \
+			--config .github/template.markdownlint.yaml \
+			--dot \
+			$${files}; \
+	fi
 
 .PHONY: renovate-config-validator
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
-	@./node_modules/.bin/renovate-config-validator --strict
+	@# bash \
+	./node_modules/.bin/renovate-config-validator --strict
 
 .PHONY: selene
 selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.lua' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			exit_code=0; \
-			while IFS="" read -r p && [ -n "$$p" ]; do \
-				type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"'); \
-				if [ "$${type}" != "Diagnostic" ]; then \
-					continue; \
-				fi; \
-				level=$$(echo "$$p" | jq -c '.severity // empty' | tr -d '"'); \
-				file=$$(echo "$$p" | jq -c '.primary_label.filename // empty' | tr -d '"'); \
-				line=$$(echo "$$p" | jq -c '.primary_label.span.start_line // empty' | tr -d '"'); \
-				endline=$$(echo "$$p" | jq -c '.primary_label.span.end_line // empty' | tr -d '"'); \
-				col=$$(echo "$$p" | jq -c '.primary_label.span.start_column // empty' | tr -d '"'); \
-				endcol=$$(echo "$$p" | jq -c '.primary_label.span.end_column // empty' | tr -d '"'); \
-				message=$$(echo "$$p" | jq -c '((.code // empty) + " : " + (.message // empty))' | tr -d '"'); \
-				exit_code=1; \
-				case $$level in \
-				"Warning") \
-					echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-					;; \
-				"Error") \
-					echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-					;; \
-				esac; \
-			done <<< "$$(selene --config selene.toml --display-style Json2 $${files})"; \
-			if [ "$${exit_code}" != "0" ]; then \
-				exit "$${exit_code}"; \
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.lua' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		exit_code=0; \
+		while IFS="" read -r p && [ -n "$$p" ]; do \
+			type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"'); \
+			if [ "$${type}" != "Diagnostic" ]; then \
+				continue; \
 			fi; \
-		else \
-			selene \
-				--config selene.toml \
-				--no-summary \
-				$${files}; \
-		fi
+			level=$$(echo "$$p" | jq -c '.severity // empty' | tr -d '"'); \
+			file=$$(echo "$$p" | jq -c '.primary_label.filename // empty' | tr -d '"'); \
+			line=$$(echo "$$p" | jq -c '.primary_label.span.start_line // empty' | tr -d '"'); \
+			endline=$$(echo "$$p" | jq -c '.primary_label.span.end_line // empty' | tr -d '"'); \
+			col=$$(echo "$$p" | jq -c '.primary_label.span.start_column // empty' | tr -d '"'); \
+			endcol=$$(echo "$$p" | jq -c '.primary_label.span.end_column // empty' | tr -d '"'); \
+			message=$$(echo "$$p" | jq -c '((.code // empty) + " : " + (.message // empty))' | tr -d '"'); \
+			exit_code=1; \
+			case $$level in \
+			"Warning") \
+				echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+				;; \
+			"Error") \
+				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+				;; \
+			esac; \
+		done <<< "$$(selene --config selene.toml --display-style Json2 $${files})"; \
+		if [ "$${exit_code}" != "0" ]; then \
+			exit "$${exit_code}"; \
+		fi; \
+	else \
+		selene \
+			--config selene.toml \
+			--no-summary \
+			$${files}; \
+	fi
 
 SHELLCHECK_ARGS = --severity=style --external-sources
 
 .PHONY: shellcheck
 shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
-	@set -e;\
-		files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			exit_code=0; \
-			while IFS="" read -r p && [ -n "$$p" ]; do \
-				level=$$(echo "$$p" | jq -c '.level // empty' | tr -d '"'); \
-				file=$$(echo "$$p" | jq -c '.file // empty' | tr -d '"'); \
-				line=$$(echo "$$p" | jq -c '.line // empty' | tr -d '"'); \
-				endline=$$(echo "$$p" | jq -c '.endLine // empty' | tr -d '"'); \
-				col=$$(echo "$$p" | jq -c '.column // empty' | tr -d '"'); \
-				endcol=$$(echo "$$p" | jq -c '.endColumn // empty' | tr -d '"'); \
-				message=$$(echo "$$p" | jq -c '.message // empty' | tr -d '"'); \
-				exit_code=1; \
-				case $$level in \
-				"info") \
-					echo "::notice file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-					;; \
-				"warning") \
-					echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-					;; \
-				"error") \
-					echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-					;; \
-				esac; \
-			done <<< "$$(echo -n "$$files" | xargs shellcheck -f json $(SHELLCHECK_ARGS) | jq -c '.[]')"; \
-			exit "$${exit_code}"; \
-		else \
-			echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS); \
-		fi
+	@# bash \
+	files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		exit_code=0; \
+		while IFS="" read -r p && [ -n "$$p" ]; do \
+			level=$$(echo "$$p" | jq -c '.level // empty' | tr -d '"'); \
+			file=$$(echo "$$p" | jq -c '.file // empty' | tr -d '"'); \
+			line=$$(echo "$$p" | jq -c '.line // empty' | tr -d '"'); \
+			endline=$$(echo "$$p" | jq -c '.endLine // empty' | tr -d '"'); \
+			col=$$(echo "$$p" | jq -c '.column // empty' | tr -d '"'); \
+			endcol=$$(echo "$$p" | jq -c '.endColumn // empty' | tr -d '"'); \
+			message=$$(echo "$$p" | jq -c '.message // empty' | tr -d '"'); \
+			exit_code=1; \
+			case $$level in \
+			"info") \
+				echo "::notice file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+				;; \
+			"warning") \
+				echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+				;; \
+			"error") \
+				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+				;; \
+			esac; \
+		done <<< "$$(echo -n "$$files" | xargs shellcheck -f json $(SHELLCHECK_ARGS) | jq -c '.[]')"; \
+		exit "$${exit_code}"; \
+	else \
+		echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS); \
+	fi
 
 .PHONY: textlint
 textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textlint linter.
-	@set -euo pipefail; \
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.md' \
-				'*.txt' \
-				':!:requirements*.txt' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			exit_code=0; \
-			while IFS="" read -r p && [ -n "$$p" ]; do \
-				filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
-				file=$$(realpath --relative-to="." "$${filePath}"); \
-				while IFS="" read -r m && [ -n "$$m" ]; do \
-					line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
-					endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
-					col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
-					endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
-					message=$$(echo "$$m" | jq -cr '.message // empty'); \
-					exit_code=1; \
-					echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-				done <<<"$$(echo "$$p" | jq -cr '.messages[] // empty')"; \
-			done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
-			exit "$${exit_code}"; \
-		else \
-			./node_modules/.bin/textlint \
-				--config .textlintrc.yaml \
-				$${files}; \
-		fi
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.md' \
+			'*.txt' \
+			':!:requirements*.txt' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		exit_code=0; \
+		while IFS="" read -r p && [ -n "$$p" ]; do \
+			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
+			file=$$(realpath --relative-to="." "$${filePath}"); \
+			while IFS="" read -r m && [ -n "$$m" ]; do \
+				line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
+				endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
+				col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
+				endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
+				message=$$(echo "$$m" | jq -cr '.message // empty'); \
+				exit_code=1; \
+				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
+			done <<<"$$(echo "$$p" | jq -cr '.messages[] // empty')"; \
+		done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
+		exit "$${exit_code}"; \
+	else \
+		./node_modules/.bin/textlint \
+			--config .textlintrc.yaml \
+			$${files}; \
+	fi
 
 .PHONY: yamllint
 yamllint: .venv/.installed ## Runs the yamllint linter.
-	@set -euo pipefail;\
-		files=$$( \
-			git ls-files --deduplicate \
-				'*.yml' \
-				'*.yaml' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		format="standard"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			format="github"; \
-		fi; \
-		.venv/bin/yamllint \
-			--strict \
-			--config-file .yamllint.yaml \
-			--format "$${format}" \
-			$${files}
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.yml' \
+			'*.yaml' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	format="standard"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		format="github"; \
+	fi; \
+	.venv/bin/yamllint \
+		--strict \
+		--config-file .yamllint.yaml \
+		--format "$${format}" \
+		$${files}
 
 .PHONY: zizmor
 zizmor: .venv/.installed ## Runs the zizmor linter.
-	@# NOTE: On GitHub actions this outputs SARIF format to zizmor.sarif.json
-	@#       in addition to outputting errors to the terminal.
-	@set -euo pipefail;\
-		files=$$( \
-			git ls-files --deduplicate \
-				'.github/workflows/*.yml' \
-				'.github/workflows/*.yaml' \
-				| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-		); \
-		if [ "$${files}" == "" ]; then \
-			exit 0; \
-		fi; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			.venv/bin/zizmor \
-				--config .zizmor.yml \
-				--quiet \
-				--pedantic \
-				--format sarif \
-				$${files} > zizmor.sarif.json; \
-		fi; \
+	@# bash \
+	# NOTE: On GitHub actions this outputs SARIF format to zizmor.sarif.json \
+	#       in addition to outputting errors to the terminal. \
+	files=$$( \
+		git ls-files --deduplicate \
+			'.github/workflows/*.yml' \
+			'.github/workflows/*.yaml' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		.venv/bin/zizmor \
 			--config .zizmor.yml \
 			--quiet \
 			--pedantic \
-			--format plain \
-			$${files}
+			--format sarif \
+			$${files} > zizmor.sarif.json; \
+	fi; \
+	.venv/bin/zizmor \
+		--config .zizmor.yml \
+		--quiet \
+		--pedantic \
+		--format plain \
+		$${files}
 
 ## Base Tools
 #####################################################################
 
 $(XDG_BIN_HOME):
-	@set -euo pipefail; \
-		mkdir -p $(XDG_BIN_HOME); \
-		ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME)/
+	@# bash \
+	mkdir -p $(XDG_BIN_HOME); \
+	ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME)/
 
 $(XDG_BIN_HOME)/%: $(XDG_BIN_HOME) bin/all/%
-	@ln -sf "$(REPO_ROOT)"/bin/all/* $(XDG_BIN_HOME)/
+	@# bash \
+	ln -sf "$(REPO_ROOT)"/bin/all/* $(XDG_BIN_HOME)/
 
 BIN_SRCS := $(wildcard bin/all/*)
 BIN_OBJS := $(subst bin/all,$(XDG_BIN_HOME),$(BIN_SRCS))
@@ -641,34 +678,36 @@ install-bin: $(BIN_OBJS) ## Install binary scripts.
 
 .PHONY: configure-bash
 configure-bash: ## Configure bash.
-	@set -euo pipefail; \
-		rm -f \
-			$(HOME)/.inputrc \
-			$(HOME)/.profile \
-			$(HOME)/.bash_profile \
-			$(HOME)/.bashrc \
-			$(HOME)/.bash_aliases \
-			$(HOME)/.bash_completion \
-			$(HOME)/.bash_logout \
-			$(HOME)/.dockerfunc \
-			$(HOME)/.local/share/bash/lib \
-			$(XDG_CONFIG_HOME)/sbp; \
-		mkdir -p $(HOME)/.local/share/bash; \
-		ln -sf $(REPO_ROOT)/bash/lib $(HOME)/.local/share/bash/lib; \
-		ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
-		ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile; \
-		ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile; \
-		ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc; \
-		ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
-		ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
-		ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
-		ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
+	@# bash \
+	rm -f \
+		$(HOME)/.inputrc \
+		$(HOME)/.profile \
+		$(HOME)/.bash_profile \
+		$(HOME)/.bashrc \
+		$(HOME)/.bash_aliases \
+		$(HOME)/.bash_completion \
+		$(HOME)/.bash_logout \
+		$(HOME)/.dockerfunc \
+		$(HOME)/.local/share/bash/lib \
+		$(XDG_CONFIG_HOME)/sbp; \
+	mkdir -p $(HOME)/.local/share/bash; \
+	ln -sf $(REPO_ROOT)/bash/lib $(HOME)/.local/share/bash/lib; \
+	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
+	ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile; \
+	ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile; \
+	ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc; \
+	ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
+	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
+	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
+	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
 
 $(HOME)/.aqua.yaml:
-	@ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
+	@# bash \
+	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
 
 aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
-	@.bin/aqua-$(AQUA_VERSION)/aqua --config aqua/aqua.yaml update-checksum
+	@# bash \
+	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua --config aqua/aqua.yaml update-checksum
 
 $(HOME)/.aqua-checksums.json:
 	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
@@ -677,38 +716,38 @@ $(HOME)/.aqua-checksums.json:
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
 
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml
-	@set -euo pipefail; \
-		mkdir -p $$(dirname $@); \
-		mkdir -p $(XDG_STATE_HOME)/efm-langserver; \
-		sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
+	@# bash \
+	mkdir -p $$(dirname $@); \
+	mkdir -p $(XDG_STATE_HOME)/efm-langserver; \
+	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
 
 .PHONY: configure-efm-langserver
 configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Configure efm-langserver.
 
 .PHONY: configure-nix
 configure-nix: ## Configure nix.
-	@set -euo pipefail; \
-		mkdir -p $(XDG_CONFIG_HOME)/nix; \
-		ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
+	@# bash \
+	mkdir -p $(XDG_CONFIG_HOME)/nix; \
+	ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
 
 .PHONY: configure-nvim
 configure-nvim: ## Configure neovim.
-	@set -euo pipefail; \
-		rm -rf $(XDG_CONFIG_HOME)/nvim; \
-		ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
+	@# bash \
+	rm -rf $(XDG_CONFIG_HOME)/nvim; \
+	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
 
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
-	@set -euo pipefail; \
-		rm -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
-		ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
-		ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
+	@# bash \
+	rm -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
+	ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
+	ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
 
 .PHONY: configure-git
 configure-git: ## Configure git.
-	@set -euo pipefail; \
-		rm -f $(HOME)/.gitconfig; \
-		ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
+	@# bash \
+	rm -f $(HOME)/.gitconfig; \
+	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
 
 ## Install Tools
 #####################################################################
@@ -717,208 +756,210 @@ configure-git: ## Configure git.
 install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
 
 $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier: $(HOME)/opt
-	@set -euo pipefail; \
-		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"; \
-		echo "$(SLSA_VERIFIER_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-	 	mkdir -p $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION); \
-		mv "$${tempfile}" $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier; \
-		chmod +x $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
+	@# bash \
+	tempfile=$$(mktemp --suffix=".tar.gz"); \
+	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"; \
+	echo "$(SLSA_VERIFIER_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	mkdir -p $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION); \
+	mv "$${tempfile}" $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier; \
+	chmod +x $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
 
 $(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME) $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
-	@set -euo pipefail; \
-		ln -sf $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier $@; \
-		touch $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
+	@# bash \
+	ln -sf $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier $@; \
+	touch $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
 
 .PHONY: install-aqua
 install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
-	@$(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
+	@# bash \
+	$(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
 
 $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(XDG_BIN_HOME)/slsa-verifier
-	@set -euo pipefail; \
-		tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-		tempjsonl=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).intoto.jsonl"); \
-		curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-		curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
-		$(XDG_BIN_HOME)/slsa-verifier verify-artifact \
-			"$${tempfile}" \
-			--provenance-path "$${tempjsonl}" \
-			--source-uri "$(AQUA_REPO)" \
-			--source-tag "$(AQUA_VERSION)"; \
-		mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
-		tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
-		touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
+	@# bash \
+	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+	tempjsonl=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).intoto.jsonl"); \
+	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
+	curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
+	$(XDG_BIN_HOME)/slsa-verifier verify-artifact \
+		"$${tempfile}" \
+		--provenance-path "$${tempjsonl}" \
+		--source-uri "$(AQUA_REPO)" \
+		--source-tag "$(AQUA_VERSION)"; \
+	mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
+	tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
+	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
 $(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
-	@set -euo pipefail; \
-		touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
-		ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
+	@# bash \
+	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
+	ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
 
 ## Language Runtimes
 #####################################################################
 
 .PHONY: install-go
 install-go: $(HOME)/opt ## Install the Go runtime.
-	@set -euo pipefail; \
-		tempfile=$$(mktemp --suffix=".tar.gz"); \
-		curl -sSLo "$${tempfile}" "$(GO_URL)"; \
-		echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-		cd $(HOME)/opt; \
-		rm -rf go; \
-		tar xf "$${tempfile}"; \
-		mv go go-$(GO_VERSION); \
-		ln -s go-$(GO_VERSION) go; \
-		$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto
+	@# bash \
+	tempfile=$$(mktemp --suffix=".tar.gz"); \
+	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
+	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	cd $(HOME)/opt; \
+	rm -rf go; \
+	tar xf "$${tempfile}"; \
+	mv go go-$(GO_VERSION); \
+	ln -s go-$(GO_VERSION) go; \
+	$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto
 
 .PHONY: install-node
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
 
 # Installs nodeenv and Node.js
 $(NODENV_ROOT)/.installed:
-	@set -euo pipefail; \
-		# Install the nodenv. \
-		git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
-		if [ "$(NODENV_INSTALL_VERSION)" == "master" ]; then \
-			git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"; \
-		fi; \
-		nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD); \
-		if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then \
-			echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"; \
-			rm -rf $(NODENV_ROOT); \
-			exit 1; \
-		fi; \
-		# Install the nodenv plugins. \
-		git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$(NODENV_ROOT)"/plugins/node-build; \
-		nodenv_build_sha=$$(git -C $(NODENV_ROOT)/plugins/node-build rev-parse HEAD); \
-		if [ "$${nodenv_build_sha}" != "$(NODENV_BUILD_SHA)" ]; then \
-			echo "Invalid node-build: '$${nodenv_build_sha}' != '$(NODENV_BUILD_SHA)'"; \
-			rm -rf $(NODENV_ROOT); \
-			exit 1; \
-		fi; \
-		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv install --skip-existing; \
-		ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
-		touch $@
+	@# bash \
+	# Install the nodenv. \
+	git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
+	if [ "$(NODENV_INSTALL_VERSION)" == "master" ]; then \
+		git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"; \
+	fi; \
+	nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD); \
+	if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then \
+		echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"; \
+		rm -rf $(NODENV_ROOT); \
+		exit 1; \
+	fi; \
+	# Install the nodenv plugins. \
+	git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$(NODENV_ROOT)"/plugins/node-build; \
+	nodenv_build_sha=$$(git -C $(NODENV_ROOT)/plugins/node-build rev-parse HEAD); \
+	if [ "$${nodenv_build_sha}" != "$(NODENV_BUILD_SHA)" ]; then \
+		echo "Invalid node-build: '$${nodenv_build_sha}' != '$(NODENV_BUILD_SHA)'"; \
+		rm -rf $(NODENV_ROOT); \
+		exit 1; \
+	fi; \
+	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv install --skip-existing; \
+	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
+	touch $@
 
 nodenv/package-lock.json: nodenv/package.json
-	@set -euo pipefail; \
-		cd $(REPO_ROOT)/nodenv; \
-		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm \
-			install \
-			--package-lock-only \
-			--no-audit \
-			--no-fund
+	@# bash \
+	cd $(REPO_ROOT)/nodenv; \
+	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm \
+		install \
+		--package-lock-only \
+		--no-audit \
+		--no-fund
 
 # Installs tools in the user node_modules.
 $(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed
-	@set -euo pipefail; \
-		cd $(REPO_ROOT)/nodenv; \
-		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm clean-install; \
-		NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm audit signatures; \
-		ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
-		touch $@
+	@# bash \
+	cd $(REPO_ROOT)/nodenv; \
+	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm clean-install; \
+	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm audit signatures; \
+	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
+	touch $@
 
 .PHONY: install-python
 install-python: $(PYENV_ROOT)/versions/$(USER)/.installed ## Install the Python environment.
 
 # Installs the requirements in the Python virtualenv.
 $(PYENV_ROOT)/versions/$(USER)/.installed: requirements-dev.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
-	@set -euo pipefail; \
-		export PYENV_ROOT=$(PYENV_ROOT); \
-		$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes; \
-		touch $@
+	@# bash \
+	export PYENV_ROOT=$(PYENV_ROOT); \
+	$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes; \
+	touch $@
 
 # Creates a Python virtualenv using pyenv.
 $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
-	@set -euo pipefail; \
-		export PYENV_ROOT=$(PYENV_ROOT); \
-		# NOTE: We unset the `PYENV_VERSION` environment variable to \
-		# 		ensure that we don't depend on a virtualenv that is not \
-		# 		yet installed. \
-		PYENV_VERSION= $(PYENV_ROOT)/bin/pyenv virtualenv $(USER)
+	@# bash \
+	export PYENV_ROOT=$(PYENV_ROOT); \
+	# NOTE: We unset the `PYENV_VERSION` environment variable to \
+	# 		ensure that we don't depend on a virtualenv that is not \
+	# 		yet installed. \
+	PYENV_VERSION= $(PYENV_ROOT)/bin/pyenv virtualenv $(USER)
 
 $(PYENV_ROOT)/.installed:
-	@set -euo pipefail; \
-		export PYENV_ROOT=$(PYENV_ROOT) \
-		export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
-		$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
-		# Validate the pyenv installation. \
-		pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
-		if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
-			echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
-			rm -rf $(PYENV_ROOT); \
-			exit 1; \
-		fi; \
-		pyenv_doctor_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-doctor rev-parse HEAD); \
-		if [ "$${pyenv_doctor_sha}" != "$(PYENV_DOCTOR_SHA)" ]; then \
-			echo "Invalid pyenv_doctor: '$${pyenv_doctor_sha}' != '$(PYENV_DOCTOR_SHA)'"; \
-			rm -rf $(PYENV_ROOT); \
-			exit 1; \
-		fi; \
-		pyenv_update_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-update rev-parse HEAD); \
-		if [ "$${pyenv_update_sha}" != "$(PYENV_UPDATE_SHA)" ]; then \
-			echo "Invalid pyenv_update: '$${pyenv_update_sha}' != '$(PYENV_UPDATE_SHA)'"; \
-			rm -rf $(PYENV_ROOT); \
-			exit 1; \
-		fi; \
-		pyenv_virtualenv_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-virtualenv rev-parse HEAD); \
-		if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
-			echo "Invalid pyenv_virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
-			rm -rf $(PYENV_ROOT); \
-			exit 1; \
-		fi; \
-		$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
-		ln -sf $(REPO_ROOT)/.python-version $(HOME)/.python-version; \
-		touch $@
+	@# bash \
+	export PYENV_ROOT=$(PYENV_ROOT) \
+	export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
+	$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
+	# Validate the pyenv installation. \
+	pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
+	if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
+		echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
+		rm -rf $(PYENV_ROOT); \
+		exit 1; \
+	fi; \
+	pyenv_doctor_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-doctor rev-parse HEAD); \
+	if [ "$${pyenv_doctor_sha}" != "$(PYENV_DOCTOR_SHA)" ]; then \
+		echo "Invalid pyenv_doctor: '$${pyenv_doctor_sha}' != '$(PYENV_DOCTOR_SHA)'"; \
+		rm -rf $(PYENV_ROOT); \
+		exit 1; \
+	fi; \
+	pyenv_update_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-update rev-parse HEAD); \
+	if [ "$${pyenv_update_sha}" != "$(PYENV_UPDATE_SHA)" ]; then \
+		echo "Invalid pyenv_update: '$${pyenv_update_sha}' != '$(PYENV_UPDATE_SHA)'"; \
+		rm -rf $(PYENV_ROOT); \
+		exit 1; \
+	fi; \
+	pyenv_virtualenv_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-virtualenv rev-parse HEAD); \
+	if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
+		echo "Invalid pyenv_virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
+		rm -rf $(PYENV_ROOT); \
+		exit 1; \
+	fi; \
+	$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
+	ln -sf $(REPO_ROOT)/.python-version $(HOME)/.python-version; \
+	touch $@
 
 .PHONY: install-ruby
 install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
 
 $(RBENV_ROOT)/.installed:
-	@set -euo pipefail; \
-		export RBENV_ROOT=$(RBENV_ROOT) \
-		export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
-		git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
-		# Validate the rbenv installation. \
-		rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
-		if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then \
-			echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"; \
-			rm -rf $(RBENV_ROOT); \
-			exit 1; \
-		fi; \
-		# Install the nodenv plugins. \
-		git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$(RBENV_ROOT)"/plugins/ruby-build; \
-		rbenv_build_sha=$$(git -C $(RBENV_ROOT)/plugins/ruby-build rev-parse HEAD); \
-		if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then \
-			echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"; \
-			rm -rf $(RBENV_ROOT); \
-			exit 1; \
-		fi; \
-		$(RBENV_ROOT)/bin/rbenv install --skip-existing; \
-		ln -sf $(REPO_ROOT)/.ruby-version $(HOME)/.ruby-version; \
-		touch $@
+	@# bash \
+	export RBENV_ROOT=$(RBENV_ROOT) \
+	export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
+	git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
+	# Validate the rbenv installation. \
+	rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
+	if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then \
+		echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"; \
+		rm -rf $(RBENV_ROOT); \
+		exit 1; \
+	fi; \
+	# Install the nodenv plugins. \
+	git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$(RBENV_ROOT)"/plugins/ruby-build; \
+	rbenv_build_sha=$$(git -C $(RBENV_ROOT)/plugins/ruby-build rev-parse HEAD); \
+	if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then \
+		echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"; \
+		rm -rf $(RBENV_ROOT); \
+		exit 1; \
+	fi; \
+	$(RBENV_ROOT)/bin/rbenv install --skip-existing; \
+	ln -sf $(REPO_ROOT)/.ruby-version $(HOME)/.ruby-version; \
+	touch $@
 
 ## Maintenance
 #####################################################################
 
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
-	@set -euo pipefail;\
-		PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-		AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
-		output="default"; \
-		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-			output="github"; \
-		fi; \
-		# NOTE: todos does not use `git ls-files` because many files might be \
-		# 		unsupported and generate an error if passed directly on the \
-		# 		command line. \
-		todos \
-			--output "$${output}" \
-			--todo-types="TODO,Todo,todo,FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
+	@# bash \
+	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
+	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
+	output="default"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		output="github"; \
+	fi; \
+	# NOTE: todos does not use `git ls-files` because many files might be \
+	# 		unsupported and generate an error if passed directly on the \
+	# 		command line. \
+	todos \
+		--output "$${output}" \
+		--todo-types="TODO,Todo,todo,FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
 .PHONY: clean
 clean: ## Delete temporary files.
-	@rm -rf \
+	@# bash \
+	rm -rf \
 		.bin \
 		$(AQUA_ROOT_DIR) \
 		.venv \

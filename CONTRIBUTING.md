@@ -157,11 +157,10 @@ Once you have finished you can mark the PR as "Ready for review".
 
 PRs perform number of [GitHub status checks] which run linters, tests, etc.
 These tests must all pass before a PR will be accepted. These tests are located
-in the [`.github/workflows`](.github/workflows) directory and begin with the
-prefix `pre-sumbit`.
+in the [`.github/workflows`](.github/workflows) directory.
 
-Most pull request status checks are run as pre-submit tests in the
-[`pre-submit.units.yml`] file.
+Most pull request status checks are run as status checks in the
+[`pull_request.tests.yml`] file.
 
 #### Code reviews
 
@@ -241,5 +240,5 @@ The following prefixes are supported and are checked using the
 [About pull request reviews]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews
 [Semantic Versioning]: https://semver.org/
 [Conventional Commits]: https://www.conventionalcommits.org/en/v1.0.0/
-[`pre-submit.units.yml`]: .github/workflows/pre-submit.units.yml
+[`pull_request.tests.yml`]: .github/workflows/pull_request.tests.yml
 [GitHub status checks]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks
