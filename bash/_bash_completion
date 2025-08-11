@@ -47,6 +47,20 @@ function _bash_completion() {
         source <(slsa-verifier completion bash)
     fi
 
+    # cosign completion
+    if command -v cosign >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(cosign completion bash)
+    fi
+
+    # docker completion
+    # NOTE: Docker is not installed by dotfiles but is often installed on the
+    # system.
+    if command -v docker >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(docker completion bash)
+    fi
+
     if [ -f ~/.bash_completion.local ]; then
         # shellcheck source=/dev/null
         source ~/.bash_completion.local
