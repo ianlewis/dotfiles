@@ -92,7 +92,7 @@ local yamllint = require("efmls-configs.linters.yamllint")
 local todos = {
 	prefix = "todos",
 	lintCommand = "todos",
-	lintStdin = true,
+	lintStdin = false,
 	lintIgnoreExitCode = true,
 	lintSeverity = 2, -- 2 = warning
 	lintFormats = {
