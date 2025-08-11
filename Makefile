@@ -62,12 +62,6 @@ GO_CHECKSUM ?= 3333f6ea53afa971e9078895eaa4ac7204a8c6b5c68c10e6bc9a33e8e391bdd8
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
-# renovate: datasource=node-version
-NODE_VERSION ?= 22.13.1
-NODE_CHECKSUM ?= 0d2a5af33c7deab5555c8309cd3f373446fe1526c1b95833935ab3f019733b3b
-NODE_URL.Linux.x86_64 := https://nodejs.org/dist/v$(NODE_VERSION)/node-v$(NODE_VERSION)-linux-x64.tar.xz
-NODE_URL = $(NODE_URL.$(uname_s).$(uname_m))
-
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.5
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
@@ -92,8 +86,9 @@ NODENV_BUILD_SHA ?= c2312f850e27a018faafd635d7bfae243c267f55
 RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
-RBENV_BUILD_VERSION ?= v20250610
-RBENV_BUILD_SHA ?= 1195268593b80a0a1bcd518e11efb4b4de115984
+# renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
+RBENV_BUILD_VERSION ?= v20250811
+RBENV_BUILD_SHA ?= 266b94f2780499d2c436b50be4ec8d881a3c2b79
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
