@@ -20,6 +20,6 @@ vim.filetype.add({
 		[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
 		-- Allow requirements.txt files with extra labels like
 		-- "requirements-dev.txt"
-		["requirements.*.txt"] = "requirements",
+		[".*/requirements.*.txt"] = "requirements",
 	},
 })
