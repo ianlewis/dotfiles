@@ -40,14 +40,21 @@ if ! echo "${runsc_checksum}  ${runsc_path}" | sha256sum; then
 fi
 
 # renovate: datasource=docker depName=ghcr.io/ianlewis/opencode versioning=loose
-OPENCODE_VERSION="2.7.1"
-OPENCODE_SHA="sha256:524268e23e403add9f693e2aefdb3596b16b729fd85d268a17cccced57df7e64"
+OPENCODE_VERSION="0.4.14"
+OPENCODE_SHA="sha256:78d314d9bfe965e019644d20657c183ab6767da38ec654a1d37f2e69445b9cd8"
 OPENCODE_IMAGE="ghcr.io/ianlewis/opencode:${OPENCODE_VERSION}@${OPENCODE_SHA}"
 
 XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 OPENCODE_DATA_HOME="${XDG_DATA_HOME}/opencode-docker"
 
 mkdir -p "${OPENCODE_DATA_HOME}"
+
+cosign verify-attestation \
+    --type slsaprovenance \
+    --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+    --certificate-identity-regexp '^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$' \
+    --policy ~/.config/coding-assistant-docker-images.policy.cue \
+    "${OPENCODE_IMAGE}"
 
 docker run \
     --rm \
