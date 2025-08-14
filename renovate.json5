@@ -5,8 +5,8 @@
     // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
     "config:best-practices",
 
-    // Update dependencies weekly.
-    "schedule:weekly",
+    // Update dependencies monthly.
+    "schedule:monthly",
 
     // Add DCO sign-off
     ":gitSignOff",
@@ -27,7 +27,8 @@
   // Security alerts/updates happen more frequently.
   vulnerabilityAlerts: {
     enabled: true,
-    schedule: "* 0-4 * * *",
+    // Schedule daily before 4 AM.
+    schedule: "* 0-3 * * *",
   },
   osvVulnerabilityAlerts: true,
 
@@ -35,6 +36,8 @@
   // to date.
   lockFileMaintenance: {
     enabled: true,
+    // Weekly schedule on early Monday mornings (before 4 AM).
+    schedule: ["* 0-3 * * 1"],
   },
 
   // Create a new issue for each config warning. By default, Renovate re-opens
@@ -53,6 +56,8 @@
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
       matchFileNames: ["aqua/aqua.yaml"],
+      // Weekly schedule on early Monday mornings (before 4 AM).
+      schedule: ["* 0-3 * * 1"],
     },
     {
       matchUpdateTypes: ["minor", "patch"],
@@ -69,12 +74,23 @@
       matchManagers: ["pip_requirements"],
       matchUpdateTypes: ["minor", "patch"],
       groupName: "python",
+      matchFileNames: ["requirements.txt"],
+      // Weekly schedule on early Monday mornings (before 4 AM).
+      schedule: ["* 0-3 * * 1"],
+    },
+    {
+      matchManagers: ["pip_requirements"],
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "python-dev",
+      matchFileNames: ["requirements-dev.txt"],
     },
     {
       matchManagers: ["npm"],
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch"],
       groupName: "npm",
+      // Weekly schedule on early Monday mornings (before 4 AM).
+      schedule: ["* 0-3 * * 1"],
     },
     {
       matchManagers: ["npm"],
