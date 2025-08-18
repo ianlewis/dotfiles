@@ -23,7 +23,7 @@ checksum:
     - all
 registries:
   - type: standard
-    ref: v4.401.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.403.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: koalaman/shellcheck@v0.11.0
   - name: rhysd/actionlint@v1.7.7
@@ -39,11 +39,11 @@ packages:
   - name: slsa-framework/slsa-verifier@v2.7.1
   - name: sigstore/cosign@v2.5.3
   - name: go-acme/lego@v4.25.2
-  - name: astral-sh/ruff@0.12.8
+  - name: astral-sh/ruff@0.12.9
   - name: mattn/efm-langserver@v0.0.54
   - name: rust-lang/rust-analyzer@2025-06-16
   - name: LuaLS/lua-language-server@3.15.0
   - name: golang.org/x/tools/gopls@v0.20.0
   - name: mvdan/gofumpt@v0.8.0
   - name: hadolint/hadolint@v2.12.0
-  - name: Automattic/harper/harper-ls@v0.56.0
+  - name: Automattic/harper/harper-ls@v0.58.0
