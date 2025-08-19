@@ -671,11 +671,9 @@ BIN_OBJS := $(subst bin/all,$(XDG_BIN_HOME),$(BIN_SRCS))
 .PHONY: install-bin
 install-bin: $(BIN_OBJS) ## Install binary scripts.
 	@# bash \
-	rm -f \
-		$(XDG_CONFIG_HOME)/coding-assistant-docker-images.policy.cue; \
-	ln -sf \
-		$(REPO_ROOT)/config/coding-assistant-docker-images.policy.cue \
-		$(XDG_CONFIG_HOME)/coding-assistant-docker-images.policy.cue
+	make \
+		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
+		install
 
 .PHONY: configure-bash
 configure-bash: ## Configure bash.
