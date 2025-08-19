@@ -56,7 +56,7 @@ SLSA_VERIFIER_URL ?= $(SLSA_VERIFIER_URL.$(uname_s).$(uname_m))
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
-# renovate: datasource=golang-version
+# renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.24.3
 GO_CHECKSUM ?= 3333f6ea53afa971e9078895eaa4ac7204a8c6b5c68c10e6bc9a33e8e391bdd8
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
