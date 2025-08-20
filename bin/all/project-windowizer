@@ -33,7 +33,9 @@ function _main() {
     local new_window_size=$(($(tmux display-message -p "#{window_width}") - 80))
 
     # Run the command in the right pane, defaulting to `nvim`.
-    tmux split-window -hd -l "${new_window_size}" "${*:-nvim}"
+    # Explicitly start nvim in an interactive bash shell to ensure the command
+    # runs with a full terminal environment.
+    tmux split-window -hd -l "${new_window_size}" "${*:-"bash -i -c nvim"}"
 
     # clear the left window
     clear
