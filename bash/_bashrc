@@ -201,7 +201,7 @@ function _bashrc_main() {
     # Python
     export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
     if [ -d "${PYENV_ROOT}/bin" ]; then
-        export PATH="${PYENV_ROOT}/bin:${PATH}"
+        [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]] && PATH="${PYENV_ROOT}/bin:${PATH}"
         eval "$(pyenv init - bash)"
     fi
 
@@ -213,19 +213,19 @@ function _bashrc_main() {
     # Nodenv
     export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
     if [ -d "${NODENV_ROOT}/bin" ]; then
-        export PATH="${NODENV_ROOT}/bin:${PATH}"
+        [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]] && PATH="${NODENV_ROOT}/bin:${PATH}"
         eval "$(nodenv init - bash)"
     fi
 
     # Activate the local node_modules.
-    if [ -d "${XDG_DATA_HOME}/node_modules" ]; then
-        export PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
+    if [ -d "${XDG_DATA_HOME}/node_modules/.bin" ]; then
+        [[ ":$PATH:" != *":${XDG_DATA_HOME}/node_modules/.bin:"* ]] && PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
     fi
 
     # Rbenv
     export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
     if [ -d "${RBENV_ROOT}/bin" ]; then
-        export PATH="${RBENV_ROOT}/bin:${PATH}"
+        [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]] && PATH="${RBENV_ROOT}/bin:${PATH}"
         eval "$(rbenv init - bash)"
     fi
 
