@@ -37,6 +37,9 @@ structs:
     cmd:
       any: true
 
+    diagnostic:
+      any: true
+
     # Environment variables.
     env:
       any: true
