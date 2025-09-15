@@ -8,7 +8,7 @@
     // Update dependencies monthly.
     "schedule:monthly",
 
-    // Add DCO sign-off
+    // Add DCO sign-off.
     ":gitSignOff",
 
     // Add Aqua present to allow updating CLI tools.
@@ -24,11 +24,12 @@
   // would cause Renovate to only create 2 PRs every month.
   prHourlyLimit: 0,
 
-  // Security alerts/updates happen more frequently.
+  // Security alerts/updates.
   vulnerabilityAlerts: {
     enabled: true,
-    // Schedule daily before 4 AM.
-    schedule: "* 0-3 * * *",
+    // Explicitly set the schedule to "at any time" to ensure that security
+    // update PRs are created as soon as possible.
+    schedule: ["at any time"],
   },
   osvVulnerabilityAlerts: true,
 
@@ -43,6 +44,8 @@
   // Enable git submodule updates.
   "git-submodules": {
     enabled: true,
+    // NOTE: Same as schedule:monthly preset.
+    schedule: ["* 0-3 1 * *"],
   },
 
   // Create a new issue for each config warning. By default, Renovate re-opens
