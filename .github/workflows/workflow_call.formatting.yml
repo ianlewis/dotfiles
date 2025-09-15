@@ -31,8 +31,11 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: ".node-version"
-      # TODO(github.com/ianlewis/repo-template/288): Use make format-check target.
-      - run: make format
+      # TODO(github.com/ianlewis/repo-template/issues/288): Use make format-check target.
+      - name: format
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: make format
       - name: check diff
         run: |
           set -euo pipefail

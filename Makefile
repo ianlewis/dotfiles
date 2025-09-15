@@ -380,7 +380,7 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 		# last commit by default. \
 		current_branch=$$(git rev-parse --abbrev-ref HEAD); \
 		if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
-			commintlint_from="HEAD~1"; \
+			commitlint_from="HEAD~1"; \
 		fi; \
 		commitlint_to="HEAD"; \
 	fi; \
@@ -406,7 +406,6 @@ fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
 	todos \
 		--output "$${output}" \
 		--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
-
 
 .PHONY: markdownlint
 markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the markdownlint linter.

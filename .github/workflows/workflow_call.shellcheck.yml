@@ -29,4 +29,6 @@ jobs:
         with:
           persist-credentials: false
       - name: shellcheck
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make shellcheck
