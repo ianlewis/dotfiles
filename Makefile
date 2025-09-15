@@ -151,8 +151,10 @@ package-lock.json: package.json
 		loglevel="verbose"; \
 	fi; \
 	eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
+	# NOTE: package-lock.json is removed to ensure that npm includes the \
+	# integrity field. \
+	rm -f package-lock.json; \
 	npm --loglevel="$${loglevel}" install \
-		--package-lock-only \
 		--no-audit \
 		--no-fund
 
