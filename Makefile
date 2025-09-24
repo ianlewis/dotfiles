@@ -71,7 +71,7 @@ PYENV_INSTALL_SHA ?= d56241330c3caa695042bf382587713ce7366a93
 # to time and cause validation errors.
 PYENV_DOCTOR_SHA ?= bad83e51e1409665de6cb37537cfc1e02e154bec
 PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
-PYENV_VIRTUALENV_SHA ?= 4b3f5f8468c6c7e2b2e55ba8d1bd192f03489d3a
+PYENV_VIRTUALENV_SHA ?= 387f627464544a0c81176a734c7134f4ca30c3aa
 PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
