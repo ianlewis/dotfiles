@@ -289,3 +289,6 @@ mypy-extensions==1.1.0 \
 platformdirs==4.4.0 \
     --hash=sha256:abd01743f24e5287cd7a5db3752faf1a2d65353f38ec26d98e25a6db65958c85 \
     --hash=sha256:ca753cf4d81dc309bc67b0ea38fd15dc97bc30ce419a7f58d13eb3bf14c4febf
+pytokens==0.1.10 \
+    --hash=sha256:c9a4bfa0be1d26aebce03e6884ba454e842f186a59ea43a6d3b25af58223c044 \
+    --hash=sha256:db7b72284e480e69fb085d9f251f66b3d2df8b7166059261258ff35f50fb711b
