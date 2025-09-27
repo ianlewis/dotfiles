@@ -43,15 +43,6 @@ AQUA_CHECKSUM.Linux.x86_64 = 697d8e69bda13f30bb8d9f76ee5eeb67004cba93022148a20e7
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
-AQUA_PROVENANCE_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/multiple.intoto.jsonl
-
-# renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
-SLSA_VERIFIER_VERSION ?= 2.7.1
-# NOTE: slsa-verifier establishes the trust root for installed CLI tools in the home directory.
-SLSA_VERIFIER_CHECKSUM.Linux.x86_64 = 946dbec729094195e88ef78e1734324a27869f03e2c6bd2f61cbc06bd5350339
-SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(uname_s).$(uname_m))
-SLSA_VERIFIER_URL.Linux.x86_64 = https://github.com/slsa-framework/slsa-verifier/releases/download/v$(SLSA_VERIFIER_VERSION)/slsa-verifier-linux-amd64
-SLSA_VERIFIER_URL ?= $(SLSA_VERIFIER_URL.$(uname_s).$(uname_m))
 
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
@@ -752,40 +743,17 @@ configure-git: ## Configure git.
 ## Install Tools
 #####################################################################
 
-.PHONY: install-slsa-verifier
-install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
-
-$(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier: $(HOME)/opt
-	@# bash \
-	tempfile=$$(mktemp --suffix=".tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"; \
-	echo "$(SLSA_VERIFIER_CHECKSUM)  $${tempfile}" | sha256sum -c; \
-	mkdir -p $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION); \
-	mv "$${tempfile}" $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier; \
-	chmod +x $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
-
-$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME) $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
-	@# bash \
-	ln -sf $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier $@; \
-	touch $(HOME)/opt/slsa-verifier-v$(SLSA_VERIFIER_VERSION)/slsa-verifier
-
 .PHONY: install-aqua
 install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	$(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
 
-$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt $(XDG_BIN_HOME)/slsa-verifier
+$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt
 	@# bash \
-	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-	tempjsonl=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).intoto.jsonl"); \
-	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	curl -sSLo "$${tempjsonl}" "$(AQUA_PROVENANCE_URL)"; \
-	$(XDG_BIN_HOME)/slsa-verifier verify-artifact \
-		"$${tempfile}" \
-		--provenance-path "$${tempjsonl}" \
-		--source-uri "$(AQUA_REPO)" \
-		--source-tag "$(AQUA_VERSION)"; \
 	mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
+	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
+	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
 	tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
 	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
