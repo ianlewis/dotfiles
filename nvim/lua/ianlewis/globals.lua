@@ -16,14 +16,15 @@ do
 	vim.g.mapleader = " "
 
 	vim.g.markdown_fenced_languages = {
-		"html",
+		"bash",
 		"go",
-		"python",
-		"typescript",
+		"html",
 		"java",
 		"javascript",
-		"bash",
+		"python",
+		"rust",
 		"sh",
 		"shell=sh",
+		"typescript",
 	}
 end

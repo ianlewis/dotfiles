@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## `2025-09-27`
 
-- Removed `flake8` as a dependency. Configuration was removed and the command
-  will no longer be available
+- CLI: Removed `flake8` as a dependency. Configuration was removed and the
+  command will no longer be available
   ([#379](https://github.com/ianlewis/dotfiles/issues/379)).
+- Neovim: Added Rust to Markdown fenced languages
+  ([#376](https://github.com/ianlewis/dotfiles/issues/376)).
