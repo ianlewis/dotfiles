@@ -32,3 +32,4 @@ packages:
   - name: mvdan/sh@v3.12.0
   - name: JohnnyMorganz/StyLua@v2.1.0
   - name: Kampfkarren/selene@0.29.0
+  - name: checkmake/checkmake@0.2.2

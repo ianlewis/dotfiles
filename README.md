@@ -119,8 +119,8 @@ locations.
 
 ## Language Runtimes
 
-Language runtimes are installed in the `~/opt` directory. Their binaries
-directory is added to the `$PATH`.
+Language runtimes are installed using different methods. Their binaries are
+added to the `$PATH`.
 
 ### Go
 

@@ -42,7 +42,10 @@ AQUA_REPO ?= github.com/aquaproj/aqua
 AQUA_CHECKSUM.Linux.x86_64 = 697d8e69bda13f30bb8d9f76ee5eeb67004cba93022148a20e7ffff8f7edee29
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
-AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
+export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
+
+# Ensure that aqua and aqua installed tools are in the PATH.
+export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PATH)
 
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
@@ -63,12 +66,12 @@ PYENV_INSTALL_SHA ?= d56241330c3caa695042bf382587713ce7366a93
 PYENV_DOCTOR_SHA ?= bad83e51e1409665de6cb37537cfc1e02e154bec
 PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
 PYENV_VIRTUALENV_SHA ?= 387f627464544a0c81176a734c7134f4ca30c3aa
-PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
+export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
 NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
-NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
+export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
 NODENV_BUILD_VERSION ?= v5.4.8
 NODENV_BUILD_SHA ?= c2312f850e27a018faafd635d7bfae243c267f55
@@ -76,7 +79,7 @@ NODENV_BUILD_SHA ?= c2312f850e27a018faafd635d7bfae243c267f55
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
-RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
+export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
 RBENV_BUILD_VERSION ?= v20250811
 RBENV_BUILD_SHA ?= 266b94f2780499d2c436b50be4ec8d881a3c2b79
@@ -135,19 +138,37 @@ install-tools: install-bin install-aqua ## Install all CLI tools.
 
 install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
 
-package-lock.json: package.json
+package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
-	eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
-	# NOTE: package-lock.json is removed to ensure that npm includes the \
-	# integrity field. \
-	rm -f package-lock.json; \
-	npm --loglevel="$${loglevel}" install \
-		--no-audit \
-		--no-fund
+	eval "$$($(NODENV_ROOT)/bin/nodenv init - bash)"; \
+	# NOTE: npm install will happily ignore the fact that integrity hashes are \
+	# missing in the package-lock.json. We need to check for missing integrity \
+	# fields ourselves. If any are missing, then we need to regenerate the \
+	# package-lock.json from scratch. \
+	nointegrity=""; \
+	noresolved=""; \
+	if [ -f "$@" ]; then \
+		nointegrity=$$(jq '.packages | del(."") | .[] | select(has("integrity") | not)' < $@); \
+		noresolved=$$(jq '.packages | del(."") | .[] | select(has("resolved") | not)' < $@); \
+	fi; \
+	if [ ! -f "$@" ] || [ -n "$${nointegrity}" ] || [ -n "$${noresolved}" ]; then \
+		# NOTE: package-lock.json is removed to ensure that npm includes the \
+		# integrity field. npm install will not restore this field if \
+		# missing in an existing package-lock.json file. \
+		rm -f $@; \
+		npm --loglevel="$${loglevel}" install \
+			--no-audit \
+			--no-fund; \
+	else \
+		npm --loglevel="$${loglevel}" install \
+			--package-lock-only \
+			--no-audit \
+			--no-fund; \
+	fi; \
 
 node_modules/.installed: package-lock.json
 	@# bash \
@@ -155,19 +176,19 @@ node_modules/.installed: package-lock.json
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
-	eval "$(NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv init - bash)"; \
+	eval "$$($(NODENV_ROOT)/bin/nodenv init - bash)"; \
 	npm --loglevel="$${loglevel}" clean-install; \
 	npm --loglevel="$${loglevel}" audit signatures; \
 	touch $@
 
 .venv/bin/activate:
 	@# bash \
-	eval "$(PYENV_ROOT=$(PYENV_ROOT) $(PYENV_ROOT)/bin/pyenv init - bash)"; \
+	eval "$$($(PYENV_ROOT)/bin/pyenv init - bash)"; \
 	python -m venv .venv
 
 .venv/.installed: requirements-dev.txt .venv/bin/activate
 	@# bash \
-	./.venv/bin/pip install -r $< --require-hashes; \
+	$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
 	touch $@
 
 .bin/aqua-$(AQUA_VERSION)/aqua:
@@ -184,7 +205,7 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="debug"; \
 	fi; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)" ./.bin/aqua-$(AQUA_VERSION)/aqua \
+	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
 		--log-level "$${loglevel}" \
 		--config .aqua.yaml \
 		install; \
@@ -193,8 +214,51 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 $(HOME)/opt:
 	@mkdir -p $(HOME)/opt
 
-## Tools
+## Build
 #####################################################################
+
+# TODO: Add all target dependencies.
+.PHONY: all
+all: ## Build everything.
+	@# bash \
+	echo "Nothing to build."
+
+## Testing
+#####################################################################
+
+# TODO: Add test target dependencies.
+.PHONY: test
+test: ## Run all tests.
+	@# bash \
+	echo "Nothing to test."
+
+## Formatting
+#####################################################################
+
+.PHONY: format
+format: json-format license-headers lua-format md-format shfmt yaml-format ## Format all files
+
+.PHONY: json-format
+json-format: node_modules/.installed ## Format JSON files.
+	@# bash \
+	loglevel="log"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.json' \
+			'*.json5' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	$(REPO_ROOT)/node_modules/.bin/prettier \
+		--log-level "$${loglevel}" \
+		--no-error-on-unmatched-pattern \
+		--write \
+		$${files}
 
 .PHONY: license-headers
 license-headers: ## Update license headers.
@@ -225,7 +289,7 @@ license-headers: ## Update license headers.
 	fi; \
 	for filename in $${files}; do \
 		if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
-			./third_party/mbrukman/autogen/autogen.sh \
+			$(REPO_ROOT)/third_party/mbrukman/autogen/autogen.sh \
 				--in-place \
 				--no-code \
 				--no-tlc \
@@ -235,34 +299,6 @@ license-headers: ## Update license headers.
 		fi; \
 	done
 
-## Formatting
-#####################################################################
-
-.PHONY: format
-format: json-format lua-format md-format shfmt yaml-format ## Format all files
-
-.PHONY: json-format
-json-format: node_modules/.installed ## Format JSON files.
-	@# bash \
-	loglevel="log"; \
-	if [ -n "$(DEBUG_LOGGING)" ]; then \
-		loglevel="debug"; \
-	fi; \
-	files=$$( \
-		git ls-files --deduplicate \
-			'*.json' \
-			'*.json5' \
-			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-	); \
-	if [ "$${files}" == "" ]; then \
-		exit 0; \
-	fi; \
-	./node_modules/.bin/prettier \
-		--log-level "$${loglevel}" \
-		--no-error-on-unmatched-pattern \
-		--write \
-		$${files}
-
 .PHONY: lua-format
 lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
 	@# bash \
@@ -271,8 +307,6 @@ lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
 			'*.lua' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	stylua --config-path stylua.toml $${files}
 
 .PHONY: md-format
@@ -291,7 +325,7 @@ md-format: node_modules/.installed ## Format Markdown files.
 		exit 0; \
 	fi; \
 	# NOTE: prettier uses .editorconfig for tab-width. \
-	./node_modules/.bin/prettier \
+	$(REPO_ROOT)/node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -305,8 +339,6 @@ shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	shfmt --write --simplify --indent 4 $${files}
 
 .PHONY: yaml-format
@@ -324,7 +356,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	./node_modules/.bin/prettier \
+	$(REPO_ROOT)/node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -334,7 +366,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint commitlint fixme markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
+lint: actionlint checkmake commitlint fixme markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -349,15 +381,39 @@ actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		actionlint \
 			-format '{{range $$err := .}}::error file={{$$err.Filepath}},line={{$$err.Line}},col={{$$err.Column}}::{{$$err.Message}}%0A```%0A{{replace $$err.Snippet "\\n" "%0A"}}%0A```\n{{end}}' \
 			-ignore 'SC2016:' \
 			$${files}; \
 	else \
-		actionlint $${files}; \
+		actionlint \
+			-ignore 'SC2016:' \
+			$${files}; \
+	fi
+
+.PHONY: checkmake
+checkmake: $(AQUA_ROOT_DIR)/.installed ## Runs the checkmake linter.
+	@# bash \
+	# NOTE: We need to ignore config files used in tests. \
+	files=$$( \
+		git ls-files --deduplicate \
+			'Makefile' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		# TODO: Remove newline from the format string after updating checkmake. \
+		checkmake \
+			--config .checkmake.ini \
+			--format '::error file={{.FileName}},line={{.LineNumber}}::{{.Rule}}: {{.Violation}}'$$'\n' \
+			$${files}; \
+	else \
+		checkmake \
+			--config .checkmake.ini \
+			$${files}; \
 	fi
 
 .PHONY: commitlint
@@ -377,7 +433,7 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 		fi; \
 		commitlint_to="HEAD"; \
 	fi; \
-	./node_modules/.bin/commitlint \
+	$(REPO_ROOT)/node_modules/.bin/commitlint \
 		--config commitlint.config.mjs \
 		--from "$${commitlint_from}" \
 		--to "$${commitlint_to}" \
@@ -387,8 +443,6 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 .PHONY: fixme
 fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
 	@# bash \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	output="default"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		output="github"; \
@@ -416,8 +470,6 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -427,12 +479,12 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 			message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 			exit_code=1; \
 			echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-		done <<< "$$(./node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
+		done <<< "$$($(REPO_ROOT)/node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
 		if [ "$${exit_code}" != "0" ]; then \
 			exit "$${exit_code}"; \
 		fi; \
 	else \
-		./node_modules/.bin/markdownlint \
+		$(REPO_ROOT)/node_modules/.bin/markdownlint \
 			--config .markdownlint.yaml \
 			--dot \
 			$${files}; \
@@ -455,12 +507,12 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 			message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
 			exit_code=1; \
 			echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-		done <<< "$$(./node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
+		done <<< "$$($(REPO_ROOT)/node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
 		if [ "$${exit_code}" != "0" ]; then \
 			exit "$${exit_code}"; \
 		fi; \
 	else \
-		./node_modules/.bin/markdownlint \
+		$(REPO_ROOT)/node_modules/.bin/markdownlint \
 			--config .github/template.markdownlint.yaml \
 			--dot \
 			$${files}; \
@@ -469,7 +521,8 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 .PHONY: renovate-config-validator
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
 	@# bash \
-	./node_modules/.bin/renovate-config-validator --strict
+	$(REPO_ROOT)/node_modules/.bin/renovate-config-validator \
+		--strict
 
 .PHONY: selene
 selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
@@ -482,8 +535,6 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -527,8 +578,6 @@ shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -570,8 +619,6 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
@@ -586,10 +633,10 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
 			done <<<"$$(echo "$$p" | jq -cr '.messages[] // empty')"; \
-		done <<< "$$(./node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
+		done <<< "$$($(REPO_ROOT)/node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
 		exit "$${exit_code}"; \
 	else \
-		./node_modules/.bin/textlint \
+		$(REPO_ROOT)/node_modules/.bin/textlint \
 			--config .textlintrc.yaml \
 			$${files}; \
 	fi
@@ -803,14 +850,14 @@ $(NODENV_ROOT)/.installed:
 		rm -rf $(NODENV_ROOT); \
 		exit 1; \
 	fi; \
-	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/bin/nodenv install --skip-existing; \
+	$(NODENV_ROOT)/bin/nodenv install --skip-existing; \
 	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
 	touch $@
 
 nodenv/package-lock.json: nodenv/package.json
 	@# bash \
 	cd $(REPO_ROOT)/nodenv; \
-	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm \
+	$(NODENV_ROOT)/shims/npm \
 		install \
 		--package-lock-only \
 		--no-audit \
@@ -820,8 +867,8 @@ nodenv/package-lock.json: nodenv/package.json
 $(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed
 	@# bash \
 	cd $(REPO_ROOT)/nodenv; \
-	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm clean-install; \
-	NODENV_ROOT=$(NODENV_ROOT) $(NODENV_ROOT)/shims/npm audit signatures; \
+	$(NODENV_ROOT)/shims/npm clean-install; \
+	$(NODENV_ROOT)/shims/npm audit signatures; \
 	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
 	touch $@
 
@@ -831,14 +878,12 @@ install-python: $(PYENV_ROOT)/versions/$(USER)/.installed ## Install the Python 
 # Installs the requirements in the Python virtualenv.
 $(PYENV_ROOT)/versions/$(USER)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
 	@# bash \
-	export PYENV_ROOT=$(PYENV_ROOT); \
 	$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes; \
 	touch $@
 
 # Creates a Python virtualenv using pyenv.
 $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 	@# bash \
-	export PYENV_ROOT=$(PYENV_ROOT); \
 	# NOTE: We unset the `PYENV_VERSION` environment variable to \
 	# 		ensure that we don't depend on a virtualenv that is not \
 	# 		yet installed. \
@@ -846,7 +891,6 @@ $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 
 $(PYENV_ROOT)/.installed:
 	@# bash \
-	export PYENV_ROOT=$(PYENV_ROOT) \
 	export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
 	$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
 	# Validate the pyenv installation. \
@@ -883,7 +927,6 @@ install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
 
 $(RBENV_ROOT)/.installed:
 	@# bash \
-	export RBENV_ROOT=$(RBENV_ROOT) \
 	export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
 	git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
 	# Validate the rbenv installation. \
@@ -911,8 +954,6 @@ $(RBENV_ROOT)/.installed:
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 	@# bash \
-	PATH="$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$${PATH}"; \
-	AQUA_ROOT_DIR="$(AQUA_ROOT_DIR)"; \
 	output="default"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		output="github"; \
@@ -926,10 +967,8 @@ todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 
 .PHONY: clean
 clean: ## Delete temporary files.
-	@# bash \
-	rm -rf \
-		.bin \
-		$(AQUA_ROOT_DIR) \
-		.venv \
-		node_modules \
-		*.sarif.json
+	@$(RM) -r .bin
+	@$(RM) -r $(AQUA_ROOT_DIR)
+	@$(RM) -r .venv
+	@$(RM) -r node_modules
+	@$(RM) *.sarif.json
