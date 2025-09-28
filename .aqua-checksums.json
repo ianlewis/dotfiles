@@ -81,6 +81,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.darwin.amd64",
+      "checksum": "AFAA325D2348043F9A60D3D7BA7803A0A54B760095EA03837C4DE357C75478EF",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.linux.amd64",
+      "checksum": "BEDD033B06F2563809855EC2A9950C7A81ACEA6CD82937FD2F124E2C1C5FC3D5",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/ianlewis/todos/v0.12.0/todos-darwin-amd64",
       "checksum": "6F5A294D197A0435490D0416F7F3D8B43652691C1BF9683719157E4A198C866E",
       "algorithm": "sha256"
@@ -409,6 +419,11 @@
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.401.0/registry.yaml",
       "checksum": "5A88C0990B1FAA7C508B275C282D08D2FF1B20C82B1BA7E4D64227F698D4860F",
       "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.398.0/registry.yaml",
+      "checksum": "7ECB8D2982D9147B59B8EE0FD7F01EEAEAA542BC9AD2A6E57E3FF250CB9FA8233347CC963ACC5BE4E0527B4E6967DA88613D99952B0BC42CCBE7C0FC60C562C5",
+      "algorithm": "sha512"
     }
   ]
 }

@@ -48,11 +48,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make clean all
 
-  # Check license headers
-  ###############################
-  license-headers:
-    uses: ./.github/workflows/workflow_call.license-headers.yml
-
   # formatting
   ###############################
   formatting:
@@ -62,6 +57,9 @@ jobs:
   ###############################
   actionlint:
     uses: ./.github/workflows/workflow_call.actionlint.yml
+
+  checkmake:
+    uses: ./.github/workflows/workflow_call.checkmake.yml
 
   commitlint:
     uses: ./.github/workflows/workflow_call.commitlint.yml
