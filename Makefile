@@ -124,6 +124,9 @@ help: ## Print all Makefile targets (this message).
 				} \
 			}'
 
+## Installation
+#####################################################################
+
 .PHONY: all
 all: install-all configure-all ## Install and configure everything.
 
@@ -214,19 +217,10 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 $(HOME)/opt:
 	@mkdir -p $(HOME)/opt
 
-## Build
-#####################################################################
-
-# TODO: Add all target dependencies.
-.PHONY: all
-all: ## Build everything.
-	@# bash \
-	echo "Nothing to build."
-
 ## Testing
 #####################################################################
 
-# TODO: Add test target dependencies.
+# TODO(#240): Add test target dependencies.
 .PHONY: test
 test: ## Run all tests.
 	@# bash \
