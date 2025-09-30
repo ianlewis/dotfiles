@@ -246,23 +246,22 @@ lspconfig.pylsp.setup({
 	settings = {
 		pylsp = {
 			plugins = {
-				-- pycodestyle, pyflakes, mccabe, autopep8, and yapf are disabled by ruff.
+				-- `pycodestyle`, `pyflakes`, `mccabe`, `autopep8`, and `yapf`
+				-- are disabled by ruff.
 				ruff = {
 					enabled = true,
 					-- Enable all rules and exclude rules explicitly.
 					-- https://docs.astral.sh/ruff/rules/
 					select = { "ALL" },
-				},
-				pycodestyle = {
-					-- Use ruff's max line length.
-					maxLineLength = 88,
+					-- Ignore `flake8-fixme` rules. These are handled by
+					-- `todos`.
+					ignore = { "FIX" },
 				},
 			},
 		},
 	},
 })
 --}}}
-
 -- rust-analyzer {{{
 lspconfig.rust_analyzer.setup({
 	capabilities = cmp_capabilities,
