@@ -253,6 +253,9 @@ lspconfig.pylsp.setup({
 					-- Enable all rules and exclude rules explicitly.
 					-- https://docs.astral.sh/ruff/rules/
 					select = { "ALL" },
+					-- Rules that are marked as fixable by ruff that should be
+					-- fixed when running `textDocument/formatting`.
+					format = { "I" },
 					-- Ignore `flake8-fixme` rules. These are handled by
 					-- `todos`.
 					ignore = { "FIX" },
