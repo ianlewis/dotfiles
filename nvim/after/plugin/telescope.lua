@@ -13,6 +13,18 @@
 -- limitations under the License.
 
 require("telescope").setup({
+	defaults = {
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--smart-case",
+			"--hidden", -- search hidden files
+		},
+	},
 	pickers = {
 		find_files = {
 			hidden = true,
