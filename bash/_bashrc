@@ -63,18 +63,16 @@ function _bashrc_main() {
         fi
     fi
 
-    # If not running interactively, don't do anything
-    [ -z "${PS1}" ] && return
+    # If not running interactively, don't do anything. PS1 may be unbound so we
+    # need to use a special form of parameter expansion.
+    [ -z "${PS1+x}" ] && return
 
     # Load system bashrc
+    # NOTE: On Debian based systems /etc/bash.bashrc is loaded before ~/.bashrc
+    #       `-DSYS_BASHRC` compile-time option and does not need to be sourced here.
     if [ -f /etc/bashrc ]; then
         # shellcheck source=/dev/null
         source /etc/bashrc
-    fi
-    # for some debian systems
-    if [ -f /etc/bash.bashrc ]; then
-        # shellcheck source=/dev/null
-        source /etc/bash.bashrc
     fi
 
     EDITOR=vim
