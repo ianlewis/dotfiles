@@ -39,7 +39,7 @@ REPO_NAME = $(shell basename "$(REPO_ROOT)")
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.55.0
 AQUA_REPO ?= github.com/aquaproj/aqua
-AQUA_CHECKSUM.Linux.x86_64 = 697d8e69bda13f30bb8d9f76ee5eeb67004cba93022148a20e7ffff8f7edee29
+AQUA_CHECKSUM.Linux.x86_64 = cb7780962ca651c4e025a027b7bfc82c010af25c5c150fe89ad72f4058d46540
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
@@ -52,14 +52,14 @@ export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PAT
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.25.1
-GO_CHECKSUM ?= 3333f6ea53afa971e9078895eaa4ac7204a8c6b5c68c10e6bc9a33e8e391bdd8
+GO_CHECKSUM ?= 7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.8
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= d56241330c3caa695042bf382587713ce7366a93
+PYENV_INSTALL_SHA ?= 519ce9dbf0d1ce810050cfab1ae5a7c40df9fb34
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
 # the 'master' branch. We validate the SHA here but it may be updated from time
 # to time and cause validation errors.
@@ -81,8 +81,8 @@ RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20250811
-RBENV_BUILD_SHA ?= 266b94f2780499d2c436b50be4ec8d881a3c2b79
+RBENV_BUILD_VERSION ?= v20250925
+RBENV_BUILD_SHA ?= a71c27a9e7b8a0a0f76a8425fe4429ef1fd948a0
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
