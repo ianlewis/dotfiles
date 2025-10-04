@@ -37,7 +37,7 @@ REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.53.9
+AQUA_VERSION ?= v2.55.0
 AQUA_REPO ?= github.com/aquaproj/aqua
 AQUA_CHECKSUM.Linux.x86_64 = 697d8e69bda13f30bb8d9f76ee5eeb67004cba93022148a20e7ffff8f7edee29
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
@@ -51,13 +51,13 @@ export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PAT
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.24.3
+GO_VERSION ?= 1.25.1
 GO_CHECKSUM ?= 3333f6ea53afa971e9078895eaa4ac7204a8c6b5c68c10e6bc9a33e8e391bdd8
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.6
+PYENV_INSTALL_VERSION ?= v2.6.8
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= d56241330c3caa695042bf382587713ce7366a93
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
