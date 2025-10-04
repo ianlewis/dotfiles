@@ -9,3 +9,6 @@ node_modules/
 
 # SARIF files
 *.sarif.json
+
+# nvim checkhealth logs
+nvim-checkhealth.log
