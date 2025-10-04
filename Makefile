@@ -226,6 +226,18 @@ test: ## Run all tests.
 	@# bash \
 	echo "Nothing to test."
 
+nvim-checkhealth:
+	@# bash \
+	# NOTE: make sure treesitter parsers are installed. \
+	nvim --version; \
+	nvim --headless '+TSUpdate' '+checkhealth' '+w!nvim-checkhealth.log' '+qa!'; \
+	cat nvim-checkhealth.log; \
+	num_errors=$$(grep -cE 'error' nvim-checkhealth.log || true); \
+	>&2 echo "nvim checkhealth found $${num_errors} errors."; \
+	if [ "$${num_errors}" -gt 0 ]; then \
+		exit 1; \
+	fi
+
 ## Formatting
 #####################################################################
 
@@ -965,3 +977,4 @@ clean: ## Delete temporary files.
 	@$(RM) -r .venv
 	@$(RM) -r node_modules
 	@$(RM) *.sarif.json
+	@$(RM) nvim-checkhealth.log

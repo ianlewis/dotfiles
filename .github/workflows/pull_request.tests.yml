@@ -40,13 +40,33 @@ jobs:
         with:
           submodules: true
           persist-credentials: false
+
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version-file: ".node-version"
+
       - name: Install all
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make clean all
+
+      - name: install nvim
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NVIM_VERSION: "v0.11.4"
+        run: |
+          gh release download \
+            --repo neovim/neovim \
+            --pattern "nvim-linux-x86_64.tar.gz" \
+            "${NVIM_VERSION}"
+          sudo tar \
+            --strip-components=1 \
+            -C /usr/local \
+            -x \
+            -f nvim-linux-x86_64.tar.gz
+
+      - name: nvim checkhealth
+        run: make nvim-checkhealth
 
   # formatting
   ###############################
