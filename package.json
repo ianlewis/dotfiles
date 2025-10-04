@@ -1,7 +1,7 @@
 {
   "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cli": "20.1.0",
+    "@commitlint/config-conventional": "20.0.0",
     "dictionary-en": "4.0.0",
     "markdownlint-cli": "0.45.0",
     "prettier": "3.6.2",
