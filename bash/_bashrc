@@ -200,7 +200,9 @@ function _bashrc_main() {
     export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
     if [ -d "${PYENV_ROOT}/bin" ]; then
         [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]] && PATH="${PYENV_ROOT}/bin:${PATH}"
-        eval "$(pyenv init - bash)"
+        if [[ ":$PATH:" != *":${PYENV_ROOT}/shims:"* ]]; then
+            eval "$(pyenv init - bash)"
+        fi
     fi
 
     # Activate the 'ian' virtualenv if it exists.
@@ -212,7 +214,9 @@ function _bashrc_main() {
     export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
     if [ -d "${NODENV_ROOT}/bin" ]; then
         [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]] && PATH="${NODENV_ROOT}/bin:${PATH}"
-        eval "$(nodenv init - bash)"
+        if [[ ":$PATH:" != *":${NODENV_ROOT}/shims:"* ]]; then
+            eval "$(nodenv init - bash)"
+        fi
     fi
 
     # Activate the local node_modules.
@@ -224,7 +228,9 @@ function _bashrc_main() {
     export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
     if [ -d "${RBENV_ROOT}/bin" ]; then
         [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]] && PATH="${RBENV_ROOT}/bin:${PATH}"
-        eval "$(rbenv init - bash)"
+        if [[ ":$PATH:" != *":${RBENV_ROOT}/shims:"* ]]; then
+            eval "$(rbenv init - bash)"
+        fi
     fi
 
     # The next line updates PATH for the Google Cloud SDK.
