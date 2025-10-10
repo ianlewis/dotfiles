@@ -143,7 +143,7 @@ install-runtimes: install-go install-node install-python install-ruby ## Install
 
 package-lock.json: package.json $(NODENV_ROOT)/.installed $(AQUA_ROOT_DIR)/.installed
 	@# bash \
-	loglevel="silent"; \
+	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
