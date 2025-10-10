@@ -201,6 +201,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/Automattic/harper/v0.67.0/harper-ls-aarch64-apple-darwin.tar.gz",
+      "checksum": "53F209D53052DAAE5FEE13C5BAF14A4A6F777D4DA65E9C19AE6E08E4EEC2F0E9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.67.0/harper-ls-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "CD42718722C4111BA392C63F336060EB38C20D2461BFF56D39445FA10C01FC9B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.67.0/harper-ls-x86_64-apple-darwin.tar.gz",
+      "checksum": "2E2D041922D78133297C11B15C56961A8FBE72FCC890C602C27E1D071C308C9E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.67.0/harper-ls-x86_64-pc-windows-msvc.zip",
+      "checksum": "5FC34D2CA29A4B6EBCD3C59D6F21CDDEE828018526536CE87EF933E3B0BD123E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.67.0/harper-ls-x86_64-unknown-linux-gnu.tar.gz",
+      "checksum": "BE4679A20D40463FCFE6C4F44B4F864AFF5D594093852A89A108CABE24954AA2",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/BurntSushi/ripgrep/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz",
       "checksum": "24AD76777745FBFF131C8FBC466742B011F925BFA4FFFA2DED6DEF23B5B937BE",
       "algorithm": "sha256"
@@ -643,6 +668,36 @@
     {
       "id": "github_release/github.com/astral-sh/ruff/0.13.3/ruff-x86_64-unknown-linux-musl.tar.gz",
       "checksum": "8D24D74171772C67366D3187B990A3DC706022AA3A631B2A612D12E362F226C7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-aarch64-apple-darwin.tar.gz",
+      "checksum": "0B7C193D5C45EDA02226720EB75239FABECA995D5A0EB3830FD2973CAA3030EC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-aarch64-pc-windows-msvc.zip",
+      "checksum": "A882D2EC2235C13F63453FDE682775D2E1F8A44CCFD1AF9E031255B051E30E70",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "34A25398F03E7D32A4EC406C5C841C6E183FA0A96FBDD40B7E7EEC1F177B360E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-x86_64-apple-darwin.tar.gz",
+      "checksum": "880AE046B435EB306CD557A7481EED6DA463B85F283BA1F2C1E2AD7C139ED6C5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-x86_64-pc-windows-msvc.zip",
+      "checksum": "F81F957C862F310AC0BE70AE7CEF2E99AFB4CC09648E40C039432E11465C2C1C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "ED6D1B8407A1D228DC332FB19057E86E04A6CD3C2BEACDB324AD6FF2A3F9071B",
       "algorithm": "sha256"
     },
     {
@@ -1978,6 +2033,11 @@
     {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.419.0/registry.yaml",
       "checksum": "B0ACBC7B1DB81AC408FB496294BACC92CB0293C3A53CF4DCD5CA84CB7A2021BD6C62AE221C1215D8A5677029745B8C11862D5E7277894978CCBC80F3A9DF0C4F",
+      "algorithm": "sha512"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.426.0/registry.yaml",
+      "checksum": "F677018AB574E8ED9C78555E90C994CC6EFE1A976012BBD8FF5B31B5339EA5F39F52B8EDDE31154328FFA997FA6C04E0A624C1E596BD96494209118881C012D4",
       "algorithm": "sha512"
     }
   ]
