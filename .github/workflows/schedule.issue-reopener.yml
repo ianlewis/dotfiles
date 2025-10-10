@@ -33,12 +33,12 @@ jobs:
     name: Reopen TODO issues
     runs-on: ubuntu-latest
     permissions:
-      # NOTE: contents: read is necessary for private repositories.
-      contents: read
-      issues: write
+      contents: read # Needed for private repositories.
+      issues: write # Needed to comment on and reopen issues.
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
+
       - name: Issue Reopener
         uses: ianlewis/todo-issue-reopener@05ca1b2493e450e1cc464bb25e0fa735ae8e4a00 # v1.7.0

@@ -141,13 +141,12 @@ install-tools: install-bin install-aqua ## Install all CLI tools.
 
 install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
 
-package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
+package-lock.json: package.json $(NODENV_ROOT)/.installed $(AQUA_ROOT_DIR)/.installed
 	@# bash \
-	loglevel="silent"; \
+	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
-	eval "$$($(NODENV_ROOT)/bin/nodenv init - bash)"; \
 	# NOTE: npm install will happily ignore the fact that integrity hashes are \
 	# missing in the package-lock.json. We need to check for missing integrity \
 	# fields ourselves. If any are missing, then we need to regenerate the \
@@ -163,31 +162,29 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 		# integrity field. npm install will not restore this field if \
 		# missing in an existing package-lock.json file. \
 		rm -f $@; \
-		npm --loglevel="$${loglevel}" install \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--no-audit \
 			--no-fund; \
 	else \
-		npm --loglevel="$${loglevel}" install \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--package-lock-only \
 			--no-audit \
 			--no-fund; \
 	fi; \
 
-node_modules/.installed: package-lock.json
+node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
-	eval "$$($(NODENV_ROOT)/bin/nodenv init - bash)"; \
-	npm --loglevel="$${loglevel}" clean-install; \
-	npm --loglevel="$${loglevel}" audit signatures; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" clean-install; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
 	touch $@
 
-.venv/bin/activate:
+.venv/bin/activate: $(PYENV_ROOT)/.installed
 	@# bash \
-	eval "$$($(PYENV_ROOT)/bin/pyenv init - bash)"; \
-	python -m venv .venv
+	$(PYENV_ROOT)/shims/python -m venv .venv
 
 .venv/.installed: requirements-dev.txt .venv/bin/activate
 	@# bash \
@@ -222,7 +219,7 @@ $(HOME)/opt:
 
 # TODO(#240): Add test target dependencies.
 .PHONY: test
-test: ## Run all tests.
+test: lint ## Run all tests.
 	@# bash \
 	echo "Nothing to test."
 
@@ -300,6 +297,9 @@ lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
 			'*.lua' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
 	stylua --config-path stylua.toml $${files}
 
 .PHONY: md-format
@@ -359,7 +359,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint checkmake commitlint fixme markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
+lint: actionlint checkmake commitlint fixme format-check markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -415,7 +415,14 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 	commitlint_from=$(COMMITLINT_FROM_REF); \
 	commitlint_to=$(COMMITLINT_TO_REF); \
 	if [ "$${commitlint_from}" == "" ]; then \
-		commitlint_from=$$(git remote show origin | grep 'HEAD branch' | awk '{print $$NF}'); \
+		# Try to get the default branch without hitting the remote server \
+		if git symbolic-ref --short refs/remotes/origin/HEAD >/dev/null 2>&1; then \
+			commitlint_from=$$(git symbolic-ref --short refs/remotes/origin/HEAD); \
+		elif git show-ref refs/remotes/origin/master >/dev/null 2>&1; then \
+			commitlint_from="origin/master"; \
+		else \
+			commitlint_from="origin/main"; \
+		fi; \
 	fi; \
 	if [ "$${commitlint_to}" == "" ]; then \
 		# if head is on the commitlint_from branch, then we will lint the \
@@ -446,6 +453,29 @@ fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
 	todos \
 		--output "$${output}" \
 		--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
+
+.PHONY: format-check
+format-check: ## Check that files are properly formatted.
+	@# bash \
+	if [ -n "$$(git diff)" ]; then \
+		>&2 echo "The working directory is dirty. Please commit, stage, or stash changes and try again."; \
+		exit 1; \
+	fi; \
+	make format; \
+	exit_code=0; \
+	if [ -n "$$(git diff)" ]; then \
+		>&2 echo "Some files need to be formatted. Please run 'make format' and try again."; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			echo "::group::git diff"; \
+		fi; \
+		git --no-pager diff; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			echo "::endgroup::"; \
+		fi; \
+		exit_code=1; \
+	fi; \
+	git restore .; \
+	exit "$${exit_code}"
 
 .PHONY: markdownlint
 markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the markdownlint linter.
@@ -847,7 +877,7 @@ $(NODENV_ROOT)/.installed:
 	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
 	touch $@
 
-nodenv/package-lock.json: nodenv/package.json
+nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed
 	@# bash \
 	cd $(REPO_ROOT)/nodenv; \
 	$(NODENV_ROOT)/shims/npm \
