@@ -51,13 +51,13 @@ export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PAT
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.25.1
+GO_VERSION ?= 1.25.2
 GO_CHECKSUM ?= 7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.8
+PYENV_INSTALL_VERSION ?= v2.6.10
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= 519ce9dbf0d1ce810050cfab1ae5a7c40df9fb34
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
