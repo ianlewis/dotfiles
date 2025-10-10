@@ -38,11 +38,18 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0 # Fetch all history for all branches and tags
+
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version-file: ".node-version"
+
       # NOTE: actions/checkout does not set up local branches
       - run: |
+          # Fetch the HEAD ref. This is necessary to get the correct default
+          # branch.
+          git remote set-head origin --auto
+
+          # Create local branches for all remote branches except pull requests.
           set -euo pipefail
           current_branch=$(git rev-parse --abbrev-ref HEAD)
           for remote_branch in $(git branch -r | grep -v "\->" | grep -v -e "^\s*pull/"); do
@@ -52,6 +59,7 @@ jobs:
             fi
             git branch --track "${local_branch}" "${remote_branch}"
           done
+
       - name: commitlint
         env:
           COMMITLINT_FROM_REF: ${{ inputs.from_ref }}

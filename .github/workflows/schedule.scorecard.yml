@@ -30,14 +30,11 @@ jobs:
     name: Scorecards analysis
     runs-on: ubuntu-latest
     permissions:
-      # Needed to upload the results to code-scanning dashboard.
-      security-events: write
-      # Used to receive a badge. (Upcoming feature)
-      id-token: write
+      security-events: write # Needed to upload SARIF results.
+      id-token: write # Used to validate the scorecard results.
 
-      # Needed for private repositories.
-      contents: read
-      actions: read
+      contents: read # Needed for private repositories.
+      actions: read # Needed for private repositories.
       issues: read # To allow GraphQL ListCommits to work
       pull-requests: read # To allow GraphQL ListCommits to work
       checks: read # To detect SAST tools

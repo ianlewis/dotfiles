@@ -36,16 +36,18 @@ dotfiles Makefile
 Usage: make [COMMAND]
 
   help                      Print all Makefile targets (this message).
+Installation
   all                       Install and configure everything.
   configure-all             Configure all tools.
   install-all               Install all CLI tools and runtimes.
   install-tools             Install all CLI tools.
   install-runtimes          Install all runtimes.
-Tools
-  license-headers           Update license headers.
+Testing
+  test                      Run all tests.
 Formatting
   format                    Format all files
   json-format               Format JSON files.
+  license-headers           Update license headers.
   lua-format                Format Lua files.
   md-format                 Format Markdown files.
   shfmt                     Format bash files.
@@ -53,7 +55,10 @@ Formatting
 Linting
   lint                      Run all linters.
   actionlint                Runs the actionlint linter.
+  checkmake                 Runs the checkmake linter.
+  commitlint                Run commitlint linter.
   fixme                     Check for outstanding FIXMEs.
+  format-check              Check that files are properly formatted.
   markdownlint              Runs the markdownlint linter.
   renovate-config-validator Validate Renovate configuration.
   selene                    Runs the selene (Lua) linter.
@@ -71,7 +76,6 @@ Base Tools
   configure-tmux            Configure tmux.
   configure-git             Configure git.
 Install Tools
-  install-slsa-verifier     Install slsa-verifier
   install-aqua              Install aqua and aqua-managed CLI tools
 Language Runtimes
   install-go                Install the Go runtime.
@@ -79,7 +83,7 @@ Language Runtimes
   install-python            Install the Python environment.
   install-ruby              Install the Ruby environment.
 Maintenance
-  todos                     Check for outstanding TODOs.
+  todos                     Print outstanding TODOs.
   clean                     Delete temporary files.
 ```
 

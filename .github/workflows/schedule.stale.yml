@@ -24,8 +24,8 @@ jobs:
     name: Close stale issues and PRs
     runs-on: ubuntu-latest
     permissions:
-      issues: write
-      pull-requests: write
+      issues: write # Needed to label and write comments on issues.
+      pull-requests: write # Needed to label and write comments on PRs.
     steps:
       - uses: actions/stale@5f858e3efba33a5ca4407a664cc011ad407f2008 # v10.1.0
         with:
