@@ -52,14 +52,14 @@ export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PAT
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.25.2
-GO_CHECKSUM ?= 7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e
+GO_CHECKSUM ?= d7fa7f8fbd16263aa2501d681b11f972a5fd8e811f7b10cb9b26d031a3d7454b
 GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL = $(GO_URL.$(uname_s).$(uname_m))
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.10
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= 519ce9dbf0d1ce810050cfab1ae5a7c40df9fb34
+PYENV_INSTALL_SHA ?= a419b003b4615bef05098865bb97e0fbc428095e
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
 # the 'master' branch. We validate the SHA here but it may be updated from time
 # to time and cause validation errors.
