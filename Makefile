@@ -141,13 +141,12 @@ install-tools: install-bin install-aqua ## Install all CLI tools.
 
 install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
 
-package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
+package-lock.json: package.json $(NODENV_ROOT)/.installed $(AQUA_ROOT_DIR)/.installed
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
-	eval "$$($(NODENV_ROOT)/bin/nodenv init - bash)"; \
 	# NOTE: npm install will happily ignore the fact that integrity hashes are \
 	# missing in the package-lock.json. We need to check for missing integrity \
 	# fields ourselves. If any are missing, then we need to regenerate the \
@@ -163,31 +162,29 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 		# integrity field. npm install will not restore this field if \
 		# missing in an existing package-lock.json file. \
 		rm -f $@; \
-		npm --loglevel="$${loglevel}" install \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--no-audit \
 			--no-fund; \
 	else \
-		npm --loglevel="$${loglevel}" install \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--package-lock-only \
 			--no-audit \
 			--no-fund; \
 	fi; \
 
-node_modules/.installed: package-lock.json
+node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
-	eval "$$($(NODENV_ROOT)/bin/nodenv init - bash)"; \
-	npm --loglevel="$${loglevel}" clean-install; \
-	npm --loglevel="$${loglevel}" audit signatures; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" clean-install; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
 	touch $@
 
-.venv/bin/activate:
+.venv/bin/activate: $(PYENV_ROOT)/.installed
 	@# bash \
-	eval "$$($(PYENV_ROOT)/bin/pyenv init - bash)"; \
-	python -m venv .venv
+	$(PYENV_ROOT)/shims/python -m venv .venv
 
 .venv/.installed: requirements-dev.txt .venv/bin/activate
 	@# bash \
@@ -880,7 +877,7 @@ $(NODENV_ROOT)/.installed:
 	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
 	touch $@
 
-nodenv/package-lock.json: nodenv/package.json
+nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed
 	@# bash \
 	cd $(REPO_ROOT)/nodenv; \
 	$(NODENV_ROOT)/shims/npm \
