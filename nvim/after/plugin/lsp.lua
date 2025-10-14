@@ -265,6 +265,7 @@ lspconfig.pylsp.setup({
 	},
 })
 --}}}
+
 -- rust-analyzer {{{
 lspconfig.rust_analyzer.setup({
 	capabilities = cmp_capabilities,
