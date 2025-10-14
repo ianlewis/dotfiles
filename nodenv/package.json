@@ -9,6 +9,6 @@
     "stylelint-config-standard-scss": "16.0.0",
     "stylelint-scss": "6.12.1",
     "typescript": "5.9.3",
-    "typescript-language-server": "5.0.0"
+    "typescript-language-server": "5.0.1"
   }
 }
