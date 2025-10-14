@@ -5,6 +5,16 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-10-04`
+
+- Neovim: Search hidden directories and files with telescope's `live_grep`
+  feature ([#407](https://github.com/ianlewis/dotfiles/issues/407)).
+
+## `2025-10-03`
+
+- Neovim: Format and sort Python imports with `ruff`
+  ([#396](https://github.com/ianlewis/dotfiles/issues/396)).
+
 ## `2025-09-27`
 
 - CLI: Removed `flake8` as a dependency. Configuration was removed and the
