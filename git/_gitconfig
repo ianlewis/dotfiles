@@ -6,7 +6,7 @@
     co = checkout
     tree = log --graph --pretty=oneline --abbrev-commit --decorate
 [github]
-    user = IanLewis
+    user = ianlewis
 [include]
     path = ~/.gitconfig.local
 [credential "https://source.developers.google.com"]
