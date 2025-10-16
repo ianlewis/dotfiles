@@ -226,6 +226,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/Automattic/harper/v0.68.0/harper-ls-aarch64-apple-darwin.tar.gz",
+      "checksum": "233797B1988D4D734AB9FEDC6FF591B92A7D5C28E7063CAE1F4E819414416153",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.68.0/harper-ls-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "0ADF78BADBD4CAC9056ADECA8D183B4834DA991B1AE22416CFD8F6A9394C92C3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.68.0/harper-ls-x86_64-apple-darwin.tar.gz",
+      "checksum": "DD019DB1F64A8D2C9A15BE9E69EB72D1AC7C3A7F81969D057BF8B2959ED3A520",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.68.0/harper-ls-x86_64-pc-windows-msvc.zip",
+      "checksum": "AB8B6D0E3954E47582AE072936A0176778FF81199752A66427B58878275811C5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v0.68.0/harper-ls-x86_64-unknown-linux-gnu.tar.gz",
+      "checksum": "D35AA041ADCE8B1E683FAA619EA3BBE7816049007AF09D1051806371F614E8F0",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/BurntSushi/ripgrep/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz",
       "checksum": "24AD76777745FBFF131C8FBC466742B011F925BFA4FFFA2DED6DEF23B5B937BE",
       "algorithm": "sha256"
@@ -911,6 +936,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/cli/cli/v2.82.0/gh_2.82.0_linux_amd64.tar.gz",
+      "checksum": "ABA32DD552112101464941C7B5EE5F097896E1E234EB99581FF1652F44C4009A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.82.0/gh_2.82.0_linux_arm64.tar.gz",
+      "checksum": "B67206677153562DEAA45382227123B1313BD0B304AC8E3239923DD5A671D4C1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.82.0/gh_2.82.0_macOS_amd64.zip",
+      "checksum": "C5DD3EBEA62A7363226026ACF0493EDA93A66273F8FBF24014A73FB33330AB14",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.82.0/gh_2.82.0_macOS_arm64.zip",
+      "checksum": "C52D24F92858743E7142C0DDBEA7BA3679E116062A48F364BE8FE6AA6B24E42C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.82.0/gh_2.82.0_windows_amd64.zip",
+      "checksum": "8CC6F294D0A0B956505695143931E152B5534F1B878F916A72512A051528F9A9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.82.0/gh_2.82.0_windows_arm64.zip",
+      "checksum": "CA33A11224B54AC90815CEE04D8AAF11AD1EBA43DF4D2F03596127E8E409CFD5",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/go-acme/lego/v4.23.1/lego_v4.23.1_darwin_amd64.tar.gz",
       "checksum": "C1343A65D4EEAD6C8053D9044DD745E9D1B2F87AC152A22961A029C2CE8E95FB",
       "algorithm": "sha256"
@@ -1461,6 +1516,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-darwin_amd64.tar.gz",
+      "checksum": "DE7A4C272682671AE2BB6B9D7FBF2103361EE3EE64CC1DAEEA87FA6E5DE08CC2",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-darwin_arm64.tar.gz",
+      "checksum": "B64A9862F30F3D4568C0433DD5A23BC626FA1EDE2C6E1A5E8E680BBF96725EA6",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-linux_amd64.tar.gz",
+      "checksum": "362D5F92187560A87338B427DBE573D1E1BF8B4FB4BAB1F44ACA6A8F7FE8070F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-linux_arm64.tar.gz",
+      "checksum": "E0EBB2E4D2549CC4C693D80CB6CD16467652AB2385B2EBBB5CBAEE3B63FD2904",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-windows_amd64.zip",
+      "checksum": "9D2A1BC6E38665D0A15D846703A2C9EF1F5FE2630A9F972F9832712709C18823",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-windows_arm64.zip",
+      "checksum": "A8A20ECC6E5B49645269B4AD34A8BB34317E753282D9CE463D90BE31B5CEE659",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/koalaman/shellcheck/v0.10.0/shellcheck-v0.10.0.darwin.aarch64.tar.xz",
       "checksum": "BBD2F14826328EEE7679DA7221F2BC3AFB011F6A928B848C80C321F6046DDF81",
       "algorithm": "sha256"
@@ -1793,6 +1878,36 @@
     {
       "id": "github_release/github.com/rhysd/actionlint/v1.7.7/actionlint_1.7.7_windows_arm64.zip",
       "checksum": "76E9514CFAC18E5677AA04F3A89873C981F16A2F2353BB97372A86CD09B1F5A8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.8/actionlint_1.7.8_darwin_amd64.tar.gz",
+      "checksum": "16B85CAF792B34BCC40F7437736C4347680DA0A1B034353A85012DEBBD71A461",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.8/actionlint_1.7.8_darwin_arm64.tar.gz",
+      "checksum": "FFB1F6C429A51DC9F37AF9D11F96C16BD52F54B713BF7F8BD92F7FCE9FD4284A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.8/actionlint_1.7.8_linux_amd64.tar.gz",
+      "checksum": "BE92C2652AB7B6D08425428797CEABEB16E31A781C07BC388456B4E592F3E36A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.8/actionlint_1.7.8_linux_arm64.tar.gz",
+      "checksum": "4C65DBB2D59B409CDD75D47FFA8FA32AF8F0EEE573AC510468DC2275C48BF07C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.8/actionlint_1.7.8_windows_amd64.zip",
+      "checksum": "8CAE2385EB69B93084EA2E6A4BCE57233FEB56AB16B3087BEA25CBC0ABADB0CC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.8/actionlint_1.7.8_windows_arm64.zip",
+      "checksum": "76CBB407E2DE15DF97969AAE51D6FB46AAAE9E73A48DA06B1C3157CB9F2EE766",
       "algorithm": "sha256"
     },
     {
