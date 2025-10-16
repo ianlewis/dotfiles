@@ -39,6 +39,7 @@ rules:
       - "/\\b[Rr]emappings?\\b/g"
       - "/\\b[Ss]ubmodules?\\b/g"
       - "/\\b[Tt]mux\\b/g"
+      - "/\\b[Uu]nstage\\b/g" # e.g. unstage from git index
 
       - "/\\b(CHANGELOG|Changelog)\\b/g"
       - "/\\bCODEOWNER\\b/g"

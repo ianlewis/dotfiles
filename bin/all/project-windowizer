@@ -35,7 +35,16 @@ function _main() {
     # Run the command in the right pane, defaulting to `nvim`.
     # Explicitly start nvim in an interactive bash shell to ensure the command
     # runs with a full terminal environment.
-    tmux split-window -hd -l "${new_window_size}" "${*:-"bash -i -c nvim"}"
+    local pw_cmd="${*:-"nvim"}"
+    local full_cmd="bash -i -c '${pw_cmd}'"
+
+    # If the user explicitly passed "bash" as the first argument, run bash
+    # directly instead of wrapping it in another bash shell.
+    if [[ ${1:-} == "bash" ]]; then
+        full_cmd="${*}"
+    fi
+
+    tmux split-window -hd -l "${new_window_size}" "${full_cmd}"
 
     # clear the left window
     clear
