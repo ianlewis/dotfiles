@@ -5,6 +5,13 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-10-16`
+
+- Git: Add a `git amend` alias to amend the last commit
+  ([#427](https://github.com/ianlewis/dotfiles/issues/427)).
+- Git: Add a `git undo` alias to undo the last commit.
+- Git: Add a `git unstage` alias to unstage files from the index.
+
 ## `2025-10-04`
 
 - Neovim: Search hidden directories and files with telescope's `live_grep`
