@@ -26,3 +26,12 @@ rules:
 
         # Allow the use of the ossf/scorecard-action
         - ossf/scorecard-action
+
+        # Allow the use of the Homebrew/actions/setup-homebrew action.
+        - Homebrew/actions/setup-homebrew
+
+  stale-action-refs:
+    ignore:
+      # Homebrew/actions does not publish tags.
+      # .github/workflows/pull_request.tests.yml
+      - pull_request.tests.yml:68:9

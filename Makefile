@@ -23,8 +23,10 @@ SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 arch.x86_64 := amd64
+arch.arm64 = arm64
 arch = $(arch.$(uname_m))
 kernel.Linux := linux
+kernel.Darwin := darwin
 kernel = $(kernel.$(uname_s))
 
 XDG_CONFIG_HOME ?= $(HOME)/.config
@@ -40,6 +42,7 @@ REPO_NAME = $(shell basename "$(REPO_ROOT)")
 AQUA_VERSION ?= v2.55.0
 AQUA_REPO ?= github.com/aquaproj/aqua
 AQUA_CHECKSUM.Linux.x86_64 = cb7780962ca651c4e025a027b7bfc82c010af25c5c150fe89ad72f4058d46540
+AQUA_CHECKSUM.Darwin.arm64 = 4797caf2d0b60d6ff3eac8c27281d1f23b1dfada4969fd6254f9951dfd83f9cf
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
@@ -47,14 +50,20 @@ export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 # Ensure that aqua and aqua installed tools are in the PATH.
 export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PATH)
 
+# We want GNU versions of tools so prefer them if present.
+GREP := $(shell command -v ggrep 2>/dev/null || command -v grep 2>/dev/null)
+AWK := $(shell command -v gawk 2>/dev/null || command -v awk 2>/dev/null)
+MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 3>/dev/null)
+
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.25.2
-GO_CHECKSUM ?= d7fa7f8fbd16263aa2501d681b11f972a5fd8e811f7b10cb9b26d031a3d7454b
-GO_URL.Linux.x86_64 := https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz
-GO_URL = $(GO_URL.$(uname_s).$(uname_m))
+GO_CHECKSUM.Linux.x86_64 ?= d7fa7f8fbd16263aa2501d681b11f972a5fd8e811f7b10cb9b26d031a3d7454b
+GO_CHECKSUM.Darwin.arm64 ?= d1ade1b480e51b6269b6e65856c602aed047e1f0d32fffef7eebbd7faa8d7687
+GO_CHECKSUM ?= $(GO_CHECKSUM.$(uname_s).$(uname_m))
+GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.10
@@ -100,7 +109,7 @@ RBENV_BUILD_SHA ?= a71c27a9e7b8a0a0f76a8425fe4429ef1fd948a0
 help: ## Print all Makefile targets (this message).
 	@# bash \
 	echo "$(REPO_NAME) Makefile"; \
-	echo "Usage: make [COMMAND]"; \
+	echo "Usage: $(MAKE) [COMMAND]"; \
 	echo ""; \
 	normal=""; \
 	cyan=""; \
@@ -110,8 +119,8 @@ help: ## Print all Makefile targets (this message).
 			cyan=$$(tput setaf 6); \
 		fi; \
 	fi; \
-	grep --no-filename -E '^([/a-z.A-Z0-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
-		awk \
+	$(GREP) --no-filename -E '^([/a-z.A-Z1-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
+		$(AWK) \
 			--assign=normal="$${normal}" \
 			--assign=cyan="$${cyan}" \
 			'BEGIN {FS = "(:.*?|)## ?"}; { \
@@ -194,9 +203,9 @@ node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
 .bin/aqua-$(AQUA_VERSION)/aqua:
 	@# bash \
 	mkdir -p .bin/aqua-$(AQUA_VERSION); \
-	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
 	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
 
 $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
@@ -278,7 +287,7 @@ license-headers: ## Update license headers.
 		>&2 echo "git config user.name \"John Doe\""; \
 	fi; \
 	for filename in $${files}; do \
-		if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
+		if ! ( head "$${filename}" | $(GREP) -iL "Copyright" > /dev/null ); then \
 			$(REPO_ROOT)/third_party/mbrukman/autogen/autogen.sh \
 				--in-place \
 				--no-code \
@@ -328,7 +337,7 @@ md-format: node_modules/.installed ## Format Markdown files.
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	@# NOTE: We need to ignore config files used in tests.
 	@# bash \
-	files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
+	files=$$(git ls-files | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
@@ -461,10 +470,10 @@ format-check: ## Check that files are properly formatted.
 		>&2 echo "The working directory is dirty. Please commit, stage, or stash changes and try again."; \
 		exit 1; \
 	fi; \
-	make format; \
+	$(MAKE) format; \
 	exit_code=0; \
 	if [ -n "$$(git diff)" ]; then \
-		>&2 echo "Some files need to be formatted. Please run 'make format' and try again."; \
+		>&2 echo "Some files need to be formatted. Please run '$(MAKE) format' and try again."; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			echo "::group::git diff"; \
 		fi; \
@@ -597,7 +606,7 @@ SHELLCHECK_ARGS = --severity=style --external-sources
 .PHONY: shellcheck
 shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
 	@# bash \
-	files=$$(git ls-files | xargs file | grep -e ':.*shell' | cut -d':' -f1); \
+	files=$$(git ls-files | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
@@ -680,7 +689,7 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		format="github"; \
 	fi; \
-	.venv/bin/yamllint \
+	$(REPO_ROOT)/.venv/bin/yamllint \
 		--strict \
 		--config-file .yamllint.yaml \
 		--format "$${format}" \
@@ -701,14 +710,14 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 		exit 0; \
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		.venv/bin/zizmor \
+		$(REPO_ROOT)/.venv/bin/zizmor \
 			--config .zizmor.yml \
 			--quiet \
 			--pedantic \
 			--format sarif \
 			$${files} > zizmor.sarif.json; \
 	fi; \
-	.venv/bin/zizmor \
+	$(REPO_ROOT)/.venv/bin/zizmor \
 		--config .zizmor.yml \
 		--quiet \
 		--pedantic \
@@ -720,25 +729,30 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 
 $(XDG_BIN_HOME):
 	@# bash \
-	mkdir -p $(XDG_BIN_HOME); \
-	ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME)/
+	mkdir -p $(XDG_BIN_HOME)
 
-$(XDG_BIN_HOME)/%: $(XDG_BIN_HOME) bin/all/%
-	@# bash \
-	ln -sf "$(REPO_ROOT)"/bin/all/* $(XDG_BIN_HOME)/
+$(XDG_CONFIG_HOME):
+	mkdir -p $(XDG_CONFIG_HOME)
 
-BIN_SRCS := $(wildcard bin/all/*)
-BIN_OBJS := $(subst bin/all,$(XDG_BIN_HOME),$(BIN_SRCS))
+$(XDG_STATE_HOME):
+	mkdir -p $(XDG_STATE_HOME)
+
+$(XDG_DATA_HOME):
+	mkdir -p $(XDG_STATE_HOME)
 
 .PHONY: install-bin
-install-bin: $(BIN_OBJS) ## Install binary scripts.
+install-bin: $(XDG_BIN_HOME) $(XDG_CONFIG_HOME) ## Install binary scripts.
 	@# bash \
-	make \
-		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
-		install
+	ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME); \
+	# TODO(#462): Support MacOS \
+	# TODO(github.com/ianlewis/coding-assistant-docker-images/issues/117): Support MacOS \
+	# mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
+	# $(MAKE) \
+	# 	-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
+	# 	install
 
 .PHONY: configure-bash
-configure-bash: ## Configure bash.
+configure-bash: $(XDG_CONFIG_HOME) ## Configure bash.
 	@# bash \
 	rm -f \
 		$(HOME)/.inputrc \
@@ -776,23 +790,22 @@ $(HOME)/.aqua-checksums.json:
 .PHONY: configure-aqua
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
 
-$(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml
+$(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)
 	@# bash \
-	mkdir -p $$(dirname $@); \
-	mkdir -p $(XDG_STATE_HOME)/efm-langserver; \
-	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
+	mkdir $(XDG_CONFIG_HOME)/efm-langserver; \
+	sed 's|$${XDG_CONFIG_HOME}|'$(XDG_CONFIG_HOME)'|'< $< > $@
 
 .PHONY: configure-efm-langserver
 configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Configure efm-langserver.
 
 .PHONY: configure-nix
-configure-nix: ## Configure nix.
+configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
 	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/nix; \
+	mkdir $(XDG_CONFIG_HOME)/nix; \
 	ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
 
 .PHONY: configure-nvim
-configure-nvim: ## Configure neovim.
+configure-nvim: $(XDG_CONFIG_HOME) ## Configure neovim.
 	@# bash \
 	rm -rf $(XDG_CONFIG_HOME)/nvim; \
 	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
@@ -816,18 +829,19 @@ configure-git: ## Configure git.
 .PHONY: install-aqua
 install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
 	@# bash \
-	$(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
+	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
+	AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
 
 $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt
 	@# bash \
 	mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
-	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
 	tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
 	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
-$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
+$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME)
 	@# bash \
 	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
 	ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
@@ -838,9 +852,9 @@ $(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 .PHONY: install-go
 install-go: $(HOME)/opt ## Install the Go runtime.
 	@# bash \
-	tempfile=$$(mktemp --suffix=".tar.gz"); \
+	tempfile=$$($(MKTEMP) --suffix=".tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
-	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
 	cd $(HOME)/opt; \
 	rm -rf go; \
 	tar xf "$${tempfile}"; \
@@ -852,7 +866,7 @@ install-go: $(HOME)/opt ## Install the Go runtime.
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
 
 # Installs nodeenv and Node.js
-$(NODENV_ROOT)/.installed:
+$(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)
 	@# bash \
 	# Install the nodenv. \
 	git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
@@ -887,7 +901,7 @@ nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed
 		--no-fund
 
 # Installs tools in the user node_modules.
-$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed
+$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed $(XDG_DATA_HOME)
 	@# bash \
 	cd $(REPO_ROOT)/nodenv; \
 	$(NODENV_ROOT)/shims/npm clean-install; \
@@ -912,7 +926,7 @@ $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 	# 		yet installed. \
 	PYENV_VERSION= $(PYENV_ROOT)/bin/pyenv virtualenv $(USER)
 
-$(PYENV_ROOT)/.installed:
+$(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)
 	@# bash \
 	export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
 	$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
@@ -948,7 +962,7 @@ $(PYENV_ROOT)/.installed:
 .PHONY: install-ruby
 install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
 
-$(RBENV_ROOT)/.installed:
+$(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)
 	@# bash \
 	export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
 	git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \

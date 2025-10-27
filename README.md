@@ -170,4 +170,8 @@ Tmux configuration is contained in the [`tmux`](./tmux) directory.
 ## Compatibility
 
 The scripts here should work on most Linux systems. I have tested them mostly on
-Debian-based systems. YMMV.
+Debian-based systems. However, only partial support is provided for NixOS.
+
+These dotfiles have partial support for macOS (Darwin) on Apple silicon (ARM64).
+Some features may still not work. Please see
+[#462](https://github.com/ianlewis/dotfiles/issues/462).
