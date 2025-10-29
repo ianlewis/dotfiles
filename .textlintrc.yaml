@@ -27,6 +27,7 @@ rules:
 
       # Terminology
       - "/\\bARM64\\b/g"
+      - "/\\bHomebrew\\b/g"
       - "/\\bLSP\\b/g"
       - "/\\bLua\\b/g"
       - "/\\bNeovim\\b/g"

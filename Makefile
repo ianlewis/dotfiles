@@ -790,7 +790,7 @@ configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqu
 
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)
 	@# bash \
-	mkdir $(XDG_CONFIG_HOME)/efm-langserver; \
+	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver; \
 	sed 's|$${XDG_CONFIG_HOME}|'$(XDG_CONFIG_HOME)'|'< $< > $@
 
 .PHONY: configure-efm-langserver
@@ -799,7 +799,7 @@ configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Confi
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
 	@# bash \
-	mkdir $(XDG_CONFIG_HOME)/nix; \
+	mkdir -p $(XDG_CONFIG_HOME)/nix; \
 	ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
 
 .PHONY: configure-nvim
@@ -848,7 +848,9 @@ $(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME
 #####################################################################
 
 .PHONY: install-go
-install-go: $(HOME)/opt ## Install the Go runtime.
+install-go: $(HOME)/opt/go-$(GO_VERSION)/.installed ## Install the Go runtime.
+
+$(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt
 	@# bash \
 	tempfile=$$($(MKTEMP) --suffix=".tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
@@ -858,7 +860,8 @@ install-go: $(HOME)/opt ## Install the Go runtime.
 	tar xf "$${tempfile}"; \
 	mv go go-$(GO_VERSION); \
 	ln -s go-$(GO_VERSION) go; \
-	$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto
+	$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto; \
+	touch $@
 
 .PHONY: install-node
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
