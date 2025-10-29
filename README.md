@@ -26,9 +26,27 @@ home directory which makes it easy to test out configuration.
 - [Bash completion](./bash/_bash_completion) with custom completions for various tools.
 - [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful plugins.
 
+## Requirements
+
+- GNU tools: versions of `make`, `grep`, `awk`, and `mktemp` are required.
+- `libyaml`: An installation of `libyaml` is also required to install Ruby.
+- `xz`: `libzma` should be installed for Python.
+
+On macOS you can install these packages with Homebrew.
+
+```bash
+brew install \
+    make \
+    grep \
+    gawk \
+    coreutils \
+    libyaml \
+    xz
+```
+
 ## Install
 
-Dotfiles are installed using a simple Makefile in the root directory.
+Dotfiles are installed using a simple `Makefile` in the root directory.
 
 ```shell
 $ make
@@ -172,6 +190,5 @@ Tmux configuration is contained in the [`tmux`](./tmux) directory.
 The scripts here should work on most Linux systems. I have tested them mostly on
 Debian-based systems. However, only partial support is provided for NixOS.
 
-These dotfiles have partial support for macOS (Darwin) on Apple silicon (ARM64).
-Some features may still not work. Please see
-[#462](https://github.com/ianlewis/dotfiles/issues/462).
+These dotfiles have support for macOS (Darwin) on Apple silicon (ARM64).
+However, it still has not been tested so some features may still not work.

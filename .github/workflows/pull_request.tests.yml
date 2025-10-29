@@ -69,10 +69,12 @@ jobs:
 
       - name: Install GNU tools
         run: |
-          brew install grep
-          brew install gawk
-          brew install make
-          brew install coreutils
+          brew install \
+            make \
+            grep \
+            gawk \
+            coreutils \
+            libyaml
 
       - name: Install all
         env:
