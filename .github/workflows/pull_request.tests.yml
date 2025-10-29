@@ -31,22 +31,69 @@ permissions:
 #       just a human-readable label.
 
 jobs:
-  # Test that a clean install works.
-  install-all:
-    name: install-all
+  # Test that a clean install works on Linix.
+  install-all-ubuntu:
+    name: install-all-ubuntu
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: true
           persist-credentials: false
+
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version-file: ".node-version"
+
       - name: Install all
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make clean all
+
+  # Test that a clean install works on MacOS.
+  install-all-macos:
+    name: install-all-macos
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: "go.mod"
+
+      # NOTE: Homebrew/actions does not publish tags.
+      - uses: Homebrew/actions/setup-homebrew@c39f0335940fb3214046dce5a5d2f94ed275ab4b # main
+
+      - name: Install GNU tools
+        run: |
+          brew install grep
+          brew install gawk
+          brew install make
+          brew install coreutils
+
+      - name: Install all
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gmake clean all
+
+  # NOTE: needed for protected branch checks.
+  install-all:
+    name: install-all
+    runs-on: ubuntu-latest
+    needs:
+      - install-all-ubuntu
+      - install-all-macos
+    if: ${{ always() }}
+    env:
+      INSTALL_UBUNTU_RESULT: ${{ needs.install-all-ubuntu.result }}
+      INSTALL_MACOS_RESULT: ${{ needs.install-all-macos.result }}
+    steps:
+      - run: |
+          [ "${INSTALL_UBUNTU_RESULT}" == "success" ]
+          [ "${INSTALL_MACOS_RESULT}" == "success" ]
 
   # format-check
   ###############################

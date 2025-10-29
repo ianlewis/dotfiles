@@ -26,13 +26,16 @@ rules:
       - "/\\bRonacher\\b/g"
 
       # Terminology
+      - "/\\bARM64\\b/g"
       - "/\\bLSP\\b/g"
       - "/\\bLua\\b/g"
       - "/\\bNeovim\\b/g"
+      - "/\\bNixOS\\b/g"
       - "/\\bTreesitter\\b/g"
       - "/\\bSDK\\b/g"
       - "/\\be2e\\b/g"
-      - "/\\kubectl\\b/g"
+      - "/\\bkubectl\\b/g"
+      - "/\\bmacOS\\b/g"
       - "/\\b[Dd]otfiles\\b/g"
       - "/\\b[Ff]olke\\b/g"
       - "/\\b[Ff]iletypes?\\b/g"

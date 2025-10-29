@@ -184,6 +184,11 @@ function _bashrc_main() {
         source "${HOME}/.bash_aliases"
     fi
 
+    # Enable homebrew if present
+    if [ -x "/opt/homebrew/bin/brew" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+
     # Go
     GOPATH=${HOME}/go
     GOBIN=${GOPATH}/bin
