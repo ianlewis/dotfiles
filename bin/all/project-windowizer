@@ -23,25 +23,47 @@ set -euo pipefail
 # provided, it defaults to running `nvim`.
 
 function _main() {
-    if [[ -z $TMUX ]]; then
+    # These variables are used by the argsparse library.
+    local program_params
+    local argsparse_usage_description
+
+    # shellcheck source=/dev/null
+    . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
+
+    # Command is optional and could contain many parts.
+    argsparse_describe_parameters "COMMAND*"
+
+    # Options are not required.
+    argsparse_allow_no_argument "true"
+
+    # shellcheck disable=SC2034 # Used by argsparse.
+    argsparse_usage_description="Split the current tmux window."
+
+    # Command line parsing is done here.
+    argsparse_parse_options "$@"
+
+    if [[ -z ${TMUX+x} ]]; then
         echo "This script requires tmux to be running." >&2
         exit 1
     fi
 
+    local pw_cmd=("${program_params[@]:-"nvim"}")
+
     # Calculate the nuw size by subtracting 80 columns from the current window
     # width.
-    local new_window_size=$(($(tmux display-message -p "#{window_width}") - 80))
+    local tmux_window_width
+    tmux_window_width=$(tmux display-message -p "#{window_width}")
+    local new_window_size=$((tmux_window_width - 80))
 
     # Run the command in the right pane, defaulting to `nvim`.
     # Explicitly start nvim in an interactive bash shell to ensure the command
     # runs with a full terminal environment.
-    local pw_cmd="${*:-"nvim"}"
-    local full_cmd="bash -i -c '${pw_cmd}'"
+    local full_cmd="bash -i -c '${pw_cmd[*]}'"
 
     # If the user explicitly passed "bash" as the first argument, run bash
     # directly instead of wrapping it in another bash shell.
-    if [[ ${1:-} == "bash" ]]; then
-        full_cmd="${*}"
+    if [[ ${program_params[0]:-""} == "bash" ]]; then
+        full_cmd="${program_params[*]}"
     fi
 
     tmux split-window -hd -l "${new_window_size}" "${full_cmd}"

@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# A simple script to clean up files from a
-# list of temporary directories.
+# A simple script to clean up files from a list of temporary directories.
 
 set -euo pipefail
 

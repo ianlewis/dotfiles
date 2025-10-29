@@ -17,12 +17,17 @@
 
 set -euo pipefail
 
+# tmux-sessionizer opens a new tmux session for a selected project directory.
+# The project directory is selected via fzf from a list of directories found
+# under a specified source directory (default: ~/src). The user can specify
+# the number of tmux windows to open in the new session (default: 1) and the
+# minimum and maximum directory depth to search for project directories
+# (default: 2, e.g. owner/repo).
+
 function _main() {
     # These variables are used by the argsparse library.
     local program_params
     local program_options
-
-    # argsparse_usage_description is used by the argsparse library.
     local argsparse_usage_description
 
     # shellcheck source=/dev/null
@@ -34,14 +39,13 @@ function _main() {
     argsparse_use_option "mindepth" "Minimum directory search depth." "value" "default:2" "short:m" "type:uint"
     argsparse_use_option "maxdepth" "Maximum directory search depth." "value" "default:2" "short:x" "type:uint"
 
-    argsparse_describe_parameters "[ QUERY ]"
-    # QUERY is optional.
-    argsparse_minimum_parameters 0
+    # Query is is a single optional parameter.
+    argsparse_describe_parameters "QUERY?"
 
     # Options are not required.
     argsparse_allow_no_argument "true"
 
-    # shellcheck disable=SC2034
+    # shellcheck disable=SC2034 # Used by argsparse.
     argsparse_usage_description="Open a new tmux session for a project."
 
     # Command line parsing is done here.
