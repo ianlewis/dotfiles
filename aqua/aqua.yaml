@@ -47,3 +47,4 @@ packages:
   - name: mvdan/gofumpt@v0.9.1
   - name: hadolint/hadolint@v2.14.0
   - name: Automattic/harper/harper-ls@v0.68.0
+  - name: dandavison/delta@0.18.2
