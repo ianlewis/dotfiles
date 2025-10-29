@@ -1,3 +1,8 @@
+# vim: ft=gitconfig
+[core]
+    pager = delta
+[init]
+    defaultBranch = main
 [user]
     name = Ian Lewis
     email = ian@ianlewis.org
@@ -7,17 +12,26 @@
     tree = log --graph --pretty=oneline --abbrev-commit --decorate
     undo = reset --soft HEAD~1
     unstage = restore --staged
-[github]
-    user = ianlewis
 [include]
     path = ~/.gitconfig.local
-[credential "https://source.developers.google.com"]
-    helper = gcloud.sh
-[http]
-    cookiefile = ~/.gitcookies
+    path = ~/.config/nvim/pack/nvim/start/tokyonight.nvim/extras/delta/tokyonight_moon.gitconfig
 [pull]
     ff = only
-[core]
-    pager = less
-[init]
-	defaultBranch = main
+# TODO(#475): re-enable after updating to git 1.35+
+# [merge]
+#     conflictStyle = zdiff3
+[http]
+    cookiefile = ~/.gitcookies
+[interactive]
+    diffFilter = delta --color-only
+[credential "https://source.developers.google.com"]
+    helper = gcloud.sh
+[credential "https://github.com"]
+    helper = gh auth git-credential
+[credential "https://gist.github.com"]
+    helper = gh auth git-credential
+[github]
+    user = ianlewis
+[delta]
+    navigate = true     # use n and N to move between diff sections
+    line-numbers = true # show line numbers
