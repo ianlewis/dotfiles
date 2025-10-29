@@ -35,6 +35,12 @@ function _bash_completion() {
         source <(aqua completion bash)
     fi
 
+    # bat completion
+    if command -v bat >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(bat --completion bash)
+    fi
+
     # GitHub CLI completion
     if command -v gh >/dev/null 2>&1; then
         # shellcheck source=/dev/null

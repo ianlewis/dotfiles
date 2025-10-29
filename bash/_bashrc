@@ -140,6 +140,9 @@ function _bashrc_main() {
     export LESS="qR -F -X ${LESS}"
     export LESS
 
+    # Set the bat theme.
+    export BAT_THEME="tokyonight_moon"
+
     local bash_lib_dir="${HOME}/.local/share/bash/lib"
     local nvim_plugin_dir="${HOME}/.config/nvim/pack/nvim/start"
 

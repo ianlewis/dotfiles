@@ -35,3 +35,5 @@
 [delta]
     navigate = true     # use n and N to move between diff sections
     line-numbers = true # show line numbers
+    # NOTE: Uses the bat theme.
+    syntax-theme = tokyonight_moon

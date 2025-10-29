@@ -140,7 +140,7 @@ help: ## Print all Makefile targets (this message).
 all: install-all configure-all ## Install and configure everything.
 
 .PHONY: configure-all
-configure-all: configure-aqua configure-efm-langserver configure-nix configure-nvim configure-bash configure-git configure-tmux ## Configure all tools.
+configure-all: configure-aqua configure-bash configure-bat configure-efm-langserver configure-git configure-nix configure-nvim configure-tmux ## Configure all tools.
 
 .PHONY: install-all
 install-all: install-tools install-runtimes ## Install all CLI tools and runtimes.
@@ -749,31 +749,6 @@ install-bin: $(XDG_BIN_HOME) $(XDG_CONFIG_HOME) ## Install binary scripts.
 		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
 		install
 
-.PHONY: configure-bash
-configure-bash: $(XDG_CONFIG_HOME) ## Configure bash.
-	@# bash \
-	rm -f \
-		$(HOME)/.inputrc \
-		$(HOME)/.profile \
-		$(HOME)/.bash_profile \
-		$(HOME)/.bashrc \
-		$(HOME)/.bash_aliases \
-		$(HOME)/.bash_completion \
-		$(HOME)/.bash_logout \
-		$(HOME)/.dockerfunc \
-		$(HOME)/.local/share/bash/lib \
-		$(XDG_CONFIG_HOME)/sbp; \
-	mkdir -p $(HOME)/.local/share/bash; \
-	ln -sf $(REPO_ROOT)/bash/lib $(HOME)/.local/share/bash/lib; \
-	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
-	ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile; \
-	ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile; \
-	ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc; \
-	ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
-	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
-	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
-	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
-
 $(HOME)/.aqua.yaml:
 	@# bash \
 	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
@@ -788,6 +763,44 @@ $(HOME)/.aqua-checksums.json:
 .PHONY: configure-aqua
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
 
+.PHONY: configure-bash
+configure-bash: $(XDG_CONFIG_HOME) $(XDG_DATA_HOME) ## Configure bash.
+	@# bash \
+	rm -f \
+		$(HOME)/.inputrc \
+		$(HOME)/.profile \
+		$(HOME)/.bash_profile \
+		$(HOME)/.bashrc \
+		$(HOME)/.bash_aliases \
+		$(HOME)/.bash_completion \
+		$(HOME)/.bash_logout \
+		$(HOME)/.dockerfunc \
+		$(XDG_DATA_HOME)/bash/lib \
+		$(XDG_CONFIG_HOME)/sbp; \
+	mkdir -p $(XDG_DATA_HOME)/bash; \
+	ln -sf $(REPO_ROOT)/bash/lib $(XDG_DATA_HOME)/bash/lib; \
+	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
+	ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile; \
+	ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile; \
+	ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc; \
+	ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
+	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
+	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
+	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
+
+configure-bat: $(XDG_CONFIG_HOME) install-aqua ## Configure bat.
+	@# bash \
+	# NOTE: bat must be installed via aqua before running this so that it can \
+	#       be used to build the cache. \
+	# NOTE: this may run before aqua tools are available on the $PATH so we \
+	#       need to refer to bat via the aqua root dir. \
+	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" root-dir); \
+	mkdir -p "$$($${aqua_dir}/bin/bat --config-dir)/themes"; \
+	ln -sf \
+		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
+		"$$($${aqua_dir}/bin/bat --config-dir)/themes/tokyonight_moon.tmTheme"; \
+	"$${aqua_dir}/bin/bat" cache --build
+
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)
 	@# bash \
 	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver; \
@@ -795,6 +808,12 @@ $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_
 
 .PHONY: configure-efm-langserver
 configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Configure efm-langserver.
+
+.PHONY: configure-git
+configure-git: ## Configure git.
+	@# bash \
+	rm -f $(HOME)/.gitconfig; \
+	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
 
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
@@ -815,12 +834,6 @@ configure-tmux: ## Configure tmux.
 	ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
 	ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
 
-.PHONY: configure-git
-configure-git: ## Configure git.
-	@# bash \
-	rm -f $(HOME)/.gitconfig; \
-	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
-
 ## Install Tools
 #####################################################################
 
@@ -828,7 +841,7 @@ configure-git: ## Configure git.
 install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
-	AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config $(HOME)/.aqua.yaml install
+	AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" install
 
 $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt
 	@# bash \
