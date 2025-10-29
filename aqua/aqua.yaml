@@ -48,3 +48,4 @@ packages:
   - name: hadolint/hadolint@v2.14.0
   - name: Automattic/harper/harper-ls@v0.68.0
   - name: dandavison/delta@0.18.2
+  - name: sharkdp/bat@v0.26.0
