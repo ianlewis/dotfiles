@@ -744,12 +744,10 @@ $(XDG_DATA_HOME):
 install-bin: $(XDG_BIN_HOME) $(XDG_CONFIG_HOME) ## Install binary scripts.
 	@# bash \
 	ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME); \
-	# TODO(#462): Support MacOS \
-	# TODO(github.com/ianlewis/coding-assistant-docker-images/issues/117): Support MacOS \
-	# mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
-	# $(MAKE) \
-	# 	-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
-	# 	install
+	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
+	$(MAKE) \
+		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
+		install
 
 .PHONY: configure-bash
 configure-bash: $(XDG_CONFIG_HOME) ## Configure bash.
