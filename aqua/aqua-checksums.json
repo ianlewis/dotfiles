@@ -1966,6 +1966,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-aarch64-apple-darwin.tar.gz",
+      "checksum": "0B66666577B551E2ADBA9CDCF35A265AE595C5B8D4B500ACB85817C4678D2F85",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "6EE11BD8A520C514E230669156D9298F0DD2B5AFC788C0952A4B14FCEC51EAEE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-x86_64-apple-darwin.tar.gz",
+      "checksum": "24D5A93D50CBAEEB977484C63CE88208DD0436B6AAA751562ADD1DAA9B295F21",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-x86_64-pc-windows-msvc.zip",
+      "checksum": "A8A6862F14698B45E101B0932C69BC47A007F4C0456F3A129FDCEF54D443D501",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "26A683B038FBC526C6DF4166DB693DDC9E431E5BDC285D45CCD6B72F3CFF5FFD",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/sigstore/cosign/v2.5.0/cosign-darwin-amd64",
       "checksum": "D61CC50F6F32C2B63CB81CD8A935E5DD1BE8520D639242031A1102092BEE44D4",
       "algorithm": "sha256"
