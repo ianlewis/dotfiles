@@ -39,7 +39,7 @@ REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.55.0
+AQUA_VERSION ?= v2.55.1
 AQUA_REPO ?= github.com/aquaproj/aqua
 AQUA_CHECKSUM.Linux.x86_64 = cb7780962ca651c4e025a027b7bfc82c010af25c5c150fe89ad72f4058d46540
 AQUA_CHECKSUM.Darwin.arm64 = 4797caf2d0b60d6ff3eac8c27281d1f23b1dfada4969fd6254f9951dfd83f9cf
@@ -59,14 +59,14 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.25.2
+GO_VERSION ?= 1.25.3
 GO_CHECKSUM.Linux.x86_64 ?= d7fa7f8fbd16263aa2501d681b11f972a5fd8e811f7b10cb9b26d031a3d7454b
 GO_CHECKSUM.Darwin.arm64 ?= d1ade1b480e51b6269b6e65856c602aed047e1f0d32fffef7eebbd7faa8d7687
 GO_CHECKSUM ?= $(GO_CHECKSUM.$(uname_s).$(uname_m))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.10
+PYENV_INSTALL_VERSION ?= v2.6.12
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= a419b003b4615bef05098865bb97e0fbc428095e
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
@@ -82,7 +82,7 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.13
+NODENV_BUILD_VERSION ?= v5.4.18
 NODENV_BUILD_SHA ?= 0bf3b42fad9df0b7f3887cf2e80450a8f2c4db92
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
