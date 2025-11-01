@@ -53,7 +53,7 @@ export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PAT
 # We want GNU versions of tools so prefer them if present.
 GREP := $(shell command -v ggrep 2>/dev/null || command -v grep 2>/dev/null)
 AWK := $(shell command -v gawk 2>/dev/null || command -v awk 2>/dev/null)
-MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 3>/dev/null)
+MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/null)
 
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
@@ -113,7 +113,7 @@ help: ## Print all Makefile targets (this message).
 	echo ""; \
 	normal=""; \
 	cyan=""; \
-	if command -v tput >/dev/null 3>&1; then \
+	if command -v tput >/dev/null 2>&1; then \
 		if [ -t 1 ]; then \
 			normal=$$(tput sgr0); \
 			cyan=$$(tput setaf 6); \
