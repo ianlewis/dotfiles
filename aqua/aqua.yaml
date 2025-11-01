@@ -49,3 +49,4 @@ packages:
   - name: Automattic/harper/harper-ls@v0.68.0
   - name: dandavison/delta@0.18.2
   - name: sharkdp/bat@v0.26.0
+  - name: tree-sitter/tree-sitter@v0.25.10
