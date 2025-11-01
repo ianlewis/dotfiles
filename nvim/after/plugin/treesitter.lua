@@ -36,8 +36,7 @@ require("nvim-treesitter.configs").setup({
 		"javascript",
 		"json",
 		"json5",
-		-- TODO(#78): Latex needs the treesitter CLI.
-		-- "latex",
+		"latex",
 		"liquid",
 		"lua",
 		"make",
@@ -60,9 +59,6 @@ require("nvim-treesitter.configs").setup({
 		"yaml",
 	},
 
-	-- TODO(#78): Latex needs the treesitter CLI.
-	ignore_install = { "latex" }, -- List of parsers to ignore installing
-
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,
 
@@ -75,8 +71,6 @@ require("nvim-treesitter.configs").setup({
 
 	highlight = {
 		enable = true,
-		-- TODO(#78): Latex needs the treesitter CLI.
-		disable = { "latex" },
 
 		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
 		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
