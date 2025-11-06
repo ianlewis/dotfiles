@@ -23,6 +23,7 @@ SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 arch.x86_64 := amd64
+arch.aarch64 := arm64
 arch.arm64 := arm64
 arch = $(arch.$(uname_m))
 kernel.Linux := linux
@@ -41,9 +42,10 @@ REPO_NAME := $(shell basename "$(REPO_ROOT)")
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.55.1
 AQUA_REPO ?= github.com/aquaproj/aqua
-AQUA_CHECKSUM.Linux.x86_64 := 7371b9785e07c429608a21e4d5b17dafe6780dabe306ec9f4be842ea754de48a
-AQUA_CHECKSUM.Darwin.arm64 := cdaa13dd96187622ef5bee52867c46d4cf10765963423dc8e867c7c4decccf4d
-AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
+AQUA_CHECKSUM.linux.amd64 := 7371b9785e07c429608a21e4d5b17dafe6780dabe306ec9f4be842ea754de48a
+AQUA_CHECKSUM.linux.arm64 := 283e0e274af47ff1d4d660a19e8084ae4b6aca23d901e95728a68a63dfb98c87
+AQUA_CHECKSUM.darwin.arm64 := cdaa13dd96187622ef5bee52867c46d4cf10765963423dc8e867c7c4decccf4d
+AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
 
@@ -60,9 +62,10 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.25.3
-GO_CHECKSUM.Linux.x86_64 := 0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f
-GO_CHECKSUM.Darwin.arm64 := 7c083e3d2c00debfeb2f77d9a4c00a1aac97113b89b9ccc42a90487af3437382
-GO_CHECKSUM ?= $(GO_CHECKSUM.$(uname_s).$(uname_m))
+GO_CHECKSUM.linux.amd64 := 0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f
+GO_CHECKSUM.linux.arm64 := 1d42ebc84999b5e2069f5e31b67d6fc5d67308adad3e178d5a2ee2c9ff2001f5
+GO_CHECKSUM.darwin.arm64 := 7c083e3d2c00debfeb2f77d9a4c00a1aac97113b89b9ccc42a90487af3437382
+GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
@@ -837,11 +840,14 @@ configure-tmux: ## Configure tmux.
 ## Install Tools
 #####################################################################
 
+# NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
-install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua ## Install aqua and aqua-managed CLI tools
+install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
-	AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" install
+	PATH=$(HOME)/opt/go/bin:$(PATH) \
+	AQUA_ROOT_DIR= \
+		$(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" install
 
 $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt
 	@# bash \

@@ -34,4 +34,4 @@ rules:
     ignore:
       # Homebrew/actions does not publish tags.
       # .github/workflows/pull_request.tests.yml
-      - pull_request.tests.yml:68:9
+      - pull_request.tests.yml:87:9
