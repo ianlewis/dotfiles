@@ -2181,6 +2181,51 @@
       "algorithm": "sha256"
     },
     {
+      "id": "http/dl.k8s.io/v1.34.1/bin/darwin/amd64/kubectl",
+      "checksum": "BB211F2B31F2B3BC60562B44CC1E3B712A16A98E9072968BA255BEB04CEFCFDF",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/darwin/arm64/kubectl",
+      "checksum": "D80E5FA36F2B14005E5BB35D3A72818ACB1AEA9A081AF05340A000E5FBDB2F76",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/linux/amd64/kubeadm",
+      "checksum": "20654FD7C5155057AF5C30B86C52C9BA169DB6229EEE6AC7ABAB4309DF4172E7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/linux/amd64/kubectl",
+      "checksum": "7721F265E18709862655AFFBA5343E85E1980639395D5754473DAFAADCAA69E3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/linux/arm64/kubeadm",
+      "checksum": "B0DC5CF091373CAF87D069DC3678E661464837E4F10156F1436BD35A9A7DB06B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/linux/arm64/kubectl",
+      "checksum": "420E6110E3BA7EE5A3927B5AF868D18DF17AAE36B720529FFA4E9E945AA95450",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/windows/amd64/kubeadm.exe",
+      "checksum": "353AE5F9EF94D861169210DBA5834A0A5FBFD1BF4F2B32CFC90181C6AD26E664",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/windows/amd64/kubectl.exe",
+      "checksum": "D118A8DDB0DE15FF230189C85F5157E752405EB0AE8FA680D284DE094C9A20F0",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.34.1/bin/windows/arm64/kubectl.exe",
+      "checksum": "9285FA579A261DA3AE7ACD9153C959807F5B1D5BCE2C7E537EC88B00F5035B14",
+      "algorithm": "sha256"
+    },
+    {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.333.3/registry.yaml",
       "checksum": "47DFBBB1D1F6ED6D97E7511DEA14002FC679CA3C59526DD27204083B9779299F",
       "algorithm": "sha256"
