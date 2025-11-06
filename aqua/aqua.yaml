@@ -52,3 +52,4 @@ packages:
   - name: tree-sitter/tree-sitter@v0.25.10
   - name: kubernetes/kubernetes/kubectl@v1.34.1
   - name: kubernetes/kubernetes/kubeadm@v1.34.1
+  - name: kubernetes-sigs/kind@v0.30.0
