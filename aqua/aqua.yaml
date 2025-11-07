@@ -49,6 +49,7 @@ packages:
   - name: Automattic/harper/harper-ls@v0.68.0
   - name: dandavison/delta@0.18.2
   - name: sharkdp/bat@v0.26.0
+  - name: sharkdp/fd@v10.2.0
   - name: tree-sitter/tree-sitter@v0.25.10
   - name: kubernetes/kubernetes/kubectl@v1.34.1
   - name: kubernetes/kubernetes/kubeadm@v1.34.1
