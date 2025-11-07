@@ -23,7 +23,7 @@ scripts.
 Resource configuration for different purposes are broken into separate files
 using their standard names, such as `.bash_aliases` and `.bash_completion`.
 
-Machine local files can be created by suffixing `.local` to the file name and
+Machine local files can be created by suffixing `.local` to the filename and
 putting it in your home directory. For example, `.bashrc` will load a script
 called `.bashrc.local` if it exists. This goes for other scripts like
 `.bash_aliases`, `.bash_completion`, etc.
@@ -40,9 +40,10 @@ The `lib` directory contains bash libraries that are used in resource
 configuration etc..
 
 - [`sbp`]: A simple bash prompt library that provides a simple way to customize
-  the bash prompt. It is used in `.bashrc` to set the prompt.
-- [`kubectl-aliases`]: A library that provides a set of kubectl aliases for
-  common kubectl commands. It is used in `.bash_aliases` to set the aliases.
+  the bash prompt. It is used in `.bashrc` to set the prompt. A local
+  `.sbp.settings.local.conf` is loaded if it exists.
+- [`kubectl-aliases`]: A library that provides a set of `kubectl` aliases for
+  common `kubectl` commands. It is used in `.bash_aliases` to set the aliases.
 - [`ssh-find-agent`]: A library that provides a way to find the ssh agent socket
   and set the `SSH_AUTH_SOCK` environment variable. If a running ssh-agent isn't
   found, it starts a new instance. It is used in `.bashrc` to set the
