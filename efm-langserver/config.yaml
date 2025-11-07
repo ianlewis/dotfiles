@@ -18,7 +18,7 @@
 
 version: 2
 # NOTE: efm-langserver does not support substitutions in the configuration
-# file. Substitutions like ${XDG_STATE_HOME} are made by the Makefile upon
+# file. Substitutions like ${XDG_CONFIG_HOME} are made by the Makefile upon
 # installation.
-log-file: ${XDG_STATE_HOME}/efm-langserver/efm-langserver.log
+log-file: ${XDG_CONFIG_HOME}/efm-langserver/efm-langserver.log
 log-level: 1
