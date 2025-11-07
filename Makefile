@@ -143,7 +143,7 @@ help: ## Print all Makefile targets (this message).
 all: install-all configure-all ## Install and configure everything.
 
 .PHONY: configure-all
-configure-all: configure-aqua configure-bash configure-bat configure-efm-langserver configure-git configure-nix configure-nvim configure-tmux ## Configure all tools.
+configure-all: configure-aqua configure-bash configure-bat configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux ## Configure all tools.
 
 .PHONY: install-all
 install-all: install-tools install-runtimes ## Install all CLI tools and runtimes.
@@ -817,6 +817,11 @@ configure-git: ## Configure git.
 	@# bash \
 	rm -f $(HOME)/.gitconfig; \
 	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
+
+.PHONY: configure-ghostty
+configure-ghostty: $(XDG_CONFIG_HOME) ## Configure Ghostty.
+	@# bash \
+	ln -sf $(REPO_ROOT)/ghostty $(XDG_CONFIG_HOME)/ghostty
 
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
