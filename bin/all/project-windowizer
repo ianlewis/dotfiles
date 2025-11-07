@@ -43,7 +43,7 @@ function _main() {
     argsparse_parse_options "$@"
 
     if [[ -z ${TMUX+x} ]]; then
-        echo "This script requires tmux to be running." >&2
+        echo "${0}: ERROR: this script requires tmux to be running." >&2
         exit 1
     fi
 
