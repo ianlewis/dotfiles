@@ -36,7 +36,7 @@ function _bashrc_main() {
     if command -v tmx2 >/dev/null 2>&1; then
         tmux_cmd=tmx2
     fi
-    if shopt -q login_shell && [ -n "${SSH_CLIENT}" ]; then
+    if shopt -q login_shell; then
         # Only run if running in a terminal.
         if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
             if command -v "${tmux_cmd}" >/dev/null 2>&1; then
