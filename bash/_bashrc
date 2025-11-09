@@ -190,6 +190,17 @@ function _bashrc_main() {
     # Enable homebrew if present
     if [ -x "/opt/homebrew/bin/brew" ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
+
+        # Install GNU getopt on the $PATH. This will likely break other stuff on
+        # macOS.
+        # TODO(#524): Remove once bash-argsparse support Homebrew gnu-getopt
+        # See: https://github.com/Anvil/bash-argsparse/issues/17
+        local getopt_path
+        getopt_path=$(/opt/homebrew/bin/brew --prefix gnu-getopt)
+
+        if [ -d "${getopt_path}" ]; then
+            [[ ":$PATH:" != *":${getopt_path}/bin:"* ]] && PATH="${getopt_path}/bin:${PATH}"
+        fi
     fi
 
     # Go
