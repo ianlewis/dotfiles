@@ -32,20 +32,16 @@ function _bashrc_main() {
     # Start a tmux or screen session if not already in one
     # Exit directly after the tmux/screen session is exited
     # Only run if logged in remotely via ssh
-    local tmux_cmd=tmux
-    if command -v tmx2 >/dev/null 2>&1; then
-        tmux_cmd=tmx2
-    fi
     if shopt -q login_shell; then
         # Only run if running in a terminal.
         if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
-            if command -v "${tmux_cmd}" >/dev/null 2>&1; then
+            if command -v tmux >/dev/null 2>&1; then
                 # Attempt to discover a detached session
                 # Use the current username as the session name.
-                if "${tmux_cmd}" has-session -t "${USER}" 2>/dev/null; then
-                    exec "${tmux_cmd}" attach-session -t "${USER}"
+                if tmux has-session -t "${USER}" 2>/dev/null; then
+                    exec tmux attach-session -t "${USER}"
                 else
-                    exec "${tmux_cmd}" new-session -s "${USER}"
+                    exec tmux new-session -s "${USER}"
                 fi
             elif command -v screen >/dev/null 2>&1; then
                 # Attempt to discover a detached session
