@@ -24,6 +24,14 @@ set -euo pipefail
 # minimum and maximum directory depth to search for project directories
 # (default: 2, e.g. owner/repo).
 
+# tmux-sessionizer is inspired by tmux-sessionizer by ThePrimeagen. The
+# functionality of searching projects and creating a new Tmux session is
+# implemented here. However, creating new splits etc. has been implemented in a
+# new `project-windowizer` script.
+#
+# You can see ThePrimeagen's version here:
+# https://github.com/ThePrimeagen/tmux-sessionizer
+
 function _main() {
     # These variables are used by the argsparse library.
     local program_params
@@ -58,7 +66,7 @@ function _main() {
     local tmux_running
 
     selected=$(find \
-        ~/src \
+        "${program_options['dir']}" \
         -mindepth "${program_options['mindepth']}" \
         -maxdepth "${program_options['maxdepth']}" \
         -type d | fzf --query="${query}")
