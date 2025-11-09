@@ -69,7 +69,7 @@ function _main() {
         "${program_options['dir']}" \
         -mindepth "${program_options['mindepth']}" \
         -maxdepth "${program_options['maxdepth']}" \
-        -type d | fzf --query="${query}")
+        -type d | fzf --query="${query}" --select-1)
 
     if [[ -z ${selected} ]]; then
         exit 0
