@@ -49,11 +49,12 @@ function _main() {
 
     local pw_cmd=("${program_params[@]:-"nvim"}")
 
-    # Calculate the nuw size by subtracting 80 columns from the current window
-    # width.
+    # Calculate the new size by subtracting 81 columns from the current window
+    # width. This leaves 80 columns for the left pane and 1 column for the
+    # separator.
     local tmux_window_width
     tmux_window_width=$(tmux display-message -p "#{window_width}")
-    local new_window_size=$((tmux_window_width - 80))
+    local new_window_size=$((tmux_window_width - 81))
 
     # Run the command in the right pane, defaulting to `nvim`.
     # Explicitly start nvim in an interactive bash shell to ensure the command
