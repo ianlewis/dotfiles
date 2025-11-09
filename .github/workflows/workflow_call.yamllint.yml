@@ -20,6 +20,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: yamllint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   yamllint:
     name: yamllint
@@ -34,4 +38,7 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - run: make yamllint
+      - name: yamllint
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: make yamllint

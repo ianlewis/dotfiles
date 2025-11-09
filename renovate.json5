@@ -5,10 +5,10 @@
     // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
     "config:best-practices",
 
-    // Update dependencies monthly.
+    // Update dependencies monthly
     "schedule:monthly",
 
-    // Add DCO sign-off.
+    // Add DCO sign-off
     ":gitSignOff",
 
     // Add Aqua present to allow updating CLI tools.
