@@ -456,6 +456,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/antonmedv/fx/39.1.0/fx_darwin_amd64",
+      "checksum": "E48592A5CFC7945F71347D6F1C998ADA9C18097395FD168E4F4DCA2ED8DF2A0B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/antonmedv/fx/39.1.0/fx_darwin_arm64",
+      "checksum": "52242AD7FB55A46907C243DBE6DD67F84EB1ACC33CF00ED430FDE067A081751D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/antonmedv/fx/39.1.0/fx_linux_amd64",
+      "checksum": "AC926DA2FBADEB0945CA568425CE5B35F3EA77A15B8EDD8F21CDAADC7C41C263",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/antonmedv/fx/39.1.0/fx_linux_arm64",
+      "checksum": "8AF2F62D15B601C749E90919376020DF98E07B82B3A2B3DBF4A910731F61E6D2",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/antonmedv/fx/39.1.0/fx_windows_amd64.exe",
+      "checksum": "3DEC796A079F4FD9645592CBCC6858A43E6492A32E3B563F309B1E9E53921DC5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/antonmedv/fx/39.1.0/fx_windows_arm64.exe",
+      "checksum": "45B1855A7CDE0A1139334014933EB6593D1052BC08369730018A158B0C9ADE8F",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/astral-sh/ruff/0.12.0/ruff-aarch64-apple-darwin.tar.gz",
       "checksum": "A72D648A24030D9B34C65043B348CC3AB40B157E7B78E65098FB88EA317774F1",
       "algorithm": "sha256"
@@ -723,6 +753,16 @@
     {
       "id": "github_release/github.com/astral-sh/ruff/0.14.0/ruff-x86_64-unknown-linux-musl.tar.gz",
       "checksum": "ED6D1B8407A1D228DC332FB19057E86E04A6CD3C2BEACDB324AD6FF2A3F9071B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.darwin.amd64",
+      "checksum": "AFAA325D2348043F9A60D3D7BA7803A0A54B760095EA03837C4DE357C75478EF",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.linux.amd64",
+      "checksum": "BEDD033B06F2563809855EC2A9950C7A81ACEA6CD82937FD2F124E2C1C5FC3D5",
       "algorithm": "sha256"
     },
     {
@@ -2303,6 +2343,31 @@
     {
       "id": "http/dl.k8s.io/v1.34.1/bin/windows/arm64/kubectl.exe",
       "checksum": "9285FA579A261DA3AE7ACD9153C959807F5B1D5BCE2C7E537EC88B00F5035B14",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.19.0-darwin-amd64.tar.gz",
+      "checksum": "09A108C0ABDA42E45AF172BE65C49125354BF7CD178DBE10435E94540E49C7B9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.19.0-darwin-arm64.tar.gz",
+      "checksum": "31513E1193DA4EB4AE042EB5F98EF9ACA7890CFA136F4707C8D4F70E2115BEF6",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.19.0-linux-amd64.tar.gz",
+      "checksum": "A7F81CE08007091B86D8BD696EB4D86B8D0F2E1B9F6C714BE62F82F96A594496",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.19.0-linux-arm64.tar.gz",
+      "checksum": "440CF7ADD0AEE27EBC93FADA965523C1DC2E0AB340D4348DA2215737FC0D76AD",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.19.0-windows-amd64.tar.gz",
+      "checksum": "0D6CD301DD49EBE500692EFAFBBDD39CA84376331F4DAC359EB00E3160DAE264",
       "algorithm": "sha256"
     },
     {
