@@ -15,7 +15,7 @@
 # Set the initial shell so we can determine extra options.
 SHELL := /usr/bin/env bash -ueo pipefail
 DEBUG_LOGGING ?= $(shell if [[ "${GITHUB_ACTIONS}" == "true" ]] && [[ -n "${RUNNER_DEBUG}" || "${ACTIONS_RUNNER_DEBUG}" == "true" || "${ACTIONS_STEP_DEBUG}" == "true" ]]; then echo "true"; else echo ""; fi)
-BASH_OPTIONS ?= $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
+BASH_OPTIONS := $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
 
 # Add extra options for debugging.
 SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
@@ -25,7 +25,7 @@ uname_m := $(shell uname -m)
 arch.x86_64 := amd64
 arch.aarch64 := arm64
 arch.arm64 := arm64
-arch = $(arch.$(uname_m))
+arch := $(arch.$(uname_m))
 kernel.Linux := linux
 kernel.Darwin := darwin
 kernel := $(kernel.$(uname_s))
@@ -41,7 +41,7 @@ REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.55.1
-AQUA_REPO ?= github.com/aquaproj/aqua
+AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM.linux.amd64 := 7371b9785e07c429608a21e4d5b17dafe6780dabe306ec9f4be842ea754de48a
 AQUA_CHECKSUM.linux.arm64 := 283e0e274af47ff1d4d660a19e8084ae4b6aca23d901e95728a68a63dfb98c87
 AQUA_CHECKSUM.darwin.arm64 := cdaa13dd96187622ef5bee52867c46d4cf10765963423dc8e867c7c4decccf4d
@@ -122,7 +122,7 @@ help: ## Print all Makefile targets (this message).
 			cyan=$$(tput setaf 6); \
 		fi; \
 	fi; \
-	$(GREP) --no-filename -E '^([/a-z.A-Z1-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
+	$(GREP) --no-filename -E '^([/a-z.A-Z0-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
 		$(AWK) \
 			--assign=normal="$${normal}" \
 			--assign=cyan="$${cyan}" \
@@ -136,24 +136,7 @@ help: ## Print all Makefile targets (this message).
 				} \
 			}'
 
-## Installation
-#####################################################################
-
-.PHONY: all
-all: install-all configure-all ## Install and configure everything.
-
-.PHONY: configure-all
-configure-all: configure-aqua configure-bash configure-bat configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux ## Configure all tools.
-
-.PHONY: install-all
-install-all: install-tools install-runtimes ## Install all CLI tools and runtimes.
-
-.PHONY: install-tools
-install-tools: install-bin install-aqua ## Install all CLI tools.
-
-install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
-
-package-lock.json: package.json $(NODENV_ROOT)/.installed $(AQUA_ROOT_DIR)/.installed
+package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.installed
 	@# bash \
 	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -208,7 +191,7 @@ node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
 	mkdir -p .bin/aqua-$(AQUA_VERSION); \
 	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
+	echo "$(AQUA_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
 	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
 
 $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
@@ -226,14 +209,29 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 $(HOME)/opt:
 	@mkdir -p $(HOME)/opt
 
+## Installation
+#####################################################################
+
+.PHONY: all
+all: install-all configure-all ## Install and configure everything.
+
+.PHONY: configure-all
+configure-all: configure-aqua configure-bash configure-bat configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux ## Configure all tools.
+
+.PHONY: install-all
+install-all: install-tools install-runtimes ## Install all CLI tools and runtimes.
+
+.PHONY: install-tools
+install-tools: install-bin install-aqua ## Install all CLI tools.
+
+install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
+
 ## Testing
 #####################################################################
 
 # TODO(#240): Add test target dependencies.
 .PHONY: test
 test: lint ## Run all tests.
-	@# bash \
-	echo "Nothing to test."
 
 ## Formatting
 #####################################################################
@@ -288,6 +286,7 @@ license-headers: ## Update license headers.
 		>&2 echo "git user.name is required."; \
 		>&2 echo "Set it up using:"; \
 		>&2 echo "git config user.name \"John Doe\""; \
+		exit 1; \
 	fi; \
 	for filename in $${files}; do \
 		if ! ( head "$${filename}" | $(GREP) -iL "Copyright" > /dev/null ); then \

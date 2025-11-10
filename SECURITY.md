@@ -40,7 +40,7 @@ If you know of a publicly disclosed security vulnerability please IMMEDIATELY
 [report the vulnerability](#reporting-a-vulnerability) so that the patch,
 release, and communication process can be started as early as possible.
 
-If the reporter does not go through the private disclosure process, the fix and
+If the reporter does not go through the private disclosure process, the fix, and
 release process will proceed as swiftly as possible. In extreme cases you can
 ask GitHub to delete the issue but this generally isn't necessary and is
 unlikely to make a public disclosure less damaging.
