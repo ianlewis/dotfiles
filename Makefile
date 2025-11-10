@@ -93,7 +93,7 @@ RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20250925
+RBENV_BUILD_VERSION ?= v20251023
 RBENV_BUILD_SHA ?= a71c27a9e7b8a0a0f76a8425fe4429ef1fd948a0
 
 # The help command prints targets in groups. Help documentation in the Makefile
