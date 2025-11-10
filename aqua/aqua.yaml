@@ -54,3 +54,4 @@ packages:
   - name: kubernetes/kubernetes/kubectl@v1.34.1
   - name: kubernetes/kubernetes/kubeadm@v1.34.1
   - name: kubernetes-sigs/kind@v0.30.0
+  - name: kubernetes-sigs/kustomize@kustomize/v5.8.0
