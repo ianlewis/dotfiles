@@ -59,6 +59,12 @@ function _bash_completion() {
         source <(cosign completion bash)
     fi
 
+    # fx completion
+    if command -v fx >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(fx --comp bash)
+    fi
+
     # docker completion
     # NOTE: Docker is not installed by dotfiles but is often installed on the
     # system.
