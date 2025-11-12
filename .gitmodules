@@ -85,3 +85,6 @@
 [submodule "third_party/ianlewis/coding-assistant-docker-images"]
 	path = third_party/ianlewis/coding-assistant-docker-images
 	url = https://github.com/ianlewis/coding-assistant-docker-images.git
+[submodule "nvim/pack/nvim/start/yazi.nvim"]
+	path = nvim/pack/nvim/start/yazi.nvim
+	url = https://github.com/mikavilpas/yazi.nvim.git
