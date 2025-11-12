@@ -41,6 +41,18 @@ function _bash_completion() {
         source <(bat --completion bash)
     fi
 
+    # cosign completion
+    if command -v cosign >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(cosign completion bash)
+    fi
+
+    # fx completion
+    if command -v fx >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(fx --comp bash)
+    fi
+
     # GitHub CLI completion
     if command -v gh >/dev/null 2>&1; then
         # shellcheck source=/dev/null
@@ -53,16 +65,10 @@ function _bash_completion() {
         source <(slsa-verifier completion bash)
     fi
 
-    # cosign completion
-    if command -v cosign >/dev/null 2>&1; then
+    # yq completion
+    if command -v yq >/dev/null 2>&1; then
         # shellcheck source=/dev/null
-        source <(cosign completion bash)
-    fi
-
-    # fx completion
-    if command -v fx >/dev/null 2>&1; then
-        # shellcheck source=/dev/null
-        source <(fx --comp bash)
+        source <(yq completion bash)
     fi
 
     # docker completion

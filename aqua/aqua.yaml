@@ -58,3 +58,5 @@ packages:
   - name: helm/helm@v3.19.0
   - name: antonmedv/fx@39.1.0
   - name: checkmake/checkmake@0.2.2
+  - name: mikefarah/yq@v4.48.1
+  - name: sxyazi/yazi@v25.5.31

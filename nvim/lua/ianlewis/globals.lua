@@ -35,4 +35,10 @@ do
 	vim.g.loaded_perl_provider = 0
 	vim.g.loaded_python3_provider = 0
 	vim.g.loaded_ruby_provider = 0
+
+	-- Disable netrw so it can be replaced with `yazi`.
+	-- See: after/plugin/yazi.lua
+	-- This tells Neovim that netrw is already loaded, effectively preventing it
+	-- from loading.
+	vim.g.loaded_netrwPlugin = 1
 end
