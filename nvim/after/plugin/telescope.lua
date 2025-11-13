@@ -23,12 +23,19 @@ require("telescope").setup({
 			"--column",
 			"--smart-case",
 			"--hidden", -- search hidden files
+			"--glob=!**/.git/*", -- don't include .git directory
 		},
 	},
 	pickers = {
 		find_files = {
-			hidden = true,
 			theme = "ivy",
+			find_command = {
+				"rg",
+				"--files",
+				"--color=never",
+				"--hidden", -- include hidden files
+				"--glob=!**/.git/*", -- don't include .git directory
+			},
 		},
 		buffers = {
 			hidden = true,
