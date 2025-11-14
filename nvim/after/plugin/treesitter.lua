@@ -12,14 +12,15 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- e.g. ~/.local/share/nvim/treesitter
+-- e.g. `~/.local/share/nvim/treesitter`
 local parser_dir = vim.fn.stdpath("data") .. "/treesitter"
 
--- NOTE: treesitter parser dir must be added to the runtime path.
+-- NOTE: Tree-sitter parser directory must be added to the runtime path.
 vim.opt.runtimepath:append(parser_dir)
 
 require("nvim-treesitter.configs").setup({
-	-- A list of parser names, or "all" (the listed parsers MUST always be installed)
+	-- A list of parser names, or "all"(the listed parsers MUST always be
+	-- installed)
 	ensure_installed = {
 		"bash",
 		"c",
@@ -66,16 +67,22 @@ require("nvim-treesitter.configs").setup({
 	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
 	auto_install = true,
 
-	-- Path to the tree-sitter parser directory.
+	-- Path to the Tree-sitter parser directory.
 	parser_install_dir = parser_dir,
 
 	highlight = {
 		enable = true,
 
-		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-		-- Using this option may slow down your editor, and you may see some duplicate highlights.
-		-- Instead of true it can also be a list of languages
+		-- Setting this to true will run `:h syntax` and Tree-sitter at the same
+		-- time. Set this to `true` if you depend on 'syntax' being enabled
+		-- (like for indentation). Using this option may slow down your editor,
+		-- and you may see some duplicate highlights. Instead of true it can
+		-- also be a list of languages
 		additional_vim_regex_highlighting = false,
+
+		disable = {
+			-- TODO(#540): re-enable when `tree-sitter-dockerfile` parser is fixed.
+			"dockerfile",
+		},
 	},
 })
