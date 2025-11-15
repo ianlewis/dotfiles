@@ -71,8 +71,6 @@
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
       matchFileNames: ["aqua/aqua.yaml"],
-      // Weekly schedule on early Monday mornings (before 4 AM).
-      schedule: ["* 0-3 * * 1"],
     },
     {
       matchUpdateTypes: ["minor", "patch"],
@@ -90,8 +88,6 @@
       matchUpdateTypes: ["minor", "patch"],
       groupName: "python",
       matchFileNames: ["requirements.txt"],
-      // Weekly schedule on early Monday mornings (before 4 AM).
-      schedule: ["* 0-3 * * 1"],
     },
     {
       matchManagers: ["pip_requirements"],
@@ -104,8 +100,6 @@
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch"],
       groupName: "npm",
-      // Weekly schedule on early Monday mornings (before 4 AM).
-      schedule: ["* 0-3 * * 1"],
     },
     {
       matchManagers: ["npm"],
