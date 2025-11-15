@@ -79,7 +79,7 @@
     },
     {
       matchManagers: ["github-actions"],
-      matchUpdateTypes: ["minor", "patch"],
+      matchUpdateTypes: ["digest", "minor", "patch"],
       groupName: "github-actions",
       pinDigests: true,
     },
