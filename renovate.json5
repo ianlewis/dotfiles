@@ -58,6 +58,11 @@
   // Group various ecosystem updates. Security updates are always separate.
   packageRules: [
     {
+      matchManagers: ["git-submodules"],
+      matchUpdateTypes: ["digest"],
+      groupName: "git-submodules",
+    },
+    {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua-dev",
       matchFileNames: [".aqua.yaml"],
