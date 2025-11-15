@@ -49,10 +49,10 @@ jobs:
         with:
           node-version-file: ".node-version"
 
-      - name: Install all
+      - name: Install
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make clean all
+        run: make clean install
 
   # Test that a clean install works on Linux arm64.
   install-all-ubuntu2404-arm64:
@@ -68,10 +68,10 @@ jobs:
         with:
           node-version-file: ".node-version"
 
-      - name: Install all
+      - name: Install
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make clean all
+        run: make clean install
 
   # Test that a clean install works on MacOS.
   install-all-macos26-arm64:
@@ -99,10 +99,10 @@ jobs:
             coreutils \
             libyaml
 
-      - name: Install all
+      - name: Install
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gmake clean all
+        run: gmake clean install
 
   # NOTE: needed for protected branch checks.
   install-all:
