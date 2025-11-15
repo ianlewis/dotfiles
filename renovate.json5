@@ -58,6 +58,11 @@
   // Group various ecosystem updates. Security updates are always separate.
   packageRules: [
     {
+      matchManagers: ["git-submodules"],
+      matchUpdateTypes: ["digest"],
+      groupName: "git-submodules",
+    },
+    {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua-dev",
       matchFileNames: [".aqua.yaml"],
@@ -66,8 +71,6 @@
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
       matchFileNames: ["aqua/aqua.yaml"],
-      // Weekly schedule on early Monday mornings (before 4 AM).
-      schedule: ["* 0-3 * * 1"],
     },
     {
       matchUpdateTypes: ["minor", "patch"],
@@ -76,7 +79,7 @@
     },
     {
       matchManagers: ["github-actions"],
-      matchUpdateTypes: ["minor", "patch"],
+      matchUpdateTypes: ["digest", "minor", "patch"],
       groupName: "github-actions",
       pinDigests: true,
     },
@@ -85,8 +88,6 @@
       matchUpdateTypes: ["minor", "patch"],
       groupName: "python",
       matchFileNames: ["requirements.txt"],
-      // Weekly schedule on early Monday mornings (before 4 AM).
-      schedule: ["* 0-3 * * 1"],
     },
     {
       matchManagers: ["pip_requirements"],
@@ -99,8 +100,6 @@
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch"],
       groupName: "npm",
-      // Weekly schedule on early Monday mornings (before 4 AM).
-      schedule: ["* 0-3 * * 1"],
     },
     {
       matchManagers: ["npm"],
