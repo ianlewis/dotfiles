@@ -39,6 +39,17 @@ OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github
 REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
+
+# TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
+# renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
+SLSA_VERIFIER_VERSION ?= v2.7.1
+SLSA_VERIFIER_REPO := github.com/slsa-framework/slsa-verifier
+SLSA_VERIFIER_CHECKSUM.linux.amd64 := 946DBEC729094195E88EF78E1734324A27869F03E2C6BD2F61CBC06BD5350339
+SLSA_VERIFIER_CHECKSUM.linux.arm64 := 5D3B2349EDE7BFEC19E7A21569F18B9F7410145AD12E9584B175370669E14061
+SLSA_VERIFIER_CHECKSUM.darwin.arm64 := 39ABFCF5F1D690C3E889CE3D2D6A8B87711424D83368511868D414E8F8BCB05C
+SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(kernel).$(arch))
+SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERIFIER_VERSION)/slsa-verifier-$(kernel)-$(arch)
+
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.55.1
 AQUA_REPO := github.com/aquaproj/aqua
@@ -213,18 +224,19 @@ $(HOME)/opt:
 #####################################################################
 
 .PHONY: all
-all: install-all configure-all ## Install and configure everything.
+all: test install-all ## Run all tests, install and configure everything.
 
-.PHONY: configure-all
-configure-all: configure-aqua configure-bash configure-bat configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux ## Configure all tools.
+.PHONY: install
+install: install-tools install-runtimes configure ## Install and configure everything.
 
-.PHONY: install-all
-install-all: install-tools install-runtimes ## Install all CLI tools and runtimes.
+.PHONY: configure
+configure: configure-aqua configure-bash configure-bat configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux
 
 .PHONY: install-tools
-install-tools: install-bin install-aqua ## Install all CLI tools.
+install-tools: install-bin install-slsa-verifier install-aqua
 
-install-runtimes: install-go install-node install-python install-ruby ## Install all runtimes.
+.PHONY: install-runtimes
+install-runtimes: install-go install-node install-python install-ruby
 
 ## Testing
 #####################################################################
@@ -843,6 +855,17 @@ configure-tmux: ## Configure tmux.
 
 ## Install Tools
 #####################################################################
+
+$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)
+	@# bash \
+	tempfile=$$($(MKTEMP) --suffix=".slsa-verifier-$(SLSA_VERIFIER_VERSION)"); \
+	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"; \
+	echo "$(SLSA_VERIFIER_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
+	chmod +x "$${tempfile}"; \
+	mv "$${tempfile}" $@
+
+.PHONY: install-slsa-verifier
+install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
