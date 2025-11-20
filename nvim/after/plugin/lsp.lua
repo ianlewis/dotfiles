@@ -89,6 +89,7 @@ local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
 
+-- {{{ Warning-level todos (TODO, FIXME, BUG, HACK, XXX, etc.)
 local todos = {
 	prefix = "todos",
 	lintCommand = "todos",
@@ -101,6 +102,21 @@ local todos = {
 }
 -- }}}
 
+-- {{{ Info-level todos (NOTE, INFO, PERF, OPTIMIZE, TEST)
+local todos_note = {
+	prefix = "todos",
+	lintCommand = "todos --todo-types NOTE,Note,note,INFO,Info,info,PERF,Perf,perf,OPTIM,Optim,optim,OPTIMIZE,Optimize,optimize,TEST,Test,test",
+	lintStdin = false,
+	lintIgnoreExitCode = true,
+	lintSeverity = 3, -- 3 = info
+	lintFormats = {
+		"%f:%l:%m",
+	},
+}
+-- }}}
+
+-- }}}
+
 lspconfig.efm.setup({
 	init_options = { documentFormatting = true },
 	settings = {
@@ -111,18 +127,18 @@ lspconfig.efm.setup({
 			--       golangci-lint isn't used because I usually have specific
 			--       configuration per-project and checks analysis tools built
 			--       into gopls are usually good enough for normal editing.
-			sh = { todos },
-			bash = { todos },
-			conf = { todos },
-			css = { prettier, stylelint, todos },
-			dockerfile = { hadolint, todos },
-			gitignore = { todos },
-			go = { todos },
-			html = { prettier, todos },
-			javascript = { prettier, todos },
-			json = { prettier, todos },
-			json5 = { prettier, todos },
-			markdown = { prettier, markdownlint, todos },
+			sh = { todos, todos_note },
+			bash = { todos, todos_note },
+			conf = { todos, todos_note },
+			css = { prettier, stylelint, todos, todos_note },
+			dockerfile = { hadolint, todos, todos_note },
+			gitignore = { todos, todos_note },
+			go = { todos, todos_note },
+			html = { prettier, todos, todos_note },
+			javascript = { prettier, todos, todos_note },
+			json = { prettier, todos, todos_note },
+			json5 = { prettier, todos, todos_note },
+			markdown = { prettier, markdownlint, todos, todos_note },
 			-- NOTE: The @shopify/prettier-plugin-liquid plugin is required in
 			-- the target project. Install it with:
 			--
@@ -139,15 +155,15 @@ lspconfig.efm.setup({
 			--     }
 			--   }
 			--
-			liquid = { prettier, todos },
-			lua = { stylua, selene, todos },
-			python = { todos },
-			rust = { todos },
-			scss = { prettier, stylelint, todos },
-			terraform = { tofuFmt, todos },
-			typescript = { prettier, todos },
-			yaml = { prettier, yamllint, todos },
-			["yaml.ghaction"] = { prettier, actionlint, yamllint, todos },
+			liquid = { prettier, todos, todos_note },
+			lua = { stylua, selene, todos, todos_note },
+			python = { todos, todos_note },
+			rust = { todos, todos_note },
+			scss = { prettier, stylelint, todos, todos_note },
+			terraform = { tofuFmt, todos, todos_note },
+			typescript = { prettier, todos, todos_note },
+			yaml = { prettier, yamllint, todos, todos_note },
+			["yaml.ghaction"] = { prettier, actionlint, yamllint, todos, todos_note },
 		},
 	},
 })
