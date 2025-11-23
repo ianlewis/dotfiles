@@ -83,6 +83,7 @@ local tofuFmt = {
 
 -- linters {{{
 local actionlint = require("efmls-configs.linters.actionlint")
+local checkmake = require("efmls-configs.linters.checkmake")
 local hadolint = require("efmls-configs.linters.hadolint")
 local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
@@ -139,6 +140,7 @@ lspconfig.efm.setup({
 			json = { prettier, todos, todos_note },
 			json5 = { prettier, todos, todos_note },
 			markdown = { prettier, markdownlint, todos, todos_note },
+			make = { checkmake, todos, todos_note },
 			-- NOTE: The @shopify/prettier-plugin-liquid plugin is required in
 			-- the target project. Install it with:
 			--

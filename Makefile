@@ -423,13 +423,10 @@ checkmake: $(AQUA_ROOT_DIR)/.installed ## Runs the checkmake linter.
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		# TODO: Remove newline from the format string after updating checkmake. \
 		checkmake \
-			--config .checkmake.ini \
 			--format '::error file={{.FileName}},line={{.LineNumber}}::{{.Rule}}: {{.Violation}}'$$'\n' \
 			$${files}; \
 	else \
-		checkmake \
-			--config .checkmake.ini \
-			$${files}; \
+		checkmake $${files}; \
 	fi
 
 .PHONY: commitlint
