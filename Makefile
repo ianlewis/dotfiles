@@ -323,7 +323,7 @@ lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	stylua --config-path stylua.toml $${files}
+	stylua $${files}
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.

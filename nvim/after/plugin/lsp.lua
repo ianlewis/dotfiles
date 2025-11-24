@@ -114,8 +114,7 @@ local todos = {
 -- {{{ Info-level todos (NOTE, INFO, PERF, OPTIMIZE, TEST)
 local todos_note = {
 	prefix = "todos",
-	lintCommand =
-	"todos --todo-types NOTE,Note,note,INFO,Info,info,PERF,Perf,perf,OPTIM,Optim,optim,OPTIMIZE,Optimize,optimize,TEST,Test,test",
+	lintCommand = "todos --todo-types NOTE,Note,note,INFO,Info,info,PERF,Perf,perf,OPTIM,Optim,optim,OPTIMIZE,Optimize,optimize,TEST,Test,test",
 	lintStdin = false,
 	lintIgnoreExitCode = true,
 	lintSeverity = 3, -- 3 = info
@@ -223,11 +222,12 @@ lspconfig.harper_ls.setup({})
 
 -- lua_ls {{{
 lspconfig.lua_ls.setup({
-	format = {
-		-- Disable CppCXY/EmmyLuaCodeStyle in favor of stylua via
+	on_attach = function(client)
+		-- Disable the documentFormattingProvider for lua-ls
+		-- This disable CppCXY/EmmyLuaCodeStyle in favor of stylua via
 		-- efm-langserver.
-		enable = false,
-	},
+		client.server_capabilities.documentFormattingProvider = false
+	end,
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
