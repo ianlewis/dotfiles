@@ -42,6 +42,11 @@ function _main() {
     # Command line parsing is done here.
     argsparse_parse_options "$@"
 
+    if ! command -v tmux >/dev/null 2>&1; then
+        echo "${0}: ERROR: this script requires tmux." >&2
+        exit 1
+    fi
+
     if [[ -z ${TMUX+x} ]]; then
         echo "${0}: ERROR: this script requires tmux to be running." >&2
         exit 1
