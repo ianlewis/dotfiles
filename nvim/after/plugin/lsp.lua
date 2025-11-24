@@ -90,6 +90,14 @@ local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
 
+markdownlint.rootMarkers = {
+	".git/",
+	".markdownlintignore",
+	".markdownlint.json",
+	".markdownlint.yaml",
+	".markdownlint.yml",
+}
+
 -- {{{ Warning-level todos (TODO, FIXME, BUG, HACK, XXX, etc.)
 local todos = {
 	prefix = "todos",
@@ -106,7 +114,8 @@ local todos = {
 -- {{{ Info-level todos (NOTE, INFO, PERF, OPTIMIZE, TEST)
 local todos_note = {
 	prefix = "todos",
-	lintCommand = "todos --todo-types NOTE,Note,note,INFO,Info,info,PERF,Perf,perf,OPTIM,Optim,optim,OPTIMIZE,Optimize,optimize,TEST,Test,test",
+	lintCommand =
+	"todos --todo-types NOTE,Note,note,INFO,Info,info,PERF,Perf,perf,OPTIM,Optim,optim,OPTIMIZE,Optimize,optimize,TEST,Test,test",
 	lintStdin = false,
 	lintIgnoreExitCode = true,
 	lintSeverity = 3, -- 3 = info
