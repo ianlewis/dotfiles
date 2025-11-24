@@ -2541,6 +2541,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-darwin-amd64",
+      "checksum": "0FC2B6F16B900ABDFDA3153B11FC435A8CBE3830E8E820FE8AD5FE4149A5B472",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-darwin-arm64",
+      "checksum": "3823B044DE184DA21E300BC5E20DD29D3FA9243AF3BA70C4A5DA1712F3385D46",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-linux-amd64",
+      "checksum": "46DBDCB5467A3DFEC2526923D0B3365E40C8D9DC00EC23D5ACA3437449E8CBFD",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-linux-arm64",
+      "checksum": "17FD784737CA54D7D8A343C82DA6C5D6DBDEE971E66644D923D1B057FB97D7ED",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-windows-amd64.exe",
+      "checksum": "7A137280D8686665CEB4D8565DF2A0AC63F28031E014CDCAE5D56891A6C8A400",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/sxyazi/yazi/v25.5.31/yazi-aarch64-apple-darwin.zip",
       "checksum": "8BDF137E8F84CD11F9DD866FF2B68E4886D1055AB21FE2E0C6F6A0515D2BFD70",
       "algorithm": "sha256"
