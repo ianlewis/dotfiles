@@ -90,6 +90,14 @@ local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
 
+markdownlint.rootMarkers = {
+	".git/",
+	".markdownlintignore",
+	".markdownlint.json",
+	".markdownlint.yaml",
+	".markdownlint.yml",
+}
+
 -- {{{ Warning-level todos (TODO, FIXME, BUG, HACK, XXX, etc.)
 local todos = {
 	prefix = "todos",
@@ -214,11 +222,12 @@ lspconfig.harper_ls.setup({})
 
 -- lua_ls {{{
 lspconfig.lua_ls.setup({
-	format = {
-		-- Disable CppCXY/EmmyLuaCodeStyle in favor of stylua via
+	on_attach = function(client)
+		-- Disable the documentFormattingProvider for lua-ls
+		-- This disable CppCXY/EmmyLuaCodeStyle in favor of stylua via
 		-- efm-langserver.
-		enable = false,
-	},
+		client.server_capabilities.documentFormattingProvider = false
+	end,
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
