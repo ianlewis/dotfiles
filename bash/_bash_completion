@@ -59,6 +59,12 @@ function _bash_completion() {
         source <(gh completion --shell bash)
     fi
 
+    # npm completion
+    if command -v npm >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(npm completion bash)
+    fi
+
     # slsa-verifier completion
     if command -v slsa-verifier >/dev/null 2>&1; then
         # shellcheck source=/dev/null
