@@ -59,6 +59,11 @@ function _main() {
     # Command line parsing is done here.
     argsparse_parse_options "$@"
 
+    if ! command -v tmux >/dev/null 2>&1; then
+        echo "${0}: ERROR: this script requires tmux." >&2
+        exit 1
+    fi
+
     local query=${program_params[0]:-""}
 
     local selected
@@ -76,14 +81,14 @@ function _main() {
     fi
 
     selected_name=$(basename "$selected" | tr . _)
-    tmux_running=$(pgrep tmux)
+    tmux_running=$(pgrep tmux || true)
 
     # Session name can't be a number so add a trailing underscore.
     if [[ ${selected_name} =~ ^[0-9]+$ ]]; then
         selected_name="${selected_name}_"
     fi
 
-    if [[ -z $TMUX ]] && [[ -z ${tmux_running} ]]; then
+    if [[ -z ${TMUX+x} ]] && [[ -z ${tmux_running} ]]; then
         tmux new-session -s "${selected_name}" -c "${selected}"
         # NOTE: new-session opens the first window.
         for ((i = 2; i <= program_options['windows']; i++)); do
