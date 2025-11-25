@@ -36,6 +36,7 @@ function _main() {
         cat "${tempfile}" >"${HOME}/.ssh/authorized_keys"
     fi
 
+    local key
     # Adds local authorized_keys if not already there
     if [ -f "${HOME}/.ssh/authorized_keys.local" ]; then
         while read -r key; do

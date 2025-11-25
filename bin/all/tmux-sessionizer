@@ -39,6 +39,11 @@ function _main() {
     local argsparse_usage_description
 
     # shellcheck source=/dev/null
+    . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
+
+    ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
+
+    # shellcheck source=/dev/null
     . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
 
     argsparse_use_option "dir" "Project source directory." "value" "default:${HOME}/src" "short:d" "type:directory"
@@ -61,7 +66,7 @@ function _main() {
 
     if ! command -v tmux >/dev/null 2>&1; then
         echo "${0}: ERROR: this script requires tmux." >&2
-        exit 1
+        return 1
     fi
 
     local query=${program_params[0]:-""}
@@ -77,7 +82,7 @@ function _main() {
         -type d | fzf --query="${query}" --select-1)
 
     if [[ -z ${selected} ]]; then
-        exit 0
+        return 0
     fi
 
     selected_name=$(basename "$selected" | tr . _)
@@ -94,7 +99,7 @@ function _main() {
         for ((i = 2; i <= program_options['windows']; i++)); do
             tmux new-window -dt "${selected_name}" -c "${selected}"
         done
-        exit 0
+        return 0
     fi
 
     if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
