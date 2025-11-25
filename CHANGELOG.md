@@ -5,6 +5,13 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-11-26`
+
+- Bash: Add support for Bash completion on macOS.
+  ([#564](https://github.com/ianlewis/dotfiles/issues/564)).
+
+<!-- TODO(#566): Add missing entries -->
+
 ## `2025-10-16`
 
 - Git: Add a `git amend` alias to amend the last commit
