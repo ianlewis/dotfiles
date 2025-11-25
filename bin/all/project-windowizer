@@ -28,6 +28,11 @@ function _main() {
     local argsparse_usage_description
 
     # shellcheck source=/dev/null
+    . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
+
+    ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
+
+    # shellcheck source=/dev/null
     . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
 
     # Command is optional and could contain many parts.
@@ -44,12 +49,12 @@ function _main() {
 
     if ! command -v tmux >/dev/null 2>&1; then
         echo "${0}: ERROR: this script requires tmux." >&2
-        exit 1
+        return 1
     fi
 
     if [[ -z ${TMUX+x} ]]; then
         echo "${0}: ERROR: this script requires tmux to be running." >&2
-        exit 1
+        return 1
     fi
 
     local pw_cmd=("${program_params[@]:-"nvim"}")

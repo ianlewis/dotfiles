@@ -19,27 +19,31 @@
 
 set -euo pipefail
 
-# Explicitly specify the directories for safety.
-DIRS="$HOME/tmp/ $HOME/Downloads/"
+function _main() {
+    local dirs
+    local days
 
-DAYS=${1:-""}
+    # Explicitly specify the directories for safety.
+    dirs="$HOME/tmp/ $HOME/Downloads/"
 
-if [ "$DAYS" = "" ]; then
-    DAYS=14
-fi
+    days=${1:-""}
 
-for DIR in $DIRS; do
-    if [ -d "$DIR" ]; then
-        # Delete old files
-        find "$DIR" -type f -mtime +"$DAYS" -delete
-
-        # Delete old symbolic links
-        find "$DIR" -type l -mtime +"$DAYS" -delete
-
-        # Delete empty directories
-        find "$DIR" -type d -empty -delete
+    if [ "${days}" = "" ]; then
+        days=14
     fi
 
-    # Finally make sure the directory itself exists
-    mkdir -p "$DIR"
-done
+    for d in ${dirs}; do
+        if [ -d "${d}" ]; then
+            # Delete old files
+            find "${d}" -type f -mtime +"${days}" -delete
+
+            # Delete old symbolic links
+            find "${d}" -type l -mtime +"${days}" -delete
+
+            # Delete empty directories
+            find "${d}" -type d -empty -delete
+        fi
+    done
+}
+
+_main "$@"

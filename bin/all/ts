@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # vim: set ft=bash:
 #
 # Copyright 2025 Ian Lewis
@@ -19,4 +19,12 @@
 # Helpful for things like cron jobs or log output.
 # example: some_long_script.sh | ts
 
-while IFS= read -r line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')] ${line}"; done
+set -euo pipefail
+
+function _main() {
+    local line
+
+    while IFS= read -r line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')] ${line}"; done
+}
+
+_main "$@"
