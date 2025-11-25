@@ -19,11 +19,57 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# _bashrc_setup_homebrew initializes the Homebrew environment on macOS.
+function _bashrc_setup_homebrew() {
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        local hb_prefix
+        hb_prefix="/opt/homebrew"
+
+        # Enable homebrew if present
+        if [ -x "${hb_prefix}/bin/brew" ]; then
+            eval "$(${hb_prefix}/bin/brew shellenv)"
+        fi
+    fi
+}
+
+# _bashrc_setup_bash_completion sets up bash completion if available. On macOS
+# it first attempts to load the system wide bash completion provided by the
+# Homebrew bash-completion package. If that is not available it falls back to
+# loading the local ~/.bash_completion file. On Linux it attempts to load the
+# system wide /etc/bash_completion file first before falling back to the local
+# ~/.bash_completion file.
+function _bashrc_setup_bash_completion() {
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        # Load the system wide bash completion if available.
+        # The system wide config should load our local config.
+        # shellcheck source=/dev/null
+        if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
+            # shellcheck source=/dev/null
+            . "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+        elif [ -r "${HOME}/.bash_completion" ]; then
+            # The system wide config is not available so just load our completion
+            # shellcheck source=/dev/null
+            source "${HOME}/.bash_completion"
+        fi
+    else
+        # Load the system wide bash completion if available.
+        if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+            # The system wide config should load our local config.
+            # shellcheck source=/dev/null
+            source /etc/bash_completion
+        elif [ -r "${HOME}/.bash_completion" ]; then
+            # The system wide config is not available so just load our completion
+            # shellcheck source=/dev/null
+            source "${HOME}/.bash_completion"
+        fi
+    fi
+}
+
 function _bashrc_main() {
     XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
     export XDG_DATA_HOME
 
-    if [ -f "${HOME}/.bashrc_init_local" ]; then
+    if [ -r "${HOME}/.bashrc_init_local" ]; then
         # shellcheck source=/dev/null
         source "${HOME}/.bashrc_init_local"
     fi
@@ -46,11 +92,11 @@ function _bashrc_main() {
             fi
         else
             # If in a tmux/screen session print the motd.
-            if [ -f "/etc/motd" ]; then
+            if [ -r "/etc/motd" ]; then
                 cat /etc/motd
-            elif [ -f "/var/run/motd" ]; then
+            elif [ -r "/var/run/motd" ]; then
                 cat /var/run/motd
-            elif [ -f "/var/run/motd.dynamic" ]; then
+            elif [ -r "/var/run/motd.dynamic" ]; then
                 cat /var/run/motd.dynamic
             fi
         fi
@@ -63,7 +109,7 @@ function _bashrc_main() {
     # Load system bashrc
     # NOTE: On Debian based systems /etc/bash.bashrc is loaded before ~/.bashrc
     #       `-DSYS_BASHRC` compile-time option and does not need to be sourced here.
-    if [ -f /etc/bashrc ]; then
+    if [ -r /etc/bashrc ]; then
         # shellcheck source=/dev/null
         source /etc/bashrc
     fi
@@ -142,7 +188,7 @@ function _bashrc_main() {
     # Simple Bash Prompt
     # shellcheck source=/dev/null
     SBP_PATH="${bash_lib_dir}/sbp"
-    if [[ -f "${SBP_PATH}/sbp.bash" ]]; then
+    if [[ -r "${SBP_PATH}/sbp.bash" ]]; then
         # shellcheck source=/dev/null
         source "${SBP_PATH}/sbp.bash"
     fi
@@ -151,7 +197,7 @@ function _bashrc_main() {
     # fzf Theme.
     # shellcheck source=/dev/null
     local moon_theme_path="${nvim_plugin_dir}/tokyonight.nvim/extras/fzf/tokyonight_moon.sh"
-    if [[ -f ${moon_theme_path} ]]; then
+    if [[ -r ${moon_theme_path} ]]; then
         # shellcheck source=/dev/null
         source "${moon_theme_path}"
     fi
@@ -163,7 +209,7 @@ function _bashrc_main() {
     # ssh-agent
     # Start an ssh-agent instance if an existing one isn't found.
     mkdir -p "${HOME}/.ssh"
-    if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -f "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
+    if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -r "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
         # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
         if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
             touch "${HOME}/.ssh/authorized_keys"
@@ -175,26 +221,13 @@ function _bashrc_main() {
     fi
 
     # Alias definitions.
-    if [ -f "${HOME}/.bash_aliases" ]; then
+    if [ -r "${HOME}/.bash_aliases" ]; then
         # shellcheck source=/dev/null
         source "${HOME}/.bash_aliases"
     fi
 
-    # Enable homebrew if present
-    if [ -x "/opt/homebrew/bin/brew" ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-
-        # Install GNU getopt on the $PATH. This will likely break other stuff on
-        # macOS.
-        # TODO(#524): Remove once bash-argsparse support Homebrew gnu-getopt
-        # See: https://github.com/Anvil/bash-argsparse/issues/17
-        local getopt_path
-        getopt_path=$(/opt/homebrew/bin/brew --prefix gnu-getopt)
-
-        if [ -d "${getopt_path}" ]; then
-            [[ ":$PATH:" != *":${getopt_path}/bin:"* ]] && PATH="${getopt_path}/bin:${PATH}"
-        fi
-    fi
+    # Setup homebrew on macOS
+    _bashrc_setup_homebrew
 
     # Go
     GOPATH=${HOME}/go
@@ -210,50 +243,50 @@ function _bashrc_main() {
 
     # Python
     export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-    if [ -d "${PYENV_ROOT}/bin" ]; then
+    if [[ -d "${PYENV_ROOT}/bin" ]]; then
         [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]] && PATH="${PYENV_ROOT}/bin:${PATH}"
         eval "$(pyenv init - bash)"
     fi
 
     # Activate the 'ian' virtualenv if it exists.
-    if [[ ${VIRTUAL_ENV##*/} != "ian" && -f "${PYENV_ROOT}/versions/ian/bin/activate" ]]; then
+    if [[ ${VIRTUAL_ENV##*/} != "ian" ]] && [[ -r "${PYENV_ROOT}/versions/ian/bin/activate" ]]; then
         pyenv activate ian
     fi
 
     # Nodenv
     export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
-    if [ -d "${NODENV_ROOT}/bin" ]; then
+    if [[ -d "${NODENV_ROOT}/bin" ]]; then
         [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]] && PATH="${NODENV_ROOT}/bin:${PATH}"
         eval "$(nodenv init - bash)"
     fi
 
     # Activate the local node_modules.
-    if [ -d "${XDG_DATA_HOME}/node_modules/.bin" ]; then
+    if [[ -d "${XDG_DATA_HOME}/node_modules/.bin" ]]; then
         [[ ":$PATH:" != *":${XDG_DATA_HOME}/node_modules/.bin:"* ]] && PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
     fi
 
     # Rbenv
     export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
-    if [ -d "${RBENV_ROOT}/bin" ]; then
+    if [[ -d "${RBENV_ROOT}/bin" ]]; then
         [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]] && PATH="${RBENV_ROOT}/bin:${PATH}"
         eval "$(rbenv init - bash)"
     fi
 
     # The next line updates PATH for the Google Cloud SDK.
-    if [ -f "${HOME}/opt/google-cloud-sdk/path.bash.inc" ]; then
+    if [[ -r "${HOME}/opt/google-cloud-sdk/path.bash.inc" ]]; then
         # shellcheck source=/dev/null
         source "${HOME}/opt/google-cloud-sdk/path.bash.inc"
     fi
 
     # The next line enables shell command completion for gcloud.
-    if [ -f "${HOME}/opt/google-cloud-sdk/completion.bash.inc" ]; then
+    if [[ -r "${HOME}/opt/google-cloud-sdk/completion.bash.inc" ]]; then
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
         # shellcheck source=/dev/null
         source "${HOME}/opt/google-cloud-sdk/completion.bash.inc"
     fi
 
     # Rust
-    if [ -f "${HOME}/.cargo/env" ]; then
+    if [[ -r "${HOME}/.cargo/env" ]]; then
         # shellcheck source=/dev/null
         source "${HOME}/.cargo/env"
     fi
@@ -270,33 +303,24 @@ function _bashrc_main() {
     fi
 
     # Local settings.
-    if [ -f "${HOME}/.bashrc.local" ]; then
+    if [[ -r "${HOME}/.bashrc.local" ]]; then
         # shellcheck source=/dev/null
         source "${HOME}/.bashrc.local"
     fi
 
     export PATH
 
-    # Completion
-    # Load the system wide bash completion if available.
-    if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-        # The system wide config should load our local config.
-        # shellcheck source=/dev/null
-        source /etc/bash_completion
-    elif [ -f "${HOME}/.bash_completion" ]; then
-        # The system wide config is not available so just load our completion
-        # shellcheck source=/dev/null
-        source "${HOME}/.bash_completion"
-    fi
+    # Setup bash completion
+    _bashrc_setup_bash_completion
 
     # Print the message if reboot is required.
-    if [ -f /var/run/reboot-required ]; then
+    if [[ -r /var/run/reboot-required ]]; then
         # Print the message if the file exists
         cat /var/run/reboot-required
     fi
 
     # Source the Google cloud devshell bashrc
-    if [ -f "/google/devshell/bashrc.google" ]; then
+    if [[ -r "/google/devshell/bashrc.google" ]]; then
         # shellcheck source=/dev/null
         source "/google/devshell/bashrc.google"
     fi

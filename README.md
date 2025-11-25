@@ -28,18 +28,22 @@ home directory which makes it easy to test out configuration.
 
 ## Requirements
 
-- GNU tools: versions of `make`, `grep`, `awk`, and `mktemp` are required.
+- GNU tools: versions of `make`, `grep`, `awk`, `getopt`, and `mktemp` are
+  required.
 - `libyaml`: An installation of `libyaml` is also required to install Ruby.
 - `xz`: `libzma` should be installed for Python.
 
-On macOS you can install these packages with Homebrew.
+On macOS you can install the required packages with
+[Homebrew](https://brew.sh/).
 
 ```bash
 brew install \
     make \
-    grep \
     gawk \
+    gnu-getopt \
+    grep \
     coreutils \
+    bash-completion \
     libyaml \
     xz
 ```
@@ -55,11 +59,8 @@ Usage: make [COMMAND]
 
   help                      Print all Makefile targets (this message).
 Installation
-  all                       Install and configure everything.
-  configure-all             Configure all tools.
-  install-all               Install all CLI tools and runtimes.
-  install-tools             Install all CLI tools.
-  install-runtimes          Install all runtimes.
+  all                       Run all tests, install and configure everything.
+  install                   Install and configure everything.
 Testing
   test                      Run all tests.
 Formatting
@@ -86,14 +87,17 @@ Linting
   zizmor                    Runs the zizmor linter.
 Base Tools
   install-bin               Install binary scripts.
-  configure-bash            Configure bash.
   configure-aqua            Configure aqua.
+  configure-bash            Configure bash.
+  configure-bat             Configure bat.
   configure-efm-langserver  Configure efm-langserver.
+  configure-git             Configure git.
+  configure-ghostty         Configure Ghostty.
   configure-nix             Configure nix.
   configure-nvim            Configure neovim.
   configure-tmux            Configure tmux.
-  configure-git             Configure git.
 Install Tools
+  install-slsa-verifier     Install slsa-verifier
   install-aqua              Install aqua and aqua-managed CLI tools
 Language Runtimes
   install-go                Install the Go runtime.
