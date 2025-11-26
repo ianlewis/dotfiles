@@ -28,14 +28,26 @@ function _clone() {
     local argsparse_usage_description
 
     # shellcheck source=/dev/null
+    . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
+
+    ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
+
+    # shellcheck source=/dev/null
     . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
 
     argsparse_use_option "dir" "Project source directory." "value" "default:${HOME}/src" "short:d" "type:directory"
 
+    argsparse_use_option "new" "Create and clone new repository." "short:n"
+    argsparse_use_option "add-readme" "Add a README file to the new repository." "require:new"
+    argsparse_use_option "gitignore" "Specify a gitignore template for the new repository." "value" "short:g" "require:new"
+    argsparse_use_option "license" "Specify an Open Source License for the new repository." "value" "short:l" "require:new"
+    argsparse_use_option "private" "Make the new repository private." "require:new"
+    argsparse_use_option "template" "Create a new repository from template." "value" "short:p" "require:new"
+
     # Command is optional and could contain many parts.
     argsparse_describe_parameters "REPOSITORY"
 
-    # Options are not required.
+    # Repository name is required.
     argsparse_allow_no_argument "false"
 
     # shellcheck disable=SC2034 # Used by argsparse.
@@ -50,6 +62,39 @@ function _clone() {
     local dest
 
     repo_id="${program_params[0]}"
+
+    # Create the repository if requested.
+    if argsparse_is_option_set "new"; then
+        local create_command
+
+        create_command=(gh repo create "${repo_id}")
+
+        if argsparse_is_option_set "private"; then
+            create_command+=("--private")
+        else
+            create_command+=("--public")
+        fi
+
+        if argsparse_is_option_set "add-readme"; then
+            create_command+=("--add-readme")
+        fi
+
+        if argsparse_is_option_set "gitignore"; then
+            create_command+=("--gitignore" "${program_options['gitignore']}")
+        fi
+
+        if argsparse_is_option_set "license"; then
+            create_command+=("--license" "${program_options['license']}")
+        fi
+
+        if argsparse_is_option_set "template"; then
+            create_command+=("--template" "${program_options['template']}")
+        fi
+
+        "${create_command[@]}"
+    fi
+
+    # Clone the repository.
 
     owner=$(gh repo view "${repo_id}" --json owner | jq -r '.owner.login')
     repo_name=$(gh repo view "${repo_id}" --json name | jq -r '.name')

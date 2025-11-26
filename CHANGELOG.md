@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bash: Add support for Bash completion on macOS.
   ([#564](https://github.com/ianlewis/dotfiles/issues/564)).
+- `clone`: Add support for creating new repositories in the `clone` script.
 
 <!-- TODO(#566): Add missing entries -->
 
