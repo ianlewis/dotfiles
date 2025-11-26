@@ -230,7 +230,7 @@ all: test install-all ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux
+configure: configure-aqua configure-bash configure-bat configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-aqua
@@ -799,6 +799,7 @@ configure-bash: $(XDG_CONFIG_HOME) $(XDG_DATA_HOME) ## Configure bash.
 	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
 	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
 
+.PHONY: configure-bat
 configure-bat: $(XDG_CONFIG_HOME) install-aqua ## Configure bat.
 	@# bash \
 	# NOTE: bat must be installed via aqua before running this so that it can \
@@ -811,6 +812,14 @@ configure-bat: $(XDG_CONFIG_HOME) install-aqua ## Configure bat.
 		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
 		"$$($${aqua_dir}/bin/bat --config-dir)/themes/tokyonight_moon.tmTheme"; \
 	"$${aqua_dir}/bin/bat" cache --build
+
+.PHONY: configure-crontab
+configure-crontab: install-bin ## Configure crontab.
+	@# bash \
+	( \
+		echo '########## MANAGED BY dotfiles; DO NOT EDIT ##########'; \
+		cat $(REPO_ROOT)/crontab; \
+	) | crontab -
 
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)
 	@# bash \

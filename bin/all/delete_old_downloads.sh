@@ -15,7 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# A simple script to clean up files from a list of temporary directories.
+# delete_old_downloads.sh deletes temporary files up files from a list of
+# temporary directories. The directories are hardcoded for safety. The age of
+# files to delete can be specified as an argument (in days). If no argument is
+# provided, files older than 14 days will be deleted.
 
 set -euo pipefail
 
