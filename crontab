@@ -22,5 +22,4 @@
 # m h  dom mon dow   command
 */10 * * * * ${HOME}/.local/bin/update_authorized_keys.sh
 35   5 * * * ${HOME}/.local/bin/delete_old_downloads.sh
-25   5 * * * docker image prune -a -f --filter "until=48h"
-30   5 * * * docker container prune -f --filter "until=48h"
+25   5 * * * ${HOME}/.local/bin/docker_prune.sh
