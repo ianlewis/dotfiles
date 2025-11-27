@@ -78,7 +78,7 @@ function _bashrc_main() {
     # Start a tmux session if not already in one
     # Exit directly after the tmux session is exited
     # Only run if logged in remotely via ssh
-    if shopt -q login_shell && [ -n "${SSH_CLIENT}" ]; then
+    if shopt -q login_shell; then
         # Only run if running in a terminal.
         if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
             if command -v tmux >/dev/null 2>&1; then
