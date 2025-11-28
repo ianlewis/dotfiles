@@ -5,11 +5,18 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-11-28`
+
+- `cron`: Add support for loading user-specific `crontab` files in the
+  `~/.config/dotfiles/crontab/` directory.
+
 ## `2025-11-26`
 
-- Bash: Add support for Bash completion on macOS.
+- Bash: Add support for Bash completion on macOS
   ([#564](https://github.com/ianlewis/dotfiles/issues/564)).
 - `clone`: Add support for creating new repositories in the `clone` script.
+- `cron`: Add support for loading the user `crontab`
+  ([#503](https://github.com/ianlewis/dotfiles/issues/503)).
 
 <!-- TODO(#566): Add missing entries -->
 
