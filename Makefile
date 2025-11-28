@@ -817,8 +817,20 @@ configure-bat: $(XDG_CONFIG_HOME) install-aqua ## Configure bat.
 configure-crontab: install-bin ## Configure crontab.
 	@# bash \
 	( \
-		echo '########## MANAGED BY dotfiles; DO NOT EDIT ##########'; \
-		cat $(REPO_ROOT)/crontab; \
+		echo '######################## MANAGED BY dotfiles; DO NOT EDIT ######################'; \
+		cat $(REPO_ROOT)/cron/crontab; \
+		echo ""; \
+		for filename in ${HOME}/.config/dotfiles/cron.d/*; do \
+			if [[ -r "$${filename}" ]]; then \
+				echo "###### BEGIN FILE: $${filename} ######"; \
+				echo ""; \
+				cat "$${filename}"; \
+				echo ""; \
+				echo "###### END FILE: $${filename} ######"; \
+				echo ""; \
+			fi; \
+		done; \
+		echo '############################## END MANAGED SECTION #############################'; \
 	) | crontab -
 
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)
