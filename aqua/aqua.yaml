@@ -59,3 +59,4 @@ packages:
   - name: checkmake/checkmake@0.2.2
   - name: mikefarah/yq@v4.48.1
   - name: sxyazi/yazi@v25.5.31
+  - name: jqlang/jq@jq-1.8.1

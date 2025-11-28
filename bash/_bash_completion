@@ -23,12 +23,6 @@ function _bash_completion() {
         eval "$(python -m pip completion --bash --no-python-version-warning)"
     fi
 
-    # kubectl bash completion
-    if command -v kubectl >/dev/null 2>&1; then
-        # shellcheck source=/dev/null
-        source <(kubectl completion bash)
-    fi
-
     # Aqua completion
     if command -v aqua >/dev/null 2>&1; then
         # shellcheck source=/dev/null
@@ -47,10 +41,22 @@ function _bash_completion() {
         source <(cosign completion bash)
     fi
 
+    # delta completion
+    if command -v delta >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(delta --generate-completion bash)
+    fi
+
     # fx completion
     if command -v fx >/dev/null 2>&1; then
         # shellcheck source=/dev/null
         source <(fx --comp bash)
+    fi
+
+    # fzf completion
+    if command -v fzf >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(fzf --bash)
     fi
 
     # GitHub CLI completion
@@ -59,16 +65,58 @@ function _bash_completion() {
         source <(gh completion --shell bash)
     fi
 
+    # helm bash completion
+    if command -v helm >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(helm completion bash)
+    fi
+
+    # kind bash completion
+    if command -v kind >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(kind completion bash)
+    fi
+
+    # kubeadm bash completion
+    if command -v kubeadm >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(kubeadm completion bash)
+    fi
+
+    # kubectl bash completion
+    if command -v kubectl >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(kubectl completion bash)
+    fi
+
+    # kustomize bash completion
+    if command -v kustomize >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(kustomize completion bash)
+    fi
+
     # npm completion
     if command -v npm >/dev/null 2>&1; then
         # shellcheck source=/dev/null
         source <(npm completion bash)
     fi
 
+    # ripgrep completion
+    if command -v rg >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(rg --generate=complete-bash)
+    fi
+
     # slsa-verifier completion
     if command -v slsa-verifier >/dev/null 2>&1; then
         # shellcheck source=/dev/null
         source <(slsa-verifier completion bash)
+    fi
+
+    # tree-sitter completion
+    if command -v tree-sitter >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(tree-sitter complete --shell bash)
     fi
 
     # yq completion
