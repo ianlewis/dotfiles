@@ -12,3 +12,9 @@ nvim/pack/nvim/start
 
 # Vendored tmux plugins.
 tmux/plugins
+
+# Vendored bats libraries.
+bash/test/bats
+bash/test/test_helper/bats-assert
+bash/test/test_helper/bats-file
+bash/test/test_helper/bats-support

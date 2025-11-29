@@ -39,7 +39,6 @@ OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github
 REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
-
 # TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
 # renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
 SLSA_VERIFIER_VERSION ?= v2.7.1
@@ -106,6 +105,9 @@ export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
 RBENV_BUILD_VERSION ?= v20251023
 RBENV_BUILD_SHA ?= 447468b1b912c704e28fc8218fc1eca02ce7a29c
+
+E2E_HOME ?= $(shell $(MKTEMP) --directory)
+export E2E_HOME := $(E2E_HOME)
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
@@ -224,7 +226,7 @@ $(HOME)/opt:
 #####################################################################
 
 .PHONY: all
-all: test install-all ## Run all tests, install and configure everything.
+all: test install ## Run all tests, install and configure everything.
 
 .PHONY: install
 install: install-tools install-runtimes configure ## Install and configure everything.
@@ -243,7 +245,34 @@ install-runtimes: install-go install-node install-python install-ruby
 
 # TODO(#240): Add test target dependencies.
 .PHONY: test
-test: lint ## Run all tests.
+test: lint unit-test e2e-test ## Run all tests.
+
+.PHONY: unit-test
+unit-test: bats-unit ## Run unit tests.
+
+$(E2E_HOME)/.installed:
+	echo "Using temporary directory: $${E2E_HOME}"; \
+	HOME="$${E2E_HOME}" \
+		XDG_BIN_HOME="$${E2E_HOME}/.local/bin" \
+		XDG_CONFIG_HOME="$${E2E_HOME}/.config" \
+		XDG_DATA_HOME="$${E2E_HOME}/.local/share" \
+		XDG_STATE_HOME="$${E2E_HOME}/.local/state" \
+		NODENV_ROOT="$${E2E_HOME}/.local/share/nodenv" \
+		PYENV_ROOT="$${E2E_HOME}/.local/share/pyenv" \
+		RBENV_ROOT="$${E2E_HOME}/.local/share/rbenv" \
+			$(MAKE) install;
+	touch $@
+
+.PHONY: e2e-test
+e2e-test: $(E2E_HOME)/.installed ## Run end-to-end tests.
+	@# bash \
+	AQUA_VERSION=$(AQUA_VERSION) \
+		$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/e2e
+
+.PHONY: bats
+bats-unit: ## Run Bats unit tests.
+	@# bash \
+	$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/unit
 
 ## Formatting
 #####################################################################
@@ -785,7 +814,6 @@ configure-bash: $(XDG_CONFIG_HOME) $(XDG_DATA_HOME) ## Configure bash.
 		$(HOME)/.bash_aliases \
 		$(HOME)/.bash_completion \
 		$(HOME)/.bash_logout \
-		$(HOME)/.dockerfunc \
 		$(XDG_DATA_HOME)/bash/lib \
 		$(XDG_CONFIG_HOME)/sbp; \
 	mkdir -p $(XDG_DATA_HOME)/bash; \
