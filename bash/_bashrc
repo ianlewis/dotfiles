@@ -143,26 +143,6 @@ function _bashrc_main() {
         mkdir -p "${HOME}/.vim/backup"
     fi
 
-    export PIP_RESPECT_VIRTUALENV=true
-    export PIP_DOWNLOAD_CACHE="${HOME}/.pip_cache"
-    if [ ! -e "${HOME}/.pip_cache" ]; then
-        mkdir "${HOME}/.pip_cache"
-    fi
-    if [ "${HOME}" ]; then
-        if command -v virtualenvwrapper.sh >/dev/null 2>&1; then
-            WORKON_HOME=${HOME}/.virtualenvs
-            if [ ! -e "${WORKON_HOME}" ]; then
-                mkdir -p "${WORKON_HOME}"
-            fi
-            export VIRTUALENVWRAPPER_LOG_DIR="${WORKON_HOME}"
-            export VIRTUALENVWRAPPER_HOOK_DIR="${WORKON_HOME}"
-            export PIP_VIRTUALENV_BASE="${WORKON_HOME}"
-
-            # shellcheck source=/dev/null
-            source "$(command -v virtualenvwrapper.sh)"
-        fi
-    fi
-
     # don't put duplicate lines in the history. See bash(1) for more options
     export HISTCONTROL=ignoredups
     # ... and ignore same sucessive entries.
@@ -248,9 +228,9 @@ function _bashrc_main() {
         eval "$(pyenv init - bash)"
     fi
 
-    # Activate the 'ian' virtualenv if it exists.
-    if [[ ${VIRTUAL_ENV##*/} != "ian" ]] && [[ -r "${PYENV_ROOT}/versions/ian/bin/activate" ]]; then
-        pyenv activate ian
+    # Activate the user's virtualenv if it exists.
+    if [[ ${VIRTUAL_ENV##*/} != "${USER}" ]] && [[ -r "${PYENV_ROOT}/versions/${USER}/bin/activate" ]]; then
+        pyenv activate "${USER}"
     fi
 
     # Nodenv
