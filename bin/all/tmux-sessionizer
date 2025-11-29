@@ -51,6 +51,7 @@ function _main() {
     # Project directories are GitHub style <user>/<repo> thus default depth of 2.
     argsparse_use_option "mindepth" "Minimum directory search depth." "value" "default:2" "short:m" "type:uint"
     argsparse_use_option "maxdepth" "Maximum directory search depth." "value" "default:2" "short:x" "type:uint"
+    argsparse_use_option "new" "Create a new folder if no selection." "short:n"
 
     # Query is is a single optional parameter.
     argsparse_describe_parameters "QUERY?"
@@ -65,27 +66,71 @@ function _main() {
     argsparse_parse_options "$@"
 
     if ! command -v tmux >/dev/null 2>&1; then
-        echo "${0}: ERROR: this script requires tmux." >&2
+        echo "${0}: tmux is required." >&2
+        return 1
+    fi
+
+    if [ ! -d "${program_options['dir']}" ]; then
+        echo "${0}: '${program_options['dir']}' does not exist or is not a directory." >&2
         return 1
     fi
 
     local query=${program_params[0]:-""}
 
+    local base_dir
+    local lines
     local selected
     local selected_name
     local tmux_running
+    local select_option=""
 
-    selected=$(find \
-        "${program_options['dir']}" \
+    # Remove trailing slashes for consistency.
+    base_dir="${program_options['dir']%%+(/)}"
+
+    # If a query is provided, select the only match automatically (if it's the
+    # only match). An empty query should always result in a list of options.
+    if [[ -n ${query} ]]; then
+        select_option="--select-1"
+    fi
+
+    # Read the all lines from fzf.
+    # NOTE: fzf --print-query always prints the query as the first line. If
+    #       there is a selection, it will be on the second line.
+    IFS=$'\n' readarray -t lines <<<"$(find \
+        "${base_dir}" \
         -mindepth "${program_options['mindepth']}" \
         -maxdepth "${program_options['maxdepth']}" \
-        -type d | fzf --query="${query}" --select-1)
+        -type d | fzf --query="${query}" --print-query ${select_option})"
+
+    if [[ ${#lines[@]} -eq 0 ]]; then
+        return 0
+    elif [[ ${#lines[@]} -eq 1 ]]; then
+        if ! argsparse_is_option_set "new"; then
+            return 0
+        fi
+
+        # New folder.
+        new_folder="${lines[0]}"
+        if [[ -z ${new_folder} ]]; then
+            return 0
+        fi
+
+        selected="${base_dir}/${new_folder}"
+        mkdir -p "${selected}"
+    elif [[ ${#lines[@]} -ge 2 ]]; then
+        # NOTE: First line is the query.
+        selected="${lines[1]}"
+    fi
 
     if [[ -z ${selected} ]]; then
         return 0
     fi
 
-    selected_name=$(basename "$selected" | tr . _)
+    # Remove the base directory prefix and convert dots to underscores for tmux
+    # session name.
+    selected_name="${selected#"${base_dir}"}"
+    selected_name=$(echo "${selected_name##+(/)}" | tr . _)
+
     tmux_running=$(pgrep tmux || true)
 
     # Session name can't be a number so add a trailing underscore.
