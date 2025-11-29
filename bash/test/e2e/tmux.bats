@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-# vim: set ft=sh:
-#
 # Copyright 2025 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function _bash_profile() {
-    if [ -r "${HOME}/.bashrc" ]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bashrc"
-    fi
+setup() {
+    E2E_HOME="${E2E_HOME:-${HOME}}"
+    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+
+    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
 }
 
-_bash_profile
+@test ".tmux is linked correctly" {
+    assert_equal "${BASE_PATH}/tmux/_tmux" "$(readlink "${E2E_HOME}/.tmux")"
+}
+
+@test ".tmux.conf is linked correctly" {
+    assert_equal "${BASE_PATH}/tmux/_tmux.conf" "$(readlink "${E2E_HOME}/.tmux.conf")"
+}

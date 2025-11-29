@@ -21,5 +21,7 @@ vim.filetype.add({
 		-- Allow requirements.txt files with extra labels like
 		-- "requirements-dev.txt"
 		[".*/requirements.*.txt"] = "requirements",
+		-- Bats files should be bash and not sh.
+		[".*/*.bats"] = "bash",
 	},
 })

@@ -32,8 +32,14 @@ function get_gnu_getopt() {
     fi
 
     local gnu_getopt_path
+    local uname_s="Unknown"
+    if command -v uname >/dev/null 2>&1; then
+        uname_s="$(uname -s)"
+    elif command -v /usr/bin/uname >/dev/null 2>&1; then
+        uname_s="$(/usr/bin/uname -s)"
+    fi
 
-    if [[ "$(uname -s)" == "Darwin" ]]; then
+    if [[ ${uname_s} == "Darwin" ]]; then
         if ! command -v brew >/dev/null 2>&1; then
             return 1
         fi
@@ -47,7 +53,7 @@ function get_gnu_getopt() {
         fi
         gnu_getopt_path="${gnu_getopt_path}/bin/getopt"
     else
-        if ! gnu_getopt_path=$(command -v getopt); then
+        if ! gnu_getopt_path=$(command -v getopt 2>/dev/null); then
             return 3
         fi
     fi

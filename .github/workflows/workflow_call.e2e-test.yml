@@ -1,0 +1,132 @@
+# Copyright 2025 Ian Lewis
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: e2e-test
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read # Needed to check out the repo.
+
+concurrency:
+  group: e2e-test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Test that a clean install works on Linux amd64.
+  e2e-test-ubuntu2404-amd64:
+    name: e2e-test-ubuntu2404-amd64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version-file: ".node-version"
+
+      - name: e2e-test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: E2E_HOME="${HOME}" make clean e2e-test
+
+      - name: Load .bashrc
+        run: |
+          # shellcheck source=/dev/null
+          source "${HOME}/.bashrc"
+
+  # Test that a clean install works on Linux arm64.
+  e2e-test-ubuntu2404-arm64:
+    name: e2e-test-ubuntu2404-arm64
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version-file: ".node-version"
+
+      - name: e2e-test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: E2E_HOME="${HOME}" make clean e2e-test
+
+      - name: Load .bashrc
+        run: |
+          # shellcheck source=/dev/null
+          source "${HOME}/.bashrc"
+
+  # Test that a clean install works on MacOS.
+  e2e-test-macos26-arm64:
+    name: e2e-test-macos26-arm64
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: "go.mod"
+
+      # NOTE: Homebrew/actions does not publish tags.
+      - uses: Homebrew/actions/setup-homebrew@e58f0b60d43355cab9d13c7ecf58a4fbfced93c2 # main
+
+      - name: Install GNU tools
+        run: |
+          brew install \
+              make \
+              gawk \
+              gnu-getopt \
+              grep \
+              coreutils \
+              bash-completion \
+              libyaml \
+              xz
+
+      - name: e2e-test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: E2E_HOME="${HOME}" gmake clean e2e-test
+
+      - name: Load .bashrc
+        run: |
+          # shellcheck source=/dev/null
+          source "${HOME}/.bashrc"
+
+  # NOTE: needed for protected branch checks.
+  e2e-test:
+    name: e2e-test
+    runs-on: ubuntu-latest
+    needs:
+      - e2e-test-ubuntu2404-amd64
+      - e2e-test-ubuntu2404-arm64
+      - e2e-test-macos26-arm64
+    if: ${{ always() }}
+    env:
+      E2E_TEST_UBUNTU_AMD64_RESULT: ${{ needs.e2e-test-ubuntu2404-amd64.result }}
+      E2E_TEST_UBUNTU_ARM64_RESULT: ${{ needs.e2e-test-ubuntu2404-arm64.result }}
+      E2E_TEST_MACOS_ARM64_RESULT: ${{ needs.e2e-test-macos26-arm64.result }}
+    steps:
+      - run: |
+          [ "${E2E_TEST_UBUNTU_AMD64_RESULT}" == "success" ]
+          [ "${E2E_TEST_UBUNTU_ARM64_RESULT}" == "success" ]
+          [ "${E2E_TEST_MACOS_ARM64_RESULT}" == "success" ]

@@ -1,0 +1,105 @@
+# Copyright 2025 Ian Lewis
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: unit-test
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read # Needed to check out the repo.
+
+concurrency:
+  group: unit-test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Test that a clean install works on Linux amd64.
+  unit-test-ubuntu2404-amd64:
+    name: unit-test-ubuntu2404-amd64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - name: unit-test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: make clean unit-test
+
+  # Test that a clean install works on Linux arm64.
+  unit-test-ubuntu2404-arm64:
+    name: unit-test-ubuntu2404-arm64
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - name: unit-test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: make clean unit-test
+
+  # Test that a clean install works on MacOS.
+  unit-test-macos26-arm64:
+    name: unit-test-macos26-arm64
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+          persist-credentials: false
+
+      # NOTE: Homebrew/actions does not publish tags.
+      - uses: Homebrew/actions/setup-homebrew@e58f0b60d43355cab9d13c7ecf58a4fbfced93c2 # main
+
+      - name: Install GNU tools
+        run: |
+          brew install \
+              make \
+              gawk \
+              gnu-getopt \
+              grep \
+              coreutils \
+              bash-completion \
+              libyaml \
+              xz
+
+      - name: unit-test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gmake clean unit-test
+
+  # NOTE: needed for protected branch checks.
+  unit-test:
+    name: unit-test
+    runs-on: ubuntu-latest
+    needs:
+      - unit-test-ubuntu2404-amd64
+      - unit-test-ubuntu2404-arm64
+      - unit-test-macos26-arm64
+    if: ${{ always() }}
+    env:
+      UNIT_TEST_UBUNTU_AMD64_RESULT: ${{ needs.unit-test-ubuntu2404-amd64.result }}
+      UNIT_TEST_UBUNTU_ARM64_RESULT: ${{ needs.unit-test-ubuntu2404-arm64.result }}
+      UNIT_TEST_MACOS_ARM64_RESULT: ${{ needs.unit-test-macos26-arm64.result }}
+    steps:
+      - run: |
+          [ "${UNIT_TEST_UBUNTU_AMD64_RESULT}" == "success" ]
+          [ "${UNIT_TEST_UBUNTU_ARM64_RESULT}" == "success" ]
+          [ "${UNIT_TEST_MACOS_ARM64_RESULT}" == "success" ]

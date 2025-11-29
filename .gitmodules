@@ -88,3 +88,15 @@
 [submodule "nvim/pack/nvim/start/yazi.nvim"]
 	path = nvim/pack/nvim/start/yazi.nvim
 	url = https://github.com/mikavilpas/yazi.nvim.git
+[submodule "bash/test/bats"]
+	path = bash/test/bats
+	url = https://github.com/bats-core/bats-core.git
+[submodule "bash/test/test_helper/bats-file"]
+	path = bash/test/test_helper/bats-file
+	url = https://github.com/bats-core/bats-file.git
+[submodule "bash/test/test_helper/bats-assert"]
+	path = bash/test/test_helper/bats-assert
+	url = https://github.com/bats-core/bats-assert.git
+[submodule "bash/test/test_helper/bats-support"]
+	path = bash/test/test_helper/bats-support
+	url = https://github.com/bats-core/bats-support.git
