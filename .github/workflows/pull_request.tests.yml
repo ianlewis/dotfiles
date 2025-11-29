@@ -54,6 +54,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make clean install
 
+      - name: Load .bashrc
+        run: |
+          # shellcheck source=/dev/null
+          source ~/.bashrc
+
   # Test that a clean install works on Linux arm64.
   install-all-ubuntu2404-arm64:
     name: install-all-ubuntu2404-arm64
@@ -72,6 +77,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make clean install
+
+      - name: Load .bashrc
+        run: |
+          # shellcheck source=/dev/null
+          source ~/.bashrc
 
   # Test that a clean install works on MacOS.
   install-all-macos26-arm64:
@@ -103,6 +113,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gmake clean install
+
+      - name: Load .bashrc
+        run: |
+          # shellcheck source=/dev/null
+          source ~/.bashrc
 
   # NOTE: needed for protected branch checks.
   install-all:
