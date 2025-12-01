@@ -30,7 +30,7 @@ jobs:
     name: e2e-test-ubuntu2404-amd64
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           submodules: true
           persist-credentials: false
@@ -54,7 +54,7 @@ jobs:
     name: e2e-test-ubuntu2404-arm64
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           submodules: true
           persist-credentials: false
@@ -78,17 +78,17 @@ jobs:
     name: e2e-test-macos26-arm64
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           submodules: true
           persist-credentials: false
 
-      - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
         with:
           go-version-file: "go.mod"
 
       # NOTE: Homebrew/actions does not publish tags.
-      - uses: Homebrew/actions/setup-homebrew@e58f0b60d43355cab9d13c7ecf58a4fbfced93c2 # main
+      - uses: Homebrew/actions/setup-homebrew@9d95677ac22eae39bdeb2ac8a196adb20a3cedbc # main
 
       - name: Install GNU tools
         run: |
