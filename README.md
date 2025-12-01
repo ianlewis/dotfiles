@@ -63,6 +63,9 @@ Installation
   install                   Install and configure everything.
 Testing
   test                      Run all tests.
+  unit-test                 Run unit tests.
+  e2e-test                  Run end-to-end tests.
+  bats-unit                 Run Bats unit tests.
 Formatting
   format                    Format all files
   json-format               Format JSON files.
@@ -90,10 +93,12 @@ Base Tools
   configure-aqua            Configure aqua.
   configure-bash            Configure bash.
   configure-bat             Configure bat.
+  configure-crontab         Configure crontab.
   configure-efm-langserver  Configure efm-langserver.
   configure-git             Configure git.
   configure-ghostty         Configure Ghostty.
   configure-nix             Configure nix.
+  configure-node            Configure Node.js and npm.
   configure-nvim            Configure neovim.
   configure-tmux            Configure tmux.
 Install Tools

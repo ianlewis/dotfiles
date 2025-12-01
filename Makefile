@@ -232,7 +232,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-nvim configure-tmux
+configure: configure-aqua configure-bash configure-bat configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-node configure-nvim configure-tmux
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-aqua
@@ -886,6 +886,14 @@ configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
 	mkdir -p $(XDG_CONFIG_HOME)/nix; \
 	ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
 
+.PHONY: configure-node
+configure-node: ## Configure Node.js and npm.
+	@# bash \
+	rm -f $(HOME)/.npmrc; \
+	ln -sf $(REPO_ROOT)/npm/_npmrc $(HOME)/.npmrc; \
+	rm -f $(HOME)/.node-version; \
+	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
+
 .PHONY: configure-nvim
 configure-nvim: $(XDG_CONFIG_HOME) ## Configure neovim.
 	@# bash \
@@ -959,7 +967,7 @@ $(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
 
 # Installs nodeenv and Node.js
-$(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)
+$(NODENV_ROOT)/.installed: configure-node $(XDG_DATA_HOME)
 	@# bash \
 	# Install the nodenv. \
 	git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
@@ -981,7 +989,6 @@ $(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)
 		exit 1; \
 	fi; \
 	$(NODENV_ROOT)/bin/nodenv install --skip-existing; \
-	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
 	touch $@
 
 nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed

@@ -21,6 +21,10 @@ setup() {
     load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
+@test ".npmrc linked correctly" {
+    assert_symlink_to "${BASE_PATH}/npm/_npmrc" "${E2E_HOME}/.npmrc"
+}
+
 @test ".node-version linked correctly" {
     assert_symlink_to "${BASE_PATH}/.node-version" "${E2E_HOME}/.node-version"
 }
