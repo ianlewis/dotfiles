@@ -252,19 +252,6 @@ function _bashrc_main() {
         eval "$(rbenv init - bash)"
     fi
 
-    # The next line updates PATH for the Google Cloud SDK.
-    if [[ -r "${HOME}/opt/google-cloud-sdk/path.bash.inc" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/opt/google-cloud-sdk/path.bash.inc"
-    fi
-
-    # The next line enables shell command completion for gcloud.
-    if [[ -r "${HOME}/opt/google-cloud-sdk/completion.bash.inc" ]]; then
-        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-        # shellcheck source=/dev/null
-        source "${HOME}/opt/google-cloud-sdk/completion.bash.inc"
-    fi
-
     # Rust
     if [[ -r "${HOME}/.cargo/env" ]]; then
         # shellcheck source=/dev/null
