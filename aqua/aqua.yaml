@@ -60,3 +60,5 @@ packages:
   - name: mikefarah/yq@v4.48.1
   - name: sxyazi/yazi@v25.5.31
   - name: jqlang/jq@jq-1.8.1
+  - name: aws/aws-cli@2.32.7
+  - name: twistedpair/google-cloud-sdk@548.0.0

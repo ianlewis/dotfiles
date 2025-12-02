@@ -29,6 +29,13 @@ function _bash_completion() {
         source <(aqua completion bash)
     fi
 
+    # AWS CLI completion
+    if command -v aws >/dev/null 2>&1; then
+        if command -v aws_completer >/dev/null 2>&1; then
+            complete -C "$(command -v aws_completer)" aws
+        fi
+    fi
+
     # bat completion
     if command -v bat >/dev/null 2>&1; then
         # shellcheck source=/dev/null
@@ -57,6 +64,16 @@ function _bash_completion() {
     if command -v fzf >/dev/null 2>&1; then
         # shellcheck source=/dev/null
         source <(fzf --bash)
+    fi
+
+    # gcloud completion
+    if gcloud_bin_path=$(aqua which gcloud 2>/dev/null); then
+        gcloud_base_path=$(dirname "$(dirname "${gcloud_bin_path}")")
+        if [[ -r "${gcloud_base_path}/completion.bash.inc" ]]; then
+            export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+            # shellcheck source=/dev/null
+            source "${gcloud_base_path}/completion.bash.inc"
+        fi
     fi
 
     # GitHub CLI completion
