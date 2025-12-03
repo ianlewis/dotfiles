@@ -50,7 +50,7 @@ SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(kernel).$(arch))
 SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERIFIER_VERSION)/slsa-verifier-$(kernel)-$(arch)
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.55.1
+AQUA_VERSION ?= v2.55.2
 AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM.linux.amd64 := 7371b9785e07c429608a21e4d5b17dafe6780dabe306ec9f4be842ea754de48a
 AQUA_CHECKSUM.linux.arm64 := 283e0e274af47ff1d4d660a19e8084ae4b6aca23d901e95728a68a63dfb98c87
@@ -71,7 +71,7 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.25.3
+GO_VERSION ?= 1.25.5
 GO_CHECKSUM.linux.amd64 := 0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f
 GO_CHECKSUM.linux.arm64 := 1d42ebc84999b5e2069f5e31b67d6fc5d67308adad3e178d5a2ee2c9ff2001f5
 GO_CHECKSUM.darwin.arm64 := 7c083e3d2c00debfeb2f77d9a4c00a1aac97113b89b9ccc42a90487af3437382
@@ -79,7 +79,7 @@ GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.12
+PYENV_INSTALL_VERSION ?= v2.6.15
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= c6ea700cdf38ad3474b047f2586ae6a8be44d78a
 # NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
@@ -95,7 +95,7 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.20
+NODENV_BUILD_VERSION ?= v5.4.21
 NODENV_BUILD_SHA ?= ce7d40be7d5e2fc0e02840e87402938cf1dfceb4
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
