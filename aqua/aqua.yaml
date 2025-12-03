@@ -54,7 +54,7 @@ packages:
   - name: kubernetes/kubernetes/kubeadm@v1.34.2
   - name: kubernetes-sigs/kind@v0.30.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.0
-  - name: helm/helm@v3.19.2
+  - name: helm/helm@v4.0.1
   - name: antonmedv/fx@39.2.0
   - name: checkmake/checkmake@0.2.2
   - name: mikefarah/yq@v4.48.1
