@@ -48,6 +48,12 @@ function _bash_completion() {
         source <(cosign completion bash)
     fi
 
+    # crictl completion
+    if command -v crictl >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(crictl completion bash)
+    fi
+
     # delta completion
     if command -v delta >/dev/null 2>&1; then
         # shellcheck source=/dev/null
