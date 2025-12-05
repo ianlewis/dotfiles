@@ -80,9 +80,6 @@ jobs:
           # shellcheck source=/dev/null
           source "${HOME}/.bashrc"
 
-      - name: nvim checkhealth
-        run: make nvim-checkhealth
-
   # Test that a clean install works on MacOS.
   e2e-test-macos26-arm64:
     name: e2e-test-macos26-arm64
@@ -138,9 +135,6 @@ jobs:
         run: |
           # shellcheck source=/dev/null
           source "${HOME}/.bashrc"
-
-      - name: nvim checkhealth
-        run: make nvim-checkhealth
 
   # NOTE: needed for protected branch checks.
   e2e-test:

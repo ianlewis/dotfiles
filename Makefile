@@ -250,7 +250,13 @@ test: lint unit-test e2e-test ## Run all tests.
 .PHONY: unit-test
 unit-test: bats-unit ## Run unit tests.
 
+.PHONY: bats
+bats-unit: ## Run Bats unit tests.
+	@# bash \
+	$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/unit
+
 $(E2E_HOME)/.installed:
+	@# bash \
 	echo "Using temporary directory: $${E2E_HOME}"; \
 	HOME="$${E2E_HOME}" \
 		XDG_BIN_HOME="$${E2E_HOME}/.local/bin" \
@@ -260,19 +266,56 @@ $(E2E_HOME)/.installed:
 		NODENV_ROOT="$${E2E_HOME}/.local/share/nodenv" \
 		PYENV_ROOT="$${E2E_HOME}/.local/share/pyenv" \
 		RBENV_ROOT="$${E2E_HOME}/.local/share/rbenv" \
-			$(MAKE) install;
+			$(MAKE) install; \
 	touch $@
 
 .PHONY: e2e-test
-e2e-test: $(E2E_HOME)/.installed ## Run end-to-end tests.
+e2e-test: bats-e2e nvim-checkhealth ## Run all end-to-end tests.
+
+bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 	@# bash \
 	AQUA_VERSION=$(AQUA_VERSION) \
 		$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/e2e
 
-.PHONY: bats
-bats-unit: ## Run Bats unit tests.
+nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 	@# bash \
-	$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/unit
+	# Ensure the environment (PATH etc.) is set up. \
+	HOME="$${E2E_HOME}" \
+		XDG_BIN_HOME="$${E2E_HOME}/.local/bin" \
+		XDG_CONFIG_HOME="$${E2E_HOME}/.config" \
+		XDG_DATA_HOME="$${E2E_HOME}/.local/share" \
+		XDG_STATE_HOME="$${E2E_HOME}/.local/state" \
+		NODENV_ROOT="$${E2E_HOME}/.local/share/nodenv" \
+		PYENV_ROOT="$${E2E_HOME}/.local/share/pyenv" \
+		RBENV_ROOT="$${E2E_HOME}/.local/share/rbenv" \
+			source "$(E2E_HOME)/.bashrc"; \
+	nvim --version; \
+	# NOTE: make sure treesitter parsers are installed. \
+	nvim \
+		--headless \
+		-u $(E2E_HOME)/.config/nvim/init.lua \
+			'+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' \
+			'+checkhealth' \
+			'+w!nvim-checkhealth.log' \
+			'+qa!'; \
+	cat nvim-checkhealth.log; \
+	if [[ "$(arch)" == "arm64" && "$(kernel)" == "linux" ]]; then \
+		# TODO(#606): Remove exception when checkmake has proper ARM65 support. \
+		# TODO(#607): Remove exception when selene has proper ARM64 support. \
+		num_errors=$$(( \
+			cat nvim-checkhealth.log | \
+			$(GREP) -v 'ERROR "checkmake": No global executable found' | \
+			$(GREP) -v 'ERROR "selene": No global executable found' | \
+			$(GREP) -ic 'error') || true); \
+	else \
+		num_errors=$$($(GREP) -ic 'error' nvim-checkhealth.log || true); \
+	fi; \
+	num_warnings=$$($(GREP) -ic 'warning' nvim-checkhealth.log || true); \
+	>&2 echo "nvim checkhealth found $${num_errors} errors, $${num_warnings} warnings."; \
+	if [ "$${num_errors}" -gt 0 ]; then \
+		exit 1; \
+	fi
+
 
 ## Formatting
 #####################################################################
@@ -411,7 +454,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint checkmake commitlint fixme format-check markdownlint nvim-checkhealth renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
+lint: actionlint checkmake commitlint fixme format-check markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -588,29 +631,6 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 			--config .github/template.markdownlint.yaml \
 			--dot \
 			$${files}; \
-	fi
-
-nvim-checkhealth: ## Run Neovim checkhealth.
-	@# bash \
-	# NOTE: make sure treesitter parsers are installed. \
-	nvim --version; \
-	nvim --headless '+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' '+checkhealth' '+w!nvim-checkhealth.log' '+qa!'; \
-	cat nvim-checkhealth.log; \
-	if [[ "$(arch)" == "arm64" && "$(kernel)" == "linux" ]]; then \
-		# TODO(#606): Remove exception when checkmake has proper ARM65 support. \
-		# TODO(#607): Remove exception when selene has proper ARM64 support. \
-		num_errors=$$(( \
-			cat nvim-checkhealth.log | \
-			$(GREP) -v 'ERROR "checkmake": No global executable found' | \
-			$(GREP) -v 'ERROR "selene": No global executable found' | \
-			$(GREP) -ic 'error') || true); \
-	else \
-		num_errors=$$($(GREP) -ic 'error' nvim-checkhealth.log || true); \
-	fi; \
-	num_warnings=$$($(GREP) -ic 'warning' nvim-checkhealth.log || true); \
-	>&2 echo "nvim checkhealth found $${num_errors} errors, $${num_warnings} warnings."; \
-	if [ "$${num_errors}" -gt 0 ]; then \
-		exit 1; \
 	fi
 
 .PHONY: renovate-config-validator
