@@ -274,18 +274,6 @@ bats-unit: ## Run Bats unit tests.
 	@# bash \
 	$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/unit
 
-nvim-checkhealth:
-	@# bash \
-	# NOTE: make sure treesitter parsers are installed. \
-	nvim --version; \
-	nvim --headless '+TSUpdate' '+checkhealth' '+w!nvim-checkhealth.log' '+qa!'; \
-	cat nvim-checkhealth.log; \
-	num_errors=$$(grep -cE 'error' nvim-checkhealth.log || true); \
-	>&2 echo "nvim checkhealth found $${num_errors} errors."; \
-	if [ "$${num_errors}" -gt 0 ]; then \
-		exit 1; \
-	fi
-
 ## Formatting
 #####################################################################
 
@@ -423,7 +411,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint checkmake commitlint fixme format-check markdownlint renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
+lint: actionlint checkmake commitlint fixme format-check markdownlint nvim-checkhealth renovate-config-validator selene shellcheck textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -600,6 +588,29 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 			--config .github/template.markdownlint.yaml \
 			--dot \
 			$${files}; \
+	fi
+
+nvim-checkhealth: ## Run Neovim checkhealth.
+	@# bash \
+	# NOTE: make sure treesitter parsers are installed. \
+	nvim --version; \
+	nvim --headless '+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' '+checkhealth' '+w!nvim-checkhealth.log' '+qa!'; \
+	cat nvim-checkhealth.log; \
+	if [[ "$(arch)" == "arm64" && "$(kernel)" == "linux" ]]; then \
+		# TODO(#606): Remove exception when checkmake has proper ARM65 support. \
+		# TODO(#607): Remove exception when selene has proper ARM64 support. \
+		num_errors=$$(( \
+			cat nvim-checkhealth.log | \
+			$(GREP) -v 'ERROR "checkmake": No global executable found' | \
+			$(GREP) -v 'ERROR "selene": No global executable found' | \
+			$(GREP) -ic 'error') || true); \
+	else \
+		num_errors=$$($(GREP) -ic 'error' nvim-checkhealth.log || true); \
+	fi; \
+	num_warnings=$$($(GREP) -ic 'warning' nvim-checkhealth.log || true); \
+	>&2 echo "nvim checkhealth found $${num_errors} errors, $${num_warnings} warnings."; \
+	if [ "$${num_errors}" -gt 0 ]; then \
+		exit 1; \
 	fi
 
 .PHONY: renovate-config-validator
