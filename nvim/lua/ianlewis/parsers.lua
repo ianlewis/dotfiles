@@ -12,10 +12,42 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local treesitter = require("nvim-treesitter")
-treesitter.setup({
-	-- Directory to install parsers and queries to
-	install_dir = vim.fn.stdpath("data") .. "/treesitter",
-})
-
-treesitter.install(require("ianlewis.parsers"))
+-- Definition of the tree-sitter parsers to be installed.
+return {
+	"bash",
+	"c",
+	"cpp",
+	"css",
+	"csv",
+	"dockerfile",
+	"gitcommit",
+	"gitignore",
+	"go",
+	"html",
+	"htmldjango",
+	"ini",
+	"javascript",
+	"json",
+	"json5",
+	"latex",
+	"liquid",
+	"lua",
+	"make",
+	"markdown",
+	"markdown_inline",
+	"proto",
+	"python",
+	"query",
+	"requirements", -- pip requirements.txt
+	"rust",
+	"scss",
+	"sql",
+	"terraform",
+	"textproto",
+	"toml",
+	"typescript",
+	"vim",
+	"vimdoc",
+	"xml",
+	"yaml",
+}
