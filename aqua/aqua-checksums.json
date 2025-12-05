@@ -276,6 +276,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/Automattic/harper/v1.1.0/harper-ls-aarch64-apple-darwin.tar.gz",
+      "checksum": "34E1D8137BA2832E1F6C8BF1DA55E295FC5B2FFF8864D5B81BE78C302976EC75",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v1.1.0/harper-ls-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "B25B020A22D586DDAD9A0CB45C9878AEF37A542AA12BE4F09F82FF3D9A55A69E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v1.1.0/harper-ls-x86_64-apple-darwin.tar.gz",
+      "checksum": "D996554078F42CBE3BD6D90517B7F78E1013E257D874E015CE29A945FDCD7ABA",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v1.1.0/harper-ls-x86_64-pc-windows-msvc.zip",
+      "checksum": "208CE11BB9B2EF80D771EB192D7246CAFB6C13F041A5BA6B4B199C7284493217",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Automattic/harper/v1.1.0/harper-ls-x86_64-unknown-linux-gnu.tar.gz",
+      "checksum": "D73DDFD8B6698F7618C72BF4FBFE5A7DE905F474747C4026632A71DCEE345E37",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/BurntSushi/ripgrep/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz",
       "checksum": "24AD76777745FBFF131C8FBC466742B011F925BFA4FFFA2DED6DEF23B5B937BE",
       "algorithm": "sha256"
