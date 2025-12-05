@@ -24,11 +24,21 @@ concurrency:
   group: e2e-test-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  NVIM_VERSION: "v0.11.4"
+
 jobs:
   # Test that a clean install works on Linux amd64.
-  e2e-test-ubuntu2404-amd64:
-    name: e2e-test-ubuntu2404-amd64
-    runs-on: ubuntu-24.04
+  e2e-test-ubuntu2404-matrix:
+    name: e2e-test-ubuntu2404-matrix
+
+    strategy:
+      matrix:
+        platform:
+          - ubuntu-24.04 # amd64
+          - ubuntu-24.04-arm # arm64
+
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
@@ -38,6 +48,27 @@ jobs:
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: ".node-version"
+
+      - name: install nvim
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLATFORM: ${{ matrix.platform }}
+        run: |
+          arch="x86_64"
+          if [ "${PLATFORM}" == "ubuntu-24.04-arm" ]; then
+            arch="arm64"
+          fi
+
+          gh release download \
+            --repo neovim/neovim \
+            --pattern "nvim-linux-${arch}.tar.gz" \
+            "${NVIM_VERSION}"
+
+          sudo tar \
+            --strip-components=1 \
+            -C /usr/local \
+            -x \
+            -f nvim-linux-${arch}.tar.gz
 
       - name: e2e-test
         env:
@@ -49,29 +80,8 @@ jobs:
           # shellcheck source=/dev/null
           source "${HOME}/.bashrc"
 
-  # Test that a clean install works on Linux arm64.
-  e2e-test-ubuntu2404-arm64:
-    name: e2e-test-ubuntu2404-arm64
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          submodules: true
-          persist-credentials: false
-
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
-        with:
-          node-version-file: ".node-version"
-
-      - name: e2e-test
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: E2E_HOME="${HOME}" make clean e2e-test
-
-      - name: Load .bashrc
-        run: |
-          # shellcheck source=/dev/null
-          source "${HOME}/.bashrc"
+      - name: nvim checkhealth
+        run: make nvim-checkhealth
 
   # Test that a clean install works on MacOS.
   e2e-test-macos26-arm64:
@@ -102,6 +112,23 @@ jobs:
               libyaml \
               xz
 
+      - name: install nvim
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          arch="arm64"
+
+          gh release download \
+            --repo neovim/neovim \
+            --pattern "nvim-macos-${arch}.tar.gz" \
+            "${NVIM_VERSION}"
+
+          sudo tar \
+            --strip-components=1 \
+            -C /usr/local \
+            -x \
+            -f nvim-macos-${arch}.tar.gz
+
       - name: e2e-test
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -112,21 +139,21 @@ jobs:
           # shellcheck source=/dev/null
           source "${HOME}/.bashrc"
 
+      - name: nvim checkhealth
+        run: make nvim-checkhealth
+
   # NOTE: needed for protected branch checks.
   e2e-test:
     name: e2e-test
     runs-on: ubuntu-latest
     needs:
-      - e2e-test-ubuntu2404-amd64
-      - e2e-test-ubuntu2404-arm64
+      - e2e-test-ubuntu2404-matrix
       - e2e-test-macos26-arm64
     if: ${{ always() }}
     env:
-      E2E_TEST_UBUNTU_AMD64_RESULT: ${{ needs.e2e-test-ubuntu2404-amd64.result }}
-      E2E_TEST_UBUNTU_ARM64_RESULT: ${{ needs.e2e-test-ubuntu2404-arm64.result }}
+      E2E_TEST_UBUNTU_MATRIX_RESULT: ${{ needs.e2e-test-ubuntu2404-matrix.result }}
       E2E_TEST_MACOS_ARM64_RESULT: ${{ needs.e2e-test-macos26-arm64.result }}
     steps:
       - run: |
-          [ "${E2E_TEST_UBUNTU_AMD64_RESULT}" == "success" ]
-          [ "${E2E_TEST_UBUNTU_ARM64_RESULT}" == "success" ]
+          [ "${E2E_TEST_UBUNTU_MATRIX_RESULT}" == "success" ]
           [ "${E2E_TEST_MACOS_ARM64_RESULT}" == "success" ]
