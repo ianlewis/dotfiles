@@ -109,6 +109,14 @@ RBENV_BUILD_SHA ?= 65a6833849b074339cbf8472262ee7059f2912ce
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
 
+# Macro for creating necessary directories.
+# NOTE: needed for targets that require a directory to be created without
+#       triggering rebuilds when anything inside changes.
+$(HOME)/%/.created:
+	@# bash \
+	mkdir -p $(dir $@); \
+	touch $@
+
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
 # help target in the order in appears in the Makefile.
@@ -178,7 +186,7 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.inst
 			--package-lock-only \
 			--no-audit \
 			--no-fund; \
-	fi; \
+	fi
 
 node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
 	@# bash \
@@ -218,9 +226,6 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 		--config .aqua.yaml \
 		install; \
 	touch $@
-
-$(HOME)/opt:
-	@mkdir -p $(HOME)/opt
 
 ## Installation
 #####################################################################
@@ -279,8 +284,10 @@ bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 
 nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 	@# bash \
-	# Ensure the environment (PATH etc.) is set up. \
-	HOME="$${E2E_HOME}" \
+	# Ensure the environment (PATH etc.) is set up properly and isn't polluted \
+	# by current PATH. \
+	env -i \
+		HOME="$${E2E_HOME}" \
 		XDG_BIN_HOME="$${E2E_HOME}/.local/bin" \
 		XDG_CONFIG_HOME="$${E2E_HOME}/.config" \
 		XDG_DATA_HOME="$${E2E_HOME}/.local/share" \
@@ -288,19 +295,13 @@ nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 		NODENV_ROOT="$${E2E_HOME}/.local/share/nodenv" \
 		PYENV_ROOT="$${E2E_HOME}/.local/share/pyenv" \
 		RBENV_ROOT="$${E2E_HOME}/.local/share/rbenv" \
-			source "$(E2E_HOME)/.bashrc"; \
-	nvim --version; \
-	# NOTE: make sure treesitter parsers are installed. \
-	nvim \
-		--headless \
-		-u $(E2E_HOME)/.config/nvim/init.lua \
-			'+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' \
-			'+checkhealth' \
-			'+w!nvim-checkhealth.log' \
-			'+qa!'; \
+		TERM="$${TERM:-"xterm-256color"}" \
+		LANG="$${LANG:-"en_US.UTF-8"}" \
+		LC_ALL="$${LC_ALL:-"en_US.UTF-8"}" \
+			bash --login _nvim_checkhealth.sh; \
 	cat nvim-checkhealth.log; \
 	if [[ "$(arch)" == "arm64" && "$(kernel)" == "linux" ]]; then \
-		# TODO(#606): Remove exception when checkmake has proper ARM65 support. \
+		# TODO(#606): Remove exception when checkmake has proper ARM64 support. \
 		# TODO(#607): Remove exception when selene has proper ARM64 support. \
 		num_errors=$$(( \
 			cat nvim-checkhealth.log | \
@@ -810,21 +811,8 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 ## Base Tools
 #####################################################################
 
-$(XDG_BIN_HOME):
-	@# bash \
-	mkdir -p $(XDG_BIN_HOME)
-
-$(XDG_CONFIG_HOME):
-	mkdir -p $(XDG_CONFIG_HOME)
-
-$(XDG_STATE_HOME):
-	mkdir -p $(XDG_STATE_HOME)
-
-$(XDG_DATA_HOME):
-	mkdir -p $(XDG_STATE_HOME)
-
 .PHONY: install-bin
-install-bin: $(XDG_BIN_HOME) $(XDG_CONFIG_HOME) ## Install binary scripts.
+install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install binary scripts.
 	@# bash \
 	ln -sf $(REPO_ROOT)/bin/all/* $(XDG_BIN_HOME); \
 	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
@@ -847,7 +835,7 @@ $(HOME)/.aqua-checksums.json:
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
 
 .PHONY: configure-bash
-configure-bash: $(XDG_CONFIG_HOME) $(XDG_DATA_HOME) ## Configure bash.
+configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configure bash.
 	@# bash \
 	rm -f \
 		$(HOME)/.inputrc \
@@ -871,7 +859,7 @@ configure-bash: $(XDG_CONFIG_HOME) $(XDG_DATA_HOME) ## Configure bash.
 	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
 
 .PHONY: configure-bat
-configure-bat: $(XDG_CONFIG_HOME) install-aqua ## Configure bat.
+configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
 	@# bash \
 	# NOTE: bat must be installed via aqua before running this so that it can \
 	#       be used to build the cache. \
@@ -904,7 +892,7 @@ configure-crontab: install-bin ## Configure crontab.
 		echo '############################## END MANAGED SECTION #############################'; \
 	) | crontab -
 
-$(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)
+$(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)/.created
 	@# bash \
 	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver; \
 	sed 's|$${XDG_CONFIG_HOME}|'$(XDG_CONFIG_HOME)'|'< $< > $@
@@ -919,12 +907,12 @@ configure-git: ## Configure git.
 	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
 
 .PHONY: configure-ghostty
-configure-ghostty: $(XDG_CONFIG_HOME) ## Configure Ghostty.
+configure-ghostty: $(XDG_CONFIG_HOME)/.created ## Configure Ghostty.
 	@# bash \
 	ln -sf $(REPO_ROOT)/ghostty $(XDG_CONFIG_HOME)/ghostty
 
 .PHONY: configure-nix
-configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
+configure-nix: $(XDG_CONFIG_HOME)/.created ## Configure nix.
 	@# bash \
 	mkdir -p $(XDG_CONFIG_HOME)/nix; \
 	ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
@@ -932,13 +920,13 @@ configure-nix: $(XDG_CONFIG_HOME) ## Configure nix.
 .PHONY: configure-node
 configure-node: ## Configure Node.js and npm.
 	@# bash \
-	rm -f $(HOME)/.npmrc; \
 	ln -sf $(REPO_ROOT)/npm/_npmrc $(HOME)/.npmrc; \
-	rm -f $(HOME)/.node-version; \
-	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version; \
+	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version
 
+# NOTE: nvim-treesitter install_dir must exist for it to be added to the Neovim
+# runtimepath.
 .PHONY: configure-nvim
-configure-nvim: $(XDG_CONFIG_HOME) ## Configure neovim.
+configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.created ## Configure neovim.
 	@# bash \
 	rm -rf $(XDG_CONFIG_HOME)/nvim; \
 	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
@@ -953,7 +941,7 @@ configure-tmux: ## Configure tmux.
 ## Install Tools
 #####################################################################
 
-$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)
+$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)/.created .
 	@# bash \
 	tempfile=$$($(MKTEMP) --suffix=".slsa-verifier-$(SLSA_VERIFIER_VERSION)"); \
 	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"; \
@@ -973,7 +961,7 @@ install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua install-go ## Install aqua and
 	AQUA_ROOT_DIR= \
 		$(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" install
 
-$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt
+$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt/.created
 	@# bash \
 	mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
 	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
@@ -982,7 +970,7 @@ $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt
 	tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
 	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
 
-$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME)
+$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME)/.created
 	@# bash \
 	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
 	ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
@@ -993,7 +981,7 @@ $(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME
 .PHONY: install-go
 install-go: $(HOME)/opt/go-$(GO_VERSION)/.installed ## Install the Go runtime.
 
-$(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt
+$(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt/.created
 	@# bash \
 	tempfile=$$($(MKTEMP) --suffix=".tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
@@ -1010,8 +998,11 @@ $(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
 
 # Installs nodeenv and Node.js
-$(NODENV_ROOT)/.installed: configure-node $(XDG_DATA_HOME)
+$(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	@# bash \
+	# TODO(#609): Update dependency on configure-node. \
+	# Run this here rather than as a dependency no avoid unnecessary rebuilds. \
+	$(MAKE) configure-node; \
 	# Install the nodenv. \
 	git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
 	if [ "$(NODENV_INSTALL_VERSION)" == "master" ]; then \
@@ -1044,7 +1035,7 @@ nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed
 		--no-fund
 
 # Installs tools in the user node_modules.
-$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed $(XDG_DATA_HOME)
+$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed $(XDG_DATA_HOME)/.created
 	@# bash \
 	cd $(REPO_ROOT)/nodenv; \
 	$(NODENV_ROOT)/shims/npm clean-install; \
@@ -1069,7 +1060,7 @@ $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 	# 		yet installed. \
 	PYENV_VERSION= $(PYENV_ROOT)/bin/pyenv virtualenv $(USER)
 
-$(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)
+$(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	@# bash \
 	export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
 	$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
@@ -1105,7 +1096,7 @@ $(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)
 .PHONY: install-ruby
 install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
 
-$(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)
+$(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	@# bash \
 	export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
 	git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \

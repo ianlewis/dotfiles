@@ -37,6 +37,7 @@ jobs:
         platform:
           - ubuntu-24.04 # amd64
           - ubuntu-24.04-arm # arm64
+      fail-fast: false
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -77,6 +78,8 @@ jobs:
 
       - name: Load .bashrc
         run: |
+          set -ueo pipefail
+
           # shellcheck source=/dev/null
           source "${HOME}/.bashrc"
 

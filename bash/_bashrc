@@ -15,9 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# ~/.bashrc: executed by bash(1) for interactive non-login shells.
+#
+# See /usr/share/doc/bash/examples/startup-files (bash-doc package) or read
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+# for more information.
+
+# NOTE: Though this file does not set `nounset` (set -u) itself, it is sourced
+#       with `nounset` set in tests.
 
 # _bashrc_setup_homebrew initializes the Homebrew environment on macOS.
 function _bashrc_setup_homebrew() {
@@ -29,6 +34,103 @@ function _bashrc_setup_homebrew() {
         if [ -x "${hb_prefix}/bin/brew" ]; then
             eval "$(${hb_prefix}/bin/brew shellenv)"
         fi
+    fi
+}
+
+# _bashrc_setup_go sets up the Go environment.
+function _bashrc_setup_go() {
+    # Go
+    GOPATH=${HOME}/go
+    GOBIN=${GOPATH}/bin
+    if [[ ":$PATH:" != *":${GOBIN}:"* ]]; then
+        PATH="${GOBIN}:${PATH}"
+    fi
+    export GOPATH
+    export GOBIN
+    if [ -d "${HOME}/opt/go" ]; then
+        GOROOT=${HOME}/opt/go
+        if [[ ":$PATH:" != *":${GOROOT}/bin:"* ]]; then
+            PATH="${GOROOT}/bin:${PATH}"
+        fi
+        export GOROOT
+    fi
+}
+
+# _bashrc_setup_pyenv sets up pyenv if available.
+function _bashrc_setup_pyenv() {
+    export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+    # Python
+    if [[ -d "${PYENV_ROOT}/bin" ]]; then
+        if [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]]; then
+            PATH="${PYENV_ROOT}/bin:${PATH}"
+        fi
+        eval "$(pyenv init - bash)"
+
+        local virtual_env
+        virtual_env="${VIRTUAL_ENV:-""}"
+        # Activate the user's virtualenv if it exists.
+        if [[ ${virtual_env##*/} != "${USER}" ]] && [[ -r "${PYENV_ROOT}/versions/${USER}/bin/activate" ]]; then
+            # NOTE: pyenv activate will set PS1 for non-interactive shells.
+            pyenv activate "${USER}"
+        fi
+    fi
+}
+
+# _bashrc_setup_nodenv sets up nodenv if available.
+function _bashrc_setup_nodenv() {
+    # Nodenv
+    export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
+    if [[ -d "${NODENV_ROOT}/bin" ]]; then
+        if [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]]; then
+            PATH="${NODENV_ROOT}/bin:${PATH}"
+        fi
+        eval "$(nodenv init - bash)"
+    fi
+
+    # Activate the local node_modules.
+    if [[ -d "${XDG_DATA_HOME}/node_modules/.bin" ]]; then
+        if [[ ":$PATH:" != *":${XDG_DATA_HOME}/node_modules/.bin:"* ]]; then
+            PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
+        fi
+    fi
+}
+
+# _bashrc_setup_rbenv sets up rbenv if available.
+function _bashrc_setup_rbenv() {
+    # Rbenv
+    export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
+    if [[ -d "${RBENV_ROOT}/bin" ]]; then
+        if [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]]; then
+            PATH="${RBENV_ROOT}/bin:${PATH}"
+        fi
+        eval "$(rbenv init - bash)"
+    fi
+}
+
+# _bashrc_setup_rust sets up the Rust environment if available.
+function _bashrc_setup_rust() {
+    # Rust
+    if [[ -r "${HOME}/.cargo/env" ]]; then
+        # shellcheck source=/dev/null
+        source "${HOME}/.cargo/env"
+    fi
+}
+
+function _bashrc_setup_aqua() {
+    if command -v aqua >/dev/null 2>&1; then
+        aqua_root="$(aqua root-dir)"
+        if [[ ":$PATH:" != *":${aqua_root}/bin:"* ]]; then
+            PATH="${aqua_root}/bin:${PATH}"
+        fi
+    fi
+}
+
+# _bashrc_setup_aliases sources the ~/.bash_aliases file if it exists.
+function _bashrc_setup_aliases() {
+    # Alias definitions.
+    if [ -r "${HOME}/.bash_aliases" ]; then
+        # shellcheck source=/dev/null
+        source "${HOME}/.bash_aliases"
     fi
 }
 
@@ -65,19 +167,67 @@ function _bashrc_setup_bash_completion() {
     fi
 }
 
+# _bashrc_update_path updates the PATH environment variable to include
+# various language version managers and local bin directories.
+function _bashrc_update_path() {
+    _bashrc_setup_homebrew
+
+    _bashrc_setup_go
+
+    _bashrc_setup_pyenv
+
+    _bashrc_setup_nodenv
+
+    _bashrc_setup_rbenv
+
+    _bashrc_setup_rust
+
+    # The .local/bin is used for some local installs such as applications
+    # installed via 'pip install --user'
+    if [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]]; then
+        PATH="${HOME}/.local/bin:${PATH}"
+    fi
+
+    # Aqua. We want aqua to be able to override other global paths so it gets
+    # highest priority.
+    _bashrc_setup_aqua
+}
+
+# _bashrc_source_local sources the ~/.bashrc.local file if it exists.
+function _bashrc_source_local() {
+    # Local settings.
+    if [[ -r "${HOME}/.bashrc.local" ]]; then
+        # shellcheck source=/dev/null
+        source "${HOME}/.bashrc.local"
+    fi
+}
+
 function _bashrc_main() {
     XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
     export XDG_DATA_HOME
 
-    if [ -r "${HOME}/.bashrc_init_local" ]; then
+    if [[ -r "${HOME}/.bashrc_init_local" ]]; then
         # shellcheck source=/dev/null
         source "${HOME}/.bashrc_init_local"
+    fi
+
+    # If not running interactively, then return early.
+    # NOTE: PS1 and tty may be set even for non-interactive shells so we check
+    #       the special parameter $- for the presence of 'i'.
+    if [[ ! $- =~ i ]]; then
+        # Update the PATH even for non-interactive shells.
+        _bashrc_update_path
+
+        _bashrc_source_local
+
+        export PATH
+
+        return 0
     fi
 
     # tmux
     # Start a tmux session if not already in one
     # Exit directly after the tmux session is exited
-    # Only run if logged in remotely via ssh
     if shopt -q login_shell; then
         # Only run if running in a terminal.
         if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
@@ -101,10 +251,6 @@ function _bashrc_main() {
             fi
         fi
     fi
-
-    # If not running interactively, don't do anything. PS1 may be unbound so we
-    # need to use a special form of parameter expansion.
-    [ -z "${PS1+x}" ] && return
 
     # Load system bashrc
     # NOTE: On Debian based systems /etc/bash.bashrc is loaded before ~/.bashrc
@@ -132,17 +278,6 @@ function _bashrc_main() {
         eval "$(dircolors -b)"
     fi
 
-    # Create the ~/opt directory.
-    mkdir -p "${HOME}/opt"
-
-    # Create vim swap file directory
-    if [ ! -d "${HOME}/.vimswp" ]; then
-        mkdir -p "${HOME}/.vim/swap"
-    fi
-    if [ ! -d "${HOME}/.vim/backup" ]; then
-        mkdir -p "${HOME}/.vim/backup"
-    fi
-
     # don't put duplicate lines in the history. See bash(1) for more options
     export HISTCONTROL=ignoredups
     # ... and ignore same sucessive entries.
@@ -153,7 +288,9 @@ function _bashrc_main() {
     shopt -s checkwinsize
 
     # make less more friendly for non-text input files, see lesspipe(1)
-    [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+    if command -v lesspipe >/dev/null 2>&1; then
+        eval "$(lesspipe)"
+    fi
 
     # less should never use the bell and not paginate if less than one page.
     export LESS="qR -F -X ${LESS}"
@@ -190,7 +327,7 @@ function _bashrc_main() {
     # Start an ssh-agent instance if an existing one isn't found.
     mkdir -p "${HOME}/.ssh"
     if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -r "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
-        # ssh-find-agent assumes that ~/.ssh/authorized_keys exists
+        # NOTE: ssh-find-agent assumes that ~/.ssh/authorized_keys exists
         if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
             touch "${HOME}/.ssh/authorized_keys"
         fi
@@ -200,82 +337,16 @@ function _bashrc_main() {
         ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
     fi
 
-    # Alias definitions.
-    if [ -r "${HOME}/.bash_aliases" ]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bash_aliases"
-    fi
+    # Update the PATH
+    _bashrc_update_path
 
-    # Setup homebrew on macOS
-    _bashrc_setup_homebrew
-
-    # Go
-    GOPATH=${HOME}/go
-    GOBIN=${GOPATH}/bin
-    [[ ":$PATH:" != *":${GOBIN}:"* ]] && PATH="${GOBIN}:${PATH}"
-    export GOPATH
-    export GOBIN
-    if [ -d "${HOME}/opt/go" ]; then
-        GOROOT=${HOME}/opt/go
-        [[ ":$PATH:" != *":${GOROOT}/bin:"* ]] && PATH="${GOROOT}/bin:${PATH}"
-        export GOROOT
-    fi
-
-    # Python
-    export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-    if [[ -d "${PYENV_ROOT}/bin" ]]; then
-        [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]] && PATH="${PYENV_ROOT}/bin:${PATH}"
-        eval "$(pyenv init - bash)"
-    fi
-
-    # Activate the user's virtualenv if it exists.
-    if [[ ${VIRTUAL_ENV##*/} != "${USER}" ]] && [[ -r "${PYENV_ROOT}/versions/${USER}/bin/activate" ]]; then
-        pyenv activate "${USER}"
-    fi
-
-    # Nodenv
-    export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
-    if [[ -d "${NODENV_ROOT}/bin" ]]; then
-        [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]] && PATH="${NODENV_ROOT}/bin:${PATH}"
-        eval "$(nodenv init - bash)"
-    fi
-
-    # Activate the local node_modules.
-    if [[ -d "${XDG_DATA_HOME}/node_modules/.bin" ]]; then
-        [[ ":$PATH:" != *":${XDG_DATA_HOME}/node_modules/.bin:"* ]] && PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
-    fi
-
-    # Rbenv
-    export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
-    if [[ -d "${RBENV_ROOT}/bin" ]]; then
-        [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]] && PATH="${RBENV_ROOT}/bin:${PATH}"
-        eval "$(rbenv init - bash)"
-    fi
-
-    # Rust
-    if [[ -r "${HOME}/.cargo/env" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.cargo/env"
-    fi
-
-    # The .local/bin is used for some local installs such as applications
-    # installed via 'pip install --user'
-    [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]] && PATH="${HOME}/.local/bin:${PATH}"
-
-    # Aqua. We want aqua to be able to override other global paths so it gets
-    # highest priority.
-    if command -v aqua >/dev/null 2>&1; then
-        aqua_root="$(aqua root-dir)"
-        [[ ":$PATH:" != *":${aqua_root}/bin:"* ]] && PATH="${aqua_root}/bin:${PATH}"
-    fi
-
-    # Local settings.
-    if [[ -r "${HOME}/.bashrc.local" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bashrc.local"
-    fi
+    # Source local settings
+    _bashrc_source_local
 
     export PATH
+
+    # Setup bash aliases
+    _bashrc_setup_aliases
 
     # Setup bash completion
     _bashrc_setup_bash_completion

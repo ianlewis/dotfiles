@@ -13,6 +13,7 @@
 -- limitations under the License.
 
 local treesitter = require("nvim-treesitter")
+
 treesitter.setup({
 	-- Directory to install parsers and queries to
 	install_dir = vim.fn.stdpath("data") .. "/treesitter",
