@@ -13,8 +13,6 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local lspconfig = require("lspconfig")
-
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
@@ -55,19 +53,23 @@ cmp.setup({
 	}),
 })
 
-local cmp_capabilities = cmp_nvim_lsp.default_capabilities()
+local cmp_capabilities = vim.lsp.config("*", {
+	capabilities = cmp_nvim_lsp.default_capabilities(),
+})
+
 -- }}}
 
 -- {{{ bash-language-server
-lspconfig.bashls.setup({
-	capabilities = cmp_capabilities,
-	-- TODO(#109): Use a local explainshell instance.
-	-- settings = {
-	-- 	bashIde = {
-	-- 		explainshellEndpoint = "https://explainshell.com",
-	-- 	},
-	-- },
-})
+-- TODO(#109): Use a local explainshell instance.
+-- vim.lsp.config("bashls", {
+-- 	settings = {
+-- 		bashIde = {
+-- 			explainshellEndpoint = "https://explainshell.com",
+-- 		},
+-- 	},
+-- })
+
+vim.lsp.enable("bashls")
 -- }}}
 
 -- efm-langserver {{{
@@ -126,7 +128,7 @@ local todos_note = {
 
 -- }}}
 
-lspconfig.efm.setup({
+vim.lsp.config("efm", {
 	init_options = { documentFormatting = true },
 	settings = {
 		rootMarkers = { ".git/" },
@@ -177,10 +179,12 @@ lspconfig.efm.setup({
 		},
 	},
 })
+
+vim.lsp.enable("efm")
 -- }}}
 
 -- eslint-language-server {{{
-lspconfig.eslint.setup({
+vim.lsp.config("eslint", {
 	on_attach = function(_, bufnr)
 		-- Fix all fixable problems on write.
 		vim.api.nvim_create_autocmd("BufWritePre", {
@@ -189,11 +193,12 @@ lspconfig.eslint.setup({
 		})
 	end,
 })
+
+vim.lsp.enable("eslint")
 -- }}}
 
 -- gopls {{{
-lspconfig.gopls.setup({
-	capabilities = cmp_capabilities,
+vim.lsp.config("gopls", {
 	filetypes = {
 		"go",
 		"gomod",
@@ -214,14 +219,16 @@ lspconfig.gopls.setup({
 		},
 	},
 })
+
+vim.lsp.enable("gopls")
 -- }}}
 
 -- harper {{{
-lspconfig.harper_ls.setup({})
+vim.lsp.enable("harper_ls")
 -- }}}
 
 -- lua_ls {{{
-lspconfig.lua_ls.setup({
+vim.lsp.config("lua_ls", {
 	on_attach = function(client)
 		-- Disable the documentFormattingProvider for lua-ls
 		-- This disable CppCXY/EmmyLuaCodeStyle in favor of stylua via
@@ -266,10 +273,12 @@ lspconfig.lua_ls.setup({
 		Lua = {},
 	},
 })
+
+vim.lsp.enable("lua_ls")
 -- }}}
 
 --{{{ pylsp
-lspconfig.pylsp.setup({
+vim.lsp.config("pylsp", {
 	settings = {
 		pylsp = {
 			plugins = {
@@ -291,10 +300,12 @@ lspconfig.pylsp.setup({
 		},
 	},
 })
+
+vim.lsp.enable("pylsp")
 --}}}
 
 -- rust-analyzer {{{
-lspconfig.rust_analyzer.setup({
+vim.lsp.config("rust_analyzer", {
 	capabilities = cmp_capabilities,
 	settings = {
 		["rust-analyzer"] = {
@@ -305,10 +316,10 @@ lspconfig.rust_analyzer.setup({
 		},
 	},
 })
+
+vim.lsp.enable("rust_analyzer")
 -- }}}
 
 -- {{{ typescript-language-server
-lspconfig.ts_ls.setup({
-	capabilities = cmp_capabilities,
-})
+vim.lsp.enable("ts_ls")
 -- }}}
