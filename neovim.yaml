@@ -96,6 +96,12 @@ structs:
         - type: any
         - type: any
 
+    # Vim treesitter module.
+    treesitter:
+      start:
+        args:
+          - type: function
+
     # Vim ui module.
     ui:
       any: true

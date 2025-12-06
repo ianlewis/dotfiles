@@ -12,12 +12,42 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- YAML-specific options.
-
--- Indent 2 spaces.
-vim.bo.tabstop = 2
-vim.bo.softtabstop = 2
-vim.bo.shiftwidth = 2
-
--- Enable tree-sitter highlighting.
-vim.treesitter.start()
+-- Definition of the tree-sitter parsers to be installed.
+return {
+	"bash",
+	"c",
+	"cpp",
+	"css",
+	"csv",
+	"dockerfile",
+	"gitcommit",
+	"gitignore",
+	"go",
+	"html",
+	"htmldjango",
+	"ini",
+	"javascript",
+	"json",
+	"json5",
+	"latex",
+	"liquid",
+	"lua",
+	"make",
+	"markdown",
+	"markdown_inline",
+	"proto",
+	"python",
+	"query",
+	"requirements", -- pip requirements.txt
+	"rust",
+	"scss",
+	"sql",
+	"terraform",
+	"textproto",
+	"toml",
+	"typescript",
+	"vim",
+	"vimdoc",
+	"xml",
+	"yaml",
+}

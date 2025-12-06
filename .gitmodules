@@ -31,6 +31,7 @@
 [submodule "nvim/pack/nvim/start/nvim-treesitter"]
 	path = nvim/pack/nvim/start/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+    branch = main
 [submodule "nvim/pack/nvim/start/efmls-configs-nvim"]
 	path = nvim/pack/nvim/start/efmls-configs-nvim
 	url = https://github.com/creativenull/efmls-configs-nvim.git

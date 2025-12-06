@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# vim: set ft=bash:
+#
+# Copyright 2025 Ian Lewis
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -euo pipefail
+
+# _nvim_checkhealth.sh - Run nvim --checkhealth in a headless mode and save
+# output to a log file. This needs to be run with a carefully created
+# environment for testing the nvim configuration, typically with env -i.
+
+nvim --version
+# NOTE: make sure treesitter parsers are installed.
+nvim \
+    --headless \
+    -u "${HOME}/.config/nvim/init.lua" \
+    '+lua print("stdpath: "..vim.inspect({config = vim.fn.stdpath("config"), data = vim.fn.stdpath("data"), cache = vim.fn.stdpath("cache"), log = vim.fn.stdpath("log")}).."\n")' \
+    '+lua print("runtimepath: "..vim.inspect(vim.api.nvim_list_runtime_paths()).."\n")' \
+    '+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' \
+    '+checkhealth' \
+    '+w!nvim-checkhealth.log' \
+    '+qa!'

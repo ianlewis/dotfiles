@@ -67,6 +67,8 @@ function _bash_completion() {
     fi
 
     # fzf completion
+    # NOTE: this actually does more than completion, it also enables integration
+    # with bash history search.
     if command -v fzf >/dev/null 2>&1; then
         # shellcheck source=/dev/null
         source <(fzf --bash)

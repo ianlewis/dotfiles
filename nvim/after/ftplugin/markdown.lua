@@ -12,12 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- YAML-specific options.
-
--- Indent 2 spaces.
-vim.bo.tabstop = 2
-vim.bo.softtabstop = 2
-vim.bo.shiftwidth = 2
+-- Markdown-specific options.
 
 -- Enable tree-sitter highlighting.
 vim.treesitter.start()

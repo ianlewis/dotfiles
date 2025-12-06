@@ -15,6 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# ~/.bash_profile: executed by bash(1) for interactive login shells.
+#
+# See /usr/share/doc/bash/examples/startup-files (bash-doc package) or read
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+# for more information.
+
 function _bash_profile() {
     if [ -r "${HOME}/.bashrc" ]; then
         # shellcheck source=/dev/null
