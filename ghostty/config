@@ -61,3 +61,7 @@
 font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
+
+# Allow terminal applications to access the clipboard (OSC 52).
+clipboard-read = allow
+clipboard-write = allow
