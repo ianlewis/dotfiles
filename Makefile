@@ -248,7 +248,6 @@ install-runtimes: install-go install-node install-python install-ruby
 ## Testing
 #####################################################################
 
-# TODO(#240): Add test target dependencies.
 .PHONY: test
 test: lint unit-test e2e-test ## Run all tests.
 
