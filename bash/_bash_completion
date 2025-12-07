@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# vim: set ft=sh:
+# vim: set ft=bash:
 #
 # Copyright 2025 Ian Lewis
 #
@@ -79,6 +79,7 @@ function _bash_completion() {
         gcloud_base_path=$(dirname "$(dirname "${gcloud_bin_path}")")
         if [[ -r "${gcloud_base_path}/completion.bash.inc" ]]; then
             export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+            export CLOUDSDK_COMPONENT_MANAGER_DISABLE_UPDATE_CHECK=True
             # shellcheck source=/dev/null
             source "${gcloud_base_path}/completion.bash.inc"
         fi
