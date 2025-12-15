@@ -87,7 +87,7 @@ PYENV_INSTALL_SHA ?= 61d869f67e2b4c1d05c532821c5166a9ed40b0aa
 # to time and cause validation errors.
 PYENV_DOCTOR_SHA ?= bad83e51e1409665de6cb37537cfc1e02e154bec
 PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
-PYENV_VIRTUALENV_SHA ?= 387f627464544a0c81176a734c7134f4ca30c3aa
+PYENV_VIRTUALENV_SHA ?= b5c88a7a154dc6729b0539dca12cf3c0d810bfbe
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
@@ -95,8 +95,8 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.21
-NODENV_BUILD_SHA ?= 87a0dd92edde277c27e570a78102ed5a40c5002b
+NODENV_BUILD_VERSION ?= v5.4.22
+NODENV_BUILD_SHA ?= 97f8e81c054cd087433f1d45964abfe58c85c0a2
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
