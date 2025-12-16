@@ -34,3 +34,9 @@ setup() {
 @test "aqua root created" {
     assert_dir_exists "${E2E_HOME}/.local/share/aquaproj-aqua/pkgs"
 }
+
+@test "goimports installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
