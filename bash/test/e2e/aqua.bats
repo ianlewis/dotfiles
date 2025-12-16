@@ -40,3 +40,9 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
+
+@test "gci installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/gci" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
