@@ -63,3 +63,5 @@ packages:
   - name: aws/aws-cli@2.32.10
   - name: twistedpair/google-cloud-sdk@548.0.0
   - name: kubernetes-sigs/cri-tools/crictl@v1.34.0
+  - name: golang/tools/goimports@v0.40.0
+  - name: daixiang0/gci@v0.13.7
