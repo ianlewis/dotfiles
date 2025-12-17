@@ -285,8 +285,8 @@ tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
 	@# bash \
 	# Check tmux config for parsing errors. This needs to be an e2e test \
 	# since it relies on the home directory paths. \
-	HOME="$${E2E_HOME}" \
-		tmux -f $${E2E_HOME}/.tmux.conf start-server \; source-file -n $${E2E_HOME}/.tmux.conf
+	HOME="$(E2E_HOME)" \
+		tmux start-server \; source-file -n "$(E2E_HOME)/.tmux.conf"
 
 nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 	@# bash \
