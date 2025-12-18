@@ -27,6 +27,27 @@ setup() {
 
 @test "pyenv is installed" {
     assert_file_executable "${E2E_HOME}/.local/share/pyenv/bin/pyenv"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python3"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pip"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pip3"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pydoc"
     assert_dir_exists "${E2E_HOME}/.local/share/pyenv/plugins/python-build"
     assert_dir_exists "${E2E_HOME}/.local/share/pyenv/plugins/pyenv-virtualenv"
+}
+
+@test "hashin installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/hashin"
+}
+
+@test "ruff installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/ruff"
+}
+
+@test "yamllint installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/yamllint"
+}
+
+@test "zizmor installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/zizmor"
 }

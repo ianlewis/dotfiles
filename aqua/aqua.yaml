@@ -65,3 +65,4 @@ packages:
   - name: kubernetes-sigs/cri-tools/crictl@v1.34.0
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.13.7
+  - name: Canop/dysk@v3.5.0

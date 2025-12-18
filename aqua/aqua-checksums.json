@@ -351,6 +351,11 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/Canop/dysk/v3.5.0/dysk_3.5.0.zip",
+      "checksum": "F7904D99FAB653B6163B683DC6FE03FA6E886866252E44183191866F5DDDEDBB",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.0.2/stylua-linux-aarch64.zip",
       "checksum": "AD2F1B2BCB215CA3009310F8978AD14DB78057CEC1B4767B4F73CC7F3BA8047E",
       "algorithm": "sha256"

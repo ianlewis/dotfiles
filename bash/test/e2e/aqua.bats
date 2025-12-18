@@ -35,6 +35,16 @@ setup() {
     assert_dir_exists "${E2E_HOME}/.local/share/aquaproj-aqua/pkgs"
 }
 
+@test "dysk installed correctly" {
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        skip "dysk not installed on Darwin system"
+    fi
+
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/dysk" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "goimports installed correctly" {
     assert_symlink_to \
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \
