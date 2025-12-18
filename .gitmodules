@@ -80,9 +80,6 @@
 [submodule "nvim/pack/nvim/start/diffview.nvim"]
 	path = nvim/pack/nvim/start/diffview.nvim
 	url = https://github.com/sindrets/diffview.nvim.git
-[submodule "pyenv/pyenv-installer"]
-	path = pyenv/pyenv-installer
-	url = https://github.com/pyenv/pyenv-installer.git
 [submodule "third_party/ianlewis/coding-assistant-docker-images"]
 	path = third_party/ianlewis/coding-assistant-docker-images
 	url = https://github.com/ianlewis/coding-assistant-docker-images.git
