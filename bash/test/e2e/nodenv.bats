@@ -30,6 +30,11 @@ setup() {
 }
 
 @test "nodenv is installed" {
-    assert_file_executable "${E2E_HOME}/.local/share/nodenv/bin/nodenv"
+    assert_symlink_to "${E2E_HOME}/.local/share/nodenv/libexec/nodenv" "${E2E_HOME}/.local/share/nodenv/bin/nodenv"
+    assert_file_executable "${E2E_HOME}/.local/share/nodenv/libexec/nodenv"
     assert_dir_exists "${E2E_HOME}/.local/share/nodenv/plugins/node-build"
+}
+
+@test "node_modules installed correctly" {
+    assert_symlink_to "${BASE_PATH}/nodenv/node_modules" "${E2E_HOME}/.local/share/node_modules"
 }

@@ -5,13 +5,26 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-12-18`
+
+- Added [`dysk`](https://github.com/Canop/dysk) as a global CLI tool
+  ([#626](https://github.com/ianlewis/dotfiles/pull/625).
+
+## `2025-12-16`
+
+- Added [`goimports`](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) and
+  [`gci`](https://github.com/daixiang0/gci) as a global CLI tools
+  ([#623](https://github.com/ianlewis/dotfiles/pull/623).
+
 ## `2025-12-04`
 
-- Added `crictl` to the default set of installed tools.
+- Added [`crictl`](https://github.com/kubernetes-sigs/cri-tools) as a global CLI
+  tool ([#603](https://github.com/ianlewis/dotfiles/pull/603).
 
 ## `2025-12-02`
 
-- Added the `aws` CLI and `gcloud` CLI to the default set of installed tools.
+- Added the `aws` CLI and `gcloud` CLI as global CLI tools
+  ([#602](https://github.com/ianlewis/dotfiles/pull/602)).
 
 ## `2025-11-29`
 

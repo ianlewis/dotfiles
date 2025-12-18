@@ -27,5 +27,6 @@ setup() {
 
 @test "rbenv is installed" {
     assert_file_executable "${E2E_HOME}/.local/share/rbenv/bin/rbenv"
+    assert_file_executable "${E2E_HOME}/.local/share/rbenv/shims/ruby"
     assert_dir_exists "${E2E_HOME}/.local/share/rbenv/plugins/ruby-build"
 }
