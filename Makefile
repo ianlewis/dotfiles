@@ -82,11 +82,7 @@ GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 PYENV_INSTALL_VERSION ?= v2.6.15
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= 61d869f67e2b4c1d05c532821c5166a9ed40b0aa
-# NOTE: pyenv plugins do not make releases and pyenv-installer installs them at
-# the 'master' branch. We validate the SHA here but it may be updated from time
-# to time and cause validation errors.
-PYENV_DOCTOR_SHA ?= bad83e51e1409665de6cb37537cfc1e02e154bec
-PYENV_UPDATE_SHA ?= 39b088e56c0b176a50a700bfcfe91fa6428ee8b9
+PYENV_VIRTUALENV_VERSION ?= v1.2.6
 PYENV_VIRTUALENV_SHA ?= b5c88a7a154dc6729b0539dca12cf3c0d810bfbe
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
@@ -1002,8 +998,9 @@ $(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	# TODO(#609): Update dependency on configure-node. \
 	# Run this here rather than as a dependency no avoid unnecessary rebuilds. \
 	$(MAKE) configure-node; \
-	# Install the nodenv. \
+	# Install nodenv. \
 	git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
+	# Validate nodenv version. \
 	if [ "$(NODENV_INSTALL_VERSION)" == "master" ]; then \
 		git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"; \
 	fi; \
@@ -1062,34 +1059,31 @@ $(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
 $(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	@# bash \
 	export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
-	$(REPO_ROOT)/pyenv/pyenv-installer/bin/pyenv-installer; \
+	# Install pyenv. \
+	git clone \
+		--branch "$(PYENV_INSTALL_VERSION)" \
+		https://github.com/pyenv/pyenv.git \
+		$(PYENV_ROOT); \
 	# Validate the pyenv installation. \
 	pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
 	if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
 		echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
-		rm -rf $(PYENV_ROOT); \
+		rm -rf "$(PYENV_ROOT)"; \
 		exit 1; \
 	fi; \
-	pyenv_doctor_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-doctor rev-parse HEAD); \
-	if [ "$${pyenv_doctor_sha}" != "$(PYENV_DOCTOR_SHA)" ]; then \
-		echo "Invalid pyenv_doctor: '$${pyenv_doctor_sha}' != '$(PYENV_DOCTOR_SHA)'"; \
-		rm -rf $(PYENV_ROOT); \
-		exit 1; \
-	fi; \
-	pyenv_update_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-update rev-parse HEAD); \
-	if [ "$${pyenv_update_sha}" != "$(PYENV_UPDATE_SHA)" ]; then \
-		echo "Invalid pyenv_update: '$${pyenv_update_sha}' != '$(PYENV_UPDATE_SHA)'"; \
-		rm -rf $(PYENV_ROOT); \
-		exit 1; \
-	fi; \
-	pyenv_virtualenv_sha=$$(git -C $(PYENV_ROOT)/plugins/pyenv-virtualenv rev-parse HEAD); \
+	# Install the pyenv-virtualenv plugin. \
+	git clone \
+		--branch "$(PYENV_VIRTUALENV_VERSION)" \
+		https://github.com/pyenv/pyenv-virtualenv.git \
+		"$(PYENV_ROOT)/plugins/pyenv-virtualenv"; \
+	pyenv_virtualenv_sha=$$(git -C "$(PYENV_ROOT)/plugins/pyenv-virtualenv" rev-parse HEAD); \
 	if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
 		echo "Invalid pyenv_virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
-		rm -rf $(PYENV_ROOT); \
+		rm -rf "$(PYENV_ROOT)"; \
 		exit 1; \
 	fi; \
 	$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
-	ln -sf $(REPO_ROOT)/.python-version $(HOME)/.python-version; \
+	ln -sf "$(REPO_ROOT)/.python-version" "$(HOME)/.python-version"; \
 	touch $@
 
 .PHONY: install-ruby
@@ -1098,6 +1092,7 @@ install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
 $(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	@# bash \
 	export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
+	# Install rbenv. \
 	git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
 	# Validate the rbenv installation. \
 	rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
