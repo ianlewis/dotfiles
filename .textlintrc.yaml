@@ -26,7 +26,7 @@ rules:
       - "/\\bRonacher\\b/g"
 
       # Terminology
-      - "/\\bARM64\\b/g"
+      - "/\\bAutocommands\\b/g" # Neovim/Vim autocommands
       - "/\\bHomebrew\\b/g"
       - "/\\bLSP\\b/g"
       - "/\\bLua\\b/g"
@@ -34,14 +34,18 @@ rules:
       - "/\\bNixOS\\b/g"
       - "/\\bTreesitter\\b/g"
       - "/\\bSDK\\b/g"
+      - "/\\bXDG\\b/g" # X Desktop Group
       - "/\\be2e\\b/g"
-      - "/\\bkubectl\\b/g"
+      - "/\\bkubectl\\b/g" # Kubernetes CLI
       - "/\\bmacOS\\b/g"
+      - "/\\b[Cc]hecksums?\\b/g" # e.g. file checksums
       - "/\\b[Dd]otfiles\\b/g"
       - "/\\b[Ff]olke\\b/g"
       - "/\\b[Ff]iletypes?\\b/g"
+      - "/\\b[Nn]amespaces?\\b/g"
       - "/\\b[Rr]emappings?\\b/g"
       - "/\\b[Ss]ubmodules?\\b/g"
+      - "/\\b[Ss]ymlinks?\\b/g" # symbolic links
       - "/\\b[Tt]mux\\b/g"
       - "/\\b[Uu]nstage\\b/g" # e.g. unstage from git index
 
