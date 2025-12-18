@@ -110,7 +110,8 @@ jobs:
               coreutils \
               bash-completion \
               libyaml \
-              xz
+              xz \
+              tmux
 
       - name: install nvim
         env:

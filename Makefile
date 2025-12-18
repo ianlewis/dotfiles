@@ -270,12 +270,19 @@ $(E2E_HOME)/.installed:
 	touch $@
 
 .PHONY: e2e-test
-e2e-test: bats-e2e nvim-checkhealth ## Run all end-to-end tests.
+e2e-test: bats-e2e tmux-e2e nvim-checkhealth ## Run all end-to-end tests.
 
 bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 	@# bash \
 	AQUA_VERSION=$(AQUA_VERSION) \
 		$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/e2e
+
+tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
+	@# bash \
+	# Check tmux config for parsing errors. This needs to be an e2e test \
+	# since it relies on the home directory paths. \
+	HOME="$(E2E_HOME)" \
+		tmux start-server \; source-file -n "$(E2E_HOME)/.tmux.conf"
 
 nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 	@# bash \
