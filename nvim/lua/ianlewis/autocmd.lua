@@ -18,9 +18,21 @@ local buf_autoformat = vim.api.nvim_create_augroup("BufAutoformat", {
 	clear = true,
 })
 
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+	group = buf_autoformat,
+	callback = function()
+		-- Enable auto-formatting by default for all buffers.
+		vim.b.autoformat = true
+	end,
+})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = buf_autoformat,
 	callback = function()
+		if not vim.b.autoformat then
+			return
+		end
+
 		vim.lsp.buf.format()
 		-- Reopen the fold at the cursor position. The result is that formatting
 		-- the file will close all folds other that the one at the cursor
