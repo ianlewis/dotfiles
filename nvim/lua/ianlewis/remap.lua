@@ -51,7 +51,7 @@ vim.keymap.set("n", "j", "J")
 -- position.
 vim.keymap.set("n", "J", "mzJ`z")
 
--- Page up and down without moving cursor positon on screen.
+-- Page up and down without moving cursor position on screen.
 vim.keymap.set("n", "<C-n>", "<C-d>zz")
 vim.keymap.set("n", "<C-t>", "<C-u>zz")
 
@@ -73,3 +73,12 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 -- Search for the word under the cursor.
 vim.keymap.set("n", "<leader>l", [[/<C-r><C-w><Enter>]])
 vim.keymap.set("n", "<leader>?", [[?<C-r><C-w><Enter>]])
+
+vim.keymap.set({ "n", "v", "o" }, "<leader>af", function()
+	vim.b.autoformat = not vim.b.autoformat
+	if vim.b.autoformat then
+		vim.notify("Enabled auto-formatting for this buffer", vim.log.levels.INFO)
+	else
+		vim.notify("Disabled auto-formatting for this buffer", vim.log.levels.WARN)
+	end
+end)
