@@ -27,6 +27,10 @@ function _bash_aliases() {
         alias ls='ls -BF --color=auto'
     fi
 
+    # alias cat to bat.
+    alias cat='bat --paging=never'
+
+    # Enable color support for grep
     alias egrep='egrep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias grep='grep --color=auto'
@@ -42,8 +46,6 @@ function _bash_aliases() {
 
     # Force ssh to use version 2
     alias ssh='ssh -2'
-
-    alias scala='scala -deprecation -unchecked -explaintypes -i ~/.import.scala'
 
     # Create a new dev session.
     alias ns='tmux-sessionizer'
