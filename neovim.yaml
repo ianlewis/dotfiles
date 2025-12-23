@@ -21,12 +21,52 @@ base: lua51
 name: vim
 
 structs:
+  # VimDiagnosticSeverity is a definition of vim.diagnostic.severity.
+  VimDiagnosticSeverity:
+    ERROR:
+      property: read-only
+      type: number
+    WARN:
+      property: read-only
+      type: number
+    INFO:
+      property: read-only
+      type: number
+    HINT:
+      property: read-only
+      type: number
+
+  # VimLogLevels is a definition of vim.log.levels.
+  VimLogLevels:
+    TRACE:
+      property: read-only
+      type: number
+    DEBUG:
+      property: read-only
+      type: number
+    INFO:
+      property: read-only
+      type: number
+    WARN:
+      property: read-only
+      type: number
+    ERROR:
+      property: read-only
+      type: number
+    FATAL:
+      property: read-only
+      type: number
+
   # Vim is a definition of the 'vim' global.
   # It is currently a non-exhaustive definition.
   # TODO(#112): Generate an exhaustive neovim stdlib definition.
   Vim:
     # Vim API.
     api:
+      any: true
+
+    # Vim buffer module.
+    b:
       any: true
 
     # Vim buffer scoped options.
@@ -37,16 +77,17 @@ structs:
     cmd:
       any: true
 
-    diagnostic:
-      any: true
+    diagnostic.severity:
+      struct: VimDiagnosticSeverity
 
     # Environment variables.
     env:
       any: true
 
     # Vim filetypes.
-    filetype:
-      any: true
+    filetype.add:
+      args:
+        - type: table
 
     # Vim functions.
     fn:
@@ -56,21 +97,62 @@ structs:
     g:
       any: true
 
+    # Vim log levels.
+    log.levels:
+      struct: VimLogLevels
+
     # Vim keymap.
-    keymap:
-      any: true
+    keymap.set:
+      args:
+        - type: any # string or table
+        - type: string
+        - type: any # string or function
+        - type: table
+          required: false
 
     # Vim Lua bindings.
     loop:
       any: true
 
     # Vim lsp client.
-    lsp:
-      any: true
+    lsp.buf.declaration:
+      args: []
+
+    lsp.buf.definition:
+      args: []
+
+    lsp.buf.format:
+      args: []
+
+    lsp.buf.hover:
+      args: []
+
+    lsp.buf.implementation:
+      args: []
+
+    lsp.buf.signature_help:
+      args: []
+
+    lsp.config:
+      args:
+        - type: string
+        - type: table
+          required: false
+
+    lsp.enable:
+      args:
+        - type: string
+        - type: table
+          required: false
 
     # Vim notifications.
     notify:
-      any: true
+      args:
+        - type: string
+        - type: number
+          required: false
+        - type: table
+          required: false
 
     # Vim options.
     opt:
@@ -96,19 +178,24 @@ structs:
         - type: any
         - type: any
 
+    uri_from_bufnr:
+      args:
+        - type: any
+      returns:
+        type: string
+
     # Vim treesitter module.
-    treesitter:
-      start:
-        args:
-          - type: function
+    treesitter.start:
+      args: []
 
     # Vim ui module.
     ui:
       any: true
 
     # Vim Lua bindings.
-    uv:
-      any: true
+    uv.fs_stat:
+      args:
+        - type: string
 
 globals:
   vim:
