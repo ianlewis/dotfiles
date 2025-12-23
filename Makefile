@@ -655,6 +655,7 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
+		selene_output="$$(selene --config selene.toml --display-style Json2 $${files})"; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
 			type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"'); \
 			if [ "$${type}" != "Diagnostic" ]; then \
@@ -676,7 +677,7 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
 				;; \
 			esac; \
-		done <<< "$$(selene --config selene.toml --display-style Json2 $${files})"; \
+		done <<< "$${selene_output}"; \
 		if [ "$${exit_code}" != "0" ]; then \
 			exit "$${exit_code}"; \
 		fi; \
@@ -737,11 +738,13 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
+	textlint_out="$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} | jq -cr '.[]' || exit_code=\"$$?\")"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
 			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
 			file=$$(realpath --relative-to="." "$${filePath}"); \
+			messages=$$(echo "$$p" | jq -cr '.messages[] // empty'); \
 			while IFS="" read -r m && [ -n "$$m" ]; do \
 				line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
 				endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
@@ -750,8 +753,8 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 				message=$$(echo "$$m" | jq -cr '.message // empty'); \
 				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-			done <<<"$$(echo "$$p" | jq -cr '.messages[] // empty')"; \
-		done <<< "$$($(REPO_ROOT)/node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
+			done <<<"$${messages}"; \
+		done <<<"$$textlint_out"; \
 		exit "$${exit_code}"; \
 	else \
 		$(REPO_ROOT)/node_modules/.bin/textlint \
