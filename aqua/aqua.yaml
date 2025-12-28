@@ -66,3 +66,4 @@ packages:
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.13.7
   - name: Canop/dysk@v3.5.0
+  - name: bufbuild/buf@v1.61.0

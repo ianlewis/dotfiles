@@ -75,6 +75,7 @@ vim.lsp.enable("bashls")
 -- efm-langserver {{{
 
 -- formatters {{{
+local bufFormat = require("efmls-configs.formatters.buf")
 local prettier = require("efmls-configs.formatters.prettier")
 local stylua = require("efmls-configs.formatters.stylua")
 local tofuFmt = {
@@ -85,6 +86,7 @@ local tofuFmt = {
 
 -- linters {{{
 local actionlint = require("efmls-configs.linters.actionlint")
+local buf = require("efmls-configs.linters.buf")
 local checkmake = require("efmls-configs.linters.checkmake")
 local hadolint = require("efmls-configs.linters.hadolint")
 local markdownlint = require("efmls-configs.linters.markdownlint")
@@ -169,6 +171,8 @@ vim.lsp.config("efm", {
 			--
 			liquid = { prettier, todos, todos_note },
 			lua = { stylua, selene, todos, todos_note },
+			-- TODO(github.com/ianlewis/todos/issues/1847): add support for todos in proto files.
+			proto = { bufFormat, buf },
 			python = { todos, todos_note },
 			rust = { todos, todos_note },
 			scss = { prettier, stylelint, todos, todos_note },

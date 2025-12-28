@@ -35,6 +35,12 @@ setup() {
     assert_dir_exists "${E2E_HOME}/.local/share/aquaproj-aqua/pkgs"
 }
 
+@test "buf installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/buf" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "dysk installed correctly" {
     if [[ "$(uname -s)" == "Darwin" ]]; then
         skip "dysk not installed on Darwin system"

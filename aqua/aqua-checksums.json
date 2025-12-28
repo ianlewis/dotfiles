@@ -976,6 +976,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Darwin-arm64.tar.gz",
+      "checksum": "23E05A680178D96C9107E451DE5F3D843A8805A91D201DCA6687488F421467BC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Darwin-x86_64.tar.gz",
+      "checksum": "F5F056E744AA7F0404C3C569AC53C9E37ED34B2EC2DB57A144B8109508FF72C8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Linux-aarch64.tar.gz",
+      "checksum": "77086E85CB8C26815E27CD34B3EC916A28C3CBADC3D4B1856CE1F6D4371DCDCE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Linux-x86_64.tar.gz",
+      "checksum": "C3CA69EA912FB961B7776AE22C665CC312C454D2BEDB72C451E8A426E723D51C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Windows-arm64.zip",
+      "checksum": "B274CCE55B7C88EB809F5C3B2B743B7152D3179615D5B508E4C1EA4E211C639C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Windows-x86_64.zip",
+      "checksum": "F8448DC56D411F6D9B898231828ED06B102F2B01CCC38D1E951BFFC3D30AC159",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.darwin.amd64",
       "checksum": "AFAA325D2348043F9A60D3D7BA7803A0A54B760095EA03837C4DE357C75478EF",
       "algorithm": "sha256"
