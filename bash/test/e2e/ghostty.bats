@@ -24,3 +24,17 @@ setup() {
 @test ".config/ghostty is linked correctly" {
     assert_symlink_to "${BASE_PATH}/ghostty" "${E2E_HOME}/.config/ghostty"
 }
+
+@test "fonts are installed correctly" {
+    if [[ "$(uname -s)" != "Darwin" ]]; then
+        skip "fonts not installed on non-Darwin system"
+    fi
+
+    assert_file_exists "${E2E_HOME}/Library/Fonts/NotoSansJP-VariableFont_wght.ttf"
+    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Regular.ttf"
+    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Italic.ttf"
+    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Bold.ttf"
+    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-BoldItalic.ttf"
+    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Medium.ttf"
+    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-MediumItalic.ttf"
+}
