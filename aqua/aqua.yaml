@@ -61,7 +61,7 @@ packages:
   - name: sxyazi/yazi@v25.5.31
   - name: jqlang/jq@jq-1.8.1
   - name: aws/aws-cli@2.32.19
-  - name: twistedpair/google-cloud-sdk@548.0.0
+  - name: twistedpair/google-cloud-sdk@550.0.0
   - name: kubernetes-sigs/cri-tools/crictl@v1.35.0
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.13.7
