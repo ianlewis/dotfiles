@@ -337,6 +337,7 @@ json-format: node_modules/.installed ## Format JSON files.
 		git ls-files --deduplicate \
 			'*.json' \
 			'*.json5' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -366,6 +367,7 @@ license-headers: ## Update license headers.
 			'*.yaml' \
 			'*.yml' \
 			'Makefile' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	name=$$(git config user.name); \
@@ -393,6 +395,7 @@ lua-format: $(AQUA_ROOT_DIR)/.installed ## Format Lua files.
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.lua' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -410,6 +413,7 @@ md-format: node_modules/.installed ## Format Markdown files.
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.md' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -424,9 +428,8 @@ md-format: node_modules/.installed ## Format Markdown files.
 
 .PHONY: shfmt
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
-	@# NOTE: We need to ignore config files used in tests.
 	@# bash \
-	files=$$(git ls-files | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
+	files=$$(git ls-files ':!:third_party' | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
@@ -443,6 +446,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 		git ls-files --deduplicate \
 			'*.yml' \
 			'*.yaml' \
+			':!:third_party' \
 	); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
@@ -547,7 +551,8 @@ fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
 	# 		command line. \
 	todos \
 		--output "$${output}" \
-		--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
+		--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK" \
+		--exclude-dir "third_party"
 
 .PHONY: format-check
 format-check: ## Check that files are properly formatted.
@@ -583,6 +588,7 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 			'*.md' \
 			':!:.github/pull_request_template.md' \
 			':!:.github/ISSUE_TEMPLATE/*.md' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -611,6 +617,7 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 		git ls-files --deduplicate \
 			'.github/pull_request_template.md' \
 			'.github/ISSUE_TEMPLATE/*.md' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -648,6 +655,7 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.lua' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -693,7 +701,7 @@ SHELLCHECK_ARGS = --severity=style --external-sources
 .PHONY: shellcheck
 shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
 	@# bash \
-	files=$$(git ls-files | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
+	files=$$(git ls-files ':!:third_party' | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
@@ -733,6 +741,7 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 			'*.md' \
 			'*.txt' \
 			':!:requirements*.txt' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -769,6 +778,7 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 		git ls-files --deduplicate \
 			'*.yml' \
 			'*.yaml' \
+			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
@@ -914,6 +924,12 @@ configure-git: ## Configure git.
 .PHONY: configure-ghostty
 configure-ghostty: $(XDG_CONFIG_HOME)/.created ## Configure Ghostty.
 	@# bash \
+	if [ "$(kernel)" == "darwin" ]; then \
+		fonts_dir="$(HOME)/Library/Fonts"; \
+		mkdir -p "$${fonts_dir}"; \
+		cp $(REPO_ROOT)/third_party/fonts.google.com/RobotoMono/*.ttf "$${fonts_dir}/"; \
+		cp $(REPO_ROOT)/third_party/fonts.google.com/Noto_Sans_JP/*.ttf "$${fonts_dir}/"; \
+	fi; \
 	ln -sf $(REPO_ROOT)/ghostty $(XDG_CONFIG_HOME)/ghostty
 
 .PHONY: configure-nix

@@ -27,6 +27,7 @@ rules:
 
       # Terminology
       - "/\\bAutocommands\\b/g" # Neovim/Vim autocommands
+      - "/\\bGhostty\\b/g" # terminal emulator
       - "/\\bHomebrew\\b/g"
       - "/\\bLSP\\b/g"
       - "/\\bLua\\b/g"

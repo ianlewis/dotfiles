@@ -57,6 +57,9 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
+font-family = RobotoMono Nerd Font Mono
+font-family = Noto Sans JP
+
 # Disable all ligatures.
 font-feature = -calt
 font-feature = -liga
