@@ -35,6 +35,16 @@
   },
   osvVulnerabilityAlerts: true,
 
+  // Apply a dependency cooldown of 14 days. This helps to avoid issues with
+  // compromised releases.
+  // https://blog.yossarian.net/2025/11/21/We-should-all-be-using-dependency-cooldowns
+  minimumReleaseAge: "14 days",
+  // These options suppress PR creation for dependencies that were released
+  // within minimumReleaseAge.
+  // https://docs.renovatebot.com/configuration-options/#suppress-branchpr-creation-for-x-days
+  prCreation: "not-pending",
+  internalChecksFilter: "strict",
+
   // Enable the lock file maintenance feature to keep transitive dependencies up
   // to date.
   lockFileMaintenance: {
