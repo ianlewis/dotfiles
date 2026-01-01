@@ -50,7 +50,7 @@ SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(kernel).$(arch))
 SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERIFIER_VERSION)/slsa-verifier-$(kernel)-$(arch)
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.55.2
+AQUA_VERSION ?= v2.55.3
 AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM.linux.amd64 := 4b47965f71afee9bef6ac9ca4515dc2adc4bc1dfe279dceab8126e69ca3a6bc3
 AQUA_CHECKSUM.linux.arm64 := 75bef0c9e82480adb4c203b71b9af530945fda60b91f6f860b17791adf068158
@@ -79,7 +79,7 @@ GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.15
+PYENV_INSTALL_VERSION ?= v2.6.17
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= 61d869f67e2b4c1d05c532821c5166a9ed40b0aa
 PYENV_VIRTUALENV_VERSION ?= v1.2.6
