@@ -99,7 +99,7 @@ RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20251117
+RBENV_BUILD_VERSION ?= v20251225
 RBENV_BUILD_SHA ?= 65a6833849b074339cbf8472262ee7059f2912ce
 
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
