@@ -50,11 +50,11 @@ SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(kernel).$(arch))
 SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERIFIER_VERSION)/slsa-verifier-$(kernel)-$(arch)
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.55.2
+AQUA_VERSION ?= v2.55.3
 AQUA_REPO := github.com/aquaproj/aqua
-AQUA_CHECKSUM.linux.amd64 := 4b47965f71afee9bef6ac9ca4515dc2adc4bc1dfe279dceab8126e69ca3a6bc3
-AQUA_CHECKSUM.linux.arm64 := 75bef0c9e82480adb4c203b71b9af530945fda60b91f6f860b17791adf068158
-AQUA_CHECKSUM.darwin.arm64 := 040857e7f4eec6d468dedbad9a05a2409c2dfe13fc2e69c197f25bddec361793
+AQUA_CHECKSUM.linux.amd64 := 326c9119aef16b42e41a5d2af9d62ee82ed78abbb6651de515d51b0edcd613d9
+AQUA_CHECKSUM.linux.arm64 := 772d9f08c60ad888586bfc5532fe41a0532c276d8723e2bf8fccb139ccf8f8cf
+AQUA_CHECKSUM.darwin.arm64 := 7e602e41c7f7a5c6b1504f6a06fbb7bca13f2b0604067c55f79b99b310c76f68
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
@@ -79,9 +79,9 @@ GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.15
+PYENV_INSTALL_VERSION ?= v2.6.17
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= 61d869f67e2b4c1d05c532821c5166a9ed40b0aa
+PYENV_INSTALL_SHA ?= 22b192913e9f14e1a56eb627147dcc7bae137a63
 PYENV_VIRTUALENV_VERSION ?= v1.2.6
 PYENV_VIRTUALENV_SHA ?= b5c88a7a154dc6729b0539dca12cf3c0d810bfbe
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
