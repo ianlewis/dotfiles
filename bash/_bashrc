@@ -203,8 +203,14 @@ function _bashrc_source_local() {
 }
 
 function _bashrc_main() {
+    XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+    export XDG_CACHE_HOME
+    XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+    export XDG_CONFIG_HOME
     XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
     export XDG_DATA_HOME
+    XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+    export XDG_STATE_HOME
 
     if [[ -r "${HOME}/.bashrc_init_local" ]]; then
         # shellcheck source=/dev/null
@@ -299,8 +305,8 @@ function _bashrc_main() {
     # Set the bat theme.
     export BAT_THEME="tokyonight_moon"
 
-    local bash_lib_dir="${HOME}/.local/share/bash/lib"
-    local nvim_plugin_dir="${HOME}/.config/nvim/pack/nvim/start"
+    local bash_lib_dir="${XDG_DATA_HOME}/bash/lib"
+    local nvim_plugin_dir="${XDG_CONFIG_HOME}/nvim/pack/nvim/start"
 
     # Simple Bash Prompt
     # shellcheck source=/dev/null
@@ -335,6 +341,12 @@ function _bashrc_main() {
         source "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh"
 
         ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
+    fi
+
+    # Set a default crictl config path to squelch warnings but defer to the
+    # system wide config if it exists.
+    if [[ ! -r "/etc/crictl.yaml" ]]; then
+        export CRI_CONFIG_FILE="${XDG_CONFIG_HOME}/crictl/crictl.yaml"
     fi
 
     # Update the PATH

@@ -233,7 +233,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-node configure-nvim configure-tmux
+configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-node configure-nvim configure-tmux
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-aqua
@@ -831,6 +831,12 @@ configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
 		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
 		"$$($${aqua_dir}/bin/bat --config-dir)/themes/tokyonight_moon.tmTheme"; \
 	"$${aqua_dir}/bin/bat" cache --build
+
+.PHONY: configure-crictl
+configure-crictl: $(XDG_CONFIG_HOME)/.created ## Configure crictl.
+	@# bash \
+	mkdir -p $(XDG_CONFIG_HOME)/crictl; \
+	ln -sf $(REPO_ROOT)/crictl/crictl.yaml $(XDG_CONFIG_HOME)/crictl/crictl.yaml
 
 .PHONY: configure-crontab
 configure-crontab: install-bin ## Configure crontab.
