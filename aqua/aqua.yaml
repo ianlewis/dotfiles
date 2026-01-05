@@ -50,8 +50,8 @@ packages:
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.3.0
   - name: tree-sitter/tree-sitter@v0.26.3
-  - name: kubernetes/kubernetes/kubectl@v1.35.0
-  - name: kubernetes/kubernetes/kubeadm@v1.35.0
+  - name: kubernetes/kubernetes/kubectl@v1.34.2
+  - name: kubernetes/kubernetes/kubeadm@v1.34.2
   - name: kubernetes-sigs/kind@v0.31.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.0
   - name: helm/helm@v4.0.4
