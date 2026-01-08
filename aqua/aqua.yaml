@@ -49,7 +49,8 @@ packages:
   - name: dandavison/delta@0.18.2
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.3.0
-  - name: tree-sitter/tree-sitter@v0.26.3
+  # TODO(#655): Update to v0.26.0+ after dev server issue is resolved
+  - name: tree-sitter/tree-sitter@v0.25.10
   - name: kubernetes/kubernetes/kubectl@v1.34.2
   - name: kubernetes/kubernetes/kubeadm@v1.34.2
   - name: kubernetes-sigs/kind@v0.31.0
