@@ -1056,6 +1056,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/bazelbuild/bazel/8.5.1/bazel-8.5.1-darwin-arm64",
+      "checksum": "CB6D2F19AD92157E7186F64151E665C1B0C3BACAA690784E66F446F1B7660140",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bazelbuild/bazel/8.5.1/bazel-8.5.1-darwin-x86_64",
+      "checksum": "325B7B8EA32A18B4D62180E4BB15D8D964445F625A11D783F760695C89C2E910",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bazelbuild/bazel/8.5.1/bazel-8.5.1-linux-arm64",
+      "checksum": "B7F2A85595E8A87D54843BC656C1E379FD9B8C1B5F783DC41717C1D7EB7CC49F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bazelbuild/bazel/8.5.1/bazel-8.5.1-linux-x86_64",
+      "checksum": "61D89402F0368E64B6C827BE5DE79D8E65382E8124C3CBB97325611A1851392E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bazelbuild/bazel/8.5.1/bazel-8.5.1-windows-arm64.zip",
+      "checksum": "90F4AF66F6522999CDC9D361569FEF8F19902A8FCEB5CCC7E3CCA75D56903400",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bazelbuild/bazel/8.5.1/bazel-8.5.1-windows-x86_64.zip",
+      "checksum": "68B08A949E8F9B06BFA6358EFE7D646BC8B1FDF1958B924CD64BDBC9A0959BDA",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/bufbuild/buf/v1.61.0/buf-Darwin-arm64.tar.gz",
       "checksum": "23E05A680178D96C9107E451DE5F3D843A8805A91D201DCA6687488F421467BC",
       "algorithm": "sha256"
