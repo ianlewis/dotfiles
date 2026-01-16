@@ -68,3 +68,4 @@ packages:
   - name: daixiang0/gci@v0.13.7
   - name: Canop/dysk@v3.5.0
   - name: bufbuild/buf@v1.61.0
+  - name: bazelbuild/bazel@8.5.1
