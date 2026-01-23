@@ -38,3 +38,7 @@ setup() {
 @test "node_modules installed correctly" {
     assert_symlink_to "${BASE_PATH}/nodenv/node_modules" "${E2E_HOME}/.local/share/node_modules"
 }
+
+@test "yarn installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/share/node_modules/.bin/yarn"
+}
