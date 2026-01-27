@@ -16,11 +16,22 @@
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
-		-- Jump to definition even if in another file.
+		-- These GLOBAL keymaps are created unconditionally when Nvim starts:
+		-- * "gra" (Normal and Visual mode) is mapped to
+		--   `vim.lsp.buf.code_action()`
+		-- * "gri" is mapped to `vim.lsp.buf.implementation()`
+		-- * "grn" is mapped to `vim.lsp.buf.rename()`
+		-- * "grr" is mapped to `vim.lsp.buf.references()`
+		-- * "grt" is mapped to `vim.lsp.buf.type_definition()`
+		-- * "gO" is mapped to `vim.lsp.buf.document_symbol()`
+		-- * CTRL-S (Insert mode) is mapped to `vim.lsp.buf.signature_help()`
+		-- * "an" and "in" (Visual and Operator-pending mode) are mapped to
+		--   outer and inner incremental selections, respectively, using
+		--   `vim.lsp.buf.selection_range()`
+
 		local bufopts = { buffer = ev.buf }
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+		-- Jump to definition even if in another file.
+		vim.keymap.set("n", "grd", vim.lsp.buf.definition, bufopts)
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
 		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 		vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, bufopts)
