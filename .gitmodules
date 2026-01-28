@@ -98,3 +98,6 @@
 [submodule "bash/test/test_helper/bats-support"]
 	path = bash/test/test_helper/bats-support
 	url = https://github.com/bats-core/bats-support.git
+[submodule "nvim/pack/nvim/start/vim-syntax-codeowners"]
+	path = nvim/pack/nvim/start/vim-syntax-codeowners
+	url = https://github.com/rhysd/vim-syntax-codeowners.git

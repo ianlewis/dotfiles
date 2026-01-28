@@ -153,6 +153,7 @@ vim.lsp.config("efm", {
 			--       into gopls are usually good enough for normal editing.
 			sh = { todos, todos_note },
 			bash = { todos, todos_note },
+			codeowners = { todos, todos_note },
 			conf = { todos, todos_note },
 			css = { prettier, stylelint, todos, todos_note },
 			dockerfile = { hadolint, todos, todos_note },
