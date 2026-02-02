@@ -68,3 +68,9 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/gci" \
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
+
+@test "k9s installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/k9s" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}

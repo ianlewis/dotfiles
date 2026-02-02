@@ -5,6 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-02-02`
+
+- Added `k9s` as a global CLI tool
+  ([#663](https://github.com/ianlewis/dotfiles/issues/663).
+
 ## `2025-01-28`
 
 - Added syntax highlighting for `CODEOWNERS` files in Neovim
