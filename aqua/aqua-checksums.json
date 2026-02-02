@@ -1451,6 +1451,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/derailed/k9s/v0.50.18/k9s_Darwin_amd64.tar.gz",
+      "checksum": "80F3E30767AD3603BEC9664DB019E85F94493AA741D7755553EE6E47876DF30E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.50.18/k9s_Darwin_arm64.tar.gz",
+      "checksum": "68FF1541C60620466989019E86101805C1B6C70A746B1561261A403801F7FD48",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.50.18/k9s_Linux_amd64.tar.gz",
+      "checksum": "0B697ED4AA80997F7DE4DEEED6F1FBA73DF191B28BF691B1F28D2F45FA2A9E9B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.50.18/k9s_Linux_arm64.tar.gz",
+      "checksum": "D3DCC051D6BE26EE911C00F583412802EBE203A189E51BC079332CB410C83B38",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.50.18/k9s_Windows_amd64.zip",
+      "checksum": "9D4E8672C4E55C04CB137475062BC88DA7FC0878E04D53DF181196449600DA16",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.50.18/k9s_Windows_arm64.zip",
+      "checksum": "005BD1A54A52C914EB6CBF29403B572AB48E4345F0CB86614873FF56B9E80B0C",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/go-acme/lego/v4.23.1/lego_v4.23.1_darwin_amd64.tar.gz",
       "checksum": "C1343A65D4EEAD6C8053D9044DD745E9D1B2F87AC152A22961A029C2CE8E95FB",
       "algorithm": "sha256"
