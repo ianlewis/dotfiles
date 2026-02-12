@@ -97,6 +97,12 @@ function _bash_completion() {
         source <(helm completion bash)
     fi
 
+    # k9s bash completion
+    if command -v k9s >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(k9s completion bash)
+    fi
+
     # kind bash completion
     if command -v kind >/dev/null 2>&1; then
         # shellcheck source=/dev/null
