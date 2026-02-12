@@ -23,7 +23,7 @@ checksum:
     - all
 registries:
   - type: standard
-    ref: v4.446.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.468.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: koalaman/shellcheck@v0.11.0
   - name: rhysd/actionlint@v1.7.9
@@ -57,7 +57,7 @@ packages:
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.0
   - name: helm/helm@v4.0.4
   - name: antonmedv/fx@39.2.0
-  - name: checkmake/checkmake@0.2.2
+  - name: checkmake/checkmake@v0.3.2
   - name: mikefarah/yq@v4.50.1
   - name: sxyazi/yazi@v25.5.31
   - name: jqlang/jq@jq-1.8.1
