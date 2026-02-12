@@ -303,11 +303,9 @@ nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 			bash --login _nvim_checkhealth.sh; \
 	cat nvim-checkhealth.log; \
 	if [[ "$(arch)" == "arm64" && "$(kernel)" == "linux" ]]; then \
-		# TODO(#606): Remove exception when checkmake has proper ARM64 support. \
 		# TODO(#607): Remove exception when selene has proper ARM64 support. \
 		num_errors=$$(( \
 			cat nvim-checkhealth.log | \
-			$(GREP) -v 'ERROR "checkmake": No global executable found' | \
 			$(GREP) -v 'ERROR "selene": No global executable found' | \
 			$(GREP) -ic 'error') || true); \
 	else \
