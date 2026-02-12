@@ -47,6 +47,12 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
+@test "checkmake installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/checkmake" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "dysk installed correctly" {
     if [[ "$(uname -s)" == "Darwin" ]]; then
         skip "dysk not installed on Darwin system"
