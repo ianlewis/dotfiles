@@ -22,7 +22,11 @@ setup() {
 }
 
 @test ".config/ghostty is linked correctly" {
-    assert_symlink_to "${BASE_PATH}/ghostty" "${E2E_HOME}/.config/ghostty"
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        assert_symlink_to "${BASE_PATH}/ghostty/config" "${E2E_HOME}/Library/Application Support/com.mitchellh.ghostty/config"
+    else
+        assert_symlink_to "${BASE_PATH}/ghostty/config" "${E2E_HOME}/.config/ghostty/config"
+    fi
 }
 
 @test "fonts are installed correctly" {
