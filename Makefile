@@ -873,13 +873,16 @@ configure-git: ## Configure git.
 .PHONY: configure-ghostty
 configure-ghostty: $(XDG_CONFIG_HOME)/.created ## Configure Ghostty.
 	@# bash \
+	config_dir="$(XDG_CONFIG_HOME)/ghostty"; \
 	if [ "$(kernel)" == "darwin" ]; then \
+		config_dir="$(HOME)/Library/Application Support/com.mitchellh.ghostty"; \
 		fonts_dir="$(HOME)/Library/Fonts"; \
 		mkdir -p "$${fonts_dir}"; \
 		cp $(REPO_ROOT)/third_party/fonts.google.com/RobotoMono/*.ttf "$${fonts_dir}/"; \
 		cp $(REPO_ROOT)/third_party/fonts.google.com/Noto_Sans_JP/*.ttf "$${fonts_dir}/"; \
 	fi; \
-	ln -sf $(REPO_ROOT)/ghostty $(XDG_CONFIG_HOME)/ghostty
+	mkdir -p "$${config_dir}"; \
+	ln -sf $(REPO_ROOT)/ghostty/config "$${config_dir}/config"
 
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME)/.created ## Configure nix.
