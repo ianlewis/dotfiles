@@ -188,6 +188,11 @@ function _bashrc_update_path() {
         PATH="${HOME}/.local/bin:${PATH}"
     fi
 
+    # Add krew bin path.
+    if [[ ":$PATH:" != *":${HOME}/.krew/bin:"* ]]; then
+        PATH="${HOME}/.krew/bin:${PATH}"
+    fi
+
     # Aqua. We want aqua to be able to override other global paths so it gets
     # highest priority.
     _bashrc_setup_aqua
