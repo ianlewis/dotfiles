@@ -2496,6 +2496,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-darwin_amd64.tar.gz",
+      "checksum": "7FF3DDE825734E74F4975C8E922B4419639E5FBFF738786AB085CF06A0D1CCC0",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-darwin_arm64.tar.gz",
+      "checksum": "5E33636A73392CF88021A85162AC4D4C86D4C0B57677E64094BCBCCA637068E6",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-linux_amd64.tar.gz",
+      "checksum": "BACC06800BDA14EC063CD0B6F377A961FDF4661C00366BF9834723CD28BFABC7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-linux_arm64.tar.gz",
+      "checksum": "E02BDB8FE67CD6641B9ED6B45C6D084F7AA5B161FE49191CAF5B1D5E83B0C0F9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-windows_amd64.tar.gz",
+      "checksum": "61CBE66D47C1F8E3AD4D778D136C293487EFC7B2BF7085A3E30A6701A374B51D",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.0/kustomize_v5.8.0_darwin_amd64.tar.gz",
       "checksum": "2DEAA6F96450C0B3204CCCD9F159A22278EB6CF85AD545D212D608D2428AEB57",
       "algorithm": "sha256"
