@@ -5,17 +5,21 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## `2025-02-02`
+## `2026-02-25`
+
+- Added `krew` as a global CLI tool.
+
+## `2026-02-02`
 
 - Added `k9s` as a global CLI tool
   ([#663](https://github.com/ianlewis/dotfiles/issues/663).
 
-## `2025-01-28`
+## `2026-01-28`
 
 - Added syntax highlighting for `CODEOWNERS` files in Neovim
   ([#665](https://github.com/ianlewis/dotfiles/issues/665).
 
-## `2025-01-27`
+## `2026-01-27`
 
 - Updated Neovim LSP key mappings
   ([#668](https://github.com/ianlewis/dotfiles/issues/668).
@@ -23,12 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `gd` -> `grd` to better match the default key mappings.
     Remove `gi` mapping in deference to default `gri` mapping.
 
-## `2025-01-23`
+## `2026-01-23`
 
 - Added `yarn` as a global CLI tool
   ([#666](https://github.com/ianlewis/dotfiles/issues/666).
 
-## `2025-01-16`
+## `2026-01-16`
 
 - Added `bazel` as a global CLI tool
   ([#661](https://github.com/ianlewis/dotfiles/issues/661).
