@@ -26,6 +26,14 @@ home directory which makes it easy to test out configuration.
 - [Bash completion](./bash/_bash_completion) with custom completions for various tools.
 - [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful plugins.
 
+## Supported Environments
+
+- Linux
+    - `amd64`/`x86_64`
+    - `arm64`/`aarch64`
+- macOS (Darwin)
+    - `arm64`/`aarch64` (Apple silicon)
+
 ## Requirements
 
 - GNU tools: versions of `make`, `grep`, `awk`, `getopt`, and `mktemp` are
