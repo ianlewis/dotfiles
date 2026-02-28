@@ -40,4 +40,5 @@ setup() {
     assert_symlink_to "${BASE_PATH}/bin/all/clone" "${E2E_HOME}/.local/bin/clone"
     assert_symlink_to "${BASE_PATH}/bin/all/tmux-sessionizer" "${E2E_HOME}/.local/bin/tmux-sessionizer"
     assert_symlink_to "${BASE_PATH}/bin/all/project-windowizer" "${E2E_HOME}/.local/bin/project-windowizer"
+    assert_symlink_to "${BASE_PATH}/bin/all/withpass.sh" "${E2E_HOME}/.local/bin/withpass"
 }
