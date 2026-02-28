@@ -55,6 +55,6 @@ function _main() {
     "${cmd[@]}"
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
     _main "$@"
 fi
