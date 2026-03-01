@@ -68,6 +68,6 @@ packages:
   - name: daixiang0/gci@v0.13.7
   - name: Canop/dysk@v3.5.0
   - name: bufbuild/buf@v1.61.0
-  - name: bazelbuild/bazel@8.5.1
+  - name: bazelbuild/bazel@9.0.0
   - name: derailed/k9s@v0.50.18
   - name: kubernetes-sigs/krew@v0.4.5
