@@ -7,7 +7,7 @@
     "markdownlint-cli2": "0.20.0",
     "picomatch": "4.0.3",
     "prettier": "3.7.4",
-    "renovate": "42.96.3",
+    "renovate": "43.39.2",
     "textlint": "15.5.0",
     "textlint-filter-rule-comments": "1.2.2",
     "textlint-rule-spelling": "0.3.0"
