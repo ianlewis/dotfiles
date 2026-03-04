@@ -33,6 +33,10 @@ setup() {
     assert_file_executable "${E2E_HOME}/.local/bin/claude"
 }
 
+@test "codex is installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/bin/codex"
+}
+
 @test "scripts are installed correctly" {
     assert_symlink_to "${BASE_PATH}/bin/all/delete_old_downloads.sh" "${E2E_HOME}/.local/bin/delete_old_downloads.sh"
     assert_symlink_to "${BASE_PATH}/bin/all/docker_prune.sh" "${E2E_HOME}/.local/bin/docker_prune.sh"
