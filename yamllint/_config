@@ -1,4 +1,4 @@
-# Copyright 2025 Ian Lewis
+# Copyright 2026 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# yamllint configuration for Kubernetes manifests.
-# This config allows the Kubernetes community style for lists where list
-# items are not indented relative to the parent key:
-#
-#   foo:
-#   - bar
-#   - baz
+# Default yamllint configuration.
+# This is installed to ~/.config/yamllint/config.
 
 ---
 extends: default
-
-ignore-from-file: [.gitignore]
 
 rules:
   comments:
@@ -36,12 +29,3 @@ rules:
     # Allow Github Actions keys like 'on'
     check-keys: false
   comments-indentation: false
-  indentation:
-    spaces: 2
-    # Allow Kubernetes-style indentless list items:
-    #
-    #   foo:
-    #   - bar
-    #   - baz
-    indent-sequences: false
-    check-multi-line-strings: false

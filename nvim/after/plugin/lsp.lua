@@ -111,7 +111,7 @@ local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
 -- yamllint linter for Kubernetes manifests using Kubernetes-specific config
 local xdg_config_home = os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")
-local yamllint_kubernetes_config = xdg_config_home .. "/yamllint/kubernetes.yaml"
+local yamllint_kubernetes_config = xdg_config_home .. "/yamllint/config.kubernetes.yaml"
 local yamllint_kubernetes = {
 	prefix = "yamllint",
 	lintCommand = "yamllint --strict --format parsable --config-file "

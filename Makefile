@@ -106,10 +106,6 @@ RBENV_BUILD_SHA ?= d099da05144d9f703c27cadd7b710f35f15dfadb
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
 
-# Regex pattern for identifying Kubernetes manifest files in kubernetes/ or
-# manifests/ directories.
-K8S_PATH_PATTERN := (^|/)kubernetes/|(^|/)manifests/
-
 # Macro for creating necessary directories.
 # NOTE: needed for targets that require a directory to be created without
 #       triggering rebuilds when anything inside changes.
@@ -439,40 +435,26 @@ shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	shfmt --write --simplify --indent 4 $${files}
 
 .PHONY: yaml-format
-yaml-format: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Format YAML files.
+yaml-format: node_modules/.installed ## Format YAML files.
 	@# bash \
 	loglevel="log"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="debug"; \
 	fi; \
-	all_files=$$( \
+	files=$$( \
 		git ls-files --deduplicate \
 			'*.yml' \
 			'*.yaml' \
 			':!:third_party' \
 	); \
-	k8s_files=$$( \
-		echo "$${all_files}" \
-			| grep -E '$(K8S_PATH_PATTERN)' \
-			|| true \
-	); \
-	other_files=$$( \
-		echo "$${all_files}" \
-			| grep -Ev '$(K8S_PATH_PATTERN)' \
-			|| true \
-	); \
-	if [ -n "$${k8s_files}" ]; then \
-		echo "$${k8s_files}" \
-			| xargs $(AQUA_ROOT_DIR)/bin/yamlfmt \
-				-conf $(REPO_ROOT)/.yamlfmt.kubernetes.yaml; \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
 	fi; \
-	if [ -n "$${other_files}" ]; then \
-		echo "$${other_files}" \
-			| xargs $(REPO_ROOT)/node_modules/.bin/prettier \
-				--log-level "$${loglevel}" \
-				--no-error-on-unmatched-pattern \
-				--write; \
-	fi
+	$(REPO_ROOT)/node_modules/.bin/prettier \
+		--log-level "$${loglevel}" \
+		--no-error-on-unmatched-pattern \
+		--write \
+		$${files}
 
 ## Linting
 #####################################################################
@@ -739,47 +721,24 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 .PHONY: yamllint
 yamllint: .venv/.installed ## Runs the yamllint linter.
 	@# bash \
-	all_files=$$( \
+	files=$$( \
 		git ls-files --deduplicate \
 			'*.yml' \
 			'*.yaml' \
 			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
-	k8s_files=$$( \
-		echo "$${all_files}" \
-			| grep -E '$(K8S_PATH_PATTERN)' \
-			|| true \
-	); \
-	other_files=$$( \
-		echo "$${all_files}" \
-			| grep -Ev '$(K8S_PATH_PATTERN)' \
-			|| true \
-	); \
-	if [ -z "$${all_files}" ]; then \
+	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
 	format="standard"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		format="github"; \
 	fi; \
-	exit_code=0; \
-	if [ -n "$${k8s_files}" ]; then \
-		echo "$${k8s_files}" \
-			| xargs $(REPO_ROOT)/.venv/bin/yamllint \
-				--strict \
-				--format "$${format}" \
-				--config-file $(REPO_ROOT)/.yamllint.kubernetes.yaml \
-			|| exit_code=$$?; \
-	fi; \
-	if [ -n "$${other_files}" ]; then \
-		echo "$${other_files}" \
-			| xargs $(REPO_ROOT)/.venv/bin/yamllint \
-				--strict \
-				--format "$${format}" \
-			|| exit_code=$$?; \
-	fi; \
-	exit "$${exit_code}"
+	$(REPO_ROOT)/.venv/bin/yamllint \
+		--strict \
+		--format "$${format}" \
+		$${files}
 
 .PHONY: zizmor
 zizmor: .venv/.installed ## Runs the zizmor linter.
@@ -967,12 +926,16 @@ $(XDG_CONFIG_HOME)/yamllint/.created: $(XDG_CONFIG_HOME)/.created
 	mkdir -p $(XDG_CONFIG_HOME)/yamllint; \
 	touch $@
 
-$(XDG_CONFIG_HOME)/yamllint/kubernetes.yaml: .yamllint.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/.created
+$(XDG_CONFIG_HOME)/yamllint/config: yamllint/_config $(XDG_CONFIG_HOME)/yamllint/.created
 	@# bash \
-	ln -sf $(REPO_ROOT)/.yamllint.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/kubernetes.yaml
+	ln -sf $(REPO_ROOT)/yamllint/_config $(XDG_CONFIG_HOME)/yamllint/config
+
+$(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml: yamllint/_yamllint.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/.created
+	@# bash \
+	ln -sf $(REPO_ROOT)/yamllint/_yamllint.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml
 
 .PHONY: configure-yamllint
-configure-yamllint: $(XDG_CONFIG_HOME)/yamllint/kubernetes.yaml ## Configure yamllint.
+configure-yamllint: $(XDG_CONFIG_HOME)/yamllint/config $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml ## Configure yamllint.
 
 ## Install Tools
 #####################################################################
