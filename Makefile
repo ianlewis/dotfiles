@@ -233,7 +233,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-node configure-nvim configure-tmux
+configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-node configure-nvim configure-tmux configure-yamllint
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-aqua
@@ -917,6 +917,22 @@ configure-tmux: ## Configure tmux.
 	rm -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
 	ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
 	ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
+
+$(XDG_CONFIG_HOME)/yamllint/.created: $(XDG_CONFIG_HOME)/.created
+	@# bash \
+	mkdir -p $(XDG_CONFIG_HOME)/yamllint; \
+	touch $@
+
+$(XDG_CONFIG_HOME)/yamllint/config: yamllint/_config $(XDG_CONFIG_HOME)/yamllint/.created
+	@# bash \
+	ln -sf $(REPO_ROOT)/yamllint/_config $(XDG_CONFIG_HOME)/yamllint/config
+
+$(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml: yamllint/_yamllint.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/.created
+	@# bash \
+	ln -sf $(REPO_ROOT)/yamllint/_yamllint.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml
+
+.PHONY: configure-yamllint
+configure-yamllint: $(XDG_CONFIG_HOME)/yamllint/config $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml ## Configure yamllint.
 
 ## Install Tools
 #####################################################################
