@@ -58,6 +58,7 @@ packages:
   - name: helm/helm@v4.1.3
   - name: antonmedv/fx@39.2.0
   - name: checkmake/checkmake@v0.3.2
+  - name: google/yamlfmt@v0.21.0
   - name: mikefarah/yq@v4.52.4
   - name: sxyazi/yazi@v26.1.22
   - name: jqlang/jq@jq-1.8.1

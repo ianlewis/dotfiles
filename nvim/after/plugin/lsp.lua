@@ -93,6 +93,11 @@ local tofuFmt = {
 	formatCommand = "tofu fmt -",
 	formatStdin = true,
 }
+-- yamlfmt formatter for Kubernetes manifests (indentless list style)
+local yamlfmt_kubernetes = {
+	formatCommand = "yamlfmt -formatter indentless_arrays=true -in",
+	formatStdin = true,
+}
 -- }}}
 
 -- linters {{{
@@ -104,6 +109,17 @@ local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
+-- yamllint linter for Kubernetes manifests using Kubernetes-specific config
+local xdg_config_home = os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")
+local yamllint_kubernetes_config = xdg_config_home .. "/yamllint/kubernetes.yaml"
+local yamllint_kubernetes = {
+	prefix = "yamllint",
+	lintCommand = "yamllint --strict --format parsable --config-file "
+		.. yamllint_kubernetes_config
+		.. " ${INPUT}",
+	lintStdin = false,
+	lintFormats = { "%f:%l:%c: [%t%*[a-z]] %m" },
+}
 
 markdownlint.rootMarkers = {
 	".git/",
@@ -192,6 +208,7 @@ vim.lsp.config("efm", {
 			typescript = { prettier, todos, todos_note },
 			yaml = { prettier, yamllint, todos, todos_note },
 			["yaml.ghaction"] = { prettier, actionlint, yamllint, todos, todos_note },
+			["yaml.kubernetes"] = { yamlfmt_kubernetes, yamllint_kubernetes, todos, todos_note },
 		},
 	},
 })
