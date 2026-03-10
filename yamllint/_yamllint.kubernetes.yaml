@@ -12,16 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# yamlfmt configuration for Kubernetes manifests.
-# See: https://github.com/google/yamlfmt/blob/main/docs/config-file.md
-formatter:
-  type: basic
-  # Use Kubernetes community style: list items are not indented relative
-  # to the parent key.
-  #
-  # foo:
-  # - bar
-  # - baz
-  indentless_arrays: true
-  retain_line_breaks: true
-  include_document_start: true
+# yamllint configuration for Kubernetes manifests.
+# This config extends the default yamllint config and allows the Kubernetes
+# community style for lists where list items are not indented relative to the
+# parent key:
+#
+#   foo:
+#   - bar
+#   - baz
+#
+# This is installed to ~/.config/yamllint/config.kubernetes.yaml.
+
+---
+extends: ~/.config/yamllint/config
+
+rules:
+  indentation:
+    spaces: 2
+    # Allow Kubernetes-style indentless list items:
+    #
+    #   foo:
+    #   - bar
+    #   - baz
+    indent-sequences: false
+    check-multi-line-strings: false
