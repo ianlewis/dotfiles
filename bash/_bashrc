@@ -337,7 +337,7 @@ function _bashrc_main() {
     # ssh-agent
     # Start an ssh-agent instance if an existing one isn't found.
     mkdir -p "${HOME}/.ssh"
-    if [[ -z "${SSH_AUTH_SOCK}" ]] && [[ -r "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
+    if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -r "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
         # NOTE: ssh-find-agent assumes that ~/.ssh/authorized_keys exists
         if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
             touch "${HOME}/.ssh/authorized_keys"
