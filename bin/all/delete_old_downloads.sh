@@ -27,7 +27,7 @@ function _main() {
     local days
 
     # Explicitly specify the directories for safety.
-    dirs="${HOME}/.tmp/ ${HOME}/Downloads/"
+    dirs="${HOME}/tmp/ ${HOME}/Downloads/"
 
     days=${1:-""}
 
@@ -43,8 +43,9 @@ function _main() {
             # Delete old symbolic links
             find "${d}" -type l -mtime +"${days}" -delete
 
-            # Delete empty directories
-            find "${d}" -type d -empty -delete
+            # Delete empty directories but do not delete the top level
+            # directory.
+            find "${d}" -mindepth 1 -type d -empty -delete
         fi
     done
 }
