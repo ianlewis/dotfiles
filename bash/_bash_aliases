@@ -51,7 +51,7 @@ function _bash_aliases() {
     alias ns='tmux-sessionizer'
 
     # Create a new temporary workspace.
-    alias tw='mkdir -p "${HOME}/.tmp/workspace" && tmux-sessionizer --new --mindepth 1 --dir "${HOME}/.tmp/workspace"'
+    alias tw='mkdir -p "${HOME}/tmp/workspace" && tmux-sessionizer --new --mindepth 1 --dir "${HOME}/tmp/workspace"'
 
     # Split window and start nvim.
     alias pw='project-windowizer'
