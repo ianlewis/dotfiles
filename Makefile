@@ -848,6 +848,8 @@ configure-crontab: install-bin ## Configure crontab.
 	@# bash \
 	( \
 		echo '######################## MANAGED BY dotfiles; DO NOT EDIT ######################'; \
+		echo "SHELL=$$(which bash)"; \
+		echo ""; \
 		cat $(REPO_ROOT)/cron/crontab; \
 		echo ""; \
 		for filename in ${HOME}/.config/dotfiles/cron.d/*; do \
