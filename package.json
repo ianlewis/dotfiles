@@ -5,7 +5,7 @@
     "dictionary-en": "4.0.0",
     "encoding": "0.1.13",
     "markdownlint-cli2": "0.20.0",
-    "picomatch": "4.0.3",
+    "picomatch": "4.0.4",
     "prettier": "3.7.4",
     "renovate": "42.96.3",
     "textlint": "15.5.0",
