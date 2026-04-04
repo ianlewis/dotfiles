@@ -41,7 +41,7 @@ setup() {
     assert_symlink_to "${BASE_PATH}/bin/all/delete_old_downloads.sh" "${E2E_HOME}/.local/bin/delete_old_downloads.sh"
     assert_symlink_to "${BASE_PATH}/bin/all/docker_prune.sh" "${E2E_HOME}/.local/bin/docker_prune.sh"
     assert_symlink_to "${BASE_PATH}/bin/all/update_authorized_keys.sh" "${E2E_HOME}/.local/bin/update_authorized_keys.sh"
-    assert_symlink_to "${BASE_PATH}/bin/all/clone" "${E2E_HOME}/.local/bin/clone"
+    assert_symlink_to "${BASE_PATH}/bin/all/clone.bash" "${E2E_HOME}/.local/bin/clone"
     assert_symlink_to "${BASE_PATH}/bin/all/tmux-sessionizer" "${E2E_HOME}/.local/bin/tmux-sessionizer"
     assert_symlink_to "${BASE_PATH}/bin/all/project-windowizer" "${E2E_HOME}/.local/bin/project-windowizer"
     assert_symlink_to "${BASE_PATH}/bin/all/withpass.sh" "${E2E_HOME}/.local/bin/withpass"

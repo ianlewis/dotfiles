@@ -94,15 +94,28 @@ function _clone() {
         "${create_command[@]}"
     fi
 
-    # Clone the repository.
+    # Check that the GitHub CLI is installed.
+    if ! command -v gh >/dev/null 2>&1; then
+        echo "$(basename "${0}"): ERROR: GitHub CLI is not installed." >&2
+        exit 1
+    fi
 
+    # Check if the user is authenticated with GitHub CLI.
+    # NOTE: If not authenticated gh repo clone might check out the repository
+    # using HTTPS which would make you unable to push.
+    if ! gh auth status >/dev/null 2>&1; then
+        echo "$(basename "${0}"): ERROR: You are not logged into any GitHub hosts. To log in, set the GH_TOKEN environment variable or run: gh auth login." >&2
+        exit 1
+    fi
+
+    # Clone the repository.
     owner=$(gh repo view "${repo_id}" --json owner | jq -r '.owner.login')
     repo_name=$(gh repo view "${repo_id}" --json name | jq -r '.name')
 
     dest="${program_options['dir']}/${owner}/${repo_name}"
 
     if [ -e "${dest}" ]; then
-        echo "${0}: ERROR: ${dest} already exists." >&2
+        echo "$(basename "${0}"): ERROR: ${dest} already exists." >&2
         exit 1
     fi
 
