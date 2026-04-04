@@ -772,7 +772,7 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 .PHONY: install-bin
 install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install binary scripts.
 	@# bash \
-	ln -sf $(REPO_ROOT)/bin/all/clone $(XDG_BIN_HOME)/clone; \
+	ln -sf $(REPO_ROOT)/bin/all/clone.bash $(XDG_BIN_HOME)/clone; \
 	ln -sf $(REPO_ROOT)/bin/all/delete_old_downloads.sh $(XDG_BIN_HOME)/delete_old_downloads.sh; \
 	ln -sf $(REPO_ROOT)/bin/all/docker_prune.sh $(XDG_BIN_HOME)/docker_prune.sh; \
 	ln -sf $(REPO_ROOT)/bin/all/project-windowizer $(XDG_BIN_HOME)/project-windowizer; \
