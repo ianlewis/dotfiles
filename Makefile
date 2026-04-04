@@ -52,9 +52,9 @@ SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERI
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.57.1
 AQUA_REPO := github.com/aquaproj/aqua
-AQUA_CHECKSUM.linux.amd64 := 326c9119aef16b42e41a5d2af9d62ee82ed78abbb6651de515d51b0edcd613d9
-AQUA_CHECKSUM.linux.arm64 := 772d9f08c60ad888586bfc5532fe41a0532c276d8723e2bf8fccb139ccf8f8cf
-AQUA_CHECKSUM.darwin.arm64 := 7e602e41c7f7a5c6b1504f6a06fbb7bca13f2b0604067c55f79b99b310c76f68
+AQUA_CHECKSUM.linux.amd64 := 685df389dd8bf4dd4442ca496a2db744d25871351d0edcb1a59dcfa6bd7e7b39
+AQUA_CHECKSUM.linux.arm64 := dbdb45eb8214937e1b02e748b2b6d96b0d84fc5868dfe4d6ca46cc3bd525f9bb
+AQUA_CHECKSUM.darwin.arm64 := 81f908c93263ba83bc06ba81d75e2594390b676ea131bb3f7691a0d4575948e4
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
@@ -72,18 +72,19 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.26.1
-GO_CHECKSUM.linux.amd64 := 9e9b755d63b36acf30c12a9a3fc379243714c1c6d3dd72861da637f336ebb35b
-GO_CHECKSUM.linux.arm64 := b00b694903d126c588c378e72d3545549935d3982635ba3f7a964c9fa23fe3b9
-GO_CHECKSUM.darwin.arm64 := bed8ebe824e3d3b27e8471d1307f803fc6ab8e1d0eb7a4ae196979bd9b801dd3
+GO_CHECKSUM.linux.amd64 := 031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a
+GO_CHECKSUM.linux.arm64 := a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7
+GO_CHECKSUM.darwin.arm64 := 353df43a7811ce284c8938b5f3c7df40b7bfb6f56cb165b150bc40b5e2dd541f
 GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.6.26
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= 22b192913e9f14e1a56eb627147dcc7bae137a63
-PYENV_VIRTUALENV_VERSION ?= v1.2.6
-PYENV_VIRTUALENV_SHA ?= b5c88a7a154dc6729b0539dca12cf3c0d810bfbe
+PYENV_INSTALL_SHA ?= 174c61526f37406a507f64deb9c99d533b1d56e1
+# renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
+PYENV_VIRTUALENV_VERSION ?= v1.3.0
+PYENV_VIRTUALENV_SHA ?= 90dfbcad93c629b68801fce8a8df4a643ed24a48
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
@@ -91,16 +92,16 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.30
-NODENV_BUILD_SHA ?= 97f8e81c054cd087433f1d45964abfe58c85c0a2
+NODENV_BUILD_VERSION ?= v5.4.33
+NODENV_BUILD_SHA ?= 1e9b4bc9922d52e256761df4d9398da0bb0267cb
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20251225
-RBENV_BUILD_SHA ?= 7ea6b50fe77786f350c5c667f66f645d3bd00638
+RBENV_BUILD_VERSION ?= v20260327
+RBENV_BUILD_SHA ?= d099da05144d9f703c27cadd7b710f35f15dfadb
 
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
