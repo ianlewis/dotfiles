@@ -101,3 +101,6 @@
 [submodule "nvim/pack/nvim/start/vim-syntax-codeowners"]
 	path = nvim/pack/nvim/start/vim-syntax-codeowners
 	url = https://github.com/rhysd/vim-syntax-codeowners.git
+[submodule "bash/lib/complete-alias"]
+	path = bash/lib/complete-alias
+	url = https://github.com/cykerway/complete-alias.git

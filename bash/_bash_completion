@@ -136,6 +136,20 @@ function _bash_completion() {
     if command -v kubectl >/dev/null 2>&1; then
         # shellcheck source=/dev/null
         source <(kubectl completion bash)
+
+        # Add completion for kubectl-aliases.
+        # NOTE: This must be done after aliases are loaded.
+        local bash_lib_dir="${HOME}/.local/share/bash/lib"
+        if [ -f "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases" ]; then
+            if [ -f "${bash_lib_dir}/complete-alias/complete_alias" ]; then
+                # shellcheck source=/dev/null
+                source "${bash_lib_dir}/complete-alias/complete_alias"
+
+                while read -r a; do
+                    complete -F _complete_alias "${a}"
+                done <<<"$(sed '/^alias /!d;s/^alias //;s/=.*$//' "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases")"
+            fi
+        fi
     fi
 
     # kustomize bash completion

@@ -5,6 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2026-04-05`
+
+- Added bash completion support for `kubectl-aliases`
+  ([#732](https://github.com/ianlewis/dotfiles/issues/732)).
+
 ## `2026-02-28`
 
 - Added a `withpass` script to read passwords from standard input and pass them
