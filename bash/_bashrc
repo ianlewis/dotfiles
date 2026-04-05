@@ -142,10 +142,10 @@ function _bashrc_setup_aliases() {
 # ~/.bash_completion file.
 function _bashrc_setup_bash_completion() {
     if [[ "$(uname -s)" == "Darwin" ]]; then
-        # Load the system wide bash completion if available.
+        # Load the system wide homebrew bash completion if available.
         # The system wide config should load our local config.
         # shellcheck source=/dev/null
-        if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
+        if [[ -z ${HOMEBREW_PREFIX:-} ]] && [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
             # shellcheck source=/dev/null
             . "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
         elif [ -r "${HOME}/.bash_completion" ]; then
@@ -167,9 +167,17 @@ function _bashrc_setup_bash_completion() {
     fi
 }
 
-# _bashrc_update_path updates the PATH environment variable to include
-# various language version managers and local bin directories.
-function _bashrc_update_path() {
+# _bashrc_setup_crictl sets up the crictl environment.
+function _bashrc_setup_crictl() {
+    # Set a default crictl config path to squelch warnings, but only when the
+    # user has not already configured one and no system wide config exists.
+    if [[ -z ${CRI_CONFIG_FILE:-} && ! -r "/etc/crictl.yaml" ]]; then
+        export CRI_CONFIG_FILE="${XDG_CONFIG_HOME}/crictl/crictl.yaml"
+    fi
+}
+
+# _bashrc_update_env sets necessary environment variables.
+function _bashrc_update_env() {
     _bashrc_setup_homebrew
 
     _bashrc_setup_go
@@ -181,6 +189,8 @@ function _bashrc_update_path() {
     _bashrc_setup_rbenv
 
     _bashrc_setup_rust
+
+    _bashrc_setup_crictl
 
     # The .local/bin is used for some local installs such as applications
     # installed via 'pip install --user'
@@ -226,8 +236,8 @@ function _bashrc_main() {
     # NOTE: PS1 and tty may be set even for non-interactive shells so we check
     #       the special parameter $- for the presence of 'i'.
     if [[ ! $- =~ i ]]; then
-        # Update the PATH even for non-interactive shells.
-        _bashrc_update_path
+        # Update the environment for non-interactive shells.
+        _bashrc_update_env
 
         _bashrc_source_local
 
@@ -348,24 +358,18 @@ function _bashrc_main() {
         ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
     fi
 
-    # Set a default crictl config path to squelch warnings but defer to the
-    # system wide config if it exists.
-    if [[ ! -r "/etc/crictl.yaml" ]]; then
-        export CRI_CONFIG_FILE="${XDG_CONFIG_HOME}/crictl/crictl.yaml"
-    fi
+    # Update the environment.
+    _bashrc_update_env
 
-    # Update the PATH
-    _bashrc_update_path
-
-    # Source local settings
+    # Source local settings.
     _bashrc_source_local
 
     export PATH
 
-    # Setup bash aliases
+    # Setup bash aliases.
     _bashrc_setup_aliases
 
-    # Setup bash completion
+    # Setup bash completion.
     _bashrc_setup_bash_completion
 
     # Print the message if reboot is required.
