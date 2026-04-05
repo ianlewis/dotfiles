@@ -104,10 +104,16 @@ structs:
     # Vim keymap.
     keymap.set:
       args:
-        - type: any # string or table
-        - type: string
-        - type: any # string or function
-        - type: table
+        - type: any # mode: string or table
+        - type: string # key sequence
+        - type: any # mapped sequence or function: string or function
+        - type: table # options
+          required: false
+    keymap.del:
+      args:
+        - type: any # mode: string or table
+        - type: string # key sequence
+        - type: table # options
           required: false
 
     # Vim Lua bindings.
