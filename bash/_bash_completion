@@ -15,6 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Bash user completion
+# NOTE: user completion may be loaded by the system /etc/profile before the
+#       user's .profile is loaded.
+
 function _bash_completion() {
     # pip bash completion start
     if command -v python3 >/dev/null 2>&1 && python3 -m pip >/dev/null 2>&1; then
@@ -50,8 +54,20 @@ function _bash_completion() {
 
     # crictl completion
     if command -v crictl >/dev/null 2>&1; then
-        # shellcheck source=/dev/null
-        source <(crictl completion bash)
+        if [[ -r "/etc/crictl.yaml" ]]; then
+            # shellcheck source=/dev/null
+            source <(crictl completion bash)
+        else
+            # Set a default crictl config path to squelch warnings but defer to the
+            # system wide config if it exists. We need to do this here as well
+            # because bash completion may have been sourced before the user's
+            # .profile is loaded.
+
+            # TODO(#731): load crictl environment via library or plugin.
+
+            # shellcheck source=/dev/null
+            source <(CRI_CONFIG_FILE="${CRI_CONFIG_FILE:-${XDG_CONFIG_HOME:-${HOME}/.config}/crictl/crictl.yaml}" crictl completion bash)
+        fi
     fi
 
     # delta completion
@@ -76,6 +92,7 @@ function _bash_completion() {
 
     # gcloud completion
     if gcloud_bin_path=$(aqua which gcloud 2>/dev/null); then
+        # TODO(#731): load gcloud environment via library or plugin.
         gcloud_base_path=$(dirname "$(dirname "${gcloud_bin_path}")")
         if [[ -r "${gcloud_base_path}/completion.bash.inc" ]]; then
             export USE_GKE_GCLOUD_AUTH_PLUGIN=True
