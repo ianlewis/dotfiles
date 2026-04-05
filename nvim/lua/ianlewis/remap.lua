@@ -14,10 +14,12 @@
 
 -- Dvorak keymappings
 -- Remap default movement keys to Dvorak right-hand home keys.
+-- NOTE: We still use the 'h' key for left movement even for Dvorak.
+--       The movement keys are mapped to the right-hand home row keys directly
+--       rather than the default which is one key to the left.
 vim.keymap.set({ "n", "v", "o" }, "n", "j")
 vim.keymap.set({ "n", "v", "o" }, "t", "k")
 vim.keymap.set({ "n", "v", "o" }, "s", "l")
--- NOTE: We still use the 'h' key for left movement even for Dvorak.
 
 -- Close the current buffer in a split without closing the split itself.
 -- This switches to the "previously opened buffer" before closing the original
@@ -26,7 +28,10 @@ vim.keymap.set({ "n", "v", "o" }, "s", "l")
 vim.keymap.set({ "n", "v", "o" }, "<leader>bd", ":bp|sp|bn|bd<cr>")
 
 -- Open files in the directory of the currently opened file.
-vim.keymap.set({ "n", "v", "o" }, "<leader>e", ":e %:h/")
+vim.keymap.set("n", "<leader>e", ":e %:h/")
+
+-- Write files in the directory of the currently opened file.
+vim.keymap.set("n", "<leader>w", ":w %:h/")
 
 -- Remap the 'n' key to 'l' because 'n' on the Dvorak home row. Maintain cursor
 -- in the center of the screen.
@@ -52,12 +57,12 @@ vim.keymap.set("n", "j", "J")
 vim.keymap.set("n", "J", "mzJ`z")
 
 -- Page up and down without moving cursor position on screen.
-vim.keymap.set("n", "<C-n>", "<C-d>zz")
-vim.keymap.set("n", "<C-t>", "<C-u>zz")
+vim.keymap.set({ "n", "v", "o" }, "<C-n>", "<C-d>zz")
+vim.keymap.set({ "n", "v", "o" }, "<C-t>", "<C-u>zz")
 
 -- Move the cursor left and right by word.
-vim.keymap.set("n", "<C-h>", "b")
-vim.keymap.set("n", "<C-s>", "w")
+vim.keymap.set({ "n", "v", "o" }, "<C-h>", "b")
+vim.keymap.set({ "n", "v", "o" }, "<C-s>", "w")
 
 -- Paste over currently selected value without overwriting the paste buffer.
 vim.keymap.set("x", "<leader>p", [["_dP]])
@@ -82,3 +87,12 @@ vim.keymap.set({ "n", "v", "o" }, "<leader>af", function()
 		vim.notify("Disabled auto-formatting for this buffer", vim.log.levels.WARN)
 	end
 end)
+
+-- Unmap undesirable keys.
+-- Unmap C-A because C-a is used as the tmux prefix and I often mistype it as
+-- C-A. Also unmap C-X for good measure.
+vim.keymap.set("n", "<C-A>", "<Nop>")
+vim.keymap.set("n", "<C-X>", "<Nop>")
+
+-- Unmap unused default key mappings.
+vim.keymap.set({ "n", "v", "o" }, "k", "<Nop>")
