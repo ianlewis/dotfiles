@@ -21,7 +21,14 @@ vim.filetype.add({
 		-- Allow requirements.txt files with extra labels like
 		-- "requirements-dev.txt"
 		[".*/requirements.*.txt"] = "requirements",
+	},
+	extension = {
 		-- Bats files should be bash and not sh.
-		[".*/*.bats"] = "bash",
+		bats = "bash",
+
+		-- jsonc, hjson, jwcc, etc.
+		hjson = "json5",
+		hujson = "json5",
+		jsonc = "json5",
 	},
 })
