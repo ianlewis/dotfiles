@@ -18,6 +18,10 @@ vim.filetype.add({
 		-- Add a special filetype extension to indicate a GitHub Actions
 		-- workflow. This is used to run GitHub Actions linters.
 		[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
+		-- Add a special filetype for Kubernetes manifests and similar
+		-- files to use Kubernetes-style YAML formatting (indentless lists).
+		[".*/kubernetes/.*%.ya?ml"] = "yaml.kubernetes",
+		[".*/manifests/.*%.ya?ml"] = "yaml.kubernetes",
 		-- Allow requirements.txt files with extra labels like
 		-- "requirements-dev.txt"
 		[".*/requirements.*.txt"] = "requirements",
