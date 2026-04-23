@@ -94,8 +94,10 @@ local tofuFmt = {
 	formatStdin = true,
 }
 -- yamlfmt formatter for Kubernetes manifests (indentless list style)
+local xdg_config_home = os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")
+local yamlfmt_kubernetes_config = xdg_config_home .. "/yamlfmt/.yamlfmt.kubernetes.yaml"
 local yamlfmt_kubernetes = {
-	formatCommand = "yamlfmt -formatter indentless_arrays=true -in",
+	formatCommand = "yamlfmt -conf " .. yamlfmt_kubernetes_config .. " -in",
 	formatStdin = true,
 }
 -- }}}
@@ -110,7 +112,6 @@ local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
 -- yamllint linter for Kubernetes manifests using Kubernetes-specific config
-local xdg_config_home = os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")
 local yamllint_kubernetes_config = xdg_config_home .. "/yamllint/config.kubernetes.yaml"
 local yamllint_kubernetes = {
 	prefix = "yamllint",
