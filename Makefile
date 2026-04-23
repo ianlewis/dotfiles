@@ -869,10 +869,15 @@ configure-crontab: install-bin ## Configure crontab.
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)/.created
 	@# bash \
 	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver; \
-	sed 's|$${XDG_CONFIG_HOME}|'$(XDG_CONFIG_HOME)'|'< $< > $@
+	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
+
+$(XDG_STATE_HOME)/efm-langserver/.created:
+	@# bash \
+	mkdir -p $(XDG_STATE_HOME)/efm-langserver; \
+	touch $@
 
 .PHONY: configure-efm-langserver
-configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml ## Configure efm-langserver.
+configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml $(XDG_STATE_HOME)/efm-langserver/.created ## Configure efm-langserver.
 
 .PHONY: configure-git
 configure-git: ## Configure git.
