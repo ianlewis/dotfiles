@@ -24,4 +24,3 @@ formatter:
   # - baz
   indentless_arrays: true
   retain_line_breaks: true
-  include_document_start: true

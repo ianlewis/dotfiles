@@ -932,7 +932,7 @@ $(XDG_CONFIG_HOME)/yamllint/config: yamllint/_config $(XDG_CONFIG_HOME)/yamllint
 
 $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml: yamllint/_config.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/.created
 	@# bash \
-	ln -sf $(REPO_ROOT)/yamllint/_config.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml
+	sed 's|$${XDG_CONFIG_HOME}|'$(XDG_CONFIG_HOME)'|'< $< > $@
 
 .PHONY: configure-yamllint
 configure-yamllint: $(XDG_CONFIG_HOME)/yamllint/config $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml ## Configure yamllint.

@@ -24,7 +24,10 @@
 # This is installed to ~/.config/yamllint/config.kubernetes.yaml.
 
 ---
-extends: ~/.config/yamllint/config
+# NOTE: yamllint does not support substitutions in the configuration file.
+# Substitutions like ${XDG_CONFIG_HOME} are made by the Makefile upon
+# installation.
+extends: ${XDG_CONFIG_HOME}/yamllint/config
 
 rules:
   indentation:
