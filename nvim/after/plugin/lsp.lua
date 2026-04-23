@@ -13,6 +13,8 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+local xdg = require("ianlewis.xdg")
+
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
@@ -94,8 +96,7 @@ local tofuFmt = {
 	formatStdin = true,
 }
 -- yamlfmt formatter for Kubernetes manifests (indentless list style)
-local xdg_config_home = os.getenv("XDG_CONFIG_HOME") or (os.getenv("HOME") .. "/.config")
-local yamlfmt_kubernetes_config = xdg_config_home .. "/yamlfmt/.yamlfmt.kubernetes.yaml"
+local yamlfmt_kubernetes_config = xdg.config_home() .. "/yamlfmt/.yamlfmt.kubernetes.yaml"
 local yamlfmt_kubernetes = {
 	formatCommand = "yamlfmt -conf " .. yamlfmt_kubernetes_config .. " -in",
 	formatStdin = true,
@@ -111,14 +112,11 @@ local markdownlint = require("efmls-configs.linters.markdownlint")
 local selene = require("efmls-configs.linters.selene")
 local stylelint = require("efmls-configs.linters.stylelint")
 local yamllint = require("efmls-configs.linters.yamllint")
+
 -- yamllint linter for Kubernetes manifests using Kubernetes-specific config
-local yamllint_kubernetes_config = xdg_config_home .. "/yamllint/config.kubernetes.yaml"
-local yamllint_kubernetes = {
-	prefix = "yamllint",
-	lintCommand = "yamllint --strict --format parsable --config-file " .. yamllint_kubernetes_config .. " ${INPUT}",
-	lintStdin = false,
-	lintFormats = { "%f:%l:%c: [%t%*[a-z]] %m" },
-}
+local yamllint_kubernetes = vim.deepcopy(yamllint)
+local yamllint_kubernetes_config = xdg.config_home() .. "/yamllint/config.kubernetes.yaml"
+yamllint_kubernetes.lintCommand = "yamllint --format parsable --config-file " .. yamllint_kubernetes_config .. " -"
 
 markdownlint.rootMarkers = {
 	".git/",

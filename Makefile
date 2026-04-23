@@ -926,9 +926,9 @@ $(XDG_CONFIG_HOME)/yamllint/.created: $(XDG_CONFIG_HOME)/.created
 	mkdir -p $(XDG_CONFIG_HOME)/yamllint; \
 	touch $@
 
-$(XDG_CONFIG_HOME)/yamllint/config: yamllint/_config $(XDG_CONFIG_HOME)/yamllint/.created
+$(XDG_CONFIG_HOME)/yamllint/config: yamllint/_config.yaml $(XDG_CONFIG_HOME)/yamllint/.created
 	@# bash \
-	ln -sf $(REPO_ROOT)/yamllint/_config $(XDG_CONFIG_HOME)/yamllint/config
+	ln -sf $(REPO_ROOT)/yamllint/_config.yaml $(XDG_CONFIG_HOME)/yamllint/config
 
 $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml: yamllint/_config.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/.created
 	@# bash \

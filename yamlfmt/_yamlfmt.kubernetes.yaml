@@ -24,3 +24,4 @@ formatter:
   # - baz
   indentless_arrays: true
   retain_line_breaks: true
+  eof_newline: true

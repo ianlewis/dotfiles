@@ -77,6 +77,14 @@ structs:
     cmd:
       any: true
 
+    deepcopy:
+      args:
+        - type: table
+        - type: bool
+          required: false
+      returns:
+        type: table
+
     diagnostic.severity:
       struct: VimDiagnosticSeverity
 
