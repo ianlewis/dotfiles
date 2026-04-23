@@ -115,9 +115,7 @@ local yamllint = require("efmls-configs.linters.yamllint")
 local yamllint_kubernetes_config = xdg_config_home .. "/yamllint/config.kubernetes.yaml"
 local yamllint_kubernetes = {
 	prefix = "yamllint",
-	lintCommand = "yamllint --strict --format parsable --config-file "
-		.. yamllint_kubernetes_config
-		.. " ${INPUT}",
+	lintCommand = "yamllint --strict --format parsable --config-file " .. yamllint_kubernetes_config .. " ${INPUT}",
 	lintStdin = false,
 	lintFormats = { "%f:%l:%c: [%t%*[a-z]] %m" },
 }
