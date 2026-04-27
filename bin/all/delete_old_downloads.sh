@@ -27,7 +27,7 @@ function _main() {
     local days
 
     # Explicitly specify the directories for safety.
-    dirs="${HOME}/tmp/ ${HOME}/Downloads/"
+    dirs="${HOME}/.tmp/ ${HOME}/Downloads/"
 
     days=${1:-""}
 
