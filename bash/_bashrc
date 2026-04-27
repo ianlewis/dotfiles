@@ -217,12 +217,12 @@ function _bashrc_source_local() {
     fi
 }
 
-# _bashrc_get_temp_workspace_dir returns a directory path for temporary
-# workspaces. It prefers /var/tmp if it exists and is writable, otherwise it
-# falls back to /tmp. The workspace directory is named "user-ws-UID" where UID
-# is the user's ID. If the workspace directory does not exist, it is created
-# with permissions 0700.
-function _bashrc_temp_workspace_dir() {
+# _bashrc_user_temp returns a directory path for temporary workspaces. It
+# prefers /var/tmp if it exists and is writable, otherwise it falls back to
+# /tmp. The workspace directory is named "user-ws-UID" where UID is the user's
+# ID. If the workspace directory does not exist, it is created with permissions
+# 0700.
+function _bashrc_user_temp() {
     # if /var/tmp exists use it so that workspaces can persist across reboots.
     local tmp_dir="/var/tmp"
     if [[ ! -d "${tmp_dir}" ]] || [[ ! -w "${tmp_dir}" ]]; then
@@ -234,20 +234,35 @@ function _bashrc_temp_workspace_dir() {
         fi
     fi
 
-    local ws_root="${tmp_dir}/user-tw-${UID}"
+    local ws_root="${tmp_dir}/dotfiles-user-tmp-${UID}"
     if [[ ! -d "${ws_root}" ]]; then
         mkdir -m 0700 "${ws_root}"
     fi
+
     # Link to the temporary directory from the user's home directory. We do this
     # to pick up the user's configuration (e.g. aqua, nodenv, etc.)
     # NOTE: We assume $HOME exists so it's ok that `-m` only applies to the last
     #       directory in the path.
     # shellcheck disable=SC2174
-    mkdir -p -m 0700 "${HOME}/.tmp"
-    rm -f "${HOME}/.tmp/workspace"
-    ln -sf "${ws_root}" "${HOME}/.tmp/workspace"
+    rm -f "${HOME}/.tmp"
+    ln -sf "${ws_root}" "${HOME}/.tmp"
 
-    echo "${HOME}/.tmp/workspace"
+    echo "${HOME}/.tmp"
+}
+
+# _bashrc_temp_workspace_dir returns a directory path for temporary workspaces.
+# It is used by the 'tw' alias to create temporary workspaces for development.
+# It is a "workspace" subdirectory under the user temp directory returned by
+# _bashrc_user_temp. If the workspace directory does not exist, it is created
+# with permissions 0700.
+function _bashrc_temp_workspace_dir() {
+    local ws_dir
+    ws_dir="$(_bashrc_user_temp)/workspace"
+    if [[ ! -d "${ws_dir}" ]]; then
+        mkdir -m 0700 "${ws_dir}"
+    fi
+
+    echo "${ws_dir}"
 }
 
 function _bashrc_main() {
