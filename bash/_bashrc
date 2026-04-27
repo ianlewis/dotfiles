@@ -225,8 +225,8 @@ function _bashrc_source_local() {
 function _bashrc_user_temp() {
     # if /var/tmp exists use it so that workspaces can persist across reboots.
     local tmp_dir="/var/tmp"
-    if [[ ! -d "${tmp_dir}" ]] || [[ ! -w "${tmp_dir}" ]]; then
-        if [[ -n "${TMPDIR:-}" ]] && [[ -d "${TMPDIR}" ]] && [[ -w "${TMPDIR}" ]]; then
+    if [[ ! -d ${tmp_dir} ]] || [[ ! -w ${tmp_dir} ]]; then
+        if [[ -n ${TMPDIR:-} ]] && [[ -d ${TMPDIR} ]] && [[ -w ${TMPDIR} ]]; then
             tmp_dir="${TMPDIR}"
         else
             # Otherwise, use the default /tmp directory.
@@ -235,7 +235,7 @@ function _bashrc_user_temp() {
     fi
 
     local ws_root="${tmp_dir}/dotfiles-user-tmp-${UID}"
-    if [[ ! -d "${ws_root}" ]]; then
+    if [[ ! -d ${ws_root} ]]; then
         mkdir -m 0700 "${ws_root}"
     fi
 
@@ -246,7 +246,7 @@ function _bashrc_user_temp() {
     local stat_group_id
     local stat_permissions
     read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -c "%u %g %a" "${ws_root}")"
-    if [[ "${stat_user_id}" != "${UID}" ]] || [[ "${stat_group_id}" != "${GID}" ]] || [[ "${stat_permissions}" != "700" ]]; then
+    if [[ ${stat_user_id} != "${UID}" ]] || [[ ${stat_group_id} != "${GID}" ]] || [[ ${stat_permissions} != "700" ]]; then
         echo "WARN: Workspace directory ${ws_root} has incorrect ownership or permissions." >&2
         ws_root="$(mktemp -d -t "dotfiles-user-tmp-XXXXXXXXXX")"
     fi
@@ -255,10 +255,10 @@ function _bashrc_user_temp() {
     # to pick up the user's configuration (e.g. aqua, nodenv, etc.)
 
     local user_tmp="${HOME}/.tmp"
-    if [[ -L "${user_tmp}" ]]; then
+    if [[ -L ${user_tmp} ]]; then
         local canon_user_tmp
         canon_user_tmp="$(readlink -f "${user_tmp}")"
-        if [[ "${canon_user_tmp}" != "${ws_root}" ]]; then
+        if [[ ${canon_user_tmp} != "${ws_root}" ]]; then
             echo "WARN: ${user_tmp} is a symlink to ${canon_user_tmp} instead of ${ws_root}. Updating the symlink." >&2
             rm -f "${user_tmp}"
             ln -sf "${ws_root}" "${user_tmp}"
@@ -279,7 +279,7 @@ function _bashrc_user_temp() {
 function _bashrc_temp_workspace_dir() {
     local ws_dir
     ws_dir="$(_bashrc_user_temp)/workspace"
-    if [[ ! -d "${ws_dir}" ]]; then
+    if [[ ! -d ${ws_dir} ]]; then
         mkdir -m 0700 "${ws_dir}"
     fi
 
