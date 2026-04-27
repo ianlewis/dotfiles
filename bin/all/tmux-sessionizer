@@ -97,7 +97,7 @@ function _main() {
     # NOTE: fzf --print-query always prints the query as the first line. If
     #       there is a selection, it will be on the second line.
     IFS=$'\n' readarray -t lines <<<"$(find \
-        "${base_dir}" \
+        "${base_dir}/" \
         -mindepth "${program_options['mindepth']}" \
         -maxdepth "${program_options['maxdepth']}" \
         -type d | fzf --query="${query}" --print-query ${select_option})"
@@ -138,20 +138,25 @@ function _main() {
         selected_name="${selected_name}_"
     fi
 
+    # NOTE: We use cd to change directory rather than using -c option of tmux
+    # new-session and new-window. This is because the -c option expands symlinks
+    # which can lead to unexpected behavior if the base directory includes
+    # symlinks. Using cd preserves the symlink in the session and window starting
+    # directory.
     if [[ -z ${TMUX+x} ]] && [[ -z ${tmux_running} ]]; then
-        tmux new-session -s "${selected_name}" -c "${selected}"
+        tmux new-session -s "${selected_name}" "cd ${selected}; exec ${SHELL}"
         # NOTE: new-session opens the first window.
         for ((i = 2; i <= program_options['windows']; i++)); do
-            tmux new-window -dt "${selected_name}" -c "${selected}"
+            tmux new-window -dt "${selected_name}" "cd ${selected}; exec ${SHELL}"
         done
         return 0
     fi
 
     if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
-        tmux new-session -ds "${selected_name}" -c "${selected}"
+        tmux new-session -ds "${selected_name}" "cd ${selected}; exec ${SHELL}"
         # NOTE: new-session opens the first window.
         for ((i = 2; i <= program_options['windows']; i++)); do
-            tmux new-window -dt "${selected_name}" -c "${selected}"
+            tmux new-window -dt "${selected_name}" "cd ${selected}; exec ${SHELL}"
         done
     fi
 

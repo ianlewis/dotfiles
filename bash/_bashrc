@@ -217,7 +217,80 @@ function _bashrc_source_local() {
     fi
 }
 
+# _bashrc_user_temp returns a directory path for temporary workspaces. It
+# prefers /var/tmp if it exists and is writable, otherwise it falls back to
+# /tmp. The workspace directory is named "dotfiles-user-tmp-UID" where UID is
+# the user's ID. If the workspace directory does not exist, it is created with
+# permissions 0700.
+function _bashrc_user_temp() {
+    # if /var/tmp exists use it so that workspaces can persist across reboots.
+    local tmp_dir="/var/tmp"
+    if [[ ! -d ${tmp_dir} ]] || [[ ! -w ${tmp_dir} ]]; then
+        if [[ -n ${TMPDIR:-} ]] && [[ -d ${TMPDIR} ]] && [[ -w ${TMPDIR} ]]; then
+            tmp_dir="${TMPDIR}"
+        else
+            # Otherwise, use the default /tmp directory.
+            tmp_dir="/tmp"
+        fi
+    fi
+
+    local ws_root="${tmp_dir}/dotfiles-user-tmp-${UID}"
+    if [[ ! -d ${ws_root} ]]; then
+        mkdir -m 0700 "${ws_root}"
+    fi
+
+    # test that the owner, group, and permissions of the workspace directory is
+    # correct. If not, print a warning and fall back to using a new temporary
+    # directory.
+    local stat_user_id
+    local stat_group_id
+    local stat_permissions
+    read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -c "%u %g %a" "${ws_root}")"
+    if [[ ${stat_user_id} != "${UID}" ]] || [[ ${stat_group_id} != "${GID}" ]] || [[ ${stat_permissions} != "700" ]]; then
+        echo "WARN: Workspace directory ${ws_root} has incorrect ownership or permissions." >&2
+        ws_root="$(mktemp -d -t "dotfiles-user-tmp-XXXXXXXXXX")"
+    fi
+
+    # Link to the temporary directory from the user's home directory. We do this
+    # to pick up the user's configuration (e.g. aqua, nodenv, etc.)
+
+    local user_tmp="${HOME}/.tmp"
+    if [[ -L ${user_tmp} ]]; then
+        local canon_user_tmp
+        canon_user_tmp="$(readlink -f "${user_tmp}")"
+        if [[ ${canon_user_tmp} != "${ws_root}" ]]; then
+            echo "WARN: ${user_tmp} is a symlink to ${canon_user_tmp} instead of ${ws_root}. Updating the symlink." >&2
+            rm -f "${user_tmp}"
+            ln -sf "${ws_root}" "${user_tmp}"
+        fi
+    else
+        rm -rf "${user_tmp}"
+        ln -sf "${ws_root}" "${user_tmp}"
+    fi
+
+    echo "${user_tmp}"
+}
+
+# _bashrc_temp_workspace_dir returns a directory path for temporary workspaces.
+# It is used by the 'tw' alias to create temporary workspaces for development.
+# It is a "workspace" subdirectory under the user temp directory returned by
+# _bashrc_user_temp. If the workspace directory does not exist, it is created
+# with permissions 0700.
+function _bashrc_temp_workspace_dir() {
+    local ws_dir
+    ws_dir="$(_bashrc_user_temp)/workspace"
+    if [[ ! -d ${ws_dir} ]]; then
+        mkdir -m 0700 "${ws_dir}"
+    fi
+
+    echo "${ws_dir}"
+}
+
 function _bashrc_main() {
+    # NOTE: bash does not set primary group ID (PGID) in the environment.
+    GID=$(id -g)
+    export GID
+
     XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
     export XDG_CACHE_HOME
     XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
