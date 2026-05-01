@@ -71,7 +71,7 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.26.1
+GO_VERSION ?= 1.26.2
 GO_CHECKSUM.linux.amd64 := 031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a
 GO_CHECKSUM.linux.arm64 := a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7
 GO_CHECKSUM.darwin.arm64 := 353df43a7811ce284c8938b5f3c7df40b7bfb6f56cb165b150bc40b5e2dd541f
@@ -79,7 +79,7 @@ GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.26
+PYENV_INSTALL_VERSION ?= v2.6.27
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= 174c61526f37406a507f64deb9c99d533b1d56e1
 # renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
@@ -92,7 +92,7 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.33
+NODENV_BUILD_VERSION ?= v5.4.34
 NODENV_BUILD_SHA ?= 1e9b4bc9922d52e256761df4d9398da0bb0267cb
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
