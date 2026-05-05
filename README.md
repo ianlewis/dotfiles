@@ -36,6 +36,20 @@ home directory which makes it easy to test out configuration.
 
 ## Requirements
 
+Some packages and tools need to be installed for these dotfiles to work.
+
+### Linux
+
+- Basic command-line tools are required: `make`, `grep`, an `awk`
+  implementation, `getopt`, and `mktemp`. On many Linux distributions these are
+  provided by packages such as `make`, `grep`, `gawk`/`mawk`, `util-linux`, and
+  `coreutils`, respectively.
+- `zlib1g-dev`, `libssl-dev`, `libsqlite3-dev`, and `libzma-dev` are needed for
+  installing Python.
+- `libffi-dev` and `libyaml-dev` are needed for installing Ruby.
+
+### macOS
+
 - GNU tools: versions of `make`, `grep`, `awk`, `getopt`, and `mktemp` are
   required.
 - `libyaml`: An installation of `libyaml` is also required to install Ruby.
