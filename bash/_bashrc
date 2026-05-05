@@ -145,9 +145,9 @@ function _bashrc_setup_bash_completion() {
         # Load the system wide homebrew bash completion if available.
         # The system wide config should load our local config.
         # shellcheck source=/dev/null
-        if [[ -z ${HOMEBREW_PREFIX:-} ]] && [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
+        if [[ -n ${HOMEBREW_PREFIX:-} ]] && [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
             # shellcheck source=/dev/null
-            . "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+            source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
         elif [ -r "${HOME}/.bash_completion" ]; then
             # The system wide config is not available so just load our completion
             # shellcheck source=/dev/null

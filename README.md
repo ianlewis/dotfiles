@@ -51,7 +51,7 @@ brew install \
     gnu-getopt \
     grep \
     coreutils \
-    bash-completion \
+    bash-completion@2 \
     libyaml \
     xz
 ```
