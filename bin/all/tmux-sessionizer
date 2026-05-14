@@ -138,13 +138,14 @@ function _main() {
         selected_name="${selected_name}_"
     fi
 
-    # NOTE: We use cd to change directory rather than using -c option of tmux
-    # new-session and new-window. This is because the -c option expands symlinks
-    # which can lead to unexpected behavior if the base directory includes
-    # symlinks. Using cd preserves the symlink in the session and window starting
-    # directory.
+    # NOTE: We use -c on new-session to set the session's default working
+    # directory so that new windows created later (e.g. with Ctrl+A c) start
+    # in the project directory. We also pass a shell command with cd to
+    # preserve symlinks in the shell's logical working directory ($PWD). The
+    # -c option may resolve symlinks at the tmux level, but cd preserves the
+    # logical path for the initial shell.
     if [[ -z ${TMUX+x} ]] && [[ -z ${tmux_running} ]]; then
-        tmux new-session -s "${selected_name}" "cd ${selected}; exec ${SHELL}"
+        tmux new-session -s "${selected_name}" -c "${selected}" "cd ${selected}; exec ${SHELL}"
         # NOTE: new-session opens the first window.
         for ((i = 2; i <= program_options['windows']; i++)); do
             tmux new-window -dt "${selected_name}" "cd ${selected}; exec ${SHELL}"
@@ -153,7 +154,7 @@ function _main() {
     fi
 
     if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
-        tmux new-session -ds "${selected_name}" "cd ${selected}; exec ${SHELL}"
+        tmux new-session -ds "${selected_name}" -c "${selected}" "cd ${selected}; exec ${SHELL}"
         # NOTE: new-session opens the first window.
         for ((i = 2; i <= program_options['windows']; i++)); do
             tmux new-window -dt "${selected_name}" "cd ${selected}; exec ${SHELL}"
