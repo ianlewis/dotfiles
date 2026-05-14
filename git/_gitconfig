@@ -1,6 +1,7 @@
 # vim: ft=gitconfig
 [core]
     pager = delta
+    hooksPath = /dev/null
 [init]
     defaultBranch = main
 [user]
