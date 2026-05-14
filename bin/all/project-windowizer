@@ -69,15 +69,17 @@ function _main() {
     # Run the command in the right pane, defaulting to `nvim`.
     # Explicitly start nvim in an interactive bash shell to ensure the command
     # runs with a full terminal environment.
-    local full_cmd="bash -i -c '${pw_cmd[*]}'"
+    local pwd_escaped
+    printf -v pwd_escaped "%q" "${PWD}"
+    local full_cmd="bash -i -c 'cd -- ${pwd_escaped} && ${pw_cmd[*]}'"
 
     # If the user explicitly passed "bash" as the first argument, run bash
     # directly instead of wrapping it in another bash shell.
     if [[ ${program_params[0]:-""} == "bash" ]]; then
-        full_cmd="${program_params[*]}"
+        full_cmd="bash -i -c 'cd -- ${pwd_escaped} && exec ${program_params[*]}'"
     fi
 
-    tmux split-window -hd -l "${new_window_size}" -c "${PWD}" "${full_cmd}"
+    tmux split-window -hd -l "${new_window_size}" "${full_cmd}"
 
     # clear the left window
     clear
