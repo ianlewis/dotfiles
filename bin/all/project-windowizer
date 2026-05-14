@@ -77,7 +77,7 @@ function _main() {
         full_cmd="${program_params[*]}"
     fi
 
-    tmux split-window -hd -l "${new_window_size}" "${full_cmd}"
+    tmux split-window -hd -l "${new_window_size}" -c "${PWD}" "${full_cmd}"
 
     # clear the left window
     clear
