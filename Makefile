@@ -234,7 +234,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-nix configure-node configure-nvim configure-tmux configure-yamlfmt configure-yamllint
+configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-nix configure-node configure-nvim configure-tmux configure-yamlfmt configure-yamllint
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-aqua
@@ -275,8 +275,12 @@ e2e-test: bats-e2e tmux-e2e nvim-checkhealth ## Run all end-to-end tests.
 
 bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 	@# bash \
+	formatter="pretty"; \
+	if [[ "$(OUTPUT_FORMAT)" == "github" ]]; then \
+		formatter="tap"; \
+	fi; \
 	AQUA_VERSION=$(AQUA_VERSION) \
-		$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/e2e
+		$(REPO_ROOT)/bash/test/bats/bin/bats --formatter "$${formatter}" $(REPO_ROOT)/bash/test/e2e
 
 tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
 	@# bash \
@@ -898,6 +902,12 @@ configure-ghostty: $(XDG_CONFIG_HOME)/.created ## Configure Ghostty.
 	fi; \
 	mkdir -p "$${config_dir}"; \
 	ln -sf $(REPO_ROOT)/ghostty/config "$${config_dir}/config"
+
+.PHONY: configure-k9s
+configure-k9s: $(XDG_CONFIG_HOME)/.created ## Configure k9s.
+	@# bash \
+	mkdir -p $(XDG_CONFIG_HOME)/k9s; \
+	ln -sf $(REPO_ROOT)/k9s/config.yaml $(XDG_CONFIG_HOME)/k9s/config.yaml
 
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME)/.created ## Configure nix.
