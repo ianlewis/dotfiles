@@ -25,6 +25,10 @@ setup() {
     assert_file_executable "${E2E_HOME}/.local/bin/slsa-verifier"
 }
 
+@test "cosign is installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/bin/cosign"
+}
+
 @test "opencode is installed correctly" {
     assert_file_executable "${E2E_HOME}/.local/bin/opencode"
 }
