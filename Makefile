@@ -49,6 +49,16 @@ SLSA_VERIFIER_CHECKSUM.darwin.arm64 := 39ABFCF5F1D690C3E889CE3D2D6A8B87711424D83
 SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(kernel).$(arch))
 SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERIFIER_VERSION)/slsa-verifier-$(kernel)-$(arch)
 
+# TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
+# renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
+COSIGN_VERSION ?= v3.0.6
+COSIGN_REPO := github.com/sigstore/cosign
+COSIGN_CHECKSUM.linux.amd64 := c956e5dfcac53d52bcf058360d579472f0c1d2d9b69f55209e256fe7783f4c74
+COSIGN_CHECKSUM.linux.arm64 := bedac92e8c3729864e13d4a17048007cfafa79d5deca993a43a90ffe018ef2b8
+COSIGN_CHECKSUM.darwin.arm64 := 5fadd012ae6381a6a29ff86a7d39aa873878852f1073fc90b15995961ecfb084
+COSIGN_CHECKSUM ?= $(COSIGN_CHECKSUM.$(kernel).$(arch))
+COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-$(kernel)-$(arch)
+
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.57.1
 AQUA_REPO := github.com/aquaproj/aqua
@@ -237,7 +247,7 @@ install: install-tools install-runtimes configure ## Install and configure every
 configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-nix configure-node configure-nvim configure-tmux configure-yamlfmt configure-yamllint
 
 .PHONY: install-tools
-install-tools: install-bin install-slsa-verifier install-aqua
+install-tools: install-bin install-slsa-verifier install-cosign install-aqua
 
 .PHONY: install-runtimes
 install-runtimes: install-go install-node install-python install-ruby
@@ -977,6 +987,17 @@ $(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)/.created .
 
 .PHONY: install-slsa-verifier
 install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
+
+$(XDG_BIN_HOME)/cosign: $(XDG_BIN_HOME)/.created .
+	@# bash \
+	tempfile=$$($(MKTEMP) --suffix=".cosign-$(COSIGN_VERSION)"); \
+	curl -sSLo "$${tempfile}" "$(COSIGN_URL)"; \
+	echo "$(COSIGN_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
+	chmod +x "$${tempfile}"; \
+	mv "$${tempfile}" $@
+
+.PHONY: install-cosign
+install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
