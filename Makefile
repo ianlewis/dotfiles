@@ -51,7 +51,7 @@ SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERI
 
 # TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
 # renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
-COSIGN_VERSION ?= v3.0.5
+COSIGN_VERSION ?= v3.0.6
 COSIGN_REPO := github.com/sigstore/cosign
 COSIGN_CHECKSUM.linux.amd64 := c956e5dfcac53d52bcf058360d579472f0c1d2d9b69f55209e256fe7783f4c74
 COSIGN_CHECKSUM.linux.arm64 := bedac92e8c3729864e13d4a17048007cfafa79d5deca993a43a90ffe018ef2b8
