@@ -5,6 +5,32 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2026-05-20`
+
+- Updated `node-build` to v5.4.37
+  ([#764](https://github.com/ianlewis/dotfiles/pull/764)).
+
+## `2026-05-19`
+
+- Neovim: Detect `.yaml` GitHub Actions workflows as `yaml.ghaction` filetype
+  ([#759](https://github.com/ianlewis/dotfiles/pull/759)).
+- Install `cosign` out-of-band and update it to v3.0.6 to fix flaky installs
+  ([#760](https://github.com/ianlewis/dotfiles/pull/760)).
+
+## `2026-05-18`
+
+- Added a default read-only configuration for `k9s`
+  ([#757](https://github.com/ianlewis/dotfiles/pull/757)).
+
+## `2026-05-14`
+
+- Git: Disable hooks by default with `hooksPath = /dev/null`
+  ([#748](https://github.com/ianlewis/dotfiles/pull/748)).
+- Tmux: Restore the `-c` flag in `tmux-sessionizer` when creating sessions
+  ([#749](https://github.com/ianlewis/dotfiles/pull/749)).
+- Bash: Constrain `tw` alias depth to one level
+  ([#753](https://github.com/ianlewis/dotfiles/pull/753)).
+
 ## `2026-04-05`
 
 - Added bash completion support for `kubectl-aliases`
