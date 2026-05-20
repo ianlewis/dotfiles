@@ -102,8 +102,8 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.35
-NODENV_BUILD_SHA ?= d41e0a7c38abd870471a6a0bf91670349da69f78
+NODENV_BUILD_VERSION ?= v5.4.37
+NODENV_BUILD_SHA ?= ff78cce12ae222d06e6795be6d2e499342a94efb
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
