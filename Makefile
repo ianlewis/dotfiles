@@ -283,6 +283,7 @@ $(E2E_HOME)/.installed:
 .PHONY: e2e-test
 e2e-test: bats-e2e tmux-e2e nvim-checkhealth ## Run all end-to-end tests.
 
+.PHONY: bats-e2e
 bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 	@# bash \
 	formatter="pretty"; \
@@ -292,6 +293,7 @@ bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 	AQUA_VERSION=$(AQUA_VERSION) \
 		$(REPO_ROOT)/bash/test/bats/bin/bats --formatter "$${formatter}" $(REPO_ROOT)/bash/test/e2e
 
+.PHONY: tmux-e2e
 tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
 	@# bash \
 	# Check tmux config for parsing errors. This needs to be an e2e test \
@@ -299,6 +301,7 @@ tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
 	HOME="$(E2E_HOME)" \
 		tmux start-server \; source-file -n "$(E2E_HOME)/.tmux.conf"
 
+.PHONY: nvim-checkhealth
 nvim-checkhealth: $(E2E_HOME)/.installed ## Run Neovim checkhealth (e2e).
 	@# bash \
 	# Ensure the environment (PATH etc.) is set up properly and isn't polluted \
