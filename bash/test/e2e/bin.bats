@@ -29,16 +29,20 @@ setup() {
     assert_file_executable "${E2E_HOME}/.local/bin/cosign"
 }
 
-@test "opencode is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/opencode"
-}
-
 @test "claude is installed correctly" {
     assert_file_executable "${E2E_HOME}/.local/bin/claude"
 }
 
 @test "codex is installed correctly" {
     assert_file_executable "${E2E_HOME}/.local/bin/codex"
+}
+
+@test "copilot is installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/bin/copilot"
+}
+
+@test "opencode is installed correctly" {
+    assert_file_executable "${E2E_HOME}/.local/bin/opencode"
 }
 
 @test "scripts are installed correctly" {
