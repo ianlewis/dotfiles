@@ -60,7 +60,7 @@ COSIGN_CHECKSUM ?= $(COSIGN_CHECKSUM.$(kernel).$(arch))
 COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-$(kernel)-$(arch)
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.57.1
+AQUA_VERSION ?= v2.59.0
 AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM.linux.amd64 := 685df389dd8bf4dd4442ca496a2db744d25871351d0edcb1a59dcfa6bd7e7b39
 AQUA_CHECKSUM.linux.arm64 := dbdb45eb8214937e1b02e748b2b6d96b0d84fc5868dfe4d6ca46cc3bd525f9bb
@@ -81,7 +81,7 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.26.1
+GO_VERSION ?= 1.26.3
 GO_CHECKSUM.linux.amd64 := 031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a
 GO_CHECKSUM.linux.arm64 := a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7
 GO_CHECKSUM.darwin.arm64 := 353df43a7811ce284c8938b5f3c7df40b7bfb6f56cb165b150bc40b5e2dd541f
@@ -89,11 +89,11 @@ GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.26
+PYENV_INSTALL_VERSION ?= v2.6.31
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
 PYENV_INSTALL_SHA ?= 174c61526f37406a507f64deb9c99d533b1d56e1
 # renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
-PYENV_VIRTUALENV_VERSION ?= v1.3.0
+PYENV_VIRTUALENV_VERSION ?= v1.4.0
 PYENV_VIRTUALENV_SHA ?= 90dfbcad93c629b68801fce8a8df4a643ed24a48
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
@@ -102,7 +102,7 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.37
+NODENV_BUILD_VERSION ?= v5.4.38
 NODENV_BUILD_SHA ?= ff78cce12ae222d06e6795be6d2e499342a94efb
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
