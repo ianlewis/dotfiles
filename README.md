@@ -215,11 +215,3 @@ Neovim configuration is contained in the [`nvim`](./nvim) directory.
 ## Tmux
 
 Tmux configuration is contained in the [`tmux`](./tmux) directory.
-
-## Compatibility
-
-The scripts here should work on most Linux systems. I have tested them mostly on
-Debian-based systems. However, only partial support is provided for NixOS.
-
-These dotfiles have support for macOS (Darwin) on Apple silicon (ARM64).
-However, it still has not been tested so some features may still not work.
