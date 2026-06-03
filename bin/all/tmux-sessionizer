@@ -96,11 +96,13 @@ function _main() {
     # Read the all lines from fzf.
     # NOTE: fzf --print-query always prints the query as the first line. If
     #       there is a selection, it will be on the second line.
-    IFS=$'\n' readarray -t lines <<<"$(find \
-        "${base_dir}/" \
+    # NOTE: We cd into base_dir and use '.' as the find root so that fzf
+    #       shows relative paths (e.g. owner/repo) instead of absolute paths.
+    IFS=$'\n' readarray -t lines <<<"$(cd "${base_dir}" && find \
+        . \
         -mindepth "${program_options['mindepth']}" \
         -maxdepth "${program_options['maxdepth']}" \
-        -type d | fzf --query="${query}" --print-query ${select_option})"
+        -type d | sed 's|^\./||' | fzf --query="${query}" --print-query ${select_option})"
 
     if [[ ${#lines[@]} -eq 0 ]]; then
         return 0
@@ -119,7 +121,7 @@ function _main() {
         mkdir -p "${selected}"
     elif [[ ${#lines[@]} -ge 2 ]]; then
         # NOTE: First line is the query.
-        selected="${lines[1]}"
+        selected="${base_dir}/${lines[1]}"
     fi
 
     if [[ -z ${selected} ]]; then
