@@ -2251,6 +2251,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/go-acme/lego/v5.0.4/lego_v5.0.4_darwin_amd64.tar.gz",
+      "checksum": "B93051EF13AA038879D2CC9A69FD0B6A236BE1934CAAEDCA1D48117FA408685A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/go-acme/lego/v5.0.4/lego_v5.0.4_darwin_arm64.tar.gz",
+      "checksum": "21FD2C0CAF4DEF2C9BF909187FD5CFACCCC682045EFCF932F10F1E2B8845CD5D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/go-acme/lego/v5.0.4/lego_v5.0.4_linux_amd64.tar.gz",
+      "checksum": "B9EE4E690DD4D516C52C4DC71988CABA474FC804A28DAAF0760FBDA3030FF95D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/go-acme/lego/v5.0.4/lego_v5.0.4_linux_arm64.tar.gz",
+      "checksum": "FE831BB1147CDAA2E0527DBA0FB7C9BB3E9BCDB187619BEE165E4CB6F260CA5F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/go-acme/lego/v5.0.4/lego_v5.0.4_windows_amd64.zip",
+      "checksum": "4797577BE3E4F1BE6D07053235B0DAF1715F1270B6A116ACC5E3A04DB7A082BC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/go-acme/lego/v5.0.4/lego_v5.0.4_windows_arm64.zip",
+      "checksum": "3B90CD5C3620B6590C6CD709B7C48C237A4E5F4B4923BA0F2BD420DE8A49A7F7",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/golangci/golangci-lint/v1.64.8/golangci-lint-1.64.8-darwin-amd64.tar.gz",
       "checksum": "B52AEBB8CB51E00BFD5976099083FBE2C43EF556CEF9C87E58A8AE656E740444",
       "algorithm": "sha256"
