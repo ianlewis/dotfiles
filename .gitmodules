@@ -104,3 +104,6 @@
 [submodule "bash/lib/complete-alias"]
 	path = bash/lib/complete-alias
 	url = https://github.com/cykerway/complete-alias.git
+[submodule "bash/lib/ble.sh"]
+	path = bash/lib/ble.sh
+	url = https://github.com/akinomyoga/ble.sh.git
