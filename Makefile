@@ -84,7 +84,7 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 GO_VERSION ?= 1.26.4
 GO_CHECKSUM.linux.amd64 := 1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f
 GO_CHECKSUM.linux.arm64 := ef758ae7c6cf9267c9c0ef080b8965f453d89ab2d25d9eb22de4405925238768
-GO_CHECKSUM.darwin.arm64 := 9d35ecdcc142f3f2b9010b495ee0051e64ccd7bcf340d3c1258fe2ceb1026c87
+GO_CHECKSUM.darwin.arm64 := b62ad2b6d7d2464f12a5bcad7ff47f19d08325773b5efd21610e445a05a9bf53
 GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
