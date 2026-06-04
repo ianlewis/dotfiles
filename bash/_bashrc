@@ -464,7 +464,7 @@ function _bashrc_main() {
     fi
 
     # Start ble.sh
-    [[ ! ${BLE_VERSION-} ]] || ble-attach
+    [[ -n ${BLE_VERSION-} ]] && ble-attach
 }
 
 _bashrc_main

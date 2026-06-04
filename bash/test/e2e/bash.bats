@@ -56,3 +56,7 @@ setup() {
 @test "sbp config directory is linked correctly" {
     assert_symlink_to "${BASE_PATH}/bash/sbp" "${E2E_HOME}/.config/sbp"
 }
+
+@test "ble.sh config directory is linked correctly" {
+    assert_symlink_to "${BASE_PATH}/bash/blesh" "${E2E_HOME}/.config/blesh"
+}
