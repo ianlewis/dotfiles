@@ -22,9 +22,12 @@ home directory which makes it easy to test out configuration.
 ## Features
 
 - Tokyo Night color scheme for Neovim, Tmux, and Bash prompt.
-- [Bash](./bash) prompt with git, Python virtualenv, and Nix shell integration.
-- [Bash completion](./bash/_bash_completion) with custom completions for various tools.
-- [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful plugins.
+- [Bash](./bash) prompt with syntax highlighting, auto-suggestions, and
+  integration with git, Python virtualenv, and Nix shell.
+- [Bash completion](./bash/_bash_completion) with custom completions for various
+  tools and aliases.
+- [Neovim configuration](./nvim) with LSP support, Treesitter, and many useful
+  plugins.
 
 ## Supported Environments
 

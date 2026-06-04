@@ -5,12 +5,13 @@ scripts.
 
 ## Features
 
-- [`sbp`](https://github.com/brujoand/sbp) prompt in Tokyo Night color scheme with
+- [`sbp`] prompt in Tokyo Night color scheme with
   git, Python virtualenv, and Nix shell integration.
+- CLI syntax highlighting and auto-suggestions with [`ble.sh`].
 - [Bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
   addition to the system default completions.
 - [Bash aliases](./_bash_aliases) for common commands, including
-  [`kubectl-aliases`](https://github.com/ahmetb/kubectl-aliases).
+  [`kubectl-aliases`].
 - `ssh-agent` integration to find the running ssh-agent and set the
   `SSH_AUTH_SOCK` environment variable.
 - `tmux` integration to set the terminal title and display the current working
@@ -42,6 +43,8 @@ configuration etc..
 - [`sbp`]: A simple bash prompt library that provides a simple way to customize
   the bash prompt. It is used in `.bashrc` to set the prompt. A local
   `.sbp.settings.local.conf` is loaded if it exists.
+- [`ble.sh`]: A line editor for bash that provides features like syntax
+  highlighting and auto-suggestions.
 - [`kubectl-aliases`]: A library that provides a set of `kubectl` aliases for
   common `kubectl` commands. It is used in `.bash_aliases` to set the aliases.
 - [`ssh-find-agent`]: A library that provides a way to find the ssh agent socket
@@ -49,6 +52,7 @@ configuration etc..
   found, it starts a new instance. It is used in `.bashrc` to set the
   `SSH_AUTH_SOCK` variable.
 
+[`ble.sh`]: https://github.com/akinomyoga/ble.sh
 [`sbp`]: https://github.com/brujoand/sbp
 [`kubectl-aliases`]: https://github.com/ahmetb/kubectl-aliases
 [`ssh-find-agent`]: https://github.com/wwalker/ssh-find-agent
