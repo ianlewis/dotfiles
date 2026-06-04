@@ -820,6 +820,7 @@ configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqu
 .PHONY: configure-bash
 configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configure bash.
 	@# bash \
+	$(MAKE) -C $(REPO_ROOT)/bash/lib/ble.sh build; \
 	rm -f \
 		$(HOME)/.inputrc \
 		$(HOME)/.profile \
@@ -839,7 +840,8 @@ configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configu
 	ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
 	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
 	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
-	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
+	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp; \
+	ln -sf $(REPO_ROOT)/blesh $(XDG_CONFIG_HOME)/blesh
 
 .PHONY: configure-bat
 configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.

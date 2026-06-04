@@ -24,6 +24,12 @@
 # NOTE: Though this file does not set `nounset` (set -u) itself, it is sourced
 #       with `nounset` set in tests.
 
+# Source the ble.sh library if running interactively.
+# NOTE: sourcing ble.sh should be done outside of shell functions.
+#       https://github.com/akinomyoga/ble.sh#13-set-up-bashrc
+# shellcheck source=/dev/null
+[[ $- == *i* ]] && source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
+
 # _bashrc_setup_homebrew initializes the Homebrew environment on macOS.
 function _bashrc_setup_homebrew() {
     if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -456,6 +462,9 @@ function _bashrc_main() {
         # shellcheck source=/dev/null
         source "/google/devshell/bashrc.google"
     fi
+
+    # Start ble.sh
+    [[ ! ${BLE_VERSION-} ]] || ble-attach
 }
 
 _bashrc_main
