@@ -60,11 +60,11 @@ COSIGN_CHECKSUM ?= $(COSIGN_CHECKSUM.$(kernel).$(arch))
 COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-$(kernel)-$(arch)
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.59.0
+AQUA_VERSION ?= v2.59.1
 AQUA_REPO := github.com/aquaproj/aqua
-AQUA_CHECKSUM.linux.amd64 := 685df389dd8bf4dd4442ca496a2db744d25871351d0edcb1a59dcfa6bd7e7b39
-AQUA_CHECKSUM.linux.arm64 := dbdb45eb8214937e1b02e748b2b6d96b0d84fc5868dfe4d6ca46cc3bd525f9bb
-AQUA_CHECKSUM.darwin.arm64 := 81f908c93263ba83bc06ba81d75e2594390b676ea131bb3f7691a0d4575948e4
+AQUA_CHECKSUM.linux.amd64 := f2ec38dece860fee4fc48d1213da176fa7bd900e95036cac8d952800d91644e7
+AQUA_CHECKSUM.linux.arm64 := 92298717b849c4baa36947dc4fcdedf7a542a2686dbc939a0dcda83d891b9a25
+AQUA_CHECKSUM.darwin.arm64 := 8c658418ba81cf2629813d374358f3dfe13c6715d27ccb476baf85c873acc501t
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
@@ -81,20 +81,20 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.26.3
-GO_CHECKSUM.linux.amd64 := 031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a
-GO_CHECKSUM.linux.arm64 := a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7
-GO_CHECKSUM.darwin.arm64 := 353df43a7811ce284c8938b5f3c7df40b7bfb6f56cb165b150bc40b5e2dd541f
+GO_VERSION ?= 1.26.4
+GO_CHECKSUM.linux.amd64 := 1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f
+GO_CHECKSUM.linux.arm64 := ef758ae7c6cf9267c9c0ef080b8965f453d89ab2d25d9eb22de4405925238768
+GO_CHECKSUM.darwin.arm64 := 9d35ecdcc142f3f2b9010b495ee0051e64ccd7bcf340d3c1258fe2ceb1026c87
 GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.6.31
+PYENV_INSTALL_VERSION ?= v2.7.1
 # NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= 174c61526f37406a507f64deb9c99d533b1d56e1
+PYENV_INSTALL_SHA ?= 45180928d34ce5adf21931a494881bbf502ef6bd
 # renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
 PYENV_VIRTUALENV_VERSION ?= v1.4.0
-PYENV_VIRTUALENV_SHA ?= 90dfbcad93c629b68801fce8a8df4a643ed24a48
+PYENV_VIRTUALENV_SHA ?= eda64556af9b2992386deeb75dad2130899fc4c9
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
@@ -102,8 +102,8 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.38
-NODENV_BUILD_SHA ?= ff78cce12ae222d06e6795be6d2e499342a94efb
+NODENV_BUILD_VERSION ?= v5.4.39
+NODENV_BUILD_SHA ?= e3e444085c1a52b33b85639a7fd519eb3535f352
 
 # renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
 RBENV_INSTALL_VERSION ?= v1.3.2
