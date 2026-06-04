@@ -44,7 +44,7 @@ packages:
   - name: golang.org/x/tools/gopls@v0.22.0
   - name: mvdan/gofumpt@v0.10.0
   - name: hadolint/hadolint@v2.14.0
-  - name: Automattic/harper/harper-ls@v1.12.0
+  - name: Automattic/harper/harper-ls@v2.1.0
   - name: dandavison/delta@0.19.2
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.4.2
