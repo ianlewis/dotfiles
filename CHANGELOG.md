@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## `2026-06-04`
 
-- Add support for `ble.sh` as a Bash completion engine
+- Add support for `ble.sh` for interactive Bash syntax highlighting
   ([#766](https://github.com/ianlewis/dotfiles/issues/766)).
 
 ## `2026-04-05`

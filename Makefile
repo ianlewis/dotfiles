@@ -830,7 +830,8 @@ configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configu
 		$(HOME)/.bash_completion \
 		$(HOME)/.bash_logout \
 		$(XDG_DATA_HOME)/bash/lib \
-		$(XDG_CONFIG_HOME)/sbp; \
+		$(XDG_CONFIG_HOME)/sbp \
+		$(XDG_CONFIG_HOME)/blesh; \
 	mkdir -p $(XDG_DATA_HOME)/bash; \
 	ln -sf $(REPO_ROOT)/bash/lib $(XDG_DATA_HOME)/bash/lib; \
 	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
@@ -841,7 +842,7 @@ configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configu
 	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
 	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
 	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp; \
-	ln -sf $(REPO_ROOT)/blesh $(XDG_CONFIG_HOME)/blesh
+	ln -sf $(REPO_ROOT)/bash/blesh $(XDG_CONFIG_HOME)/blesh
 
 .PHONY: configure-bat
 configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
