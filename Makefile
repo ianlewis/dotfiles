@@ -831,6 +831,7 @@ configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configu
 		$(HOME)/.bash_logout \
 		$(XDG_DATA_HOME)/bash/lib \
 		$(XDG_CONFIG_HOME)/sbp; \
+		$(XDG_CONFIG_HOME)/blesh; \
 	mkdir -p $(XDG_DATA_HOME)/bash; \
 	ln -sf $(REPO_ROOT)/bash/lib $(XDG_DATA_HOME)/bash/lib; \
 	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
