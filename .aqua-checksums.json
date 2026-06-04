@@ -101,6 +101,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-linux-aarch64.zip",
+      "checksum": "0EF2EBF0B7E5A652B65C4CB96C6D9FFB3981A98547DE3C764465BBF54A8D761A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-linux-x86_64-musl.zip",
+      "checksum": "CA6F1CF52EAF69E6632B81ACEF9C197AA24B85EB30D2455A35E7DBE28AE77C72",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-macos-aarch64.zip",
+      "checksum": "92FF0889E16324801BC072692974BB67F8161E62010FC90F96C62A17F81F32C7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-macos-x86_64.zip",
+      "checksum": "53C50A1605D0A6345D160A1A5A21DB40BCF2BF9CD23C17F7C277A63A1BFF3A7F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-windows-x86_64.zip",
+      "checksum": "E77D0EA1226B8B389B43F702240091249A96EEA25857281F90EA24D0EB9EB969",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/Kampfkarren/selene/0.28.0/selene-0.28.0-linux.zip",
       "checksum": "5D8706751968486D46D120316B108154693052F75AF60EFB3DBF4D4CF9E4D902",
       "algorithm": "sha256"
@@ -143,6 +168,21 @@
     {
       "id": "github_release/github.com/Kampfkarren/selene/0.30.1/selene-0.30.1-windows.zip",
       "checksum": "B55A8592BA6FFD54C88EDD3396348E43D581494C2C255CD2D02C8C26B96080F4",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-linux.zip",
+      "checksum": "DAC452422747999EC4919BBB8BB52992B66AAE533B60022BF005669DE8616671",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-macos.zip",
+      "checksum": "67F644E57E14CCB74A0C272BC44AF0DC7909D8BDFF58E4E59BB3524717DA5741",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-windows.zip",
+      "checksum": "C5D5D087DAA8E38BD71680B2202A407E5D4BC00FD584A648DEC17EF9B29A2B73",
       "algorithm": "sha256"
     },
     {
@@ -476,6 +516,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_darwin_amd64",
+      "checksum": "6FEEDAFC72915794163114F512348E2437D080D0047EF8B8FA2EC63B575F12AF",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_darwin_arm64",
+      "checksum": "9680526BE4A66EA1FFE988ED08AF58E1400FE1E4F4AEF5BD88B20BB9B3DA33F8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_linux_amd64",
+      "checksum": "FB096C5D1AC6BEABBDBAA2874D025BADB03EE07929F0C9FF67563CE8C75398B1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_linux_arm64",
+      "checksum": "32D92ACAA5CD8ABB29FC49DAC123DC412442D5713967819D8AF2C29F1B3857C7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_windows_amd64.exe",
+      "checksum": "60CD368533D0AD73FA86D93D5BBF95EF40587245CE684ED138C1B31557B5FE97",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/rhysd/actionlint/v1.7.11/actionlint_1.7.11_darwin_amd64.tar.gz",
       "checksum": "17FFC17FED8F0258EF6AD4AED932D3272464C7EF7D64E1CB0D65AA97C9752107",
       "algorithm": "sha256"
@@ -503,6 +568,36 @@
     {
       "id": "github_release/github.com/rhysd/actionlint/v1.7.11/actionlint_1.7.11_windows_arm64.zip",
       "checksum": "4900EB60E084604850935705306305F0BB0CA532E07C2B4AE642917142ABA75D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.12/actionlint_1.7.12_darwin_amd64.tar.gz",
+      "checksum": "5B44C3BC2255115C9B69E30EFC0FECDF498FDB63C5D58E17084FD5F16324C644",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.12/actionlint_1.7.12_darwin_arm64.tar.gz",
+      "checksum": "ABA9CED2DEE8D27FECCA3DC7FEB1A7F9A52CAEFA1EB46F3271EA66B6E0E6953F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz",
+      "checksum": "8ACA8DB96F1B94770F1B0D72B6DDDCB1EBB8123CB3712530B08CC387B349A3D8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.12/actionlint_1.7.12_linux_arm64.tar.gz",
+      "checksum": "325E971B6BA9BFA504672E29BE93C24981EEB1C07576D730E9F7C8805AFFF0C6",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.12/actionlint_1.7.12_windows_amd64.zip",
+      "checksum": "6E7241B51E6817EA6A047693D8E6FED13B31819C9A0DD6C5A726E1592D22F6E9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.12/actionlint_1.7.12_windows_arm64.zip",
+      "checksum": "CADCF7EA4EFE3A68728893813643CEBE1185E5B1D4BE5B96245F65C9A4D5EA41",
       "algorithm": "sha256"
     },
     {
@@ -688,6 +783,11 @@
     {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.486.0/registry.yaml",
       "checksum": "C37EB2C6D865B586E781B2410FC7EC52F699EF8FC482410E6A9167152EDA330F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.514.0/registry.yaml",
+      "checksum": "E6642BD2698BDAE1BAA8C17E92CAC47507CE77521B520B1ABB3C9F42416F644A",
       "algorithm": "sha256"
     }
   ]
