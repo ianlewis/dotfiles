@@ -28,7 +28,9 @@
 # NOTE: sourcing ble.sh should be done outside of shell functions.
 #       https://github.com/akinomyoga/ble.sh#13-set-up-bashrc
 # shellcheck source=/dev/null
-[[ $- == *i* ]] && source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
+if [[ $- == *i* ]]; then
+    source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
+fi
 
 # _bashrc_setup_homebrew initializes the Homebrew environment on macOS.
 function _bashrc_setup_homebrew() {
