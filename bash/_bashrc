@@ -28,7 +28,7 @@
 # NOTE: sourcing ble.sh should be done outside of shell functions.
 #       https://github.com/akinomyoga/ble.sh#13-set-up-bashrc
 # shellcheck source=/dev/null
-if [[ $- == *i* ]]; then
+if [[ $- =~ i ]]; then
     source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
 fi
 
