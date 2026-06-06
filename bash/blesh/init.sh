@@ -33,7 +33,7 @@ bleopt exec_elapsed_mark=""
 bleopt exec_elapsed_enabled=""
 #}}}
 
-##{{{ "exec_errexit_mark" specifies the the mark to show the exit status
+##{{{ "exec_errexit_mark" specifies the mark to show the exit status
 ## of the command when it is non-zero.  If this setting is an empty string, the
 ## exit status will not be shown.  The value can contain ANSI escape sequences.
 
