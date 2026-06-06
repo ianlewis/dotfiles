@@ -22,16 +22,35 @@
 
 set -o vi
 
-## "exec_errexit_mark" specifies the format of the mark to show the exit status
+##{{{ "edit_bell" controls the behavior of the bell.
+
+bleopt edit_bell=none
+#}}}
+
+##{{{ "exec_elapsed_mark" specifies the format of the execution time report.
+
+bleopt exec_elapsed_mark=""
+bleopt exec_elapsed_enabled=""
+#}}}
+
+##{{{ "exec_errexit_mark" specifies the mark to show the exit status
 ## of the command when it is non-zero.  If this setting is an empty string, the
 ## exit status will not be shown.  The value can contain ANSI escape sequences.
 
 bleopt exec_errexit_mark=""
+#}}}
 
-## "exec_exit_mark" specifies the marker printed when the bash session ends.
+##{{{ "exec_exit_mark" specifies the marker printed when the bash session ends.
 ## When an empty string is specified, the marker is disabled.
 
 bleopt exec_exit_mark=""
+#}}}
+
+##{{{ "prompt_eol_mark" specifies the contents of the mark used to indicate the
+## command output is not ended with newlines.
+
+bleopt prompt_eol_mark=""
+#}}}
 
 #{{{ ble/widget/discard-and-enter-insert clears the current line.
 function ble/widget/discard-and-enter-insert {
