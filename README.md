@@ -58,6 +58,8 @@ You can install the required packages on Debian-based Linux distributions with
 sudo apt-get update
 sudo apt-get install -y \
     coreutils \
+    gawk \
+    grep \
     libffi-dev \
     liblzma-dev \
     libreadline-dev \
@@ -65,7 +67,6 @@ sudo apt-get install -y \
     libssl-dev \
     libyaml-dev \
     make \
-    gawk \
     util-linux \
     zlib1g-dev
 ```
