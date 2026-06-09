@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add [Neovim](https://neovim.io/) as a global tool
   ([#799](https://github.com/ianlewis/dotfiles/issues/799)).
-- Add a ssh config file (`~/.ssh/config`)
+- Add a ssh configuration file (`~/.ssh/config`)
   ([#769](https://github.com/ianlewis/dotfiles/issues/769)).
 - Use [`wsdjeg/bufdel.nvim`](https://github.com/wsdjeg/bufdel.nvim) for
   `<leader>bd` buffer deletion in Neovim
