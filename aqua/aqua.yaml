@@ -71,4 +71,4 @@ packages:
   - name: bazelbuild/bazel@9.1.0
   - name: derailed/k9s@v0.50.18
   - name: kubernetes-sigs/krew@v0.5.0
-  - name: neovim/neovim@v0.12.2
+  - name: neovim/neovim@v0.11.2
