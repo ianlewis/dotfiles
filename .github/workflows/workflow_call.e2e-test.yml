@@ -50,26 +50,22 @@ jobs:
         with:
           node-version-file: ".node-version"
 
-      - name: install nvim
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PLATFORM: ${{ matrix.platform }}
+      - name: install dependencies
         run: |
-          arch="x86_64"
-          if [ "${PLATFORM}" == "ubuntu-24.04-arm" ]; then
-            arch="arm64"
-          fi
-
-          gh release download \
-            --repo neovim/neovim \
-            --pattern "nvim-linux-${arch}.tar.gz" \
-            "${NVIM_VERSION}"
-
-          sudo tar \
-            --strip-components=1 \
-            -C /usr/local \
-            -x \
-            -f nvim-linux-${arch}.tar.gz
+          sudo apt-get update
+          sudo apt-get install -y \
+              coreutils \
+              gawk \
+              grep \
+              libffi-dev \
+              liblzma-dev \
+              libreadline-dev \
+              libsqlite3-dev \
+              libssl-dev \
+              libyaml-dev \
+              make \
+              util-linux \
+              zlib1g-dev
 
       - name: e2e-test
         env:
@@ -112,23 +108,6 @@ jobs:
               libyaml \
               xz \
               tmux
-
-      - name: install nvim
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          arch="arm64"
-
-          gh release download \
-            --repo neovim/neovim \
-            --pattern "nvim-macos-${arch}.tar.gz" \
-            "${NVIM_VERSION}"
-
-          sudo tar \
-            --strip-components=1 \
-            -C /usr/local \
-            -x \
-            -f nvim-macos-${arch}.tar.gz
 
       - name: e2e-test
         env:

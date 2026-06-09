@@ -99,6 +99,12 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
+@test "nvim installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/nvim" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "yamlfmt installed correctly" {
     assert_symlink_to \
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/yamlfmt" \
