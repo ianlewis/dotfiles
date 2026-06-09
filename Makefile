@@ -244,7 +244,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-nix configure-node configure-nvim configure-tmux configure-yamlfmt configure-yamllint
+configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-nix configure-node configure-nvim configure-ssh configure-tmux configure-yamlfmt configure-yamllint
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-cosign install-aqua
@@ -952,6 +952,13 @@ configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.cr
 	@# bash \
 	rm -rf $(XDG_CONFIG_HOME)/nvim; \
 	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
+
+.PHONY: configure-ssh
+configure-ssh: ## Configure ssh.
+	@# bash \
+	mkdir -p $(HOME)/.ssh/conf.d; \
+ 	chmod 0700 $(HOME)/.ssh $(HOME)/.ssh/conf.d; \
+	ln -sf $(REPO_ROOT)/ssh/config $(HOME)/.ssh/config
 
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
