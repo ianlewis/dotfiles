@@ -62,27 +62,6 @@ jobs:
             libyaml-dev \
             zlib1g-dev
 
-      - name: install nvim
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PLATFORM: ${{ matrix.platform }}
-        run: |
-          arch="x86_64"
-          if [[ "${PLATFORM}" == *"arm" ]]; then
-            arch="arm64"
-          fi
-
-          gh release download \
-            --repo neovim/neovim \
-            --pattern "nvim-linux-${arch}.tar.gz" \
-            "${NVIM_VERSION}"
-
-          sudo tar \
-            --strip-components=1 \
-            -C /usr/local \
-            -x \
-            -f nvim-linux-${arch}.tar.gz
-
       - name: e2e-test
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -124,23 +103,6 @@ jobs:
               libyaml \
               xz \
               tmux
-
-      - name: install nvim
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          arch="arm64"
-
-          gh release download \
-            --repo neovim/neovim \
-            --pattern "nvim-macos-${arch}.tar.gz" \
-            "${NVIM_VERSION}"
-
-          sudo tar \
-            --strip-components=1 \
-            -C /usr/local \
-            -x \
-            -f nvim-macos-${arch}.tar.gz
 
       - name: e2e-test
         env:
