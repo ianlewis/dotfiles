@@ -57,3 +57,18 @@ vim.opt.textwidth = 80
 -- Set the colorcolumn width. Make it one column right of textwidth so that the
 -- last character doesn't overlap the color column.
 vim.opt.colorcolumn = "+1"
+
+-- If running over SSH, override the clipboard provider to use OSC52
+if vim.env.SSH_TTY then
+	vim.g.clipboard = {
+		name = "OSC 52",
+		copy = {
+			["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+			["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+		},
+		paste = {
+			["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+			["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+		},
+	}
+end
