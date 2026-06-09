@@ -948,8 +948,8 @@ configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.cr
 .PHONY: configure-ssh
 configure-ssh: ## Configure ssh.
 	@# bash \
-	mkdir -m 0700 $(HOME)/.ssh; \
-	mkdir -m 0700 $(HOME)/.ssh/conf.d; \
+	mkdir -p $(HOME)/.ssh/conf.d; \
+ 	chmod 0700 $(HOME)/.ssh $(HOME)/.ssh/conf.d; \
 	ln -sf $(REPO_ROOT)/ssh/config $(HOME)/.ssh/config
 
 .PHONY: configure-tmux
