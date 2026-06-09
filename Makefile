@@ -264,7 +264,13 @@ unit-test: bats-unit ## Run unit tests.
 .PHONY: bats
 bats-unit: ## Run Bats unit tests.
 	@# bash \
-	$(REPO_ROOT)/bash/test/bats/bin/bats $(REPO_ROOT)/bash/test/unit
+	formatter="pretty"; \
+	if [[ "$(OUTPUT_FORMAT)" == "github" ]]; then \
+		formatter="tap"; \
+	fi; \
+	$(REPO_ROOT)/bash/test/bats/bin/bats \
+		--formatter "$${formatter}" \
+		$(REPO_ROOT)/bash/test/unit
 
 $(E2E_HOME)/.installed:
 	@# bash \
@@ -291,7 +297,9 @@ bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 		formatter="tap"; \
 	fi; \
 	AQUA_VERSION=$(AQUA_VERSION) \
-		$(REPO_ROOT)/bash/test/bats/bin/bats --formatter "$${formatter}" $(REPO_ROOT)/bash/test/e2e
+		$(REPO_ROOT)/bash/test/bats/bin/bats \
+			--formatter "$${formatter}" \
+			$(REPO_ROOT)/bash/test/e2e
 
 .PHONY: tmux-e2e
 tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
