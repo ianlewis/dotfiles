@@ -107,3 +107,6 @@
 [submodule "bash/lib/ble.sh"]
 	path = bash/lib/ble.sh
 	url = https://github.com/akinomyoga/ble.sh.git
+[submodule "nvim/pack/nvim/start/bufdel.nvim"]
+	path = nvim/pack/nvim/start/bufdel.nvim
+	url = https://github.com/wsdjeg/bufdel.nvim.git

@@ -22,10 +22,9 @@ vim.keymap.set({ "n", "v", "o" }, "t", "k")
 vim.keymap.set({ "n", "v", "o" }, "s", "l")
 
 -- Close the current buffer in a split without closing the split itself.
--- This switches to the "previously opened buffer" before closing the original
--- buffer so it could be better as sometimes there isn't really a "previously
--- opened buffer".
-vim.keymap.set({ "n", "v", "o" }, "<leader>bd", ":bp|sp|bn|bd<cr>")
+vim.keymap.set({ "n", "v", "o" }, "<leader>bd", "<cmd>Bdelete<cr>")
+vim.keymap.set({ "n", "v", "o" }, "<leader>bD", "<cmd>Bdelete!<cr>")
+vim.keymap.set({ "n", "v", "o" }, "<leader>bw", "<cmd>Bwipeout<cr>")
 
 -- Open files in the directory of the currently opened file.
 vim.keymap.set("n", "<leader>e", ":e %:h/")
