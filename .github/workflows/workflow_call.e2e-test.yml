@@ -50,13 +50,25 @@ jobs:
         with:
           node-version-file: ".node-version"
 
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libffi-dev \
+            liblzma-dev \
+            libreadline-dev \
+            libsqlite3-dev \
+            libssl-dev \
+            libyaml-dev \
+            zlib1g-dev
+
       - name: install nvim
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PLATFORM: ${{ matrix.platform }}
         run: |
           arch="x86_64"
-          if [ "${PLATFORM}" == "ubuntu-24.04-arm" ]; then
+          if [[ "${PLATFORM}" == *"arm" ]]; then
             arch="arm64"
           fi
 

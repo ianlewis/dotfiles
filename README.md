@@ -47,9 +47,28 @@ Some packages and tools need to be installed for these dotfiles to work.
   implementation, `getopt`, and `mktemp`. On many Linux distributions these are
   provided by packages such as `make`, `grep`, `gawk`/`mawk`, `util-linux`, and
   `coreutils`, respectively.
-- `zlib1g-dev`, `libssl-dev`, `libsqlite3-dev`, and `libzma-dev` are needed for
-  installing Python.
+- `liblzma-dev`, `libreadline-dev`, `libsqlite3-dev`, `libssl-dev`, and
+  `zlib1g-dev` are needed for installing Python.
 - `libffi-dev` and `libyaml-dev` are needed for installing Ruby.
+
+You can install the required packages on Debian-based Linux distributions with
+`apt`:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+    coreutils \
+    libffi-dev \
+    liblzma-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libyaml-dev \
+    make \
+    gawk \
+    util-linux \
+    zlib1g-dev
+```
 
 ### macOS
 
@@ -58,8 +77,7 @@ Some packages and tools need to be installed for these dotfiles to work.
 - `libyaml`: An installation of `libyaml` is also required to install Ruby.
 - `xz`: `libzma` should be installed for Python.
 
-On macOS you can install the required packages with
-[Homebrew](https://brew.sh/).
+You can install the required packages with [Homebrew](https://brew.sh/).
 
 ```bash
 brew install \
