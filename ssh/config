@@ -1,0 +1,10 @@
+# vim: set filetype=sshconfig:
+
+# Set default connection handling config for all hosts.
+Host *
+    ConnectTimeout 15
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# Load local config
+Include ~/.ssh/conf.d/*.conf
