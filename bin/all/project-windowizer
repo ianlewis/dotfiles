@@ -18,13 +18,14 @@
 set -euo pipefail
 
 # project-windowizer splits the current tmux window into two panes. The left
-# pane is sized to 80 columns. The right pane is size to fill the rest of the
-# window and runs the command provided as an argument. If no command is
-# provided, it defaults to running `nvim`.
+# pane is sized to 80 columns by default. The right pane is size to fill the
+# rest of the window and runs the command provided as an argument. If no command
+# is provided, it defaults to running `nvim`.
 
 function _main() {
     # These variables are used by the argsparse library.
     local program_params
+    local program_options
     local argsparse_usage_description
 
     # shellcheck source=/dev/null
@@ -34,6 +35,8 @@ function _main() {
 
     # shellcheck source=/dev/null
     . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
+
+    argsparse_use_option "width" "Width of the left pane." "value" "default:80" "short:w" "type:uint"
 
     # Command is optional and could contain many parts.
     argsparse_describe_parameters "COMMAND*"
@@ -59,23 +62,31 @@ function _main() {
 
     local pw_cmd=("${program_params[@]:-"nvim"}")
 
-    # Calculate the new size by subtracting 81 columns from the current window
-    # width. This leaves 80 columns for the left pane and 1 column for the
-    # separator.
+    # Calculate the new size by subtracting width + 1 columns from the current
+    # window width. This leaves `width` columns for the left pane and 1 column
+    # for the separator.
+    local left_pane_width=$((program_options["width"] + 1))
     local tmux_window_width
     tmux_window_width=$(tmux display-message -p "#{window_width}")
-    local new_window_size=$((tmux_window_width - 81))
+    local new_window_size=$((tmux_window_width - left_pane_width))
 
     # Run the command in the right pane, defaulting to `nvim`.
-    # Explicitly start nvim in an interactive bash shell to ensure the command
-    # runs with a full terminal environment.
-    local full_cmd="bash -i -c '${pw_cmd[*]}'"
-
-    # If the user explicitly passed "bash" as the first argument, run bash
-    # directly instead of wrapping it in another bash shell.
+    # First we run bash with --norc and --noprofile to change directory to the
+    # current directory. This is done to preserve the path with symlinks. Using
+    # tmux -c will resolve the path and lose the symlinks.
+    #
+    # Then we exec bash to replace the current process with a new interactive
+    # bash that will run the full bash environment (e.g. .bashrc etc.).
+    local pwd_escaped
+    printf -v pwd_escaped "%q" "${PWD}"
+    local sub_cmd="bash -i -c '${pw_cmd[*]}'"
+    # If the user explicitly passed "bash" as the first argument, run bash with
+    # their chosen arguments directly instead of wrapping it in another bash
+    # shell.
     if [[ ${program_params[0]:-""} == "bash" ]]; then
-        full_cmd="${program_params[*]}"
+        sub_cmd="${program_params[*]}"
     fi
+    local full_cmd="bash --norc --noprofile -c \"cd -- ${pwd_escaped} && exec ${sub_cmd}\""
 
     tmux split-window -hd -l "${new_window_size}" "${full_cmd}"
 
