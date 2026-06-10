@@ -32,6 +32,16 @@ if [[ $- =~ i ]]; then
     source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
 fi
 
+# Override the builtin `cd` command to set the current working directory in the
+# tmux environment.
+cd() {
+    if [[ -n ${TMUX} ]]; then
+        tmux set-environment -g "TMUX_PWD_$(tmux display-message -p "#I")" "${PWD}"
+    fi
+    # shellcheck disable=SC2164 # Directly invoking cd is intentional.
+    builtin cd "$@"
+}
+
 # _bashrc_setup_homebrew initializes the Homebrew environment on macOS.
 function _bashrc_setup_homebrew() {
     if [[ "$(uname -s)" == "Darwin" ]]; then
