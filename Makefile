@@ -1049,7 +1049,7 @@ $(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt/.created
 .PHONY: install-node
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
 
-# Installs nodeenv
+# Installs nodenv
 $(NODENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	@# bash \
 	# TODO(#609): Update dependency on configure-node. \
@@ -1109,7 +1109,6 @@ nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODE
 		nointegrity=$$(jq '.packages | del(."") | .[] | select(has("integrity") | not)' < $@); \
 		noresolved=$$(jq '.packages | del(."") | .[] | select(has("resolved") | not)' < $@); \
 	fi; \
-	cd $(REPO_ROOT)/nodenv; \
 	if [ ! -f "$@" ] || [ -n "$${nointegrity}" ] || [ -n "$${noresolved}" ]; then \
 		# NOTE: package-lock.json is removed to ensure that npm includes the \
 		# integrity field. npm install will not restore this field if \
@@ -1118,12 +1117,14 @@ nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODE
 		# NOTE: We clean the node_modules directory to ensure that npm install \
 		#       will not desync between the package.json, package-lock.json \
 		#       and the node_modules directory. \
-		$(RM) -rf $(REPO_ROOT)/nodeenv/node_modules; \
+		$(RM) -rf nodenv/node_modules; \
 		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
+			--prefix ./nodenv \
 			--no-audit \
 			--no-fund; \
 	else \
 		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
+			--prefix ./nodenv \
 			--package-lock-only \
 			--no-audit \
 			--no-fund; \
