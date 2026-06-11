@@ -1109,6 +1109,7 @@ $(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT
 	cd $(REPO_ROOT)/nodenv; \
 	$(NODENV_ROOT)/shims/npm clean-install; \
 	$(NODENV_ROOT)/shims/npm audit signatures; \
+	rm -f $(XDG_DATA_HOME)/node_modules; \
 	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
 	touch $@
 
