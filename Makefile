@@ -64,7 +64,7 @@ AQUA_VERSION ?= v2.59.1
 AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM.linux.amd64 := f2ec38dece860fee4fc48d1213da176fa7bd900e95036cac8d952800d91644e7
 AQUA_CHECKSUM.linux.arm64 := 92298717b849c4baa36947dc4fcdedf7a542a2686dbc939a0dcda83d891b9a25
-AQUA_CHECKSUM.darwin.arm64 := 8c658418ba81cf2629813d374358f3dfe13c6715d27ccb476baf85c873acc501t
+AQUA_CHECKSUM.darwin.arm64 := 8c658418ba81cf2629813d374358f3dfe13c6715d27ccb476baf85c873acc501
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
@@ -164,6 +164,17 @@ help: ## Print all Makefile targets (this message).
 				} \
 			}'
 
+.aqua-checksums.json: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+		--config "$(REPO_ROOT)/.aqua.yaml" \
+		--log-level "$${loglevel}" \
+		update-checksum
+
 package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.installed
 	@# bash \
 	loglevel="notice"; \
@@ -185,6 +196,10 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.inst
 		# integrity field. npm install will not restore this field if \
 		# missing in an existing package-lock.json file. \
 		rm -f $@; \
+		# NOTE: We clean the node_modules directory to ensure that npm install \
+		#       will not desync between the package.json, package-lock.json \
+		#       and the node_modules directory. \
+		$(MAKE) clean-node-modules; \
 		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--no-audit \
 			--no-fund; \
@@ -195,7 +210,7 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.inst
 			--no-fund; \
 	fi
 
-node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
+node_modules/.installed: $(NODENV_ROOT)/.installed | package-lock.json
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -811,13 +826,21 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
 		install
 
+aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	cd aqua; \
+	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+		--config aqua.yaml \
+		--log-level "$${loglevel}" \
+		update-checksum
+
 $(HOME)/.aqua.yaml:
 	@# bash \
 	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
-
-aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
-	@# bash \
-	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua --config aqua/aqua.yaml update-checksum
 
 $(HOME)/.aqua-checksums.json:
 	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
@@ -1094,21 +1117,52 @@ $(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	$(NODENV_ROOT)/bin/nodenv install --skip-existing; \
 	touch $@
 
-nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed
+nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.installed
 	@# bash \
+	loglevel="notice"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="verbose"; \
+	fi; \
+	# NOTE: npm install will happily ignore the fact that integrity hashes are \
+	# missing in the package-lock.json. We need to check for missing integrity \
+	# fields ourselves. If any are missing, then we need to regenerate the \
+	# package-lock.json from scratch. \
+	nointegrity=""; \
+	noresolved=""; \
+	if [ -f "$@" ]; then \
+		nointegrity=$$(jq '.packages | del(."") | .[] | select(has("integrity") | not)' < $@); \
+		noresolved=$$(jq '.packages | del(."") | .[] | select(has("resolved") | not)' < $@); \
+	fi; \
 	cd $(REPO_ROOT)/nodenv; \
-	$(NODENV_ROOT)/shims/npm \
-		install \
-		--package-lock-only \
-		--no-audit \
-		--no-fund
+	if [ ! -f "$@" ] || [ -n "$${nointegrity}" ] || [ -n "$${noresolved}" ]; then \
+		# NOTE: package-lock.json is removed to ensure that npm includes the \
+		# integrity field. npm install will not restore this field if \
+		# missing in an existing package-lock.json file. \
+		rm -f $@; \
+		# NOTE: We clean the node_modules directory to ensure that npm install \
+		#       will not desync between the package.json, package-lock.json \
+		#       and the node_modules directory. \
+		$(RM) -rf $(REPO_ROOT)/nodeenv/node_modules; \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
+			--no-audit \
+			--no-fund; \
+	else \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
+			--package-lock-only \
+			--no-audit \
+			--no-fund; \
+	fi
 
 # Installs tools in the user node_modules.
-$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed $(XDG_DATA_HOME)/.created
+$(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.installed $(XDG_DATA_HOME)/.created | nodenv/package-lock.json
 	@# bash \
+	loglevel="silent"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="verbose"; \
+	fi; \
 	cd $(REPO_ROOT)/nodenv; \
-	$(NODENV_ROOT)/shims/npm clean-install; \
-	$(NODENV_ROOT)/shims/npm audit signatures; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" clean-install; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
 	rm -f $(XDG_DATA_HOME)/node_modules; \
 	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
 	touch $@
@@ -1190,6 +1244,9 @@ $(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 ## Maintenance
 #####################################################################
 
+.PHONY: update-lockfiles
+update-lockfiles: .aqua-checksums.json package-lock.json aqua/aqua-checksums.json nodenv/package-lock.json ## Update lockfiles.
+
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 	@# bash \
@@ -1204,11 +1261,14 @@ todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 		--output "$${output}" \
 		--todo-types="TODO,Todo,todo,FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
+.PHONY: clean-node-modules
+clean-node-modules:
+	@$(RM) -r node_modules
+
 .PHONY: clean
-clean: ## Delete temporary files.
+clean: clean-node-modules ## Delete temporary files.
 	@$(RM) -r .bin
 	@$(RM) -r $(AQUA_ROOT_DIR)
 	@$(RM) -r .venv
-	@$(RM) -r node_modules
 	@$(RM) *.sarif.json
 	@$(RM) nvim-checkhealth.log
