@@ -20,6 +20,8 @@ BASH_OPTIONS := $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; els
 # Add extra options for debugging.
 SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
 
+include versions.mk
+
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 arch.x86_64 := amd64
@@ -40,31 +42,16 @@ REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
 # TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
-# renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
-SLSA_VERIFIER_VERSION ?= v2.7.1
 SLSA_VERIFIER_REPO := github.com/slsa-framework/slsa-verifier
-SLSA_VERIFIER_CHECKSUM.linux.amd64 := 946DBEC729094195E88EF78E1734324A27869F03E2C6BD2F61CBC06BD5350339
-SLSA_VERIFIER_CHECKSUM.linux.arm64 := 5D3B2349EDE7BFEC19E7A21569F18B9F7410145AD12E9584B175370669E14061
-SLSA_VERIFIER_CHECKSUM.darwin.arm64 := 39ABFCF5F1D690C3E889CE3D2D6A8B87711424D83368511868D414E8F8BCB05C
 SLSA_VERIFIER_CHECKSUM ?= $(SLSA_VERIFIER_CHECKSUM.$(kernel).$(arch))
 SLSA_VERIFIER_URL := https://$(SLSA_VERIFIER_REPO)/releases/download/$(SLSA_VERIFIER_VERSION)/slsa-verifier-$(kernel)-$(arch)
 
 # TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
-# renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
-COSIGN_VERSION ?= v3.0.6
 COSIGN_REPO := github.com/sigstore/cosign
-COSIGN_CHECKSUM.linux.amd64 := c956e5dfcac53d52bcf058360d579472f0c1d2d9b69f55209e256fe7783f4c74
-COSIGN_CHECKSUM.linux.arm64 := bedac92e8c3729864e13d4a17048007cfafa79d5deca993a43a90ffe018ef2b8
-COSIGN_CHECKSUM.darwin.arm64 := 5fadd012ae6381a6a29ff86a7d39aa873878852f1073fc90b15995961ecfb084
 COSIGN_CHECKSUM ?= $(COSIGN_CHECKSUM.$(kernel).$(arch))
 COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-$(kernel)-$(arch)
 
-# renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.59.1
 AQUA_REPO := github.com/aquaproj/aqua
-AQUA_CHECKSUM.linux.amd64 := f2ec38dece860fee4fc48d1213da176fa7bd900e95036cac8d952800d91644e7
-AQUA_CHECKSUM.linux.arm64 := 92298717b849c4baa36947dc4fcdedf7a542a2686dbc939a0dcda83d891b9a25
-AQUA_CHECKSUM.darwin.arm64 := 8c658418ba81cf2629813d374358f3dfe13c6715d27ccb476baf85c873acc501t
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
@@ -80,38 +67,12 @@ MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/nul
 # NOTE: Go shouldn't necessarily need to be upgraded since it can support
 #       toolchains and will automatically download the necessary runtime
 #       version for a project.
-# renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.26.4
-GO_CHECKSUM.linux.amd64 := 1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f
-GO_CHECKSUM.linux.arm64 := ef758ae7c6cf9267c9c0ef080b8965f453d89ab2d25d9eb22de4405925238768
-GO_CHECKSUM.darwin.arm64 := b62ad2b6d7d2464f12a5bcad7ff47f19d08325773b5efd21610e445a05a9bf53
 GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
-# renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.7.1
-# NOTE: PYENV_INSTALL_SHA is used to validate the pyenv installation.
-PYENV_INSTALL_SHA ?= 45180928d34ce5adf21931a494881bbf502ef6bd
-# renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
-PYENV_VIRTUALENV_VERSION ?= v1.4.0
-PYENV_VIRTUALENV_SHA ?= eda64556af9b2992386deeb75dad2130899fc4c9
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
-
-# renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
-NODENV_INSTALL_VERSION ?= v1.6.2
-NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
-# renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.39
-NODENV_BUILD_SHA ?= e3e444085c1a52b33b85639a7fd519eb3535f352
-
-# renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
-RBENV_INSTALL_VERSION ?= v1.3.2
-RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
-# renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20260520
-RBENV_BUILD_SHA ?= 3671c9ef15d58759311faba68c947d90b2d5980e
 
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
@@ -164,6 +125,17 @@ help: ## Print all Makefile targets (this message).
 				} \
 			}'
 
+.aqua-checksums.json: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+		--config "$(REPO_ROOT)/.aqua.yaml" \
+		--log-level "$${loglevel}" \
+		update-checksum
+
 package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.installed
 	@# bash \
 	loglevel="notice"; \
@@ -184,7 +156,11 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.inst
 		# NOTE: package-lock.json is removed to ensure that npm includes the \
 		# integrity field. npm install will not restore this field if \
 		# missing in an existing package-lock.json file. \
-		rm -f $@; \
+		$(RM) -f $@; \
+		# NOTE: We clean the node_modules directory to ensure that npm install \
+		#       will not desync between the package.json, package-lock.json \
+		#       and the node_modules directory. \
+		$(MAKE) clean-node-modules; \
 		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--no-audit \
 			--no-fund; \
@@ -195,7 +171,7 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.inst
 			--no-fund; \
 	fi
 
-node_modules/.installed: package-lock.json $(NODENV_ROOT)/.installed
+node_modules/.installed: $(NODENV_ROOT)/.node-installed | package-lock.json
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -811,13 +787,21 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
 		install
 
+aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	cd aqua; \
+	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+		--config aqua.yaml \
+		--log-level "$${loglevel}" \
+		update-checksum
+
 $(HOME)/.aqua.yaml:
 	@# bash \
 	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
-
-aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
-	@# bash \
-	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua --config aqua/aqua.yaml update-checksum
 
 $(HOME)/.aqua-checksums.json:
 	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
@@ -829,7 +813,7 @@ configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqu
 configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configure bash.
 	@# bash \
 	$(MAKE) -C $(REPO_ROOT)/bash/lib/ble.sh build; \
-	rm -f \
+	$(RM) -f \
 		$(HOME)/.inputrc \
 		$(HOME)/.profile \
 		$(HOME)/.bash_profile \
@@ -910,7 +894,7 @@ configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml $(XDG_ST
 .PHONY: configure-git
 configure-git: ## Configure git.
 	@# bash \
-	rm -f $(HOME)/.gitconfig; \
+	$(RM) -f $(HOME)/.gitconfig; \
 	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
 
 .PHONY: configure-ghostty
@@ -950,7 +934,7 @@ configure-node: ## Configure Node.js and npm.
 .PHONY: configure-nvim
 configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.created ## Configure neovim.
 	@# bash \
-	rm -rf $(XDG_CONFIG_HOME)/nvim; \
+	$(RM) -rf $(XDG_CONFIG_HOME)/nvim; \
 	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
 
 .PHONY: configure-ssh
@@ -963,7 +947,7 @@ configure-ssh: ## Configure ssh.
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
 	@# bash \
-	rm -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
+	$(RM) -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
 	ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
 	ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
 
@@ -1055,7 +1039,7 @@ $(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt/.created
 	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
 	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
 	cd $(HOME)/opt; \
-	rm -rf go; \
+	$(RM) -rf go; \
 	tar xf "$${tempfile}"; \
 	mv go go-$(GO_VERSION); \
 	ln -s go-$(GO_VERSION) go; \
@@ -1065,50 +1049,98 @@ $(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt/.created
 .PHONY: install-node
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
 
-# Installs nodeenv and Node.js
-$(NODENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
+# Installs nodenv
+$(NODENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	@# bash \
 	# TODO(#609): Update dependency on configure-node. \
 	# Run this here rather than as a dependency no avoid unnecessary rebuilds. \
 	$(MAKE) configure-node; \
 	# Install nodenv. \
-	git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
-	# Validate nodenv version. \
-	if [ "$(NODENV_INSTALL_VERSION)" == "master" ]; then \
+	if [[ -d $(NODENV_ROOT) ]]; then \
+		git -C $(NODENV_ROOT) fetch origin "$(NODENV_INSTALL_SHA)"; \
 		git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"; \
+	else \
+		git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
 	fi; \
 	nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD); \
 	if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then \
 		echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"; \
-		rm -rf $(NODENV_ROOT); \
+		$(RM) -rf $(NODENV_ROOT); \
 		exit 1; \
 	fi; \
-	# Install the nodenv plugins. \
-	git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$(NODENV_ROOT)"/plugins/node-build; \
-	nodenv_build_sha=$$(git -C $(NODENV_ROOT)/plugins/node-build rev-parse HEAD); \
+	touch $@
+
+$(NODENV_ROOT)/plugins/node-build/.installed: $(NODENV_ROOT)/.installed versions.mk
+	@# bash \
+	node_build_path="$(NODENV_ROOT)/plugins/node-build"; \
+	if [[ -d "$${node_build_path}" ]]; then \
+		git -C "$${node_build_path}" fetch origin "$(NODENV_BUILD_SHA)"; \
+		git -C "$${node_build_path}" checkout "$(NODENV_BUILD_SHA)"; \
+	else \
+		git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$${node_build_path}"; \
+	fi; \
+	nodenv_build_sha=$$(git -C "$${node_build_path}" rev-parse HEAD); \
 	if [ "$${nodenv_build_sha}" != "$(NODENV_BUILD_SHA)" ]; then \
 		echo "Invalid node-build: '$${nodenv_build_sha}' != '$(NODENV_BUILD_SHA)'"; \
-		rm -rf $(NODENV_ROOT); \
+		$(RM) -rf "$${node_build_path}"; \
 		exit 1; \
 	fi; \
+	touch $@
+
+# Installs Node.js
+$(NODENV_ROOT)/.node-installed: .node-version $(NODENV_ROOT)/plugins/node-build/.installed
+	@# bash \
 	$(NODENV_ROOT)/bin/nodenv install --skip-existing; \
 	touch $@
 
-nodenv/package-lock.json: nodenv/package.json $(NODENV_ROOT)/.installed
+nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.node-installed
 	@# bash \
-	cd $(REPO_ROOT)/nodenv; \
-	$(NODENV_ROOT)/shims/npm \
-		install \
-		--package-lock-only \
-		--no-audit \
-		--no-fund
+	loglevel="notice"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="verbose"; \
+	fi; \
+	# NOTE: npm install will happily ignore the fact that integrity hashes are \
+	# missing in the package-lock.json. We need to check for missing integrity \
+	# fields ourselves. If any are missing, then we need to regenerate the \
+	# package-lock.json from scratch. \
+	nointegrity=""; \
+	noresolved=""; \
+	if [ -f "$@" ]; then \
+		nointegrity=$$(jq '.packages | del(."") | .[] | select(has("integrity") | not)' < $@); \
+		noresolved=$$(jq '.packages | del(."") | .[] | select(has("resolved") | not)' < $@); \
+	fi; \
+	if [ ! -f "$@" ] || [ -n "$${nointegrity}" ] || [ -n "$${noresolved}" ]; then \
+		# NOTE: package-lock.json is removed to ensure that npm includes the \
+		# integrity field. npm install will not restore this field if \
+		# missing in an existing package-lock.json file. \
+		$(RM) -f $@; \
+		# NOTE: We clean the node_modules directory to ensure that npm install \
+		#       will not desync between the package.json, package-lock.json \
+		#       and the node_modules directory. \
+		$(RM) -rf nodenv/node_modules; \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
+			--prefix ./nodenv \
+			--no-audit \
+			--no-fund; \
+	else \
+		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
+			--prefix ./nodenv \
+			--package-lock-only \
+			--no-audit \
+			--no-fund; \
+	fi
 
 # Installs tools in the user node_modules.
-$(XDG_DATA_HOME)/node_modules/.installed: nodenv/package-lock.json $(NODENV_ROOT)/.installed $(XDG_DATA_HOME)/.created
+$(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.node-installed $(XDG_DATA_HOME)/.created | nodenv/package-lock.json
 	@# bash \
+	loglevel="silent"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="verbose"; \
+	fi; \
 	cd $(REPO_ROOT)/nodenv; \
-	$(NODENV_ROOT)/shims/npm clean-install; \
-	$(NODENV_ROOT)/shims/npm audit signatures; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" clean-install; \
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
+	$(RM) -f $(XDG_DATA_HOME)/node_modules; \
 	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
 	touch $@
 
@@ -1141,7 +1173,7 @@ $(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
 	if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
 		echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
-		rm -rf "$(PYENV_ROOT)"; \
+		$(RM) -rf "$(PYENV_ROOT)"; \
 		exit 1; \
 	fi; \
 	# Install the pyenv-virtualenv plugin. \
@@ -1152,7 +1184,7 @@ $(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	pyenv_virtualenv_sha=$$(git -C "$(PYENV_ROOT)/plugins/pyenv-virtualenv" rev-parse HEAD); \
 	if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
 		echo "Invalid pyenv_virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
-		rm -rf "$(PYENV_ROOT)"; \
+		$(RM) -rf "$(PYENV_ROOT)"; \
 		exit 1; \
 	fi; \
 	$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
@@ -1171,15 +1203,15 @@ $(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 	rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
 	if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then \
 		echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"; \
-		rm -rf $(RBENV_ROOT); \
+		$(RM) -rf $(RBENV_ROOT); \
 		exit 1; \
 	fi; \
-	# Install the nodenv plugins. \
+	# Install the rbenv plugins. \
 	git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$(RBENV_ROOT)"/plugins/ruby-build; \
 	rbenv_build_sha=$$(git -C $(RBENV_ROOT)/plugins/ruby-build rev-parse HEAD); \
 	if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then \
 		echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"; \
-		rm -rf $(RBENV_ROOT); \
+		$(RM) -rf $(RBENV_ROOT); \
 		exit 1; \
 	fi; \
 	$(RBENV_ROOT)/bin/rbenv install --skip-existing; \
@@ -1188,6 +1220,9 @@ $(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 
 ## Maintenance
 #####################################################################
+
+.PHONY: update-lockfiles
+update-lockfiles: .aqua-checksums.json package-lock.json aqua/aqua-checksums.json nodenv/package-lock.json ## Update lockfiles.
 
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
@@ -1203,11 +1238,14 @@ todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 		--output "$${output}" \
 		--todo-types="TODO,Todo,todo,FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
+.PHONY: clean-node-modules
+clean-node-modules:
+	@$(RM) -r node_modules
+
 .PHONY: clean
-clean: ## Delete temporary files.
+clean: clean-node-modules ## Delete temporary files.
 	@$(RM) -r .bin
 	@$(RM) -r $(AQUA_ROOT_DIR)
 	@$(RM) -r .venv
-	@$(RM) -r node_modules
 	@$(RM) *.sarif.json
 	@$(RM) nvim-checkhealth.log
