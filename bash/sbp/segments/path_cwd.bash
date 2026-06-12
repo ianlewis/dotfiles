@@ -18,6 +18,6 @@
 # The path_cwd segment displays the current working directory only.
 
 segments::path_cwd() {
-    local wdir=${PWD/${HOME}/\~}
+    local wdir="${PWD/#${HOME}/\~}"
     print_themed_segment 'normal' "$(basename "${wdir}")"
 }

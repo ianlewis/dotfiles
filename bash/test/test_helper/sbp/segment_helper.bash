@@ -17,7 +17,7 @@ source_segment() {
     base_path="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")")")" >/dev/null 2>&1 && pwd)"
     local segment_name="${1}"
 
-    segment_source="${base_path}/bash/lib/sbp/src/segments/${segment_name}.bash"
+    local segment_source="${base_path}/bash/lib/sbp/src/segments/${segment_name}.bash"
     if [[ ! -f ${segment_source} ]]; then
         segment_source="${base_path}/bash/sbp/segments/${segment_name}.bash"
         if [[ ! -f ${segment_source} ]]; then
