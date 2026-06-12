@@ -97,6 +97,8 @@ jobs:
       - uses: Homebrew/actions/setup-homebrew@d0dd492210067c1b5f8857ab6c5dd52c29944e44 # main
 
       - name: Install GNU tools
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
         run: |
           brew install \
               make \
@@ -104,7 +106,8 @@ jobs:
               gnu-getopt \
               grep \
               coreutils \
-              bash-completion \
+              bash \
+              bash-completion@2 \
               libyaml \
               xz \
               tmux
