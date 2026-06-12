@@ -111,10 +111,6 @@ jobs:
               libyaml \
               xz \
               tmux
-          # Enable Homebrew's bash as the default shell, which is needed for
-          # installation and testing.
-          sudo bash -c 'echo /opt/homebrew/bin/bash >> /etc/shells'
-          chsh -s /opt/homebrew/bin/bash
 
       - name: e2e-test
         env:
