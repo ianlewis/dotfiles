@@ -49,7 +49,7 @@ function _randstr() {
     local pattern="${program_options['pattern']}"
 
     head -c "${length}" <(tr -dc "${pattern}" </dev/urandom)
-    if [[ -z "${program_options['exclude-newline']:-}" ]]; then
+    if [[ -z ${program_options['exclude-newline']:-} ]]; then
         echo
     fi
 }
