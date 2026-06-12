@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # vim: set ft=bash:
 #
-# Copyright 2025 Ian Lewis
+# Copyright 2026 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
