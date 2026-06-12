@@ -39,6 +39,7 @@ rules:
       - "/\\be2e\\b/g"
       - "/\\bkubectl\\b/g" # Kubernetes CLI
       - "/\\bmacOS\\b/g"
+      - "/\\b[Aa]llowlists?\\b/g"
       - "/\\b[Cc]hecksums?\\b/g" # e.g. file checksums
       - "/\\b[Dd]otfiles\\b/g"
       - "/\\b[Ff]olke\\b/g"

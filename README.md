@@ -67,12 +67,14 @@ sudo apt-get install -y \
     libssl-dev \
     libyaml-dev \
     make \
+    tmux \
     util-linux \
     zlib1g-dev
 ```
 
 ### macOS
 
+- An updated version of `bash` is required.
 - GNU tools: versions of `make`, `grep`, `awk`, `getopt`, and `mktemp` are
   required.
 - `libyaml`: An installation of `libyaml` is also required to install Ruby.
@@ -87,9 +89,18 @@ brew install \
     gnu-getopt \
     grep \
     coreutils \
+    bash \
     bash-completion@2 \
     libyaml \
+    tmux \
     xz
+```
+
+Add Homebrew's bash to the shell allowlist and enable it as the default shell.
+
+```bash
+sudo bash -c 'echo /opt/homebrew/bin/bash >> /etc/shells'
+chsh -s /opt/homebrew/bin/bash
 ```
 
 ## Install
