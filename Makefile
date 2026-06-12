@@ -270,6 +270,7 @@ bats-unit: ## Run Bats unit tests.
 	fi; \
 	$(REPO_ROOT)/bash/test/bats/bin/bats \
 		--formatter "$${formatter}" \
+		--recursive \
 		$(REPO_ROOT)/bash/test/unit
 
 $(E2E_HOME)/.installed:
