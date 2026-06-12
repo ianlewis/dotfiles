@@ -23,7 +23,7 @@ checksum:
     - all
 registries:
   - type: standard
-    ref: v4.514.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.518.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: koalaman/shellcheck@v0.11.0
   - name: rhysd/actionlint@v1.7.12
@@ -32,24 +32,24 @@ packages:
   - name: Kampfkarren/selene@0.31.0
   - name: JohnnyMorganz/StyLua@v2.5.2
   - name: BurntSushi/ripgrep@15.1.0
-  - name: opentofu/opentofu@v1.12.0
-  - name: junegunn/fzf@v0.72.0
-  - name: cli/cli@v2.92.0
+  - name: opentofu/opentofu@v1.12.1
+  - name: junegunn/fzf@v0.73.1
+  - name: cli/cli@v2.93.0
   - name: ianlewis/todos@v0.14.0
-  - name: go-acme/lego@v5.0.4
-  - name: astral-sh/ruff@0.15.13
+  - name: go-acme/lego@v5.1.0
+  - name: astral-sh/ruff@0.15.15
   - name: mattn/efm-langserver@v0.0.56
   - name: rust-lang/rust-analyzer@2025-06-16
   - name: LuaLS/lua-language-server@3.18.2
   - name: golang.org/x/tools/gopls@v0.22.0
   - name: mvdan/gofumpt@v0.10.0
   - name: hadolint/hadolint@v2.14.0
-  - name: Automattic/harper/harper-ls@v2.1.0
+  - name: Automattic/harper/harper-ls@v2.2.1
   - name: dandavison/delta@0.19.2
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.4.2
   # TODO(#655): Update to v0.26.0+ after dev server issue is resolved
-  - name: tree-sitter/tree-sitter@v0.25.10
+  - name: tree-sitter/tree-sitter@v0.26.9
   - name: kubernetes/kubernetes/kubectl@v1.36.1
   - name: kubernetes/kubernetes/kubeadm@v1.36.1
   - name: kubernetes-sigs/kind@v0.31.0
@@ -61,14 +61,14 @@ packages:
   - name: mikefarah/yq@v4.53.2
   - name: sxyazi/yazi@v26.5.6
   - name: jqlang/jq@jq-1.8.1
-  - name: aws/aws-cli@2.34.51
+  - name: aws/aws-cli@2.34.56
   - name: twistedpair/google-cloud-sdk@562.0.0
   - name: kubernetes-sigs/cri-tools/crictl@v1.36.0
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.14.0
   - name: Canop/dysk@v3.6.1
-  - name: bufbuild/buf@v1.69.0
+  - name: bufbuild/buf@v1.70.0
   - name: bazelbuild/bazel@9.1.0
   - name: derailed/k9s@v0.50.18
   - name: kubernetes-sigs/krew@v0.5.0
-  - name: neovim/neovim@v0.11.2
+  - name: neovim/neovim@v0.12.2
