@@ -14,7 +14,7 @@
 
 paths:
   # TODO(https://github.com/rhysd/actionlint/issues/682): Remove ignore rules
-  .github/workflows/pull_request.e2e-test.yml:
+  .github/workflows/workflow_call.e2e-test.yml:
     ignore:
-      - 'label "ubuntu26.04" is unknown.*'
-      - 'label "ubuntu26.04-arm" is unknown.*'
+      - 'label "ubuntu-26.04" is unknown.*'
+      - 'label "ubuntu-26.04-arm" is unknown.*'
