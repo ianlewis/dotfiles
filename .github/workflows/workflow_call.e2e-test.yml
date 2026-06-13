@@ -57,6 +57,7 @@ jobs:
               coreutils \
               gawk \
               grep \
+              libbz2-dev \
               libffi-dev \
               liblzma-dev \
               libreadline-dev \

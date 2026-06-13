@@ -47,8 +47,8 @@ Some packages and tools need to be installed for these dotfiles to work.
   implementation, `getopt`, and `mktemp`. On many Linux distributions these are
   provided by packages such as `make`, `grep`, `gawk`/`mawk`, `util-linux`, and
   `coreutils`, respectively.
-- `liblzma-dev`, `libreadline-dev`, `libsqlite3-dev`, `libssl-dev`, and
-  `zlib1g-dev` are needed for installing Python.
+- `libbz2-dev`, `liblzma-dev`, `libreadline-dev`, `libsqlite3-dev`,
+  `libssl-dev`, and `zlib1g-dev` are needed for installing Python.
 - `libffi-dev` and `libyaml-dev` are needed for installing Ruby.
 
 You can install the required packages on Debian-based Linux distributions with
@@ -60,6 +60,7 @@ sudo apt-get install -y \
     coreutils \
     gawk \
     grep \
+    libbz2-dev \
     libffi-dev \
     liblzma-dev \
     libreadline-dev \
