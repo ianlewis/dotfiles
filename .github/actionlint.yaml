@@ -18,3 +18,8 @@ paths:
     ignore:
       - 'label "ubuntu-26.04" is unknown.*'
       - 'label "ubuntu-26.04-arm" is unknown.*'
+  # TODO(https://github.com/rhysd/actionlint/issues/682): Remove ignore rules
+  .github/workflows/workflow_call.unit-test.yml:
+    ignore:
+      - 'label "ubuntu-26.04" is unknown.*'
+      - 'label "ubuntu-26.04-arm" is unknown.*'

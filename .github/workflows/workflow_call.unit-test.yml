@@ -25,25 +25,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Test that a clean install works on Linux amd64.
-  unit-test-ubuntu2404-amd64:
-    name: unit-test-ubuntu2404-amd64
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          submodules: true
-          persist-credentials: false
+  unit-test-ubuntu-matrix:
+    name: unit-test-ubuntu-matrix
 
-      - name: unit-test
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make clean unit-test
+    strategy:
+      matrix:
+        platform:
+          - ubuntu-24.04 # amd64
+          - ubuntu-24.04-arm # arm64
+          - ubuntu-26.04 # amd64
+          - ubuntu-26.04-arm # arm64
+      fail-fast: false
 
-  # Test that a clean install works on Linux arm64.
-  unit-test-ubuntu2404-arm64:
-    name: unit-test-ubuntu2404-arm64
-    runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -94,16 +88,13 @@ jobs:
     name: unit-test
     runs-on: ubuntu-latest
     needs:
-      - unit-test-ubuntu2404-amd64
-      - unit-test-ubuntu2404-arm64
+      - unit-test-ubuntu-matrix
       - unit-test-macos26-arm64
     if: ${{ always() }}
     env:
-      UNIT_TEST_UBUNTU_AMD64_RESULT: ${{ needs.unit-test-ubuntu2404-amd64.result }}
-      UNIT_TEST_UBUNTU_ARM64_RESULT: ${{ needs.unit-test-ubuntu2404-arm64.result }}
+      UNIT_TEST_UBUNTU_RESULT: ${{ needs.unit-test-ubuntu-matrix.result }}
       UNIT_TEST_MACOS_ARM64_RESULT: ${{ needs.unit-test-macos26-arm64.result }}
     steps:
       - run: |
-          [ "${UNIT_TEST_UBUNTU_AMD64_RESULT}" == "success" ]
-          [ "${UNIT_TEST_UBUNTU_ARM64_RESULT}" == "success" ]
+          [ "${UNIT_TEST_UBUNTU_RESULT}" == "success" ]
           [ "${UNIT_TEST_MACOS_ARM64_RESULT}" == "success" ]
