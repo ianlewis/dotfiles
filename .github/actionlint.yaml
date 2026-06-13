@@ -13,8 +13,8 @@
 # limitations under the License.
 
 paths:
-  .github/workflows/pull_request.tests.yml:
-    # List of regular expressions to filter errors by the error messages.
+  # TODO(https://github.com/rhysd/actionlint/issues/682): Remove ignore rules
+  .github/workflows/pull_request.e2e-test.yml:
     ignore:
-      # NOTE: macos-26 is currently in beta and not known to actionlint.
-      - 'label "macos-26" is unknown.*'
+      - 'label "ubuntu26.04" is unknown.*'
+      - 'label "ubuntu26.04-arm" is unknown.*'
