@@ -35,4 +35,4 @@ rules:
       # Homebrew/actions does not publish tags.
       # .github/workflows/pull_request.tests.yml
       - workflow_call.e2e-test.yml:100:15
-      - workflow_call.unit-test.yml:69:15
+      - workflow_call.unit-test.yml:63:15
