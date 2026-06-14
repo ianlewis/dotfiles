@@ -15,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The tmux_cwd segment saves the current working directory to the tmux
-# environment. This is used to when creating new tmux windows and split panes to
+# The tmux_cwd segment saves the current working directory to a tmux option on
+# the tmux pane. This is used when creating new tmux windows and split panes to
 # set the working directory and preserve symlinks.
 # See: tmux/_tmux.conf
 
