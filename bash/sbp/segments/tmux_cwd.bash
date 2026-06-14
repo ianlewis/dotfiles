@@ -21,7 +21,7 @@
 # See: tmux/_tmux.conf
 
 segments::tmux_cwd() {
-    if [[ -n "${TMUX}" ]]; then
+    if [[ -n ${TMUX} ]]; then
         tmux set-option -p @tmux_cwd "${PWD}"
     fi
 }
