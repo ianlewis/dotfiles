@@ -110,3 +110,6 @@
 [submodule "nvim/pack/nvim/start/bufdel.nvim"]
 	path = nvim/pack/nvim/start/bufdel.nvim
 	url = https://github.com/wsdjeg/bufdel.nvim.git
+[submodule "nvim/pack/nvim/start/00-nvim-web-devicons"]
+	path = nvim/pack/nvim/start/00-nvim-web-devicons
+	url = https://github.com/nvim-tree/nvim-web-devicons.git
