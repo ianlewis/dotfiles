@@ -53,6 +53,7 @@ teardown() {
     run tmux -S "${TMUX_SOCKET}" send-keys -t "test_session_${BATS_TEST_NUMBER}" \
         "source ${BASE_PATH}/bash/test/test_helper/sbp/load.bash && tmux wait-for -U wait_channel_${BATS_TEST_NUMBER}" \
         Enter
+    [ "${status}" -eq 0 ] || fail "Failed to send keys to tmux session: ${output}"
 
     # Wait for the tmux session to initialize.
     run tmux -S "${TMUX_SOCKET}" wait-for -L "wait_channel_${BATS_TEST_NUMBER}"
