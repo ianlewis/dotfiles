@@ -614,7 +614,7 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
-		selene_output="$$(selene --display-style Json2 $${files})"; \
+		selene_out="$$(selene --display-style Json2 $${files} || exit_code=\"$$?\")"; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
 			type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"'); \
 			if [ "$${type}" != "Diagnostic" ]; then \
@@ -636,10 +636,8 @@ selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
 				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
 				;; \
 			esac; \
-		done <<< "$${selene_output}"; \
-		if [ "$${exit_code}" != "0" ]; then \
-			exit "$${exit_code}"; \
-		fi; \
+		done <<< "$${selene_out}"; \
+		exit "$${exit_code}"; \
 	else \
 		selene \
 			--no-summary \
@@ -697,9 +695,9 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	textlint_out="$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} | jq -cr '.[]' || exit_code=\"$$?\")"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
+		textlint_out="$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} | jq -cr '.[]' || exit_code=\"$$?\")"; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
 			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
 			file=$$(realpath --relative-to="." "$${filePath}"); \

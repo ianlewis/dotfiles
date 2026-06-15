@@ -85,6 +85,13 @@ structs:
       returns:
         type: table
 
+    diagnostic.config:
+      args:
+        - type: table # opts
+          required: false
+        - type: number # namespace
+          required: false
+
     diagnostic.severity:
       struct: VimDiagnosticSeverity
 
