@@ -34,5 +34,10 @@ vim.filetype.add({
 		hjson = "json5",
 		hujson = "json5",
 		jsonc = "json5",
+
+		-- Go templates
+		tmpl = "gotmpl",
+		gotmpl = "gotmpl",
+		gohtml = "gotmpl",
 	},
 })
