@@ -18,9 +18,8 @@
     path = ~/.config/nvim/pack/nvim/start/tokyonight.nvim/extras/delta/tokyonight_moon.gitconfig
 [pull]
     ff = only
-# TODO(#475): re-enable after updating to git 1.35+
-# [merge]
-#     conflictStyle = zdiff3
+[merge]
+    conflictStyle = zdiff3
 [http]
     cookiefile = ~/.gitcookies
 [interactive]
