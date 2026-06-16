@@ -15,7 +15,13 @@
 require("ts_context_commentstring").setup({
 	enable_autocmd = false,
 })
-local comment_nvim_integration = require("ts_context_commentstring.integrations.comment_nvim")
-require("Comment").setup({
-	pre_hook = comment_nvim_integration.create_pre_hook(),
-})
+
+-- Update the commentstring option to use ts_context_commentstring
+-- https://github.com/JoosepAlviste/nvim-ts-context-commentstring/wiki/Integrations#native-commenting-in-neovim-010
+local get_option = vim.filetype.get_option
+-- selene: allow(incorrect_standard_library_use)
+---@diagnostic disable-next-line: duplicate-set-field
+vim.filetype.get_option = function(filetype, option)
+	return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
+		or get_option(filetype, option)
+end

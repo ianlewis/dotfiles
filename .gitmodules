@@ -71,9 +71,6 @@
 [submodule "bash/lib/bash-argsparse"]
 	path = bash/lib/bash-argsparse
 	url = https://github.com/Anvil/bash-argsparse.git
-[submodule "nvim/pack/nvim/start/Comment.nvim"]
-	path = nvim/pack/nvim/start/Comment.nvim
-	url = https://github.com/numToStr/Comment.nvim.git
 [submodule "nvim/pack/nvim/start/nvim-ts-context-commentstring"]
 	path = nvim/pack/nvim/start/nvim-ts-context-commentstring
 	url = https://github.com/JoosepAlviste/nvim-ts-context-commentstring.git
