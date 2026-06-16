@@ -104,6 +104,11 @@ structs:
       args:
         - type: table
 
+    filetype.get_option:
+      args:
+        - type: string
+        - type: string
+
     # Vim functions.
     fn:
       any: true
