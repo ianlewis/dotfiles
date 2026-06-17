@@ -129,12 +129,24 @@ structs:
         - type: any # mapped sequence or function: string or function
         - type: table # options
           required: false
+
     keymap.del:
       args:
         - type: any # mode: string or table
         - type: string # key sequence
         - type: table # options
           required: false
+
+    list_extend:
+      args:
+        - type: table # dest
+        - type: table # src
+        - type: number # start
+          required: false
+        - type: number # end
+          required: false
+      returns:
+        type: table # list
 
     # Vim Lua bindings.
     loop:
