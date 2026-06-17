@@ -22,6 +22,12 @@
 
 set -o vi
 
+##{{{ fzf integration
+
+ble-import integration/fzf-completion
+ble-import integration/fzf-key-bindings
+##}}}
+
 ##{{{ "edit_bell" controls the behavior of the bell.
 
 bleopt edit_bell=none
