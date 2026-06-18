@@ -22,6 +22,28 @@
 
 set -o vi
 
+#{{{ Add a sed-based commandline hook to support the "s/old/new/" in # vi-mode.
+# https://github.com/akinomyoga/ble.sh/issues/704#issuecomment-4727809586
+function ble/widget/vi-command/commandline.hook.around {
+    local ex=${ADVICE_WORDS[1]}
+    if [[ $ex == s/* ]]; then
+        local line
+        # shellcheck disable=SC2016 # the expression should not be expanded
+        ble/util/assign line 'ble/bin/sed -E "$ex" <<< "$_ble_edit_str"' || return "$?"
+        ble-edit/content/reset-and-check-dirty "$line"
+        # shellcheck disable=SC2154 # ble-edit-str is set by reset-and-check-dirty
+        _ble_edit_ind=${#_ble_edit_str}
+        ble/keymap:vi/adjust-command-mode
+        return "$?"
+    fi
+
+    ble/function#advice/do
+}
+blehook/eval-after-load keymap_vi '
+  ble/function#advice around ble/widget/vi-command/commandline.hook{,.around}
+'
+#}}}
+
 ##{{{ "edit_bell" controls the behavior of the bell.
 
 bleopt edit_bell=none
