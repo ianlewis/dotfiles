@@ -937,6 +937,10 @@ configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.cr
 	$(RM) -rf $(XDG_CONFIG_HOME)/nvim; \
 	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
 
+.PHONY: configure-python
+configure-python: ## Configure Python.
+	ln -sf "$(REPO_ROOT)/.python-version" "$(HOME)/.python-version"
+
 .PHONY: configure-ssh
 configure-ssh: ## Configure ssh.
 	@# bash \
@@ -1070,6 +1074,7 @@ $(NODENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	fi; \
 	touch $@
 
+# Installs node-build plugin for nodenv
 $(NODENV_ROOT)/plugins/node-build/.installed: $(NODENV_ROOT)/.installed versions.mk
 	@# bash \
 	node_build_path="$(NODENV_ROOT)/plugins/node-build"; \
@@ -1144,51 +1149,61 @@ $(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.node-installed $(XDG_D
 	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
 	touch $@
 
+# The current python version
+PYTHON_VERSION := $(shell cat .python-version)
+
 .PHONY: install-python
-install-python: $(PYENV_ROOT)/versions/$(USER)/.installed ## Install the Python environment.
+install-python: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed ## Install the Python environment.
 
-# Installs the requirements in the Python virtualenv.
-$(PYENV_ROOT)/versions/$(USER)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(USER)/bin/activate
+# Installs pyenv
+$(PYENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	@# bash \
-	$(PYENV_ROOT)/versions/$(USER)/bin/pip install -r $< --require-hashes; \
-	touch $@
-
-# Creates a Python virtualenv using pyenv.
-$(PYENV_ROOT)/versions/$(USER)/bin/activate: $(PYENV_ROOT)/.installed
-	@# bash \
-	# NOTE: We unset the `PYENV_VERSION` environment variable to \
-	# 		ensure that we don't depend on a virtualenv that is not \
-	# 		yet installed. \
-	PYENV_VERSION= $(PYENV_ROOT)/bin/pyenv virtualenv $(USER)
-
-$(PYENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
-	@# bash \
-	export PYENV_GIT_TAG=$(PYENV_INSTALL_VERSION); \
+	# TODO(#609): Update dependency on configure-python. \
+	# Run this here rather than as a dependency no avoid unnecessary rebuilds. \
+	$(MAKE) configure-python; \
 	# Install pyenv. \
-	git clone \
-		--branch "$(PYENV_INSTALL_VERSION)" \
-		https://github.com/pyenv/pyenv.git \
-		$(PYENV_ROOT); \
-	# Validate the pyenv installation. \
+	if [[ -d $(PYENV_ROOT) ]]; then \
+		git -C $(PYENV_ROOT) fetch origin "$(PYENV_INSTALL_SHA)"; \
+		git -C $(PYENV_ROOT) checkout "$(PYENV_INSTALL_SHA)"; \
+	else \
+		git clone --branch "$(PYENV_INSTALL_VERSION)" https://github.com/pyenv/pyenv.git $(PYENV_ROOT); \
+	fi; \
 	pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
 	if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
 		echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
-		$(RM) -rf "$(PYENV_ROOT)"; \
+		$(RM) -rf $(PYENV_ROOT); \
 		exit 1; \
 	fi; \
-	# Install the pyenv-virtualenv plugin. \
-	git clone \
-		--branch "$(PYENV_VIRTUALENV_VERSION)" \
-		https://github.com/pyenv/pyenv-virtualenv.git \
-		"$(PYENV_ROOT)/plugins/pyenv-virtualenv"; \
-	pyenv_virtualenv_sha=$$(git -C "$(PYENV_ROOT)/plugins/pyenv-virtualenv" rev-parse HEAD); \
+	touch $@
+
+# Installs pyenv-virtualenv plugin for pyenv
+$(PYENV_ROOT)/plugins/pyenv-virtualenv/.installed: $(PYENV_ROOT)/.installed versions.mk
+	@# bash \
+	pyenv_virtualenv_path="$(PYENV_ROOT)/plugins/pyenv-virtualenv"; \
+	if [[ -d "$${pyenv_virtualenv_path}" ]]; then \
+		git -C "$${pyenv_virtualenv_path}" fetch origin "$(PYENV_VIRTUALENV_SHA)"; \
+		git -C "$${pyenv_virtualenv_path}" checkout "$(PYENV_VIRTUALENV_SHA)"; \
+	else \
+		git clone --branch "$(PYENV_VIRTUALENV_VERSION)" https://github.com/pyenv/pyenv-virtualenv.git "$${pyenv_virtualenv_path}"; \
+	fi; \
+	pyenv_virtualenv_sha=$$(git -C "$${pyenv_virtualenv_path}" rev-parse HEAD); \
 	if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
-		echo "Invalid pyenv_virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
-		$(RM) -rf "$(PYENV_ROOT)"; \
+		echo "Invalid pyenv-virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
+		$(RM) -rf "$${pyenv_virtualenv_path}"; \
 		exit 1; \
 	fi; \
+	touch $@
+
+# Installs Python
+$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PYENV_ROOT)/plugins/pyenv-virtualenv/.installed
+	@# bash \
 	$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
-	ln -sf "$(REPO_ROOT)/.python-version" "$(HOME)/.python-version"; \
+	touch $@
+
+# Installs Python tools in the pyenv virtualenv for the current version.
+$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed requirements.txt
+	@# bash \
+	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes; \
 	touch $@
 
 .PHONY: install-ruby
