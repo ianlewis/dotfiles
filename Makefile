@@ -187,6 +187,7 @@ node_modules/.installed: $(NODENV_ROOT)/.node-installed | package-lock.json
 # Create a Python virtual environment for development dependencies.
 .venv/bin/activate: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
+	rm -rf .venv; \
 	$(PYENV_ROOT)/shims/python -m venv .venv
 
 # Install Python development dependencies
@@ -1062,7 +1063,7 @@ install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js en
 $(NODENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	@# bash \
 	# TODO(#609): Update dependency on configure-node. \
-	# Run this here rather than as a dependency no avoid unnecessary rebuilds. \
+	# Run this here rather than as a dependency to avoid unnecessary rebuilds. \
 	$(MAKE) configure-node; \
 	# Install nodenv. \
 	if [[ -d $(NODENV_ROOT) ]]; then \
@@ -1161,7 +1162,7 @@ install-python: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed ## Install t
 $(PYENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	@# bash \
 	# TODO(#609): Update dependency on configure-python. \
-	# Run this here rather than as a dependency no avoid unnecessary rebuilds. \
+	# Run this here rather than as a dependency to avoid unnecessary rebuilds. \
 	$(MAKE) configure-python; \
 	# Install pyenv. \
 	if [[ -d $(PYENV_ROOT) ]]; then \
@@ -1206,6 +1207,7 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
 	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes; \
+	$(PYENV_ROOT)/bin/pyenv rehash; \
 	touch $@
 
 .PHONY: install-ruby
