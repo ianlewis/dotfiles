@@ -73,14 +73,6 @@ function _bashrc_setup_pyenv() {
             PATH="${PYENV_ROOT}/bin:${PATH}"
         fi
         eval "$(pyenv init - bash)"
-
-        local virtual_env
-        virtual_env="${VIRTUAL_ENV:-""}"
-        # Activate the user's virtualenv if it exists.
-        if [[ ${virtual_env##*/} != "${USER}" ]] && [[ -r "${PYENV_ROOT}/versions/${USER}/bin/activate" ]]; then
-            # NOTE: pyenv activate will set PS1 for non-interactive shells.
-            pyenv activate "${USER}"
-        fi
     fi
 }
 

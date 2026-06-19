@@ -37,17 +37,21 @@ setup() {
 }
 
 @test "hashin installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/hashin"
+    python_version="$(cat "${E2E_HOME}/.python-version")"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/hashin"
 }
 
 @test "ruff installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/ruff"
+    python_version="$(cat "${E2E_HOME}/.python-version")"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ruff"
 }
 
 @test "yamllint installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/yamllint"
+    python_version="$(cat "${E2E_HOME}/.python-version")"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/yamllint"
 }
 
 @test "zizmor installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${USER}/bin/zizmor"
+    python_version="$(cat "${E2E_HOME}/.python-version")"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/zizmor"
 }
