@@ -77,7 +77,7 @@ export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
 
-# The current python version
+# The current language runtime versions
 NODE_VERSION := $(shell cat .node-version)
 PYTHON_VERSION := $(shell cat .python-version)
 RUBY_VERSION := $(shell cat .ruby-version)
