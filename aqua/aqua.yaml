@@ -23,7 +23,7 @@ checksum:
     - all
 registries:
   - type: standard
-    ref: v4.518.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.520.2 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: koalaman/shellcheck@v0.11.0
   - name: rhysd/actionlint@v1.7.12
@@ -36,22 +36,22 @@ packages:
   - name: junegunn/fzf@v0.73.1
   - name: cli/cli@v2.93.0
   - name: ianlewis/todos@v0.14.0
-  - name: go-acme/lego@v5.1.0
-  - name: astral-sh/ruff@0.15.15
+  - name: go-acme/lego@v5.2.2
+  - name: astral-sh/ruff@0.15.16
   - name: mattn/efm-langserver@v0.0.56
   - name: rust-lang/rust-analyzer@2025-06-16
   - name: LuaLS/lua-language-server@3.18.2
   - name: golang.org/x/tools/gopls@v0.22.0
   - name: mvdan/gofumpt@v0.10.0
   - name: hadolint/hadolint@v2.14.0
-  - name: Automattic/harper/harper-ls@v2.2.1
+  - name: Automattic/harper/harper-ls@v2.4.0
   - name: dandavison/delta@0.19.2
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.4.2
   - name: tree-sitter/tree-sitter@v0.26.9
   - name: kubernetes/kubernetes/kubectl@v1.36.1
   - name: kubernetes/kubernetes/kubeadm@v1.36.1
-  - name: kubernetes-sigs/kind@v0.31.0
+  - name: kubernetes-sigs/kind@v0.32.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.1
   - name: helm/helm@v4.2.0
   - name: antonmedv/fx@39.2.0
@@ -60,14 +60,14 @@ packages:
   - name: mikefarah/yq@v4.53.2
   - name: sxyazi/yazi@v26.5.6
   - name: jqlang/jq@jq-1.8.1
-  - name: aws/aws-cli@2.34.56
+  - name: aws/aws-cli@2.34.62
   - name: twistedpair/google-cloud-sdk@562.0.0
   - name: kubernetes-sigs/cri-tools/crictl@v1.36.0
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.14.0
   - name: Canop/dysk@v3.6.1
   - name: bufbuild/buf@v1.70.0
-  - name: bazelbuild/bazel@9.1.0
+  - name: bazelbuild/bazel@9.1.1
   - name: derailed/k9s@v0.50.18
   - name: kubernetes-sigs/krew@v0.5.0
   - name: neovim/neovim@v0.12.2
