@@ -85,7 +85,7 @@
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "makefile",
-      matchFileNames: ["Makefile"],
+      matchFileNames: ["**/[Mm]akefile", "**/GNUmakefile", "**/*.mk"],
     },
     {
       matchManagers: ["github-actions"],
