@@ -1243,6 +1243,11 @@ $(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
 .PHONY: update-lockfiles
 update-lockfiles: .aqua-checksums.json package-lock.json aqua/aqua-checksums.json nodenv/package-lock.json ## Update lockfiles.
 
+.PHONY: update-versions-checksums
+update-versions-checksums: ## Update sha256 checksums in versions.mk.
+	@# bash \
+	python3 "$(REPO_ROOT)/scripts/update-checksums.py" "$(REPO_ROOT)/versions.mk"
+
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 	@# bash \

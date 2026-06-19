@@ -53,6 +53,27 @@
     schedule: ["* 0-3 * * 1"],
   },
 
+  // Update git commit SHAs alongside version updates in versions.mk.
+  // The regex manager matches the combined version + SHA comment block and
+  // uses currentDigest to track the git commit SHA for the tagged release.
+  customManagers: [
+    {
+      customType: "regex",
+      fileMatch: ["(^|/)versions\\.mk$"],
+      matchStrings: [
+        "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+) versioning=(?<versioning>[^\\s]+)\\n[A-Z_]+_VERSION \\?= (?<currentValue>[^\\n]+)\\n[A-Z_]+_SHA \\?= (?<currentDigest>[^\\n]+)",
+      ],
+    },
+  ],
+
+  // Run the update-versions-checksums Makefile target after version bumps in
+  // versions.mk to keep sha256 checksums in sync with the new versions.
+  postUpgradeTasks: {
+    commands: ["make update-versions-checksums"],
+    fileFilters: ["versions.mk"],
+    executionMode: "branch",
+  },
+
   // Enable git submodule updates.
   "git-submodules": {
     enabled: true,
@@ -85,7 +106,7 @@
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "makefile",
-      matchFileNames: ["Makefile"],
+      matchFileNames: ["Makefile", "versions.mk"],
     },
     {
       matchManagers: ["github-actions"],
