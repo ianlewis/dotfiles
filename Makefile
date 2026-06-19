@@ -78,7 +78,9 @@ E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
 
 # The current python version
+NODE_VERSION := $(shell cat .node-version)
 PYTHON_VERSION := $(shell cat .python-version)
+RUBY_VERSION := $(shell cat .ruby-version)
 
 # Macro for creating necessary directories.
 # NOTE: needed for targets that require a directory to be created without
@@ -139,7 +141,7 @@ help: ## Print all Makefile targets (this message).
 		--log-level "$${loglevel}" \
 		update-checksum
 
-package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.node-installed
+package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
 	@# bash \
 	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -174,7 +176,7 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.node
 			--no-fund; \
 	fi
 
-node_modules/.installed: $(NODENV_ROOT)/.node-installed | package-lock.json
+node_modules/.installed: $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed | package-lock.json
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -947,6 +949,10 @@ configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.cr
 configure-python: ## Configure Python.
 	ln -sf "$(REPO_ROOT)/.python-version" "$(HOME)/.python-version"
 
+.PHONY: configure-ruby
+configure-ruby: ## Configure Ruby.
+	ln -sf "$(REPO_ROOT)/.ruby-version" "$(HOME)/.ruby-version"
+
 .PHONY: configure-ssh
 configure-ssh: ## Configure ssh.
 	@# bash \
@@ -1099,12 +1105,12 @@ $(NODENV_ROOT)/plugins/node-build/.installed: $(NODENV_ROOT)/.installed versions
 	touch $@
 
 # Installs Node.js
-$(NODENV_ROOT)/.node-installed: .node-version $(NODENV_ROOT)/plugins/node-build/.installed
+$(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed: .node-version $(NODENV_ROOT)/plugins/node-build/.installed
 	@# bash \
 	$(NODENV_ROOT)/bin/nodenv install --skip-existing; \
 	touch $@
 
-nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.node-installed
+nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
 	@# bash \
 	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -1142,7 +1148,7 @@ nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODE
 	fi
 
 # Installs tools in the user node_modules.
-$(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.node-installed $(XDG_DATA_HOME)/.created | nodenv/package-lock.json
+$(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed $(XDG_DATA_HOME)/.created | nodenv/package-lock.json
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -1210,31 +1216,53 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements.txt $(PYENV_RO
 	$(PYENV_ROOT)/bin/pyenv rehash; \
 	touch $@
 
+# Installs Ruby
 .PHONY: install-ruby
-install-ruby: $(RBENV_ROOT)/.installed ## Install the Ruby environment.
+install-ruby: $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed ## Install the Ruby environment.
 
-$(RBENV_ROOT)/.installed: $(XDG_DATA_HOME)/.created
+# Installs rbenv
+$(RBENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 	@# bash \
-	export RBENV_GIT_TAG=$(RBENV_INSTALL_VERSION); \
+	# TODO(#609): Update dependency on configure-ruby. \
+	# Run this here rather than as a dependency to avoid unnecessary rebuilds. \
+	$(MAKE) configure-ruby; \
 	# Install rbenv. \
-	git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
-	# Validate the rbenv installation. \
+	if [[ -d $(RBENV_ROOT) ]]; then \
+		git -C $(RBENV_ROOT) fetch origin "$(RBENV_INSTALL_SHA)"; \
+		git -C $(RBENV_ROOT) checkout "$(RBENV_INSTALL_SHA)"; \
+	else \
+		git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
+	fi; \
 	rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
 	if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then \
 		echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"; \
 		$(RM) -rf $(RBENV_ROOT); \
 		exit 1; \
 	fi; \
-	# Install the rbenv plugins. \
-	git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$(RBENV_ROOT)"/plugins/ruby-build; \
-	rbenv_build_sha=$$(git -C $(RBENV_ROOT)/plugins/ruby-build rev-parse HEAD); \
+	touch $@
+
+# Installs ruby-build plugin for rbenv
+$(RBENV_ROOT)/plugins/ruby-build/.installed: $(RBENV_ROOT)/.installed versions.mk
+	@# bash \
+	ruby_build_path="$(RBENV_ROOT)/plugins/ruby-build"; \
+	if [[ -d "$${ruby_build_path}" ]]; then \
+		git -C "$${ruby_build_path}" fetch origin "$(RBENV_BUILD_SHA)"; \
+		git -C "$${ruby_build_path}" checkout "$(RBENV_BUILD_SHA)"; \
+	else \
+		git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$${ruby_build_path}"; \
+	fi; \
+	rbenv_build_sha=$$(git -C "$${ruby_build_path}" rev-parse HEAD); \
 	if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then \
 		echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"; \
-		$(RM) -rf $(RBENV_ROOT); \
+		$(RM) -rf "$${ruby_build_path}"; \
 		exit 1; \
 	fi; \
+	touch $@
+
+# Installs Ruby
+$(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/plugins/ruby-build/.installed
+	@# bash \
 	$(RBENV_ROOT)/bin/rbenv install --skip-existing; \
-	ln -sf $(REPO_ROOT)/.ruby-version $(HOME)/.ruby-version; \
 	touch $@
 
 ## Maintenance
