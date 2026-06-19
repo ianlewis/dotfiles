@@ -53,7 +53,7 @@ require("telescope").setup({
 local builtin = require("telescope.builtin")
 
 -- NOTE: telescope-fzf-native needs to be manually compiled.
--- TODO(#117): Complile telescope-fzf-native automatically.
+-- TODO(#828): Complile telescope-fzf-native automatically.
 
 vim.keymap.set("n", "<leader>ff", builtin.find_files, {
 	desc = "Telescope find files",
