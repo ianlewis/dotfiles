@@ -1203,7 +1203,7 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 	touch $@
 
 # Installs Python tools in the pyenv virtualenv for the current version.
-$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed requirements.txt
+$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
 	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes; \
 	touch $@
