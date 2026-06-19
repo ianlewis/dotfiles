@@ -139,7 +139,7 @@ help: ## Print all Makefile targets (this message).
 		--log-level "$${loglevel}" \
 		update-checksum
 
-package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.installed
+package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/.node-installed
 	@# bash \
 	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
