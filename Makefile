@@ -77,6 +77,9 @@ export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
 
+# The current python version
+PYTHON_VERSION := $(shell cat .python-version)
+
 # Macro for creating necessary directories.
 # NOTE: needed for targets that require a directory to be created without
 #       triggering rebuilds when anything inside changes.
@@ -181,10 +184,12 @@ node_modules/.installed: $(NODENV_ROOT)/.node-installed | package-lock.json
 	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
 	touch $@
 
-.venv/bin/activate: $(PYENV_ROOT)/.installed
+# Create a Python virtual environment for development dependencies.
+.venv/bin/activate: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
 	$(PYENV_ROOT)/shims/python -m venv .venv
 
+# Install Python development dependencies
 .venv/.installed: requirements-dev.txt .venv/bin/activate
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
@@ -1148,9 +1153,6 @@ $(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/.node-installed $(XDG_D
 	$(RM) -f $(XDG_DATA_HOME)/node_modules; \
 	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
 	touch $@
-
-# The current python version
-PYTHON_VERSION := $(shell cat .python-version)
 
 .PHONY: install-python
 install-python: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed ## Install the Python environment.
