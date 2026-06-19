@@ -43,13 +43,12 @@ Some packages and tools need to be installed for these dotfiles to work.
 
 ### Linux
 
-- Basic command-line tools are required: `make`, `grep`, an `awk`
-  implementation, `getopt`, and `mktemp`. On many Linux distributions these are
-  provided by packages such as `make`, `grep`, `gawk`/`mawk`, `util-linux`, and
-  `coreutils`, respectively.
-- `libbz2-dev`, `liblzma-dev`, `libreadline-dev`, `libsqlite3-dev`,
-  `libssl-dev`, and `zlib1g-dev` are needed for installing Python.
-- `libffi-dev` and `libyaml-dev` are needed for installing Ruby.
+- Basic command-line tools are required: `grep`, `make`, `sed`, `awk`, `getopt`,
+  and `mktemp`. On many Linux distributions these are provided by packages such
+  as `make`, `grep`, `gawk`/`mawk`, `util-linux`, and `coreutils`, respectively.
+- `build-essential`, `libbz2-dev`, `libffi-dev`, `liblzma-dev`,
+  `libreadline-dev`, `libsqlite3-dev`, `libssl-dev`, `libyaml-dev`, and
+  `zlib1g-dev` are needed for installing Python and Ruby.
 
 You can install the required packages on Debian-based Linux distributions with
 `apt`:
@@ -57,6 +56,7 @@ You can install the required packages on Debian-based Linux distributions with
 ```bash
 sudo apt-get update
 sudo apt-get install -y \
+    build-essential \
     coreutils \
     gawk \
     grep \
@@ -67,7 +67,7 @@ sudo apt-get install -y \
     libsqlite3-dev \
     libssl-dev \
     libyaml-dev \
-    make \
+    sed \
     tmux \
     util-linux \
     zlib1g-dev
