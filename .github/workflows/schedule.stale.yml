@@ -40,7 +40,14 @@ jobs:
           stale-pr-label: "stale"
           days-before-stale: 120
           days-before-close: 90
+          # If an issue or PR is updated after being marked as stale, it will be
+          # removed from the stale state and the process will start over. This
+          # prevents issues and PRs from being closed if they are actively being
+          # worked on.
           remove-stale-when-updated: true
+          # Exempt all issues or PRs with milestones, as they are likely being
+          # actively planned.
+          exempt-all-milestones: true
           exempt-pr-labels: "no-auto-close"
           exempt-issue-labels: "no-auto-close,enhancement,good first issue,help wanted"
           operations-per-run: 1000

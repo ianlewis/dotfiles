@@ -14,7 +14,7 @@
 
 # Set the initial shell so we can determine extra options.
 SHELL := /usr/bin/env bash -ueo pipefail
-DEBUG_LOGGING ?= $(shell if [[ "${GITHUB_ACTIONS}" == "true" ]] && [[ -n "${RUNNER_DEBUG}" || "${ACTIONS_RUNNER_DEBUG}" == "true" || "${ACTIONS_STEP_DEBUG}" == "true" ]]; then echo "true"; else echo ""; fi)
+DEBUG_LOGGING ?= $(shell if [[ "$(GITHUB_ACTIONS)" == "true" ]] && [[ -n "$(RUNNER_DEBUG)" || "$(ACTIONS_RUNNER_DEBUG)" == "true" || "$(ACTIONS_STEP_DEBUG)" == "true" ]]; then echo "true"; else echo ""; fi)
 BASH_OPTIONS := $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
 
 # Add extra options for debugging.
@@ -37,7 +37,7 @@ XDG_BIN_HOME ?= $(HOME)/.local/bin
 XDG_DATA_HOME ?= $(HOME)/.local/share
 XDG_STATE_HOME ?= $(HOME)/.local/state
 
-OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
+OUTPUT_FORMAT ?= $(shell if [ "$(GITHUB_ACTIONS)" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
@@ -51,9 +51,8 @@ COSIGN_REPO := github.com/sigstore/cosign
 COSIGN_CHECKSUM ?= $(COSIGN_CHECKSUM.$(kernel).$(arch))
 COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-$(kernel)-$(arch)
 
-AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
-AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
+AQUA_INSTALLER_URL := https://raw.githubusercontent.com/aquaproj/aqua-installer/$(AQUA_INSTALLER_VERSION)/aqua-installer
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
 
 # Ensure that aqua and aqua installed tools are in the PATH.
@@ -130,16 +129,8 @@ help: ## Print all Makefile targets (this message).
 				} \
 			}'
 
-.aqua-checksums.json: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
-	@# bash \
-	loglevel="info"; \
-	if [ -n "$(DEBUG_LOGGING)" ]; then \
-		loglevel="debug"; \
-	fi; \
-	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
-		--config "$(REPO_ROOT)/.aqua.yaml" \
-		--log-level "$${loglevel}" \
-		update-checksum
+# Node.js setup
+#####################################################################
 
 package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
 	@# bash \
@@ -176,7 +167,7 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versi
 			--no-fund; \
 	fi
 
-node_modules/.installed: $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed | package-lock.json
+node_modules/.installed: package.json $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -186,35 +177,63 @@ node_modules/.installed: $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed | pa
 	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
 	touch $@
 
-# Create a Python virtual environment for development dependencies.
-.venv/bin/activate: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
-	@# bash \
-	rm -rf .venv; \
-	$(PYENV_ROOT)/shims/python -m venv .venv
+# Python setup
+#####################################################################
 
-# Install Python development dependencies
-.venv/.installed: requirements-dev.txt .venv/bin/activate
+.uv/venv/bin/activate: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
+	mkdir -p .uv; \
+	$(PYENV_ROOT)/shims/python -m venv .uv/venv; \
 	touch $@
 
-.bin/aqua-$(AQUA_VERSION)/aqua:
+.uv/.installed: requirements-dev.txt .uv/venv/bin/activate
 	@# bash \
-	mkdir -p .bin/aqua-$(AQUA_VERSION); \
-	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
-	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
+	./.uv/venv/bin/pip install -r $< --require-hashes; \
+	touch $@
 
-$(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+uv.lock: pyproject.toml .uv/.installed
+	@# bash \
+	./.uv/venv/bin/uv lock; \
+	touch $@
+
+.venv/.installed: pyproject.toml .uv/.installed
+	@# bash \
+	./.uv/venv/bin/uv sync --locked; \
+	touch $@
+
+# Aqua setup
+#####################################################################
+
+# NOTE: aqua-installer itself is treated as a lockfile.
+.PHONY: aqua-installer
+aqua-installer:
+	curl -sSfL -o .aqua-installer $(AQUA_INSTALLER_URL); \
+	chmod +x .aqua-installer
+
+$(AQUA_ROOT_DIR)/bin/aqua:
+	@# bash \
+	./.aqua-installer -v "$(AQUA_VERSION)"
+
+.aqua-checksums.json: .aqua.yaml $(AQUA_ROOT_DIR)/bin/aqua
 	@# bash \
 	loglevel="info"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="debug"; \
 	fi; \
-	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+	$(AQUA_ROOT_DIR)/bin/aqua \
+		--config ".aqua.yaml" \
 		--log-level "$${loglevel}" \
-		--config .aqua.yaml \
+		update-checksum --prune
+
+$(AQUA_ROOT_DIR)/.installed: $(AQUA_ROOT_DIR)/bin/aqua .aqua.yaml
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	$(AQUA_ROOT_DIR)/bin/aqua \
+		--config ".aqua.yaml" \
+		--log-level "$${loglevel}" \
 		install; \
 	touch $@
 
@@ -252,10 +271,10 @@ bats-unit: ## Run Bats unit tests.
 	if [[ "$(OUTPUT_FORMAT)" == "github" ]]; then \
 		formatter="tap"; \
 	fi; \
-	$(REPO_ROOT)/bash/test/bats/bin/bats \
+	./bash/test/bats/bin/bats \
 		--formatter "$${formatter}" \
 		--recursive \
-		$(REPO_ROOT)/bash/test/unit
+		bash/test/unit
 
 $(E2E_HOME)/.installed:
 	@# bash \
@@ -282,9 +301,9 @@ bats-e2e: $(E2E_HOME)/.installed ## Run bats end-to-end tests.
 		formatter="tap"; \
 	fi; \
 	AQUA_VERSION=$(AQUA_VERSION) \
-		$(REPO_ROOT)/bash/test/bats/bin/bats \
+		./bash/test/bats/bin/bats \
 			--formatter "$${formatter}" \
-			$(REPO_ROOT)/bash/test/e2e
+			bash/test/e2e
 
 .PHONY: tmux-e2e
 tmux-e2e: $(E2E_HOME)/.installed ## Test tmux config for parsing errors (e2e).
@@ -352,7 +371,7 @@ json-format: node_modules/.installed ## Format JSON files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/prettier \
+	./node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -388,7 +407,7 @@ license-headers: ## Update license headers.
 	fi; \
 	for filename in $${files}; do \
 		if ! ( head "$${filename}" | $(GREP) -iL "Copyright" > /dev/null ); then \
-			$(REPO_ROOT)/third_party/mbrukman/autogen/autogen.sh \
+			./third_party/mbrukman/autogen/autogen.sh \
 				--in-place \
 				--no-code \
 				--no-tlc \
@@ -429,16 +448,20 @@ md-format: node_modules/.installed ## Format Markdown files.
 		exit 0; \
 	fi; \
 	# NOTE: prettier uses .editorconfig for tab-width. \
-	$(REPO_ROOT)/node_modules/.bin/prettier \
+	./node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
 		$${files}
 
-.PHONY: shfmt
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	@# bash \
-	files=$$(git ls-files ':!:third_party' | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
+	files=$$( \
+		git ls-files \
+			':!:third_party' \
+			':!:.aqua-installer' \
+			| xargs file | { $(GREP) -e ':.*shell' || true; } | cut -d':' -f1 \
+	); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
@@ -460,7 +483,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/prettier \
+	./node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -541,7 +564,7 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 		fi; \
 		commitlint_to="HEAD"; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/commitlint \
+	./node_modules/.bin/commitlint \
 		--from "$${commitlint_from}" \
 		--to "$${commitlint_to}" \
 		--verbose \
@@ -600,12 +623,12 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/markdownlint-cli2 $${files}
+	./node_modules/.bin/markdownlint-cli2 $${files}
 
 .PHONY: renovate-config-validator
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
 	@# bash \
-	$(REPO_ROOT)/node_modules/.bin/renovate-config-validator \
+	./node_modules/.bin/renovate-config-validator \
 		--strict
 
 .PHONY: selene
@@ -703,28 +726,7 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		exit_code=0; \
-		textlint_out="$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} | jq -cr '.[]' || exit_code=\"$$?\")"; \
-		while IFS="" read -r p && [ -n "$$p" ]; do \
-			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
-			file=$$(realpath --relative-to="." "$${filePath}"); \
-			messages=$$(echo "$$p" | jq -cr '.messages[] // empty'); \
-			while IFS="" read -r m && [ -n "$$m" ]; do \
-				line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
-				endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
-				col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
-				endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
-				message=$$(echo "$$m" | jq -cr '.message // empty'); \
-				exit_code=1; \
-				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-			done <<<"$${messages}"; \
-		done <<<"$$textlint_out"; \
-		exit "$${exit_code}"; \
-	else \
-		$(REPO_ROOT)/node_modules/.bin/textlint \
-			$${files}; \
-	fi
+	./node_modules/.bin/textlint $${files}
 
 .PHONY: yamllint
 yamllint: .venv/.installed ## Runs the yamllint linter.
@@ -743,7 +745,7 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		format="github"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/yamllint \
+	./.venv/bin/yamllint \
 		--strict \
 		--format "$${format}" \
 		$${files}
@@ -763,13 +765,13 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 		exit 0; \
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		$(REPO_ROOT)/.venv/bin/zizmor \
+		./.venv/bin/zizmor \
 			--quiet \
 			--pedantic \
 			--format sarif \
 			$${files} > zizmor.sarif.json; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/zizmor \
+	./.venv/bin/zizmor \
 		--quiet \
 		--pedantic \
 		--format plain \
@@ -792,27 +794,28 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 	ln -sf $(REPO_ROOT)/bin/all/withpass.sh $(XDG_BIN_HOME)/withpass; \
 	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
 	$(MAKE) \
-		-C $(REPO_ROOT)/third_party/ianlewis/coding-assistant-docker-images \
+		-C third_party/ianlewis/coding-assistant-docker-images \
 		install
 
-aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+aqua/aqua-checksums.json: aqua/aqua.yaml $(AQUA_ROOT_DIR)/bin/aqua
 	@# bash \
 	loglevel="info"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="debug"; \
 	fi; \
 	cd aqua; \
-	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+	$(AQUA_ROOT_DIR)/bin/aqua \
 		--config aqua.yaml \
 		--log-level "$${loglevel}" \
-		update-checksum
+		update-checksum --prune
 
 $(HOME)/.aqua.yaml:
 	@# bash \
 	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
 
 $(HOME)/.aqua-checksums.json:
-	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
+	@# bash \
+	ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
 
 .PHONY: configure-aqua
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
@@ -820,7 +823,7 @@ configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqu
 .PHONY: configure-bash
 configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configure bash.
 	@# bash \
-	$(MAKE) -C $(REPO_ROOT)/bash/lib/ble.sh build; \
+	$(MAKE) -C bash/lib/ble.sh build; \
 	$(RM) -f \
 		$(HOME)/.inputrc \
 		$(HOME)/.profile \
@@ -851,7 +854,7 @@ configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
 	#       be used to build the cache. \
 	# NOTE: this may run before aqua tools are available on the $PATH so we \
 	#       need to refer to bat via the aqua root dir. \
-	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" root-dir); \
+	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua --config "$(HOME)/.aqua.yaml" root-dir); \
 	mkdir -p "$$($${aqua_dir}/bin/bat --config-dir)/themes"; \
 	ln -sf \
 		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
@@ -871,7 +874,7 @@ configure-crontab: install-bin ## Configure crontab.
 		echo '######################## MANAGED BY dotfiles; DO NOT EDIT ######################'; \
 		echo "SHELL=$$(which bash)"; \
 		echo ""; \
-		cat $(REPO_ROOT)/cron/crontab; \
+		cat cron/crontab; \
 		echo ""; \
 		for filename in ${HOME}/.config/dotfiles/cron.d/*; do \
 			if [[ -r "$${filename}" ]]; then \
@@ -913,8 +916,8 @@ configure-ghostty: $(XDG_CONFIG_HOME)/.created ## Configure Ghostty.
 		config_dir="$(HOME)/Library/Application Support/com.mitchellh.ghostty"; \
 		fonts_dir="$(HOME)/Library/Fonts"; \
 		mkdir -p "$${fonts_dir}"; \
-		cp $(REPO_ROOT)/third_party/fonts.google.com/RobotoMono/*.ttf "$${fonts_dir}/"; \
-		cp $(REPO_ROOT)/third_party/fonts.google.com/Noto_Sans_JP/*.ttf "$${fonts_dir}/"; \
+		cp third_party/fonts.google.com/RobotoMono/*.ttf "$${fonts_dir}/"; \
+		cp third_party/fonts.google.com/Noto_Sans_JP/*.ttf "$${fonts_dir}/"; \
 	fi; \
 	mkdir -p "$${config_dir}"; \
 	ln -sf $(REPO_ROOT)/ghostty/config "$${config_dir}/config"
@@ -1022,26 +1025,23 @@ install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
-install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
+install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
 	PATH=$(HOME)/opt/go/bin:$(PATH) \
 	AQUA_ROOT_DIR= \
-		$(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" install
+		$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua \
+			--config "$(HOME)/.aqua.yaml" \
+			install
 
-$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt/.created
+$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua: $(XDG_DATA_HOME)/.created
 	@# bash \
-	mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
-	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
-	tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
-	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
-
-$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME)/.created
-	@# bash \
-	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
-	ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
+	# Remove old aqua installations to avoid conflicts. \
+	# $(RM) -rf $(HOME)/opt/aqua-*; \
+	$(RM) -f $(XDG_BIN_HOME)/aqua
+	# Explicitly set AQUA_ROOT_DIR to the default global root dir. \
+	AQUA_ROOT_DIR="$(XDG_DATA_HOME)/aquaproj-aqua" \
+		./.aqua-installer -v "$(AQUA_VERSION)"
 
 ## Language Runtimes
 #####################################################################
@@ -1210,9 +1210,12 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 	touch $@
 
 # Installs Python tools in the pyenv virtualenv for the current version.
-$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements.txt $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
+$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements-dev.txt $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
+	# Install uv \
 	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes; \
+	# Install other packages \
+	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/uv pip install --python "$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/" .; \
 	$(PYENV_ROOT)/bin/pyenv rehash; \
 	touch $@
 
@@ -1269,7 +1272,7 @@ $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/p
 #####################################################################
 
 .PHONY: update-lockfiles
-update-lockfiles: .aqua-checksums.json package-lock.json aqua/aqua-checksums.json nodenv/package-lock.json ## Update lockfiles.
+update-lockfiles: .aqua-checksums.json package-lock.json uv.lock aqua-installer aqua/aqua-checksums.json nodenv/package-lock.json ## Update lockfiles.
 
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
@@ -1294,5 +1297,6 @@ clean: clean-node-modules ## Delete temporary files.
 	@$(RM) -r .bin
 	@$(RM) -r $(AQUA_ROOT_DIR)
 	@$(RM) -r .venv
+	@$(RM) -r .uv
 	@$(RM) *.sarif.json
 	@$(RM) nvim-checkhealth.log

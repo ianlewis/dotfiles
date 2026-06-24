@@ -23,7 +23,38 @@ setup() {
 
 @test "aqua is installed correctly" {
     assert [ -n "${AQUA_VERSION}" ]
-    assert_symlink_to "${E2E_HOME}/opt/aqua-${AQUA_VERSION}/aqua" "${E2E_HOME}/.local/bin/aqua"
+    uname_s="$(uname -s)"
+    case "${uname_s}" in
+    Linux)
+        os="linux"
+        ;;
+    Darwin)
+        os="darwin"
+        ;;
+    *)
+        fail "unsupported OS: ${uname_s}"
+        ;;
+    esac
+
+    uname_m="$(uname -m)"
+    case "${uname_m}" in
+    x86_64)
+        arch="amd64"
+        ;;
+    arm64)
+        arch="arm64"
+        ;;
+    aarch64)
+        arch="arm64"
+        ;;
+    *)
+        fail "unsupported architecture: ${uname_m}"
+        ;;
+    esac
+
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/internal/pkgs/github_release/github.com/aquaproj/aqua/${AQUA_VERSION}/aqua_${os}_${arch}.tar.gz/aqua" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/aqua"
 }
 
 @test "aqua configured correctly" {

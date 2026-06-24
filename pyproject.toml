@@ -1,0 +1,28 @@
+[project]
+name = "dotfiles"
+version = "0.0.0"
+# NOTE: this should match the major/minor version in .python-version.
+requires-python = ">=3.14"
+dependencies = [
+    "hashin==1.0.5",
+    "python-lsp-server==1.14.0",
+    "python-lsp-ruff==2.3.1",
+    "ruff==0.15.13",
+    "yamllint==1.38.0",
+    "zizmor==1.25.2",
+]
+
+[build-system]
+requires = ["setuptools == 82.0.1"]
+build-backend = "setuptools.build_meta"
+
+# This is required to prevent setuptools from trying to find packages in the
+# current directory.
+[tool.setuptools.packages.find]
+include = []
+
+[dependency-groups]
+dev = [
+    "yamllint==1.38.0",
+    "zizmor==1.25.2",
+]

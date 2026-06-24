@@ -14,9 +14,8 @@
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.59.1
-AQUA_CHECKSUM.linux.amd64 := f2ec38dece860fee4fc48d1213da176fa7bd900e95036cac8d952800d91644e7
-AQUA_CHECKSUM.linux.arm64 := 92298717b849c4baa36947dc4fcdedf7a542a2686dbc939a0dcda83d891b9a25
-AQUA_CHECKSUM.darwin.arm64 := 8c658418ba81cf2629813d374358f3dfe13c6715d27ccb476baf85c873acc501
+# renovate: datasource=github-releases depName=aquaproj/aqua-installer versioning=loose
+AQUA_INSTALLER_VERSION ?= v4.0.5
 
 # renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
 COSIGN_VERSION ?= v3.0.6

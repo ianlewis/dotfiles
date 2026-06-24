@@ -117,10 +117,10 @@ function _bashrc_setup_rust() {
 }
 
 function _bashrc_setup_aqua() {
-    if command -v aqua >/dev/null 2>&1; then
-        aqua_root="$(aqua root-dir)"
-        if [[ ":$PATH:" != *":${aqua_root}/bin:"* ]]; then
-            PATH="${aqua_root}/bin:${PATH}"
+    export AQUA_ROOT_PATH="${XDG_DATA_HOME}/aquaproj-aqua"
+    if [[ -d "${AQUA_ROOT_PATH}/bin" ]]; then
+        if [[ ":$PATH:" != *":${AQUA_ROOT_PATH}/bin:"* ]]; then
+            PATH="${AQUA_ROOT_PATH}/bin:${PATH}"
         fi
     fi
 }
