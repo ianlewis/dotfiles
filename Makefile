@@ -1038,7 +1038,7 @@ $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua: $(XDG_DATA_HOME)/.created
 	@# bash \
 	# Remove old aqua installations to avoid conflicts. \
 	# $(RM) -rf $(HOME)/opt/aqua-*; \
-	$(RM) -f $(XDG_BIN_HOME)/aqua
+	$(RM) -f $(XDG_BIN_HOME)/aqua; \
 	# Explicitly set AQUA_ROOT_DIR to the default global root dir. \
 	AQUA_ROOT_DIR="$(XDG_DATA_HOME)/aquaproj-aqua" \
 		./.aqua-installer -v "$(AQUA_VERSION)"
