@@ -804,10 +804,10 @@ aqua/aqua-checksums.json: aqua/aqua.yaml $(AQUA_ROOT_DIR)/bin/aqua
 		loglevel="debug"; \
 	fi; \
 	cd aqua; \
-	./.bin/aqua-$(AQUA_VERSION)/aqua \
+	$(AQUA_ROOT_DIR)/bin/aqua \
 		--config aqua.yaml \
 		--log-level "$${loglevel}" \
-		update-checksum
+		update-checksum --prune
 
 $(HOME)/.aqua.yaml:
 	@# bash \
