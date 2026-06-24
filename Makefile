@@ -37,7 +37,7 @@ XDG_BIN_HOME ?= $(HOME)/.local/bin
 XDG_DATA_HOME ?= $(HOME)/.local/share
 XDG_STATE_HOME ?= $(HOME)/.local/state
 
-OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
+OUTPUT_FORMAT ?= $(shell if [ "$(GITHUB_ACTIONS)" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
@@ -51,7 +51,6 @@ COSIGN_REPO := github.com/sigstore/cosign
 COSIGN_CHECKSUM ?= $(COSIGN_CHECKSUM.$(kernel).$(arch))
 COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-$(kernel)-$(arch)
 
-AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_INSTALLER_URL := https://raw.githubusercontent.com/aquaproj/aqua-installer/$(AQUA_INSTALLER_VERSION)/aqua-installer
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
@@ -153,7 +152,7 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versi
 		# NOTE: package-lock.json is removed to ensure that npm includes the \
 		# integrity field. npm install will not restore this field if \
 		# missing in an existing package-lock.json file. \
-		rm -f $@; \
+		$(RM) -f $@; \
 		# NOTE: We clean the node_modules directory to ensure that npm install \
 		#       will not desync between the package.json, package-lock.json \
 		#       and the node_modules directory. \
