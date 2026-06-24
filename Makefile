@@ -455,10 +455,14 @@ md-format: node_modules/.installed ## Format Markdown files.
 		--write \
 		$${files}
 
-.PHONY: shfmt
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	@# bash \
-	files=$$(git ls-files ':!:third_party' | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
+	files=$$( \
+		git ls-files \
+			':!:third_party' \
+			':!:.aqua-installer' \
+			| xargs file | { $(GREP) -e ':.*shell' || true; } | cut -d':' -f1 \
+	); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
