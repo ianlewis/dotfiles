@@ -794,7 +794,7 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 		-C third_party/ianlewis/coding-assistant-docker-images \
 		install
 
-aqua/aqua-checksums.json: aqua/aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+aqua/aqua-checksums.json: aqua/aqua.yaml $(AQUA_ROOT_DIR)/bin/aqua
 	@# bash \
 	loglevel="info"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
