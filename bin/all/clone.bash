@@ -25,7 +25,7 @@ function _validate_repo_id() {
     local repo_id="$1"
 
     # Validate the repository ID format.
-    if [[ ! "${repo_id}" =~ ^[a-zA-Z0-9._-]+(/[a-zA-Z0-9._-]+)?$ ]]; then
+    if [[ ! ${repo_id} =~ ^[a-zA-Z0-9._-]+(/[a-zA-Z0-9._-]+)?$ ]]; then
         echo "$(basename "${0}"): ERROR: Invalid repository '${repo_id}'. Must be in the format of <owner>/<repo> or <repo>." >&2
         exit 1
     fi
