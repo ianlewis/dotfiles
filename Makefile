@@ -855,7 +855,7 @@ configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
 	#       be used to build the cache. \
 	# NOTE: this may run before aqua tools are available on the $PATH so we \
 	#       need to refer to bat via the aqua root dir. \
-	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" root-dir); \
+	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua --config "$(HOME)/.aqua.yaml" root-dir); \
 	mkdir -p "$$($${aqua_dir}/bin/bat --config-dir)/themes"; \
 	ln -sf \
 		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
