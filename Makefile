@@ -181,7 +181,7 @@ node_modules/.installed: package.json $(NODENV_ROOT)/versions/$(NODE_VERSION)/.i
 # Python setup
 #####################################################################
 
-.uv/venv/bin/activate:
+.uv/venv/bin/activate: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
 	mkdir -p .uv; \
 	$(PYENV_ROOT)/shims/python -m venv .uv/venv; \
