@@ -53,7 +53,7 @@ COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-
 
 AQUA_REPO := github.com/aquaproj/aqua
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
-AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
+AQUA_INSTALLER_URL := https://raw.githubusercontent.com/aquaproj/aqua-installer/$(AQUA_INSTALLER_VERSION)/aqua-installer
 export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
 
 # Ensure that aqua and aqua installed tools are in the PATH.
@@ -209,8 +209,6 @@ uv.lock: pyproject.toml .uv/.installed
 .PHONY: aqua-installer
 aqua-installer:
 	curl -sSfL -o .aqua-installer $(AQUA_INSTALLER_URL); \
-	# TODO(github.com/aquaproj/aqua-installer/pull/932): Remove after merge \
-	sed -i'' -E 's/rm -R /rm -Rf /' .aqua-installer; \
 	chmod +x .aqua-installer
 
 $(AQUA_ROOT_DIR)/bin/aqua:
@@ -813,7 +811,8 @@ $(HOME)/.aqua.yaml:
 	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
 
 $(HOME)/.aqua-checksums.json:
-	@ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
+	@# bash \
+	ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
 
 .PHONY: configure-aqua
 configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqua.
@@ -1023,26 +1022,23 @@ install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
-install-aqua: $(XDG_BIN_HOME)/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
+install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
 	PATH=$(HOME)/opt/go/bin:$(PATH) \
 	AQUA_ROOT_DIR= \
-		$(XDG_BIN_HOME)/aqua --config "$(HOME)/.aqua.yaml" install
+		$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua \
+			--config "$(HOME)/.aqua.yaml" \
+			install
 
-$(HOME)/opt/aqua-$(AQUA_VERSION)/.installed: $(HOME)/opt/.created
+$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua: $(XDG_DATA_HOME)/.created
 	@# bash \
-	mkdir -p $(HOME)/opt/aqua-$(AQUA_VERSION); \
-	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
-	tar -x -C $(HOME)/opt/aqua-$(AQUA_VERSION) -f "$${tempfile}"; \
-	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed
-
-$(XDG_BIN_HOME)/aqua: $(HOME)/opt/aqua-$(AQUA_VERSION)/.installed $(XDG_BIN_HOME)/.created
-	@# bash \
-	touch $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua; \
-	ln -sf $(HOME)/opt/aqua-$(AQUA_VERSION)/aqua $@
+	# Remove old aqua installations to avoid conflicts. \
+	# $(RM) -rf $(HOME)/opt/aqua-*; \
+	$(RM) -f $(XDG_BIN_HOME)/aqua
+	# Explicitly set AQUA_ROOT_DIR to the default global root dir. \
+	AQUA_ROOT_DIR="$(XDG_DATA_HOME)/aquaproj-aqua" \
+		./.aqua-installer -v "$(AQUA_VERSION)"
 
 ## Language Runtimes
 #####################################################################
