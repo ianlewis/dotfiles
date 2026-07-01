@@ -7,7 +7,7 @@ dependencies = [
     "hashin==1.0.5",
     "python-lsp-server==1.14.0",
     "python-lsp-ruff==2.3.1",
-    "ruff==0.15.13",
+    "ruff==0.15.17",
     "yamllint==1.38.0",
     "zizmor==1.25.2",
 ]
