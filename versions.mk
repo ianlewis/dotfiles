@@ -34,8 +34,8 @@ NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.42
-NODENV_BUILD_SHA ?= 883b61d89da52b2eb3b604d78b31a761f05d1c8a
+NODENV_BUILD_VERSION ?= v5.4.44
+NODENV_BUILD_SHA ?= 12ac21c200aa4af5a49302ae66b1a3dbd129bb1a
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
 PYENV_INSTALL_VERSION ?= v2.7.1
