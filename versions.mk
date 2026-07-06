@@ -13,15 +13,15 @@
 # limitations under the License.
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.59.1
+AQUA_VERSION ?= v2.60.1
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer versioning=loose
 AQUA_INSTALLER_VERSION ?= v4.0.5
 
 # renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
-COSIGN_VERSION ?= v3.0.6
-COSIGN_CHECKSUM.linux.amd64 := c956e5dfcac53d52bcf058360d579472f0c1d2d9b69f55209e256fe7783f4c74
-COSIGN_CHECKSUM.linux.arm64 := bedac92e8c3729864e13d4a17048007cfafa79d5deca993a43a90ffe018ef2b8
-COSIGN_CHECKSUM.darwin.arm64 := 5fadd012ae6381a6a29ff86a7d39aa873878852f1073fc90b15995961ecfb084
+COSIGN_VERSION ?= v3.1.1
+COSIGN_CHECKSUM.linux.amd64 := ae1ecd212663f3693ad9edf8b1a183900c9a52d3155ba6e354237f9a0f6463fc
+COSIGN_CHECKSUM.linux.arm64 := 2ec865872e331c32fd12b08dae15332d3f92c0aa029219589684a4903ca85d11
+COSIGN_CHECKSUM.darwin.arm64 := 94b42a9e697be95675f6160ab031a9a5f1ec1e646d6f648d7b2f5cd59ececbc5
 
 # renovate: datasource=golang-version depName=golang versioning=loose
 GO_VERSION ?= 1.26.4
@@ -38,8 +38,8 @@ NODENV_BUILD_VERSION ?= v5.4.44
 NODENV_BUILD_SHA ?= 12ac21c200aa4af5a49302ae66b1a3dbd129bb1a
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.7.1
-PYENV_INSTALL_SHA ?= 45180928d34ce5adf21931a494881bbf502ef6bd
+PYENV_INSTALL_VERSION ?= v2.7.3
+PYENV_INSTALL_SHA ?= 933d0aaf1d1190a641c3ddce484e72b1a993473d
 
 # renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
 PYENV_VIRTUALENV_VERSION ?= v1.4.0
