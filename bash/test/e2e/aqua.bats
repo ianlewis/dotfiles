@@ -94,6 +94,12 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
+@test "flux installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/flux" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "goimports installed correctly" {
     assert_symlink_to \
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \

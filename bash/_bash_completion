@@ -76,6 +76,12 @@ function _bash_completion() {
         source <(delta --generate-completion bash)
     fi
 
+    # flux completion
+    if command -v flux >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(flux completion bash)
+    fi
+
     # fx completion
     if command -v fx >/dev/null 2>&1; then
         # shellcheck source=/dev/null

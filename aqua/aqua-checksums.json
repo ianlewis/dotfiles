@@ -351,6 +351,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_darwin_amd64.tar.gz",
+      "checksum": "E4583DB32E4F4F4EC195084F0381C704E5104A55A7EC4C1A444396137ECDB161",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_darwin_arm64.tar.gz",
+      "checksum": "1DD6791738B1C250748C24C24B48E92908881596F999AD8BF10F84763D66FDB3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_linux_amd64.tar.gz",
+      "checksum": "4092B367FD060097976FB7261601F79420ECF7266328417DFD8DFEE27DE0E6A3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_linux_arm64.tar.gz",
+      "checksum": "665BFE5AEB843FAF907E7F77250C31840499FF2DC65A64C2479409E3728748D1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_windows_amd64.zip",
+      "checksum": "ECEADDF7782AE5959E37D1D3620A70C68EF834AD1107BA6D9049A58C088A566C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_windows_arm64.zip",
+      "checksum": "B821CF1937090D25E53720F6A6C1218B11F5AD72EF76B6D032FD2024DCEF3452",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_darwin_amd64.tar.gz",
       "checksum": "4E4878FE75C5774C9759506EFDB8E37F3BA1100F0A82A0B0338A843C7A42D1E9",
       "algorithm": "sha256"
