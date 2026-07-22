@@ -25,6 +25,14 @@ setup() {
     assert_equal "${BASE_PATH}/.python-version" "$(readlink "${E2E_HOME}/.python-version")"
 }
 
+@test "ansible is installed correctly" {
+    python_version="$(cat "${E2E_HOME}/.python-version")"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-doc"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-galaxy"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-inventory"
+    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-playbook"
+}
+
 @test "pyenv is installed" {
     assert_file_executable "${E2E_HOME}/.local/share/pyenv/bin/pyenv"
     assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python"
