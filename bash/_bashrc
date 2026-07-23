@@ -245,8 +245,15 @@ function _bashrc_user_temp() {
     local stat_user_id
     local stat_group_id
     local stat_permissions
-    read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -c "%u %g %a" "${ws_root}")"
-    if [[ ${stat_user_id} != "${UID}" ]] || [[ ${stat_group_id} != "${GID}" ]] || [[ ${stat_permissions} != "700" ]]; then
+    if [ "$(uname)" == "Darwin" ]; then
+        read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -f "%u %g %p" "${ws_root}")"
+        stat_permissions="${stat_permissions: -3}"
+        expected_gid="$(dscl . -read /Groups/wheel PrimaryGroupID | cut -d' ' -f2)"
+    else
+        read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -c "%u %g %a" "${ws_root}")"
+        expected_gid="${GID}"
+    fi
+    if [[ ${stat_user_id} != "${UID}" ]] || [[ ${stat_group_id} != "${expected_gid}" ]] || [[ ${stat_permissions} != "700" ]]; then
         echo "WARN: Workspace directory ${ws_root} has incorrect ownership or permissions." >&2
         ws_root="$(mktemp -d -t "dotfiles-user-tmp-XXXXXXXXXX")"
     fi
@@ -258,8 +265,9 @@ function _bashrc_user_temp() {
     if [[ -L ${user_tmp} ]]; then
         local canon_user_tmp
         canon_user_tmp="$(readlink -f "${user_tmp}")"
-        if [[ ${canon_user_tmp} != "${ws_root}" ]]; then
-            echo "WARN: ${user_tmp} is a symlink to ${canon_user_tmp} instead of ${ws_root}. Updating the symlink." >&2
+        canon_ws_root="$(readlink -f "${ws_root}")"
+        if [[ ${canon_user_tmp} != "${canon_ws_root}" ]]; then
+            echo "WARN: ${user_tmp} is a symlink to ${canon_user_tmp} instead of ${canon_ws_root}. Updating the symlink." >&2
             rm -f "${user_tmp}"
             ln -sf "${ws_root}" "${user_tmp}"
         fi
