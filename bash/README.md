@@ -3,53 +3,53 @@
 This directory contains bash specific resource configuration, libraries, and
 scripts.
 
-## Features
+## features
 
-- [`sbp`] prompt in Tokyo Night color scheme with
-  git, Python virtualenv, and Nix shell integration.
-- CLI syntax highlighting and auto-suggestions with [`ble.sh`].
-- [Bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
+- [`sbp`] prompt in tokyo night color scheme with
+  git, python virtualenv, and nix shell integration.
+- cli syntax highlighting and auto-suggestions with [`ble.sh`].
+- [bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
   addition to the system default completions.
-- [Bash aliases](./_bash_aliases) for common commands, including
+- [bash aliases](./_bash_aliases) for common commands, including
   [`kubectl-aliases`].
 - `ssh-agent` integration to find the running ssh-agent and set the
-  `SSH_AUTH_SOCK` environment variable.
+  `ssh_auth_sock` environment variable.
 - `tmux` integration to set the terminal title and display the current working
-  directory in the status bar. Tmux session reuse is enabled by default.
-- Integration with Google Cloud SDK, including `gcloud`, `gsutil`, and `bq`
+  directory in the status bar. tmux session reuse is enabled by default.
+- integration with google cloud sdk, including `gcloud`, `gsutil`, and `bq`
   commands installed in `~/opt/google-cloud-sdk`.
 
-## Bash resource configuration (`rc`)
+## bash resource configuration (`rc`)
 
-Resource configuration for different purposes are broken into separate files
+resource configuration for different purposes are broken into separate files
 using their standard names, such as `.bash_aliases` and `.bash_completion`.
 
-Machine local files can be created by suffixing `.local` to the filename and
-putting it in your home directory. For example, `.bashrc` will load a script
-called `.bashrc.local` if it exists. This goes for other scripts like
+machine local files can be created by suffixing `.local` to the filename and
+putting it in your home directory. for example, `.bashrc` will load a script
+called `.bashrc.local` if it exists. this goes for other scripts like
 `.bash_aliases`, `.bash_completion`, etc.
 
-Each resource configuration file is wrapped in a function that is called at the
-end of the file. This allows for setting local variables that don't corrupt the
+each resource configuration file is wrapped in a function that is called at the
+end of the file. this allows for setting local variables that don't corrupt the
 terminal session.
 
 `.inputrc` contains shell key mappings.
 
-## Custom scripts
+## custom scripts
 
 - [`clone`](../bin/all/clone.bash): A script to easily clone a repository from
   GitHub to a local directory that defaults to `~/src/<owner>/<repo>`.
-- [`ts`](../bin/all/ts): A timestamp utility that adds timestamps to log
+- [`ts`](../bin/all/ts.bash): A timestamp utility that adds timestamps to log
   output that is piped to standard input.
-- [`tmux-sessionizer`](../bin/all/tmux-sessionizer) (`ns`): A script to easily
-  create and manage tmux sessions for a "project" folder. It is aliased to `ns`
-  and defaults to searching directories in `~/src`.
-- `tw`: An alias to `tmux-sessionizer` that creates a new tmux session for a
+- [`tmux-sessionizer`](../bin/all/tmux-sessionizer.bash) (alias: `ns`): This
+  script to easily create and manage tmux sessions for a "project" folder. It is
+  aliased to `ns` and defaults to searching directories in `~/src`.
+- `tw`: an alias to `tmux-sessionizer` that creates a new tmux session for a
   new temporary directory in the `~/.tmp` directory. This is useful for creating
   testing environments that will be cleaned up automatically.
-- [`project-windowizer`](../bin/all/project-windowizer) (`pw`): This script
-  splits a tmux window vertically and runs a command in the right pane. It
-  defaults to running `nvim` in the right pane for development.
+- [`project-windowizer`](../bin/all/project-windowizer.bash) (alias: `pw`): This
+  script splits a tmux window vertically and runs a command in the right pane.
+  It defaults to running `nvim` in the right pane for development.
 - [`randstr`](../bin/all/randstr.bash): A script to generate a random string of
   a given length. Strings are generated using `/dev/urandom` so they are
   suitable for use as passwords or other secure tokens.

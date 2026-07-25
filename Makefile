@@ -786,9 +786,9 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 	ln -sf $(REPO_ROOT)/bin/all/clone.bash $(XDG_BIN_HOME)/clone; \
 	ln -sf $(REPO_ROOT)/bin/all/delete_old_downloads.sh $(XDG_BIN_HOME)/delete_old_downloads.sh; \
 	ln -sf $(REPO_ROOT)/bin/all/docker_prune.sh $(XDG_BIN_HOME)/docker_prune.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/project-windowizer $(XDG_BIN_HOME)/project-windowizer; \
-	ln -sf $(REPO_ROOT)/bin/all/tmux-sessionizer $(XDG_BIN_HOME)/tmux-sessionizer; \
-	ln -sf $(REPO_ROOT)/bin/all/ts $(XDG_BIN_HOME)/ts; \
+	ln -sf $(REPO_ROOT)/bin/all/project-windowizer.bash $(XDG_BIN_HOME)/project-windowizer; \
+	ln -sf $(REPO_ROOT)/bin/all/tmux-sessionizer.bash $(XDG_BIN_HOME)/tmux-sessionizer; \
+	ln -sf $(REPO_ROOT)/bin/all/ts.bash $(XDG_BIN_HOME)/ts; \
 	ln -sf $(REPO_ROOT)/bin/all/randstr.bash $(XDG_BIN_HOME)/randstr; \
 	ln -sf $(REPO_ROOT)/bin/all/update_authorized_keys.sh $(XDG_BIN_HOME)/update_authorized_keys.sh; \
 	ln -sf $(REPO_ROOT)/bin/all/withpass.bash $(XDG_BIN_HOME)/withpass; \
