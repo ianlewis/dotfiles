@@ -1025,7 +1025,7 @@ install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
-install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
+install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed configure-aqua install-go ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
 	PATH=$(HOME)/opt/go/bin:$(PATH) \
@@ -1034,7 +1034,7 @@ install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua configure-aqua install-go 
 			--config "$(HOME)/.aqua.yaml" \
 			install
 
-$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua: $(XDG_DATA_HOME)/.created
+$(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.created
 	@# bash \
 	# Remove old aqua installations to avoid conflicts. \
 	# $(RM) -rf $(HOME)/opt/aqua-*; \
