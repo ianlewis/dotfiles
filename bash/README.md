@@ -6,7 +6,7 @@ scripts.
 ## Features
 
 - [`sbp`] prompt in Tokyo Night color scheme with
-  git, python virtualenv, and Nix shell integration.
+  git, Python virtualenv, and Nix shell integration.
 - CLI syntax highlighting and auto-suggestions with [`ble.sh`].
 - [Bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
   addition to the system default completions.
