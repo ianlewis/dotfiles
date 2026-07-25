@@ -791,7 +791,7 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 	ln -sf $(REPO_ROOT)/bin/all/ts $(XDG_BIN_HOME)/ts; \
 	ln -sf $(REPO_ROOT)/bin/all/randstr.bash $(XDG_BIN_HOME)/randstr; \
 	ln -sf $(REPO_ROOT)/bin/all/update_authorized_keys.sh $(XDG_BIN_HOME)/update_authorized_keys.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/withpass.sh $(XDG_BIN_HOME)/withpass; \
+	ln -sf $(REPO_ROOT)/bin/all/withpass.bash $(XDG_BIN_HOME)/withpass; \
 	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
 	$(MAKE) \
 		-C third_party/ianlewis/coding-assistant-docker-images \
