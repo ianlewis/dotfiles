@@ -786,12 +786,12 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 	ln -sf $(REPO_ROOT)/bin/all/clone.bash $(XDG_BIN_HOME)/clone; \
 	ln -sf $(REPO_ROOT)/bin/all/delete_old_downloads.sh $(XDG_BIN_HOME)/delete_old_downloads.sh; \
 	ln -sf $(REPO_ROOT)/bin/all/docker_prune.sh $(XDG_BIN_HOME)/docker_prune.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/project-windowizer $(XDG_BIN_HOME)/project-windowizer; \
-	ln -sf $(REPO_ROOT)/bin/all/tmux-sessionizer $(XDG_BIN_HOME)/tmux-sessionizer; \
-	ln -sf $(REPO_ROOT)/bin/all/ts $(XDG_BIN_HOME)/ts; \
+	ln -sf $(REPO_ROOT)/bin/all/project-windowizer.bash $(XDG_BIN_HOME)/project-windowizer; \
+	ln -sf $(REPO_ROOT)/bin/all/tmux-sessionizer.bash $(XDG_BIN_HOME)/tmux-sessionizer; \
+	ln -sf $(REPO_ROOT)/bin/all/ts.bash $(XDG_BIN_HOME)/ts; \
 	ln -sf $(REPO_ROOT)/bin/all/randstr.bash $(XDG_BIN_HOME)/randstr; \
 	ln -sf $(REPO_ROOT)/bin/all/update_authorized_keys.sh $(XDG_BIN_HOME)/update_authorized_keys.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/withpass.sh $(XDG_BIN_HOME)/withpass; \
+	ln -sf $(REPO_ROOT)/bin/all/withpass.bash $(XDG_BIN_HOME)/withpass; \
 	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
 	$(MAKE) \
 		-C third_party/ianlewis/coding-assistant-docker-images \
@@ -1025,7 +1025,7 @@ install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
-install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua configure-aqua install-go ## Install aqua and aqua-managed CLI tools
+install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed configure-aqua install-go ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
 	PATH=$(HOME)/opt/go/bin:$(PATH) \
@@ -1034,7 +1034,7 @@ install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua configure-aqua install-go 
 			--config "$(HOME)/.aqua.yaml" \
 			install
 
-$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua: $(XDG_DATA_HOME)/.created
+$(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.created
 	@# bash \
 	# Remove old aqua installations to avoid conflicts. \
 	# $(RM) -rf $(HOME)/opt/aqua-*; \

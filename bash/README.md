@@ -1,4 +1,4 @@
-# Bash configuration
+# Bash Configuration
 
 This directory contains bash specific resource configuration, libraries, and
 scripts.
@@ -19,7 +19,7 @@ scripts.
 - Integration with Google Cloud SDK, including `gcloud`, `gsutil`, and `bq`
   commands installed in `~/opt/google-cloud-sdk`.
 
-## Bash resource configuration (`rc`)
+## Bash Resource Configuration (`rc`)
 
 Resource configuration for different purposes are broken into separate files
 using their standard names, such as `.bash_aliases` and `.bash_completion`.
@@ -35,10 +35,33 @@ terminal session.
 
 `.inputrc` contains shell key mappings.
 
-## Bash libraries
+## Custom Scripts
+
+- [`clone`](../bin/all/clone.bash): A script to easily clone a repository from
+  GitHub to a local directory that defaults to `~/src/<owner>/<repo>`.
+- [`ts`](../bin/all/ts.bash): A timestamp utility that adds timestamps to log
+  output that is piped to standard input.
+- [`tmux-sessionizer`](../bin/all/tmux-sessionizer.bash) (alias: `ns`): This
+  script to easily create and manage tmux sessions for a "project" folder. It is
+  aliased to `ns` and defaults to searching directories in `~/src`.
+- `tw`: an alias to `tmux-sessionizer` that creates a new tmux session for a
+  new temporary directory in the `~/.tmp` directory. This is useful for creating
+  testing environments that will be cleaned up automatically.
+- [`project-windowizer`](../bin/all/project-windowizer.bash) (alias: `pw`): This
+  script splits a tmux window vertically and runs a command in the right pane.
+  It defaults to running `nvim` in the right pane for development.
+- [`randstr`](../bin/all/randstr.bash): A script to generate a random string of
+  a given length. Strings are generated using `/dev/urandom` so they are
+  suitable for use as passwords or other secure tokens.
+- [`withpass`](../bin/all/withpass.bash): A script to run a command with a
+  password provided via standard input and passing it to a command via an
+  environment variable. This is useful for keeping secrets out of the command
+  line history and process list without exporting them in the environment.
+
+## Bash Libraries
 
 The `lib` directory contains bash libraries that are used in resource
-configuration etc..
+configuration etc.
 
 - [`sbp`]: A simple bash prompt library that provides a simple way to customize
   the bash prompt. It is used in `.bashrc` to set the prompt. A local
