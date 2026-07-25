@@ -1,41 +1,41 @@
-# Bash configuration
+# Bash Configuration
 
 This directory contains bash specific resource configuration, libraries, and
 scripts.
 
-## features
+## Features
 
-- [`sbp`] prompt in tokyo night color scheme with
-  git, python virtualenv, and nix shell integration.
-- cli syntax highlighting and auto-suggestions with [`ble.sh`].
-- [bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
+- [`sbp`] prompt in Tokyo Night color scheme with
+  git, python virtualenv, and Nix shell integration.
+- CLI syntax highlighting and auto-suggestions with [`ble.sh`].
+- [Bash completion](./_bash_completion) for `pip`, `kubectl`, and `aqua` in
   addition to the system default completions.
-- [bash aliases](./_bash_aliases) for common commands, including
+- [Bash aliases](./_bash_aliases) for common commands, including
   [`kubectl-aliases`].
 - `ssh-agent` integration to find the running ssh-agent and set the
-  `ssh_auth_sock` environment variable.
+  `SSH_AUTH_SOCK` environment variable.
 - `tmux` integration to set the terminal title and display the current working
-  directory in the status bar. tmux session reuse is enabled by default.
-- integration with google cloud sdk, including `gcloud`, `gsutil`, and `bq`
+  directory in the status bar. Tmux session reuse is enabled by default.
+- Integration with Google Cloud SDK, including `gcloud`, `gsutil`, and `bq`
   commands installed in `~/opt/google-cloud-sdk`.
 
-## bash resource configuration (`rc`)
+## Bash Resource Configuration (`rc`)
 
-resource configuration for different purposes are broken into separate files
+Resource configuration for different purposes are broken into separate files
 using their standard names, such as `.bash_aliases` and `.bash_completion`.
 
-machine local files can be created by suffixing `.local` to the filename and
-putting it in your home directory. for example, `.bashrc` will load a script
-called `.bashrc.local` if it exists. this goes for other scripts like
+Machine local files can be created by suffixing `.local` to the filename and
+putting it in your home directory. For example, `.bashrc` will load a script
+called `.bashrc.local` if it exists. This goes for other scripts like
 `.bash_aliases`, `.bash_completion`, etc.
 
-each resource configuration file is wrapped in a function that is called at the
-end of the file. this allows for setting local variables that don't corrupt the
+Each resource configuration file is wrapped in a function that is called at the
+end of the file. This allows for setting local variables that don't corrupt the
 terminal session.
 
 `.inputrc` contains shell key mappings.
 
-## custom scripts
+## Custom Scripts
 
 - [`clone`](../bin/all/clone.bash): A script to easily clone a repository from
   GitHub to a local directory that defaults to `~/src/<owner>/<repo>`.
@@ -58,7 +58,7 @@ terminal session.
   environment variable. This is useful for keeping secrets out of the command
   line history and process list without exporting them in the environment.
 
-## Bash libraries
+## Bash Libraries
 
 The `lib` directory contains bash libraries that are used in resource
 configuration etc.
