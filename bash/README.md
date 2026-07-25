@@ -38,7 +38,7 @@ terminal session.
 ## Custom scripts
 
 - [`clone`](../bin/all/clone.bash): A script to easily clone a repository from
-  GitHub to a local directory that defaults to `~/src/<user>/<repo>`.
+  GitHub to a local directory that defaults to `~/src/<owner>/<repo>`.
 - [`ts`](../bin/all/ts): A timestamp utility that adds timestamps to log
   output that is piped to standard input.
 - [`tmux-sessionizer`](../bin/all/tmux-sessionizer) (`ns`): A script to easily
