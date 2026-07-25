@@ -1210,7 +1210,7 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 	touch $@
 
 # Installs Python tools in the pyenv virtualenv for the current version.
-$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements-dev.txt $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
+$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements-dev.txt pyproject.toml $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@# bash \
 	# Install uv \
 	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes; \
