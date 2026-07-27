@@ -90,8 +90,8 @@ function blerc/vim-load-hook {
 
     #{{{ Dvorak keybindings for Normal and Operator-Pending Modes
     ble-bind -m vi_nmap -f h vi-command/backward-char
-    ble-bind -m vi_nmap -f t vi-command/forward-line
-    ble-bind -m vi_nmap -f n vi-command/backward-line
+    ble-bind -m vi_nmap -f t vi-command/backward-line
+    ble-bind -m vi_nmap -f n vi-command/forward-line
     ble-bind -m vi_nmap -f s vi-command/forward-char
 
     ble-bind -m vi_omap -f h vi-command/backward-char
