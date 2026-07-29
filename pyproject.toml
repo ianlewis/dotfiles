@@ -6,7 +6,7 @@ requires-python = ">=3.14"
 dependencies = [
     "ansible==14.2.0",
     "hashin==1.0.5",
-    "python-lsp-server==1.14.0",
+    "python-lsp-server==1.15.0",
     "python-lsp-ruff==2.3.1",
     "ruff==0.15.13",
     "yamllint==1.38.0",
