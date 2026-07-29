@@ -41,14 +41,12 @@ This directory contains my Neovim configuration. It gets symbolically linked to
 
 ## Requirements
 
-- [Neovim](https://neovim.io) 0.11.1 or later (it may work with earlier
-  versions, but it has not been tested).
-- A C compiler (e.g., `gcc` or `clang`) to build some plugins (e.g.
-  [`nvim-treesitter`](https://github.com/nvim-treesitter/nvim-treesitter)).
+- [Neovim](https://neovim.io) 0.12.0 or later (Neovim is installed via Aqua in my dotfiles).
+- A C compiler (e.g., `gcc` or `clang`) to build some plugins (e.g. parsers installed by [`nvim-treesitter`](https://github.com/nvim-treesitter/nvim-treesitter)).
 
 ## Installation
 
-All tools required for plugins should be installed via the Makefile. See the
+Neovim as well as all tools required for plugins should be installed via the Makefile. See the
 root [`README.md`](../README.md#install) for details.
 
 After installation, you do need to compile the `telescope-fzf-native.nvim`
