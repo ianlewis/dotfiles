@@ -10,7 +10,7 @@ dependencies = [
     "python-lsp-ruff==2.3.1",
     "ruff==0.15.13",
     "yamllint==1.38.0",
-    "zizmor==1.25.2",
+    "zizmor==1.26.1",
 ]
 
 [build-system]
@@ -25,5 +25,5 @@ include = []
 [dependency-groups]
 dev = [
     "yamllint==1.38.0",
-    "zizmor==1.25.2",
+    "zizmor==1.26.1",
 ]
