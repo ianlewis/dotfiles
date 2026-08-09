@@ -51,6 +51,7 @@ packages:
   - name: tree-sitter/tree-sitter@v0.26.9
   - name: kubernetes/kubernetes/kubectl@v1.36.2
   - name: kubernetes/kubernetes/kubeadm@v1.36.2
+  - name: bitnami/sealed-secrets@v0.38.4
   - name: kubernetes-sigs/kind@v0.32.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.1
   - name: helm/helm@v4.2.2

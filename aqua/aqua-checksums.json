@@ -211,6 +211,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-darwin-amd64.tar.gz",
+      "checksum": "209CB21DA63F546F785499D04199DD5D39E8EF4934626207D8445C7EC3664F20",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-darwin-arm64.tar.gz",
+      "checksum": "4FE9F8FBB6EC7EF27BF0F4014F2846F8B363AE787A31FC6BA9CBB00FD40FB66D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-linux-amd64.tar.gz",
+      "checksum": "AB5AE808B0EFCB167A825B6CF7F3A7C0034BD99A6301D78DB2012DA651A8C0B9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-linux-arm64.tar.gz",
+      "checksum": "BCC40AC15E29A21C270E2BE8C62AF29D4B01B9111AE667723E4B6D8E4009228B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-windows-amd64.tar.gz",
+      "checksum": "A7CB5C78EBB53538862F86434C07626F3E1D0EC627ABE9A78FA3A4ED87ECDC18",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/bufbuild/buf/v1.71.0/buf-Darwin-arm64.tar.gz",
       "checksum": "96151A0D44343D05930976069CC5D4BEC7736CC920304816A2745906E822170D",
       "algorithm": "sha256"
