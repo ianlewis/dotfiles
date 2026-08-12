@@ -20,7 +20,7 @@
 
 set -euo pipefail
 
-function _randstr() {
+function _main() {
     # These variables are used by the argsparse library.
     local program_options
     local argsparse_usage_description
@@ -54,4 +54,6 @@ function _randstr() {
     fi
 }
 
-_randstr "$@"
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+    _main "$@"
+fi
