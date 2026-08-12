@@ -48,7 +48,7 @@ function _randstr() {
     local length="${program_options['length']}"
     local pattern="${program_options['pattern']}"
 
-    head -c "${length}" <(tr -dc "${pattern}" </dev/urandom)
+    head -c "${length}" <(LC_ALL=C tr -dc "${pattern}" </dev/urandom)
     if [[ -z ${program_options['exclude-newline']:-} ]]; then
         echo
     fi
