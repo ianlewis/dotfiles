@@ -45,6 +45,7 @@ rules:
       - "/\\b[Ff]olke\\b/g"
       - "/\\b[Ff]iletypes?\\b/g"
       - "/\\b[Nn]amespaces?\\b/g"
+      - "/\\b[Pp]arsers?\\b/g"
       - "/\\b[Rr]emappings?\\b/g"
       - "/\\b[Ss]ubmodules?\\b/g"
       - "/\\b[Ss]ymlinks?\\b/g" # symbolic links
