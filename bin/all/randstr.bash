@@ -64,7 +64,7 @@ function _main() {
         chunk="$(dd if=/dev/urandom bs=1 count="${chunk_size}" 2>/dev/null | LC_ALL=C tr -dc "${pattern}")"
         output="${output}${chunk}"
     done
-    output="${output:0:${length}}"
+    output="${output:0:length}"
 
     # LC_ALL=C tr -dc "${pattern}" </dev/urandom 2>/dev/null | head -c "${length}" || [ $? -eq 141 ]
 
