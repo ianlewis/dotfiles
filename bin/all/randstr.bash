@@ -20,7 +20,7 @@
 
 set -euo pipefail
 
-function _randstr() {
+function _main() {
     # These variables are used by the argsparse library.
     local program_options
     local argsparse_usage_description
@@ -45,13 +45,34 @@ function _randstr() {
     # Command line parsing is done here.
     argsparse_parse_options "$@"
 
+    if ! command -v dd >/dev/null; then
+        echo >&2 "The dd command is required."
+        exit 1
+    fi
+    if ! command -v tr >/dev/null; then
+        echo >&2 "The tr command is required."
+        exit 1
+    fi
+
     local length="${program_options['length']}"
     local pattern="${program_options['pattern']}"
 
-    head -c "${length}" <(LC_ALL=C tr -dc "${pattern}" </dev/urandom)
+    local chunk_size=512
+    local output=""
+
+    # The exact number of characters we will actually have to read from
+    # /dev/urandom is unpredictible so read in fixed-size chunks.
+    while [[ ${#output} -lt ${length} ]]; do
+        chunk="$(dd if=/dev/urandom bs=1 count="${chunk_size}" 2>/dev/null | LC_ALL=C tr -dc "${pattern}")"
+        output="${output}${chunk}"
+    done
+
+    printf "%s" "${output:0:length}"
     if [[ -z ${program_options['exclude-newline']:-} ]]; then
-        echo
+        printf "\n"
     fi
 }
 
-_randstr "$@"
+if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+    _main "$@"
+fi
