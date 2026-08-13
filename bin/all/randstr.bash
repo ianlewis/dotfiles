@@ -60,15 +60,14 @@ function _main() {
     local chunk_size=512
     local output=""
 
+    # The exact number of characters we will actually have to read from
+    # /dev/urandom is unpredictible so read in fixed-size chunks.
     while [[ ${#output} -lt ${length} ]]; do
         chunk="$(dd if=/dev/urandom bs=1 count="${chunk_size}" 2>/dev/null | LC_ALL=C tr -dc "${pattern}")"
         output="${output}${chunk}"
     done
-    output="${output:0:length}"
 
-    # LC_ALL=C tr -dc "${pattern}" </dev/urandom 2>/dev/null | head -c "${length}" || [ $? -eq 141 ]
-
-    printf "%s" "${output}"
+    printf "%s" "${output:0:length}"
     if [[ -z ${program_options['exclude-newline']:-} ]]; then
         printf "\n"
     fi
