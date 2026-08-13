@@ -19,28 +19,28 @@ setup() {
     load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
     load "${BASE_PATH}/bin/all/randstr.bash"
 
-    TEST_HOME="$(mktemp -u "${BATS_TEST_TMPDIR}/home")"
+    TEST_HOME="$(mktemp -u "${BATS_TEST_TMPDIR}/home.XXXXXX")"
     mkdir -p "${TEST_HOME}/.local/share/bash/lib"
     ln -s "${BASE_PATH}/bash/lib/gnu-getopt" "${TEST_HOME}/.local/share/bash/lib/gnu-getopt"
-    ln -s "${BASE_PATH}/bash/lib/base-argsparse" "${TEST_HOME}/.local/share/bash/lib/bash-argsparse"
+    ln -s "${BASE_PATH}/bash/lib/bash-argsparse" "${TEST_HOME}/.local/share/bash/lib/bash-argsparse"
 }
 
 @test "randstr generates random string" {
-    run _main
+    HOME="${TEST_HOME}" run _main
     assert_output --regexp '^[A-Za-z0-9]{16}$'
 }
 
 @test "randstr generates random string with length" {
-    run _main --length 10
+    HOME="${TEST_HOME}" run _main --length 10
     assert_output --regexp '^[A-Za-z0-9]{10}$'
 }
 
 @test "randstr generates random string with pattern" {
-    run _main --pattern '0-9'
+    HOME="${TEST_HOME}" run _main --pattern '0-9'
     assert_output --regexp '^[0-9]{16}$'
 }
 
 @test "randstr generates random string with pattern and length" {
-    run _main --length 18 --pattern 'A-Z'
+    HOME="${TEST_HOME}" run _main --length 18 --pattern 'A-Z'
     assert_output --regexp '^[A-Z]{18}$'
 }
