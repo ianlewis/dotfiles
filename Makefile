@@ -1271,8 +1271,12 @@ $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/p
 ## Maintenance
 #####################################################################
 
+.PHONY: update-versions-mk
+update-versions-mk: ## Update checksums in versions.mk.
+	@bash scripts/update-versions-mk.sh
+
 .PHONY: update-lockfiles
-update-lockfiles: .aqua-checksums.json package-lock.json uv.lock aqua-installer aqua/aqua-checksums.json nodenv/package-lock.json ## Update lockfiles.
+update-lockfiles: .aqua-checksums.json package-lock.json uv.lock aqua-installer aqua/aqua-checksums.json nodenv/package-lock.json update-versions-mk ## Update lockfiles.
 
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
