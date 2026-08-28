@@ -55,13 +55,6 @@ function _bashrc_setup_go() {
     fi
     export GOPATH
     export GOBIN
-    if [ -d "${HOME}/opt/go" ]; then
-        GOROOT=${HOME}/opt/go
-        if [[ ":$PATH:" != *":${GOROOT}/bin:"* ]]; then
-            PATH="${GOROOT}/bin:${PATH}"
-        fi
-        export GOROOT
-    fi
 }
 
 # _bashrc_setup_pyenv sets up pyenv if available.
