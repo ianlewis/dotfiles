@@ -30,7 +30,7 @@
     {
       customType: "regex",
       description: "Update git SHA values in versions.mk",
-      fileMatch: ["^versions\\.mk$"],
+      managerFilePatterns: ["/^versions\\.mk$/"],
       matchStrings: [
         "# renovate: datasource=github-releases depName=(?<depName>\\S+)[^\n]*\n[A-Z_]+_VERSION \\?= (?<currentValue>[^\n]+)\n[A-Z_]+_SHA \\?= (?<currentDigest>[^\n]+)",
       ],
