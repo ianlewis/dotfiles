@@ -23,12 +23,6 @@ COSIGN_CHECKSUM.linux.amd64 := f7622ed3cf22e55e1ae6377c080979ff77a22da9981c11df2
 COSIGN_CHECKSUM.linux.arm64 := 90e7ae0b5dfd60f20816b52c012addf7fc055ebcc7bea4ce81c428ca8518c302
 COSIGN_CHECKSUM.darwin.arm64 := dec1c3f802320b19c2fbcf2dc7bcfb3f258e1c181a046c23a1a074bdf932f10a
 
-# renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.26.5
-GO_CHECKSUM.linux.amd64 := 5c2c3b16caefa1d968a94c1daca04a7ca301a496d9b086e17ad77bb81393f053
-GO_CHECKSUM.linux.arm64 := fe4789e92b1f33358680864bbe8704289e7bb5fc207d80623c308935bd696d49
-GO_CHECKSUM.darwin.arm64 := efb87ff28af9a188d0536ef5d42e63dd52ba8263cd7344a993cc48dd11dedb6a
-
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
 NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
