@@ -7,7 +7,7 @@ dependencies = [
     "ansible==14.2.0",
     "hashin==1.0.5",
     "python-lsp-server==1.14.0",
-    "python-lsp-ruff==2.3.1",
+    "python-lsp-ruff==2.3.3",
     "ruff==0.15.13",
     "yamllint==1.38.0",
     "zizmor==1.25.2",
