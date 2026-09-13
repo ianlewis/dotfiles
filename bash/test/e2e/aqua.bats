@@ -100,6 +100,15 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
+@test "go is installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/go" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/gofmt" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "goimports installed correctly" {
     assert_symlink_to \
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \

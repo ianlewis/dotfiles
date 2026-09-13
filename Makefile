@@ -253,7 +253,7 @@ configure: configure-aqua configure-bash configure-bat configure-crictl configur
 install-tools: install-bin install-slsa-verifier install-cosign install-aqua
 
 .PHONY: install-runtimes
-install-runtimes: install-go install-node install-python install-ruby
+install-runtimes: install-node install-python install-ruby
 
 ## Testing
 #####################################################################
@@ -1025,7 +1025,7 @@ install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
-install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed configure-aqua install-go ## Install aqua and aqua-managed CLI tools
+install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed configure-aqua ## Install aqua and aqua-managed CLI tools
 	@# bash \
 	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
 	PATH=$(HOME)/opt/go/bin:$(PATH) \
@@ -1045,22 +1045,6 @@ $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.cre
 
 ## Language Runtimes
 #####################################################################
-
-.PHONY: install-go
-install-go: $(HOME)/opt/go-$(GO_VERSION)/.installed ## Install the Go runtime.
-
-$(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt/.created
-	@# bash \
-	tempfile=$$($(MKTEMP) --suffix=".tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
-	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
-	cd $(HOME)/opt; \
-	$(RM) -rf go; \
-	tar xf "$${tempfile}"; \
-	mv go go-$(GO_VERSION); \
-	ln -s go-$(GO_VERSION) go; \
-	$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto; \
-	touch $@
 
 .PHONY: install-node
 install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js environment.
