@@ -82,6 +82,12 @@ function _bash_completion() {
         source <(flux completion bash)
     fi
 
+    # flux-operator completion
+    if command -v flux-operator >/dev/null 2>&1; then
+        # shellcheck source=/dev/null
+        source <(flux-operator completion bash)
+    fi
+
     # fx completion
     if command -v fx >/dev/null 2>&1; then
         # shellcheck source=/dev/null
