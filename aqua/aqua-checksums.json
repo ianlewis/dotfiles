@@ -326,6 +326,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.60.0/flux-operator_0.60.0_darwin_amd64.tar.gz",
+      "checksum": "A34607C60C0D38BA6DD9004C13209B578B25DC80A266285726751FC39AEB74B4",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.60.0/flux-operator_0.60.0_darwin_arm64.tar.gz",
+      "checksum": "9A40772ED9FA12263FB172D963A4DA388811F295C45689861F670D25CE0BB3F0",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.60.0/flux-operator_0.60.0_linux_amd64.tar.gz",
+      "checksum": "DD7D504BF02117FC8625EF7E71FE757473A9D69CC1D6369586D0E3AE19E40E01",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.60.0/flux-operator_0.60.0_linux_arm64.tar.gz",
+      "checksum": "5452AD9C3287607849C4F67869389AEAC101CB2EB67FDB9243BFFF06713612CB",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.60.0/flux-operator_0.60.0_windows_amd64.zip",
+      "checksum": "7A48E7AFFAED049C367563BB61A09EA117588A5E1B669EA2067338C9EA2A3373",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.60.0/flux-operator_0.60.0_windows_arm64.zip",
+      "checksum": "C9514BD70C53DE24D502466FE0DB1EAD492A6D506C523238CC15145D3C941FA0",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/dandavison/delta/0.19.2/delta-0.19.2-aarch64-apple-darwin.tar.gz",
       "checksum": "9BE36612A5A13E9E386DC498FB8E50DC87C72EE42B63DB0EA05B32F99A72A69A",
       "algorithm": "sha256"
