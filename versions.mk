@@ -50,7 +50,7 @@ RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20260716
+RBENV_BUILD_VERSION ?= v20260902
 RBENV_BUILD_SHA ?= 013c27d7e557b71b21bfa0f9c7af1081cf5411dc
 
 # renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
