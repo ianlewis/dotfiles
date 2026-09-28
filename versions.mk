@@ -18,28 +18,28 @@ AQUA_VERSION ?= v2.62.3
 AQUA_INSTALLER_VERSION ?= v4.0.5
 
 # renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
-COSIGN_VERSION ?= v3.1.2
-COSIGN_CHECKSUM.linux.amd64 := f7622ed3cf22e55e1ae6377c080979ff77a22da9981c11df222a2e444991e7cf
-COSIGN_CHECKSUM.linux.arm64 := 90e7ae0b5dfd60f20816b52c012addf7fc055ebcc7bea4ce81c428ca8518c302
-COSIGN_CHECKSUM.darwin.arm64 := dec1c3f802320b19c2fbcf2dc7bcfb3f258e1c181a046c23a1a074bdf932f10a
+COSIGN_VERSION ?= v3.1.3
+COSIGN_CHECKSUM.linux.amd64 := 4629c757b7618056f8ddd7e2625ae9fdd94c0372a65049520bc7d9df9efc7f71
+COSIGN_CHECKSUM.linux.arm64 := c5d324e091826b0d7a78eb16fef316450b4eb9aaec045611c08ba06f5e73220a
+COSIGN_CHECKSUM.darwin.arm64 := 5cf948c2f4dfe59687bdd0b8523709067383e03982cc543475c8a7dc70e92a76
 
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.26.5
-GO_CHECKSUM.linux.amd64 := 5c2c3b16caefa1d968a94c1daca04a7ca301a496d9b086e17ad77bb81393f053
-GO_CHECKSUM.linux.arm64 := fe4789e92b1f33358680864bbe8704289e7bb5fc207d80623c308935bd696d49
-GO_CHECKSUM.darwin.arm64 := efb87ff28af9a188d0536ef5d42e63dd52ba8263cd7344a993cc48dd11dedb6a
+GO_VERSION ?= 1.27.1
+GO_CHECKSUM.linux.amd64 := 63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63edaf590168445
+GO_CHECKSUM.linux.arm64 := 3450b45a3f9ee8568792736a5c5e70a1f2e9b36c35a8f74958c03e51d7d92bec
+GO_CHECKSUM.darwin.arm64 := ee215d57e0ec269c60cc9ceca68e6bda321ba9ee5afe24f4b0988703c2d87d12
 
 # renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
 NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 
 # renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
-NODENV_BUILD_VERSION ?= v5.4.49
-NODENV_BUILD_SHA ?= 1330263f5be434685eb14fd2ee563ed1970a8f3a
+NODENV_BUILD_VERSION ?= v5.4.56
+NODENV_BUILD_SHA ?= 5295c6aacdf388381bfd92da1c162d7e0985f4f5
 
 # renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
-PYENV_INSTALL_VERSION ?= v2.8.4
-PYENV_INSTALL_SHA ?= 0f16606e4f906bac76a409bcab40974d579067bf
+PYENV_INSTALL_VERSION ?= v2.8.6
+PYENV_INSTALL_SHA ?= 3787bacc9188d76ba7ca24c23e26afb1a841a543
 
 # renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
 PYENV_VIRTUALENV_VERSION ?= v1.4.0
@@ -50,8 +50,8 @@ RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 
 # renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
-RBENV_BUILD_VERSION ?= v20260716
-RBENV_BUILD_SHA ?= 013c27d7e557b71b21bfa0f9c7af1081cf5411dc
+RBENV_BUILD_VERSION ?= v20260924
+RBENV_BUILD_SHA ?= db86e6ddd6d3b1d8715d005b65fab0c3f2804fdd
 
 # renovate: datasource=github-releases depName=slsa-framework/slsa-verifier versioning=loose
 SLSA_VERIFIER_VERSION ?= v2.7.1
