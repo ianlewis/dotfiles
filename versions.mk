@@ -29,27 +29,27 @@ GO_CHECKSUM.linux.amd64 := 63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63ed
 GO_CHECKSUM.linux.arm64 := 3450b45a3f9ee8568792736a5c5e70a1f2e9b36c35a8f74958c03e51d7d92bec
 GO_CHECKSUM.darwin.arm64 := ee215d57e0ec269c60cc9ceca68e6bda321ba9ee5afe24f4b0988703c2d87d12
 
-# renovate: datasource=github-releases depName=nodenv/nodenv versioning=loose
+# renovate: depName=nodenv/nodenv
 NODENV_INSTALL_VERSION ?= v1.6.2
 NODENV_INSTALL_SHA ?= dc200d672dda83e6adb9b32b8b4fc752643ab2a4
 
-# renovate: datasource=github-releases depName=nodenv/node-build versioning=loose
+# renovate: depName=nodenv/node-build
 NODENV_BUILD_VERSION ?= v5.4.56
 NODENV_BUILD_SHA ?= 5295c6aacdf388381bfd92da1c162d7e0985f4f5
 
-# renovate: datasource=github-releases depName=pyenv/pyenv versioning=loose
+# renovate: depName=pyenv/pyenv
 PYENV_INSTALL_VERSION ?= v2.8.6
 PYENV_INSTALL_SHA ?= 3787bacc9188d76ba7ca24c23e26afb1a841a543
 
-# renovate: datasource=github-releases depName=pyenv/pyenv-virtualenv versioning=loose
+# renovate: depName=pyenv/pyenv-virtualenv
 PYENV_VIRTUALENV_VERSION ?= v1.4.0
 PYENV_VIRTUALENV_SHA ?= eda64556af9b2992386deeb75dad2130899fc4c9
 
-# renovate: datasource=github-releases depName=rbenv/rbenv versioning=loose
+# renovate: depName=rbenv/rbenv
 RBENV_INSTALL_VERSION ?= v1.3.2
 RBENV_INSTALL_SHA ?= 10e96bfc473c7459a447fbbda12164745a72fd37
 
-# renovate: datasource=github-releases depName=rbenv/ruby-build versioning=loose
+# renovate: depName=rbenv/ruby-build
 RBENV_BUILD_VERSION ?= v20260924
 RBENV_BUILD_SHA ?= db86e6ddd6d3b1d8715d005b65fab0c3f2804fdd
 
