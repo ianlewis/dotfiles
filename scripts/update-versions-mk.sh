@@ -27,12 +27,17 @@ update_var() {
     local var="$1"
     local value="$2"
 
+    local sed_options=(-i)
+    # The --version flag is not supported on BSD sed, so we check for it and set
+    # the sed options accordingly.
+    sed --version >/dev/null 2>&1 || sed_options=(-i '')
+
     # Handle := assignment (binary checksums)
     if grep -q "^${var} :=" "${VERSIONS_MK}"; then
-        sed -i "s|^${var} :=.*|${var} := ${value}|" "${VERSIONS_MK}"
+        sed "${sed_options[@]}" "s|^${var} :=.*|${var} := ${value}|" "${VERSIONS_MK}"
     # Handle ?= assignment
     elif grep -q "^${var} ?=" "${VERSIONS_MK}"; then
-        sed -i "s|^${var} ?=.*|${var} ?= ${value}|" "${VERSIONS_MK}"
+        sed "${sed_options[@]}" "s|^${var} ?=.*|${var} ?= ${value}|" "${VERSIONS_MK}"
     else
         echo "WARNING: Variable ${var} not found in ${VERSIONS_MK}" >&2
     fi
