@@ -16,3 +16,6 @@
 
 -- Use tabs.
 vim.bo.expandtab = false
+
+-- Enable tree-sitter highlighting.
+vim.treesitter.start()

@@ -1,4 +1,4 @@
--- Copyright 2025 Ian Lewis
+-- Copyright 2026 Ian Lewis
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -12,45 +12,10 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Definition of the tree-sitter parsers to be installed.
-return {
-	"bash",
-	"c",
-	"cpp",
-	"css",
-	"csv",
-	"dockerfile",
-	"gitcommit",
-	"gitignore",
-	"go",
-	"gomod",
-	"gotmpl",
-	"gowork",
-	"html",
-	"htmldjango",
-	"ini",
-	"javascript",
-	"json",
-	"json5",
-	"latex",
-	"liquid",
-	"lua",
-	"make",
-	"markdown",
-	"markdown_inline",
-	"proto",
-	"python",
-	"query",
-	"requirements", -- pip requirements.txt
-	"rust",
-	"scss",
-	"sql",
-	"terraform",
-	"textproto",
-	"toml",
-	"typescript",
-	"vim",
-	"vimdoc",
-	"xml",
-	"yaml",
-}
+-- gowork-specific options.
+
+-- Use tabs.
+vim.bo.expandtab = false
+
+-- Enable tree-sitter highlighting.
+vim.treesitter.start()
