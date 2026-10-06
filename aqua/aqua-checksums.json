@@ -1026,6 +1026,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter-darwin",
+      "checksum": "D935E2BC89E272C74227CDC4AC4DBA35F468E0E486E846E5892231A301C91A67",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter-darwin_arm64",
+      "checksum": "662277A6A267BA2CB1371B56539A371872EF142B196FA0D87195E4213773CDF8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter-linux",
+      "checksum": "618D299A3E2839C8CA9D86FCE0DB617BE0FBA41F0FECBBBFB7FBF1C04299FAE1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter-linux_arm64",
+      "checksum": "9C39D35252E0DCAFB16B26197B9E93BA578E44EB402C3C6660FC94E08F94094F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter.exe",
+      "checksum": "8B0CCF51F18AB786FDCDEDE55046AFC701A75C75122E046A2F0D3244BC91274A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter_arm64.exe",
+      "checksum": "344DDF355C0445851D1ACD64905E9DD345E2360A80F4917A36050E72775F1B62",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/sxyazi/yazi/v26.5.6/yazi-aarch64-apple-darwin.zip",
       "checksum": "7ABD71725E2FE27BED036BECBF6CE79FA17964EB68491D34190011C94B8C7CA8",
       "algorithm": "sha256"
@@ -1078,6 +1108,36 @@
     {
       "id": "github_release/github.com/tree-sitter/tree-sitter/v0.26.9/tree-sitter-windows-x64.gz",
       "checksum": "DBB5309FCC76EAEB4EC358FCB72AC2EAE5CD653E12967246CC63F84038D16CD8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/yannh/kubeconform/v0.8.0/kubeconform-darwin-amd64.tar.gz",
+      "checksum": "71DBC87AC9F24099A62B93570E65AA06312BA6AC8AEA63B7F86E9D999EDF5A92",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/yannh/kubeconform/v0.8.0/kubeconform-darwin-arm64.tar.gz",
+      "checksum": "F84F4DFBEBF4A6B0B230385FA065A39EA35E02608C2B50D025DCF64775A69D67",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/yannh/kubeconform/v0.8.0/kubeconform-linux-amd64.tar.gz",
+      "checksum": "9BC2BFFBF71F261128533EDAF912153948B7FF238F9A531AE6D34466EC287883",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/yannh/kubeconform/v0.8.0/kubeconform-linux-arm64.tar.gz",
+      "checksum": "1F53FC8E81258197A35E8603054162A5AF1DE8C5AF13746C71AB680D9534ED87",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/yannh/kubeconform/v0.8.0/kubeconform-windows-amd64.zip",
+      "checksum": "E3F56102BCF4F50B034A567E2482A1C5330799983DDD655952310211AEF73D93",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/yannh/kubeconform/v0.8.0/kubeconform-windows-arm64.zip",
+      "checksum": "4F3C9889F5F3A1E4ABA84F9212F599AD3164D1FB32175FBA3A53B505B0FFFD0F",
       "algorithm": "sha256"
     },
     {
