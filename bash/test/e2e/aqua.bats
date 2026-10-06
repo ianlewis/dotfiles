@@ -130,6 +130,18 @@ setup() {
         "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
+@test "kube-linter installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kube-linter" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
+@test "kubeconform installed correctly" {
+    assert_symlink_to \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kubeconform" \
+        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "kustomize installed correctly" {
     assert_symlink_to \
         "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kustomize" \
