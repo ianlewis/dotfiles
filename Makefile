@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+XDG_CONFIG_HOME ?= $(HOME)/.config
+XDG_BIN_HOME ?= $(HOME)/.local/bin
+XDG_DATA_HOME ?= $(HOME)/.local/share
+XDG_STATE_HOME ?= $(HOME)/.local/state
+
 export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
 export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
 export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
@@ -24,11 +29,6 @@ RUBY_VERSION := $(shell cat .ruby-version)
 
 include include.mk
 include versions.mk
-
-XDG_CONFIG_HOME ?= $(HOME)/.config
-XDG_BIN_HOME ?= $(HOME)/.local/bin
-XDG_DATA_HOME ?= $(HOME)/.local/share
-XDG_STATE_HOME ?= $(HOME)/.local/state
 
 # TODO(github.com/aquaproj/aqua/issues/3951): workaround for flaky aqua install
 SLSA_VERIFIER_REPO := github.com/slsa-framework/slsa-verifier
