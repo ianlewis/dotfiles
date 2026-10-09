@@ -10,20 +10,14 @@ dependencies = [
     "python-lsp-ruff==2.3.1",
     "ruff==0.15.13",
     "yamllint==1.38.0",
-    "zizmor==1.25.2",
+    "zizmor==1.30.1",
 ]
 
 [build-system]
-requires = ["setuptools ==83.0.0"]
+requires = ["setuptools==84.0.0"]
 build-backend = "setuptools.build_meta"
 
 # This is required to prevent setuptools from trying to find packages in the
 # current directory.
 [tool.setuptools.packages.find]
 include = []
-
-[dependency-groups]
-dev = [
-    "yamllint==1.38.0",
-    "zizmor==1.25.2",
-]
