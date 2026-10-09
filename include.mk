@@ -149,7 +149,7 @@ help: ## Print all Makefile targets (this message).
 # Node.js setup
 #####################################################################
 
-$(REPO_ROOT)/package-lock.json: $(REPO_ROOT)/package.json $(AQUA_ROOT_DIR)/.installed
+$(REPO_ROOT)/package-lock.json: $(REPO_ROOT)/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
 	@echo "Updating Node.js dependencies..."
 	loglevel="notice"
 	if [ -n "$(DEBUG_LOGGING)" ]; then
@@ -184,7 +184,7 @@ $(REPO_ROOT)/package-lock.json: $(REPO_ROOT)/package.json $(AQUA_ROOT_DIR)/.inst
 			--no-fund
 	fi
 
-$(REPO_ROOT)/node_modules/.installed: $(REPO_ROOT)/package.json
+$(REPO_ROOT)/node_modules/.installed: $(REPO_ROOT)/package.json $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
 	@echo "Installing Node.js dependencies..."
 	loglevel="notice"
 	if [ -n "$(DEBUG_LOGGING)" ]; then
@@ -197,10 +197,10 @@ $(REPO_ROOT)/node_modules/.installed: $(REPO_ROOT)/package.json
 # Python setup
 #####################################################################
 
-$(REPO_ROOT)/.uv/venv/bin/activate:
+$(REPO_ROOT)/.uv/venv/bin/activate: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
 	@echo "Creating Python virtual environment..."
 	mkdir -p $(REPO_ROOT)/.uv
-	python -m venv $(REPO_ROOT)/.uv/venv
+	$(PYENV_ROOT)/shims/python -m venv $(REPO_ROOT)/.uv/venv
 	touch $@
 
 $(REPO_ROOT)/.uv/.installed: $(REPO_ROOT)/requirements-dev.txt $(REPO_ROOT)/.uv/venv/bin/activate
