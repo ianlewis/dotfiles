@@ -31,12 +31,12 @@ jobs:
       contents: read # Needed for private repositories.
       security-events: write # Needed to upload SARIF results.
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          submodules: true
           persist-credentials: false
+          submodules: recursive
 
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version-file: ".python-version"
 
@@ -54,7 +54,9 @@ jobs:
 
       - name: Upload to code-scanning
         # NOTE: Uploading SARIF requires GitHub Enterprise and GitHub Advanced Security license for private repositories.
-        uses: github/codeql-action/upload-sarif@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
+        # TODO: Remove the next line for private repositories with GitHub Advanced Security.
+        if: github.event.repository.private == false
+        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:
           sarif_file: zizmor.sarif.json
           category: zizmor

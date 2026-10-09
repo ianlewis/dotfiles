@@ -1,28 +1,31 @@
 {
+  // Renovate configuration for updating dependencies.
+
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     // Use the best-practices preset. Adds options to pin dependencies.
     // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
     "config:best-practices",
 
-    // Update dependencies monthly
-    "schedule:monthly",
+    // Update dependencies quarterly. This strikes a balance between keeping
+    // dependencies up to date and avoiding too many PRs across many
+    // repositories.
+    "schedule:quarterly",
 
     // Add DCO sign-off
     ":gitSignOff",
 
     // Add Aqua present to allow updating CLI tools.
     // https://aquaproj.github.io/docs/guides/renovate/
-    "github>aquaproj/aqua-renovate-config#2.11.0",
+    "github>aquaproj/aqua-renovate-config#2.13.0",
 
     // Update version numbers in Makefile.
     // https://docs.renovatebot.com/presets-customManagers/#custommanagersmakefileversions
     "customManagers:makefileVersions",
   ],
-
   // NOTE: Set the prHourlyLimit to 0 to disable the hourly limit. This is done
-  // because we are using a monthly schedule and the default hourly limit of 2
-  // would cause Renovate to only create 2 PRs every month.
+  // because we are using a schedule and the default hourly limit of 2
+  // would cause Renovate to only create 2 PRs every cycle.
   // Similarly set prConcurrentLimit to 0 to disable the concurrent PR limit.
   prHourlyLimit: 0,
   prConcurrentLimit: 0,
@@ -39,25 +42,32 @@
   // Apply a dependency cooldown of 14 days. This helps to avoid issues with
   // compromised releases.
   // https://blog.yossarian.net/2025/11/21/We-should-all-be-using-dependency-cooldowns
+  // https://docs.renovatebot.com/configuration-options/#minimumreleaseage
   minimumReleaseAge: "14 days",
-  // These options suppress PR creation for dependencies that were released
-  // within minimumReleaseAge.
-  // https://docs.renovatebot.com/configuration-options/#suppress-branchpr-creation-for-x-days
-  prCreation: "not-pending",
+
+  // internalChecksFilter suppress PR creation for dependencies that were
+  // released within minimumReleaseAge.
+  // strict: All pending releases will be filtered. PRs will be skipped unless a
+  // non-pending version is available.
+  // https://docs.renovatebot.com/configuration-options/#internalchecksfilter
   internalChecksFilter: "strict",
 
   // Enable the lock file maintenance feature to keep transitive dependencies up
   // to date.
   lockFileMaintenance: {
     enabled: true,
-    // Weekly schedule on early Monday mornings (before 4 AM).
-    schedule: ["* 0-3 * * 1"],
+    // NOTE: Same as schedule:monthly preset. This is done because lock file
+    //       maintenance will catch security updates in transitive dependencies.
+    // TODO(github.com/ianlewis/repo-template/issues/570): Update schedule when
+    // security updates for transitive dependencies is supported.
+    schedule: ["* 0-3 1 * *"],
   },
 
   // Enable git submodule updates.
   "git-submodules": {
     enabled: true,
-    // NOTE: Same as schedule:monthly preset.
+    // NOTE: Same as schedule:monthly preset. We do this more often than the
+    //       default because we want to ensure that we get security updates.
     schedule: ["* 0-3 1 * *"],
   },
 
@@ -66,74 +76,103 @@
   // issues is more intuitive.
   configWarningReuseIssue: false,
 
-  // Update git SHA values alongside version strings in versions.mk.
-  // When a tool version is bumped, Renovate also updates the corresponding
-  // commit SHA to the tagged commit for the new version.
-  // NOTE: datasourceTemplate is "github-tags" (not "github-releases") because
-  // the github-tags datasource provides commit SHAs for tags, which are
-  // needed to update the *_SHA values.
-  customManagers: [
-    {
-      customType: "regex",
-      description: "Update git SHA values in versions.mk",
-      managerFilePatterns: ["/^versions\\.mk$/"],
-      matchStrings: [
-        "# renovate: depName=(?<depName>\\S+)[^\n]*\n[A-Z_]+_VERSION \\?= (?<currentValue>[^\n]+)\n[A-Z_]+_SHA \\?= (?<currentDigest>[^\n]+)",
-      ],
-      datasourceTemplate: "github-tags",
-    },
-  ],
-
   // Group various ecosystem updates. Security updates are always separate.
+  // As a general rule, we automatically merge minor and patch updates for
+  // development dependencies since they should have minimal impact on the
+  // repository. This could be extended to include other dependencies if they
+  // are relatively low risk.
   packageRules: [
     {
-      matchManagers: ["git-submodules"],
-      matchUpdateTypes: ["digest"],
-      groupName: "git-submodules",
-    },
-    {
-      matchUpdateTypes: ["minor", "patch"],
-      groupName: "aqua-dev",
-      matchFileNames: [".aqua.yaml"],
-    },
-    {
-      matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
-      matchFileNames: ["aqua/aqua.yaml"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchFileNames: [".aqua.yaml", ".aqua-checksums.yaml"],
+
+      automerge: true,
+      platformAutomerge: true,
     },
     {
-      matchUpdateTypes: ["minor", "patch"],
       groupName: "makefile",
-      matchFileNames: ["**/[Mm]akefile", "**/GNUmakefile", "**/*.mk"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchFileNames: ["Makefile"],
+
+      automerge: true,
+      platformAutomerge: true,
     },
     {
-      matchManagers: ["github-actions"],
-      matchUpdateTypes: ["digest", "minor", "patch"],
       groupName: "github-actions",
+      matchManagers: ["github-actions"],
+      matchUpdateTypes: ["minor", "patch"],
       pinDigests: true,
+
+      automerge: true,
+      platformAutomerge: true,
     },
     {
-      matchManagers: ["pip_requirements"],
-      matchUpdateTypes: ["minor", "patch"],
       groupName: "python",
-      matchFileNames: ["requirements.txt"],
+      matchManagers: ["pep621"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchDepTypes: [
+        "build-system.requires",
+        "project.dependencies",
+        "project.optional-dependencies",
+        "requires-python",
+      ],
+    },
+    // NOTE: dependency-groups (PEP 725) in pep621 are sometimes used to specify
+    //       development dependencies. However, they sometimes also include
+    //       non-development dependencies. Development dependencies are usually
+    //       specified in a dependency-group named 'dev' so we check for that
+    //       name.
+    // See: https://docs.renovatebot.com/modules/manager/pep621/
+    {
+      groupName: "python",
+      matchManagers: ["pep621"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchDepTypes: ["dependency-groups"],
+      matchJsonata: ["managerData.depGroup != 'dev'"],
     },
     {
+      groupName: "python dev",
+      matchManagers: ["pep621"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchDepTypes: ["tool.pdm.dev-dependencies", "tool.uv.dev-dependencies"],
+
+      automerge: true,
+      platformAutomerge: true,
+    },
+    {
+      groupName: "python dev",
+      matchManagers: ["pep621"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchDepTypes: ["dependency-groups"],
+      matchJsonata: ["managerData.depGroup = 'dev'"],
+
+      automerge: true,
+      platformAutomerge: true,
+    },
+    {
+      groupName: "python dev",
       matchManagers: ["pip_requirements"],
       matchUpdateTypes: ["minor", "patch"],
-      groupName: "python-dev",
       matchFileNames: ["requirements-dev.txt"],
+
+      automerge: true,
+      platformAutomerge: true,
     },
     {
+      groupName: "npm",
       matchManagers: ["npm"],
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch"],
-      groupName: "npm",
     },
     {
+      groupName: "npm dev",
       matchManagers: ["npm"],
       matchDepTypes: ["devDependencies"],
-      groupName: "npm dev",
+      matchUpdateTypes: ["minor", "patch"],
+
+      automerge: true,
+      platformAutomerge: true,
     },
   ],
 }
