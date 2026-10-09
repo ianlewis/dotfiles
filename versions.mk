@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.62.3
-# renovate: datasource=github-releases depName=aquaproj/aqua-installer versioning=loose
-AQUA_INSTALLER_VERSION ?= v4.0.5
-
 # renovate: datasource=github-releases depName=sigstore/cosign versioning=loose
 COSIGN_VERSION ?= v3.1.3
 COSIGN_CHECKSUM.linux.amd64 := 4629c757b7618056f8ddd7e2625ae9fdd94c0372a65049520bc7d9df9efc7f71
