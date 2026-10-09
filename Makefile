@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
+export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
+export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
+
+# The current language runtime versions
+# NOTE: This doesn't use the SHELL set by include.mk.
+NODE_VERSION := $(shell cat .node-version)
+PYTHON_VERSION := $(shell cat .python-version)
+RUBY_VERSION := $(shell cat .ruby-version)
+
 include include.mk
 include versions.mk
 
@@ -36,17 +46,8 @@ COSIGN_URL := https://$(COSIGN_REPO)/releases/download/$(COSIGN_VERSION)/cosign-
 GO_CHECKSUM ?= $(GO_CHECKSUM.$(kernel).$(arch))
 GO_URL := https://go.dev/dl/go$(GO_VERSION).$(kernel)-$(arch).tar.gz
 
-export PYENV_ROOT ?= $(XDG_DATA_HOME)/pyenv
-export NODENV_ROOT ?= $(XDG_DATA_HOME)/nodenv
-export RBENV_ROOT ?= $(XDG_DATA_HOME)/rbenv
-
 E2E_HOME ?= $(shell $(MKTEMP) --directory)
 export E2E_HOME := $(E2E_HOME)
-
-# The current language runtime versions
-NODE_VERSION := $(shell cat .node-version)
-PYTHON_VERSION := $(shell cat .python-version)
-RUBY_VERSION := $(shell cat .ruby-version)
 
 # Macro for creating necessary directories.
 # NOTE: needed for targets that require a directory to be created without
