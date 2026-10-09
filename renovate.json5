@@ -76,6 +76,24 @@
   // issues is more intuitive.
   configWarningReuseIssue: false,
 
+  // Update git SHA values alongside version strings in versions.mk.
+  // When a tool version is bumped, Renovate also updates the corresponding
+  // commit SHA to the tagged commit for the new version.
+  // NOTE: datasourceTemplate is "github-tags" (not "github-releases") because
+  // the github-tags datasource provides commit SHAs for tags, which are
+  // needed to update the *_SHA values.
+  customManagers: [
+    {
+      customType: "regex",
+      description: "Update git SHA values in versions.mk",
+      managerFilePatterns: ["/^versions\\.mk$/"],
+      matchStrings: [
+        "# renovate: depName=(?<depName>\\S+)[^\n]*\n[A-Z_]+_VERSION \\?= (?<currentValue>[^\n]+)\n[A-Z_]+_SHA \\?= (?<currentDigest>[^\n]+)",
+      ],
+      datasourceTemplate: "github-tags",
+    },
+  ],
+
   // Group various ecosystem updates. Security updates are always separate.
   // As a general rule, we automatically merge minor and patch updates for
   // development dependencies since they should have minimal impact on the
