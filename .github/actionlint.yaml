@@ -23,3 +23,8 @@ paths:
     ignore:
       - 'label "ubuntu-26.04" is unknown.*'
       - 'label "ubuntu-26.04-arm" is unknown.*'
+
+  ".github/workflows/**/*.yml":
+    ignore:
+      # TODO(github.com/rhysd/actionlint/issues/711): remove this ignore
+      - 'reusable workflow call ".+" at "uses" is not following the format'

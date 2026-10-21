@@ -15,11 +15,6 @@
 name: tests
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [main]
   workflow_call:
   workflow_dispatch:
 
@@ -38,52 +33,52 @@ jobs:
   # unit-test
   ###############################
   unit-test:
-    uses: ./.github/workflows/workflow_call.unit-test.yml
+    uses: $/.github/workflows/workflow_call.unit-test.yml
 
   # e2e-test
   ###############################
   e2e-test:
-    uses: ./.github/workflows/workflow_call.e2e-test.yml
+    uses: $/.github/workflows/workflow_call.e2e-test.yml
 
   # format-check
   ###############################
   format-check:
-    uses: ./.github/workflows/workflow_call.format-check.yml
+    uses: $/.github/workflows/workflow_call.format-check.yml
 
   # linters
   ###############################
   actionlint:
-    uses: ./.github/workflows/workflow_call.actionlint.yml
+    uses: $/.github/workflows/workflow_call.actionlint.yml
 
   checkmake:
-    uses: ./.github/workflows/workflow_call.checkmake.yml
+    uses: $/.github/workflows/workflow_call.checkmake.yml
 
   commitlint:
-    uses: ./.github/workflows/workflow_call.commitlint.yml
+    uses: $/.github/workflows/workflow_call.commitlint.yml
 
   fixme:
-    uses: ./.github/workflows/workflow_call.fixme.yml
+    uses: $/.github/workflows/workflow_call.fixme.yml
 
   markdownlint:
-    uses: ./.github/workflows/workflow_call.markdownlint.yml
+    uses: $/.github/workflows/workflow_call.markdownlint.yml
 
   renovate-config-validator:
-    uses: ./.github/workflows/workflow_call.renovate-config-validator.yml
+    uses: $/.github/workflows/workflow_call.renovate-config-validator.yml
 
   selene:
-    uses: ./.github/workflows/workflow_call.selene.yml
+    uses: $/.github/workflows/workflow_call.selene.yml
 
   shellcheck:
-    uses: ./.github/workflows/workflow_call.shellcheck.yml
+    uses: $/.github/workflows/workflow_call.shellcheck.yml
 
   textlint:
-    uses: ./.github/workflows/workflow_call.textlint.yml
+    uses: $/.github/workflows/workflow_call.textlint.yml
 
   yamllint:
-    uses: ./.github/workflows/workflow_call.yamllint.yml
+    uses: $/.github/workflows/workflow_call.yamllint.yml
 
   zizmor:
     permissions:
       contents: read # Needed for private repositories.
       security-events: write # Needed to upload SARIF results.
-    uses: ./.github/workflows/workflow_call.zizmor.yml
+    uses: $/.github/workflows/workflow_call.zizmor.yml
