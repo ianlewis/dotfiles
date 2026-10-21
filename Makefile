@@ -890,7 +890,7 @@ $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed: .node-version $(NODENV_ROOT)
 	if [ -n "$(DEBUG_LOGGING)" ]; then
 		nodenv_options+=(--verbose)
 	fi
-	$(NODENV_ROOT)/bin/nodenv install ${nodenv_options[@]}
+	$(NODENV_ROOT)/bin/nodenv install $${nodenv_options[@]}
 	touch $@
 
 nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
@@ -996,7 +996,7 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 	if [ -n "$(DEBUG_LOGGING)" ]; then
 		pyenv_options+=(--verbose)
 	fi
-	$(PYENV_ROOT)/bin/pyenv install ${pyenv_options[@]}
+	$(PYENV_ROOT)/bin/pyenv install $${pyenv_options[@]}
 	touch $@
 
 # Installs Python tools in the pyenv virtualenv for the current version.
@@ -1062,7 +1062,7 @@ $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/p
 	if [ -n "$(DEBUG_LOGGING)" ]; then
 		rbenv_options+=(--verbose)
 	fi
-	$(RBENV_ROOT)/bin/rbenv install ${rbenv_options[@]}
+	$(RBENV_ROOT)/bin/rbenv install $${rbenv_options[@]}
 	touch $@
 
 ## Maintenance
