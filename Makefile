@@ -53,7 +53,7 @@ export E2E_HOME := $(E2E_HOME)
 # NOTE: needed for targets that require a directory to be created without
 #       triggering rebuilds when anything inside changes.
 $(HOME)/%/.created:
-	@# bash \
+	@echo "Creating directory $@..."
 	mkdir -p $(dir $@); \
 	touch $@
 
@@ -408,83 +408,83 @@ renovate-config-validator: $(REPO_ROOT)/node_modules/.installed ## Validate Reno
 
 .PHONY: selene
 selene: $(AQUA_ROOT_DIR)/.installed ## Runs the selene (Lua) linter.
-	@# bash \
+	@echo "Running selene..."
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.lua' \
 			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-	); \
-	if [ "$${files}" == "" ]; then \
-		exit 0; \
-	fi; \
-	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		exit_code=0; \
-		selene_out="$$(selene --display-style Json2 $${files} || exit_code=\"$$?\")"; \
-		while IFS="" read -r p && [ -n "$$p" ]; do \
-			type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"'); \
-			if [ "$${type}" != "Diagnostic" ]; then \
-				continue; \
-			fi; \
-			level=$$(echo "$$p" | jq -c '.severity // empty' | tr -d '"'); \
-			file=$$(echo "$$p" | jq -c '.primary_label.filename // empty' | tr -d '"'); \
-			line=$$(echo "$$p" | jq -c '.primary_label.span.start_line // empty' | tr -d '"'); \
-			endline=$$(echo "$$p" | jq -c '.primary_label.span.end_line // empty' | tr -d '"'); \
-			col=$$(echo "$$p" | jq -c '.primary_label.span.start_column // empty' | tr -d '"'); \
-			endcol=$$(echo "$$p" | jq -c '.primary_label.span.end_column // empty' | tr -d '"'); \
-			message=$$(echo "$$p" | jq -c '((.code // empty) + " : " + (.message // empty))' | tr -d '"'); \
-			exit_code=1; \
-			case $$level in \
-			"Warning") \
-				echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-				;; \
-			"Error") \
-				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-				;; \
-			esac; \
-		done <<< "$${selene_out}"; \
-		exit "$${exit_code}"; \
-	else \
+	)
+	if [ "$${files}" == "" ]; then
+		exit 0
+	fi
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then
+		exit_code=0
+		selene_out="$$(selene --display-style Json2 $${files} || exit_code=\"$$?\")"
+		while IFS="" read -r p && [ -n "$$p" ]; do
+			type=$$(echo "$${p}" | jq -c '.type // empty' | tr -d '"')
+			if [ "$${type}" != "Diagnostic" ]; then
+				continue
+			fi
+			level=$$(echo "$$p" | jq -c '.severity // empty' | tr -d '"')
+			file=$$(echo "$$p" | jq -c '.primary_label.filename // empty' | tr -d '"')
+			line=$$(echo "$$p" | jq -c '.primary_label.span.start_line // empty' | tr -d '"')
+			endline=$$(echo "$$p" | jq -c '.primary_label.span.end_line // empty' | tr -d '"')
+			col=$$(echo "$$p" | jq -c '.primary_label.span.start_column // empty' | tr -d '"')
+			endcol=$$(echo "$$p" | jq -c '.primary_label.span.end_column // empty' | tr -d '"')
+			message=$$(echo "$$p" | jq -c '((.code // empty) + " : " + (.message // empty))' | tr -d '"')
+			exit_code=1
+			case $$level in
+			"Warning")
+				echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"
+				;;
+			"Error")
+				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"
+				;;
+			esac
+		done <<< "$${selene_out}"
+		exit "$${exit_code}"
+	else
 		selene \
 			--no-summary \
-			$${files}; \
+			$${files}
 	fi
 
 SHELLCHECK_ARGS = --severity=style --external-sources
 
 .PHONY: shellcheck
 shellcheck: $(AQUA_ROOT_DIR)/.installed ## Runs the shellcheck linter.
-	@# bash \
-	files=$$(git ls-files ':!:third_party' | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1); \
-	if [ "$${files}" == "" ]; then \
-		exit 0; \
-	fi; \
-	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		exit_code=0; \
-		while IFS="" read -r p && [ -n "$$p" ]; do \
-			level=$$(echo "$$p" | jq -c '.level // empty' | tr -d '"'); \
-			file=$$(echo "$$p" | jq -c '.file // empty' | tr -d '"'); \
-			line=$$(echo "$$p" | jq -c '.line // empty' | tr -d '"'); \
-			endline=$$(echo "$$p" | jq -c '.endLine // empty' | tr -d '"'); \
-			col=$$(echo "$$p" | jq -c '.column // empty' | tr -d '"'); \
-			endcol=$$(echo "$$p" | jq -c '.endColumn // empty' | tr -d '"'); \
-			message=$$(echo "$$p" | jq -c '.message // empty' | tr -d '"'); \
-			exit_code=1; \
-			case $$level in \
-			"info") \
-				echo "::notice file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-				;; \
-			"warning") \
-				echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-				;; \
-			"error") \
-				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-				;; \
-			esac; \
-		done <<< "$$(echo -n "$$files" | xargs shellcheck -f json $(SHELLCHECK_ARGS) | jq -c '.[]')"; \
-		exit "$${exit_code}"; \
-	else \
-		echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS); \
+	@echo "Running shellcheck..."
+	files=$$(git ls-files ':!:third_party' | xargs file | $(GREP) -e ':.*shell' | cut -d':' -f1)
+	if [ "$${files}" == "" ]; then
+		exit 0
+	fi
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then
+		exit_code=0
+		while IFS="" read -r p && [ -n "$$p" ]; do
+			level=$$(echo "$$p" | jq -c '.level // empty' | tr -d '"')
+			file=$$(echo "$$p" | jq -c '.file // empty' | tr -d '"')
+			line=$$(echo "$$p" | jq -c '.line // empty' | tr -d '"')
+			endline=$$(echo "$$p" | jq -c '.endLine // empty' | tr -d '"')
+			col=$$(echo "$$p" | jq -c '.column // empty' | tr -d '"')
+			endcol=$$(echo "$$p" | jq -c '.endColumn // empty' | tr -d '"')
+			message=$$(echo "$$p" | jq -c '.message // empty' | tr -d '"')
+			exit_code=1
+			case $$level in
+			"info")
+				echo "::notice file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"
+				;;
+			"warning")
+				echo "::warning file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"
+				;;
+			"error")
+				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"
+				;;
+			esac
+		done <<< "$$(echo -n "$$files" | xargs shellcheck -f json $(SHELLCHECK_ARGS) | jq -c '.[]')"
+		exit "$${exit_code}"
+	else
+		echo -n "$$files" | xargs shellcheck $(SHELLCHECK_ARGS)
 	fi
 
 
@@ -560,39 +560,39 @@ zizmor: $(REPO_ROOT)/.venv/.installed ## Runs the zizmor linter.
 
 .PHONY: install-bin
 install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install binary scripts.
-	@# bash \
-	ln -sf $(REPO_ROOT)/bin/all/clone.bash $(XDG_BIN_HOME)/clone; \
-	ln -sf $(REPO_ROOT)/bin/all/delete_old_downloads.sh $(XDG_BIN_HOME)/delete_old_downloads.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/docker_prune.sh $(XDG_BIN_HOME)/docker_prune.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/project-windowizer.bash $(XDG_BIN_HOME)/project-windowizer; \
-	ln -sf $(REPO_ROOT)/bin/all/tmux-sessionizer.bash $(XDG_BIN_HOME)/tmux-sessionizer; \
-	ln -sf $(REPO_ROOT)/bin/all/ts.bash $(XDG_BIN_HOME)/ts; \
-	ln -sf $(REPO_ROOT)/bin/all/randstr.bash $(XDG_BIN_HOME)/randstr; \
-	ln -sf $(REPO_ROOT)/bin/all/update_authorized_keys.sh $(XDG_BIN_HOME)/update_authorized_keys.sh; \
-	ln -sf $(REPO_ROOT)/bin/all/withpass.bash $(XDG_BIN_HOME)/withpass; \
-	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images; \
+	@echo "Installing binary scripts..."
+	ln -sf $(REPO_ROOT)/bin/all/clone.bash $(XDG_BIN_HOME)/clone
+	ln -sf $(REPO_ROOT)/bin/all/delete_old_downloads.sh $(XDG_BIN_HOME)/delete_old_downloads.sh
+	ln -sf $(REPO_ROOT)/bin/all/docker_prune.sh $(XDG_BIN_HOME)/docker_prune.sh
+	ln -sf $(REPO_ROOT)/bin/all/project-windowizer.bash $(XDG_BIN_HOME)/project-windowizer
+	ln -sf $(REPO_ROOT)/bin/all/tmux-sessionizer.bash $(XDG_BIN_HOME)/tmux-sessionizer
+	ln -sf $(REPO_ROOT)/bin/all/ts.bash $(XDG_BIN_HOME)/ts
+	ln -sf $(REPO_ROOT)/bin/all/randstr.bash $(XDG_BIN_HOME)/randstr
+	ln -sf $(REPO_ROOT)/bin/all/update_authorized_keys.sh $(XDG_BIN_HOME)/update_authorized_keys.sh
+	ln -sf $(REPO_ROOT)/bin/all/withpass.bash $(XDG_BIN_HOME)/withpass
+	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images
 	$(MAKE) \
 		-C third_party/ianlewis/coding-assistant-docker-images \
 		install
 
 aqua/aqua-checksums.json: aqua/aqua.yaml $(AQUA_ROOT_DIR)/bin/aqua
-	@# bash \
-	loglevel="info"; \
-	if [ -n "$(DEBUG_LOGGING)" ]; then \
-		loglevel="debug"; \
-	fi; \
-	cd aqua; \
+	@echo "Updating aqua checksums..."
+	loglevel="info"
+	if [ -n "$(DEBUG_LOGGING)" ]; then
+		loglevel="debug"
+	fi
+	cd aqua
 	$(AQUA_ROOT_DIR)/bin/aqua \
 		--config aqua.yaml \
 		--log-level "$${loglevel}" \
 		update-checksum --prune
 
 $(HOME)/.aqua.yaml:
-	@# bash \
+	@echo "Installing aqua config..."
 	ln -sf $(REPO_ROOT)/aqua/aqua.yaml $(HOME)/.aqua.yaml
 
 $(HOME)/.aqua-checksums.json:
-	@# bash \
+	@echo "Installing aqua checksums..."
 	ln -sf $(REPO_ROOT)/aqua/aqua-checksums.json $(HOME)/.aqua-checksums.json
 
 .PHONY: configure-aqua
@@ -600,8 +600,8 @@ configure-aqua: $(HOME)/.aqua.yaml $(HOME)/.aqua-checksums.json ## Configure aqu
 
 .PHONY: configure-bash
 configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configure bash.
-	@# bash \
-	$(MAKE) -C bash/lib/ble.sh build; \
+	@echo "Configuring bash..."
+	$(MAKE) -C bash/lib/ble.sh build
 	$(RM) -f \
 		$(HOME)/.inputrc \
 		$(HOME)/.profile \
@@ -612,69 +612,69 @@ configure-bash: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/.created ## Configu
 		$(HOME)/.bash_logout \
 		$(XDG_DATA_HOME)/bash/lib \
 		$(XDG_CONFIG_HOME)/sbp \
-		$(XDG_CONFIG_HOME)/blesh; \
-	mkdir -p $(XDG_DATA_HOME)/bash; \
-	ln -sf $(REPO_ROOT)/bash/lib $(XDG_DATA_HOME)/bash/lib; \
-	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc; \
-	ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile; \
-	ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile; \
-	ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc; \
-	ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases; \
-	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion; \
-	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout; \
-	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp; \
+		$(XDG_CONFIG_HOME)/blesh
+	mkdir -p $(XDG_DATA_HOME)/bash
+	ln -sf $(REPO_ROOT)/bash/lib $(XDG_DATA_HOME)/bash/lib
+	ln -sf $(REPO_ROOT)/bash/_inputrc $(HOME)/.inputrc
+	ln -sf $(REPO_ROOT)/bash/_profile $(HOME)/.profile
+	ln -sf $(REPO_ROOT)/bash/_bash_profile $(HOME)/.bash_profile
+	ln -sf $(REPO_ROOT)/bash/_bashrc $(HOME)/.bashrc
+	ln -sf $(REPO_ROOT)/bash/_bash_aliases $(HOME)/.bash_aliases
+	ln -sf $(REPO_ROOT)/bash/_bash_completion $(HOME)/.bash_completion
+	ln -sf $(REPO_ROOT)/bash/_bash_logout $(HOME)/.bash_logout
+	ln -sf $(REPO_ROOT)/bash/sbp $(XDG_CONFIG_HOME)/sbp
 	ln -sf $(REPO_ROOT)/bash/blesh $(XDG_CONFIG_HOME)/blesh
 
 .PHONY: configure-bat
 configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
-	@# bash \
-	# NOTE: bat must be installed via aqua before running this so that it can \
-	#       be used to build the cache. \
-	# NOTE: this may run before aqua tools are available on the $PATH so we \
-	#       need to refer to bat via the aqua root dir. \
-	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua --config "$(HOME)/.aqua.yaml" root-dir); \
-	mkdir -p "$$($${aqua_dir}/bin/bat --config-dir)/themes"; \
+	@echo "Configuring bat..."
+	# NOTE: bat must be installed via aqua before running this so that it can
+	#       be used to build the cache.
+	# NOTE: this may run before aqua tools are available on the $$PATH so we
+	#       need to refer to bat via the aqua root dir.
+	aqua_dir=$$(AQUA_ROOT_DIR= $(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua --config "$(HOME)/.aqua.yaml" root-dir)
+	mkdir -p "$$($${aqua_dir}/bin/bat --config-dir)/themes"
 	ln -sf \
 		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
-		"$$($${aqua_dir}/bin/bat --config-dir)/themes/tokyonight_moon.tmTheme"; \
+		"$$($${aqua_dir}/bin/bat --config-dir)/themes/tokyonight_moon.tmTheme"
 	"$${aqua_dir}/bin/bat" cache --build
 
 .PHONY: configure-crictl
 configure-crictl: $(XDG_CONFIG_HOME)/.created ## Configure crictl.
-	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/crictl; \
+	@echo "Configuring crictl..."
+	mkdir -p $(XDG_CONFIG_HOME)/crictl
 	ln -sf $(REPO_ROOT)/crictl/crictl.yaml $(XDG_CONFIG_HOME)/crictl/crictl.yaml
 
 .PHONY: configure-crontab
 configure-crontab: install-bin ## Configure crontab.
-	@# bash \
-	( \
-		echo '######################## MANAGED BY dotfiles; DO NOT EDIT ######################'; \
-		echo "SHELL=$$(which bash)"; \
-		echo ""; \
-		cat cron/crontab; \
-		echo ""; \
-		for filename in ${HOME}/.config/dotfiles/cron.d/*; do \
-			if [[ -r "$${filename}" ]]; then \
-				echo "###### BEGIN FILE: $${filename} ######"; \
-				echo ""; \
-				cat "$${filename}"; \
-				echo ""; \
-				echo "###### END FILE: $${filename} ######"; \
-				echo ""; \
-			fi; \
-		done; \
-		echo '############################## END MANAGED SECTION #############################'; \
+	@echo "Configuring crontab..."
+	(
+		echo '######################## MANAGED BY dotfiles; DO NOT EDIT ######################'
+		echo "SHELL=$$(which bash)"
+		echo ""
+		cat cron/crontab
+		echo ""
+		for filename in ${HOME}/.config/dotfiles/cron.d/*; do
+			if [[ -r "$${filename}" ]]; then
+				echo "###### BEGIN FILE: $${filename} ######"
+				echo ""
+				cat "$${filename}"
+				echo ""
+				echo "###### END FILE: $${filename} ######"
+				echo ""
+			fi
+		done
+		echo '############################## END MANAGED SECTION #############################'
 	) | crontab -
 
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)/.created
-	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver; \
+	@echo "Configuring efm-langserver..."
+	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver
 	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
 
 $(XDG_STATE_HOME)/efm-langserver/.created:
-	@# bash \
-	mkdir -p $(XDG_STATE_HOME)/efm-langserver; \
+	@echo "Creating efm-langserver state directory..."
+	mkdir -p $(XDG_STATE_HOME)/efm-langserver
 	touch $@
 
 .PHONY: configure-efm-langserver
@@ -682,47 +682,47 @@ configure-efm-langserver: $(XDG_CONFIG_HOME)/efm-langserver/config.yaml $(XDG_ST
 
 .PHONY: configure-git
 configure-git: ## Configure git.
-	@# bash \
-	$(RM) -f $(HOME)/.gitconfig; \
+	@echo "Configuring git..."
+	$(RM) -f $(HOME)/.gitconfig
 	ln -sf "$(REPO_ROOT)/git/_gitconfig" $(HOME)/.gitconfig
 
 .PHONY: configure-ghostty
 configure-ghostty: $(XDG_CONFIG_HOME)/.created ## Configure Ghostty.
-	@# bash \
-	config_dir="$(XDG_CONFIG_HOME)/ghostty"; \
-	if [ "$(kernel)" == "darwin" ]; then \
-		config_dir="$(HOME)/Library/Application Support/com.mitchellh.ghostty"; \
-		fonts_dir="$(HOME)/Library/Fonts"; \
-		mkdir -p "$${fonts_dir}"; \
-		cp third_party/fonts.google.com/RobotoMono/*.ttf "$${fonts_dir}/"; \
-		cp third_party/fonts.google.com/Noto_Sans_JP/*.ttf "$${fonts_dir}/"; \
-	fi; \
-	mkdir -p "$${config_dir}"; \
+	echo "Configuring Ghostty..."
+	config_dir="$(XDG_CONFIG_HOME)/ghostty"
+	if [ "$(kernel)" == "darwin" ]; then
+		config_dir="$(HOME)/Library/Application Support/com.mitchellh.ghostty"
+		fonts_dir="$(HOME)/Library/Fonts"
+		mkdir -p "$${fonts_dir}"
+		cp third_party/fonts.google.com/RobotoMono/*.ttf "$${fonts_dir}/"
+		cp third_party/fonts.google.com/Noto_Sans_JP/*.ttf "$${fonts_dir}/"
+	fi
+	mkdir -p "$${config_dir}"
 	ln -sf $(REPO_ROOT)/ghostty/config "$${config_dir}/config"
 
 .PHONY: configure-k9s
 configure-k9s: $(XDG_CONFIG_HOME)/.created ## Configure k9s.
-	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/k9s; \
+	@echo "Configuring k9s..."
+	mkdir -p $(XDG_CONFIG_HOME)/k9s
 	ln -sf $(REPO_ROOT)/k9s/config.yaml $(XDG_CONFIG_HOME)/k9s/config.yaml
 
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME)/.created ## Configure nix.
-	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/nix; \
+	@echo "Configuring nix..."
+	mkdir -p $(XDG_CONFIG_HOME)/nix
 	ln -sf $(REPO_ROOT)/nix/nix.conf $(XDG_CONFIG_HOME)/nix/nix.conf
 
 .PHONY: configure-node
 configure-node: ## Configure Node.js and npm.
-	@# bash \
-	ln -sf $(REPO_ROOT)/npm/_npmrc $(HOME)/.npmrc; \
+	@echo "Configuring Node.js and npm..."
+	ln -sf $(REPO_ROOT)/npm/_npmrc $(HOME)/.npmrc
 	ln -sf $(REPO_ROOT)/.node-version $(HOME)/.node-version
 
 # NOTE: nvim-treesitter install_dir must exist for it to be added to the Neovim
 # runtimepath.
 .PHONY: configure-nvim
 configure-nvim: $(XDG_CONFIG_HOME)/.created $(XDG_DATA_HOME)/nvim/treesitter/.created ## Configure neovim.
-	@# bash \
+	@echo "Configuring neovim..."
 	$(RM) -rf $(XDG_CONFIG_HOME)/nvim; \
 	ln -sf $(REPO_ROOT)/nvim $(XDG_CONFIG_HOME)/nvim
 
@@ -736,41 +736,41 @@ configure-ruby: ## Configure Ruby.
 
 .PHONY: configure-ssh
 configure-ssh: ## Configure ssh.
-	@# bash \
-	mkdir -p $(HOME)/.ssh/conf.d; \
- 	chmod 0700 $(HOME)/.ssh $(HOME)/.ssh/conf.d; \
+	@echo "Configuring ssh..."
+	mkdir -p $(HOME)/.ssh/conf.d
+	chmod 0700 $(HOME)/.ssh $(HOME)/.ssh/conf.d
 	ln -sf $(REPO_ROOT)/ssh/config $(HOME)/.ssh/config
 
 .PHONY: configure-tmux
 configure-tmux: ## Configure tmux.
-	@# bash \
-	$(RM) -f $(HOME)/.tmux.conf $(HOME)/.tmux; \
-	ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf; \
+	@echo "Configuring tmux..."
+	$(RM) -f $(HOME)/.tmux.conf $(HOME)/.tmux
+	ln -sf $(REPO_ROOT)/tmux/_tmux.conf $(HOME)/.tmux.conf
 	ln -sf $(REPO_ROOT)/tmux/_tmux $(HOME)/.tmux
 
 $(XDG_CONFIG_HOME)/yamllint/.created: $(XDG_CONFIG_HOME)/.created
-	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/yamllint; \
+	@echo "Creating yamllint config directory..."
+	mkdir -p $(XDG_CONFIG_HOME)/yamllint
 	touch $@
 
 $(XDG_CONFIG_HOME)/yamllint/config: yamllint/_config.yaml $(XDG_CONFIG_HOME)/yamllint/.created
-	@# bash \
+	@echo "Installing yamllint config..."
 	ln -sf $(REPO_ROOT)/yamllint/_config.yaml $(XDG_CONFIG_HOME)/yamllint/config
 
 $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml: yamllint/_config.kubernetes.yaml $(XDG_CONFIG_HOME)/yamllint/.created
-	@# bash \
+	@echo "Installing yamllint kubernetes config..."
 	sed 's|$${XDG_CONFIG_HOME}|'$(XDG_CONFIG_HOME)'|'< $< > $@
 
 .PHONY: configure-yamllint
 configure-yamllint: $(XDG_CONFIG_HOME)/yamllint/config $(XDG_CONFIG_HOME)/yamllint/config.kubernetes.yaml ## Configure yamllint.
 
 $(XDG_CONFIG_HOME)/yamlfmt/.created: $(XDG_CONFIG_HOME)/.created
-	@# bash \
-	mkdir -p $(XDG_CONFIG_HOME)/yamlfmt; \
+	@echo "Creating yamlfmt config directory..."
+	mkdir -p $(XDG_CONFIG_HOME)/yamlfmt
 	touch $@
 
 $(XDG_CONFIG_HOME)/yamlfmt/.yamlfmt.kubernetes.yaml: yamlfmt/_yamlfmt.kubernetes.yaml $(XDG_CONFIG_HOME)/yamlfmt/.created
-	@# bash \
+	@echo "Installing yamlfmt kubernetes config..."
 	ln -sf $(REPO_ROOT)/yamlfmt/_yamlfmt.kubernetes.yaml $(XDG_CONFIG_HOME)/yamlfmt/.yamlfmt.kubernetes.yaml
 
 .PHONY: configure-yamlfmt
@@ -780,22 +780,22 @@ configure-yamlfmt: $(XDG_CONFIG_HOME)/yamlfmt/.yamlfmt.kubernetes.yaml ## Config
 #####################################################################
 
 $(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)/.created .
-	@# bash \
-	tempfile=$$($(MKTEMP) --suffix=".slsa-verifier-$(SLSA_VERIFIER_VERSION)"); \
-	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"; \
-	echo "$(SLSA_VERIFIER_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
-	chmod +x "$${tempfile}"; \
+	@echo "Installing slsa-verifier..."
+	tempfile=$$($(MKTEMP) --suffix=".slsa-verifier-$(SLSA_VERIFIER_VERSION)")
+	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"
+	echo "$(SLSA_VERIFIER_CHECKSUM)  $${tempfile}" | shasum -a 256 -c
+	chmod +x "$${tempfile}"
 	mv "$${tempfile}" $@
 
 .PHONY: install-slsa-verifier
 install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
 
 $(XDG_BIN_HOME)/cosign: $(XDG_BIN_HOME)/.created .
-	@# bash \
-	tempfile=$$($(MKTEMP) --suffix=".cosign-$(COSIGN_VERSION)"); \
-	curl -sSLo "$${tempfile}" "$(COSIGN_URL)"; \
-	echo "$(COSIGN_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
-	chmod +x "$${tempfile}"; \
+	@echo "Installing cosign..."
+	tempfile=$$($(MKTEMP) --suffix=".cosign-$(COSIGN_VERSION)")
+	curl -sSLo "$${tempfile}" "$(COSIGN_URL)"
+	echo "$(COSIGN_CHECKSUM)  $${tempfile}" | shasum -a 256 -c
+	chmod +x "$${tempfile}"
 	mv "$${tempfile}" $@
 
 .PHONY: install-cosign
@@ -804,8 +804,8 @@ install-cosign: $(XDG_BIN_HOME)/cosign ## Install cosign
 # NOTE: The go runtime is required to install some tools on some platforms.
 .PHONY: install-aqua
 install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed configure-aqua install-go ## Install aqua and aqua-managed CLI tools
-	@# bash \
-	# Unset AQUA_ROOT_DIR so it installs to the default global root dir. \
+	@echo "Installing aqua-managed CLI tools..."
+	# Unset AQUA_ROOT_DIR so it installs to the default global root dir.
 	PATH=$(HOME)/opt/go/bin:$(PATH) \
 	AQUA_ROOT_DIR= \
 		$(XDG_DATA_HOME)/aquaproj-aqua/bin/aqua \
@@ -813,11 +813,9 @@ install-aqua: $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed configur
 			install
 
 $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.created
-	@# bash \
-	# Remove old aqua installations to avoid conflicts. \
-	# $(RM) -rf $(HOME)/opt/aqua-*; \
-	$(RM) -f $(XDG_BIN_HOME)/aqua; \
-	# Explicitly set AQUA_ROOT_DIR to the default global root dir. \
+	@echo "Installing aqua $(AQUA_VERSION)..."
+	$(RM) -f $(XDG_BIN_HOME)/aqua
+	# Explicitly set AQUA_ROOT_DIR to the default global root dir.
 	AQUA_ROOT_DIR="$(XDG_DATA_HOME)/aquaproj-aqua" \
 		./.aqua-installer -v "$(AQUA_VERSION)"
 
@@ -828,16 +826,16 @@ $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.cre
 install-go: $(HOME)/opt/go-$(GO_VERSION)/.installed ## Install the Go runtime.
 
 $(HOME)/opt/go-$(GO_VERSION)/.installed: $(HOME)/opt/.created
-	@# bash \
-	tempfile=$$($(MKTEMP) --suffix=".tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(GO_URL)"; \
-	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c -; \
-	cd $(HOME)/opt; \
-	$(RM) -rf go; \
-	tar xf "$${tempfile}"; \
-	mv go go-$(GO_VERSION); \
-	ln -s go-$(GO_VERSION) go; \
-	$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto; \
+	@echo "Installing Go $(GO_VERSION)..."
+	tempfile=$$($(MKTEMP) --suffix=".tar.gz")
+	curl -sSLo "$${tempfile}" "$(GO_URL)"
+	echo "$(GO_CHECKSUM)  $${tempfile}" | sha256sum -c -
+	cd $(HOME)/opt
+	$(RM) -rf go
+	tar xf "$${tempfile}"
+	mv go go-$(GO_VERSION)
+	ln -s go-$(GO_VERSION) go
+	$(HOME)/opt/go/bin/go env -w GOTOOLCHAIN=go$(GO_VERSION)+auto
 	touch $@
 
 .PHONY: install-node
@@ -845,98 +843,105 @@ install-node: $(XDG_DATA_HOME)/node_modules/.installed ## Install the Node.js en
 
 # Installs nodenv
 $(NODENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
-	@# bash \
-	# TODO(#609): Update dependency on configure-node. \
-	# Run this here rather than as a dependency to avoid unnecessary rebuilds. \
-	$(MAKE) configure-node; \
-	# Install nodenv. \
-	if [[ -d $(NODENV_ROOT) ]]; then \
-		git -C $(NODENV_ROOT) fetch origin "$(NODENV_INSTALL_SHA)"; \
-		git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"; \
-	else \
-		git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT); \
-	fi; \
-	nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD); \
-	if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then \
-		echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"; \
-		$(RM) -rf $(NODENV_ROOT); \
-		exit 1; \
-	fi; \
+	@echo "Installing nodenv..."
+	# TODO(#609): Update dependency on configure-node.
+	# Run this here rather than as a dependency to avoid unnecessary rebuilds.
+	$(MAKE) configure-node
+	# Install nodenv.
+	if [[ -d $(NODENV_ROOT) ]]; then
+		git -C $(NODENV_ROOT) fetch origin "$(NODENV_INSTALL_SHA)"
+		git -C $(NODENV_ROOT) checkout "$(NODENV_INSTALL_SHA)"
+	else
+		git clone --branch "$(NODENV_INSTALL_VERSION)" https://github.com/nodenv/nodenv.git $(NODENV_ROOT)
+	fi
+	nodenv_sha=$$(git -C $(NODENV_ROOT) rev-parse HEAD)
+	if [ "$${nodenv_sha}" != "$(NODENV_INSTALL_SHA)" ]; then
+		echo "Invalid nodenv: '$${nodenv_sha}' != '$(NODENV_INSTALL_SHA)'"
+		$(RM) -rf $(NODENV_ROOT)
+		exit 1
+	fi
 	touch $@
 
 # Installs node-build plugin for nodenv
 $(NODENV_ROOT)/plugins/node-build/.installed: $(NODENV_ROOT)/.installed versions.mk
-	@# bash \
-	node_build_path="$(NODENV_ROOT)/plugins/node-build"; \
-	if [[ -d "$${node_build_path}" ]]; then \
-		git -C "$${node_build_path}" fetch origin "$(NODENV_BUILD_SHA)"; \
-		git -C "$${node_build_path}" checkout "$(NODENV_BUILD_SHA)"; \
-	else \
-		git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$${node_build_path}"; \
-	fi; \
-	nodenv_build_sha=$$(git -C "$${node_build_path}" rev-parse HEAD); \
-	if [ "$${nodenv_build_sha}" != "$(NODENV_BUILD_SHA)" ]; then \
-		echo "Invalid node-build: '$${nodenv_build_sha}' != '$(NODENV_BUILD_SHA)'"; \
-		$(RM) -rf "$${node_build_path}"; \
-		exit 1; \
-	fi; \
+	@echo "Installing node-build plugin for nodenv..."
+	node_build_path="$(NODENV_ROOT)/plugins/node-build"
+	if [[ -d "$${node_build_path}" ]]; then
+		git -C "$${node_build_path}" fetch origin "$(NODENV_BUILD_SHA)"
+		git -C "$${node_build_path}" checkout "$(NODENV_BUILD_SHA)"
+	else
+		git clone --branch "$(NODENV_BUILD_VERSION)" https://github.com/nodenv/node-build.git "$${node_build_path}"
+	fi
+	nodenv_build_sha=$$(git -C "$${node_build_path}" rev-parse HEAD)
+	if [ "$${nodenv_build_sha}" != "$(NODENV_BUILD_SHA)" ]; then
+		echo "Invalid node-build: '$${nodenv_build_sha}' != '$(NODENV_BUILD_SHA)'"
+		$(RM) -rf "$${node_build_path}"
+		exit 1
+	fi
 	touch $@
 
 # Installs Node.js
 $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed: .node-version $(NODENV_ROOT)/plugins/node-build/.installed
-	@# bash \
-	$(NODENV_ROOT)/bin/nodenv install --skip-existing; \
+	@echo "Installing Node.js $(NODE_VERSION)..."
+	nodenv_options=(
+		# Avoid re-installing Node.js if it is already installed.
+		--skip-existing
+	)
+	if [ -n "$(DEBUG_LOGGING)" ]; then
+		nodenv_options+=(--verbose)
+	fi
+	$(NODENV_ROOT)/bin/nodenv install ${nodenv_options[@]}
 	touch $@
 
 nodenv/package-lock.json: nodenv/package.json $(AQUA_ROOT_DIR)/.installed $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed
-	@# bash \
-	loglevel="notice"; \
-	if [ -n "$(DEBUG_LOGGING)" ]; then \
-		loglevel="verbose"; \
-	fi; \
-	# NOTE: npm install will happily ignore the fact that integrity hashes are \
-	# missing in the package-lock.json. We need to check for missing integrity \
-	# fields ourselves. If any are missing, then we need to regenerate the \
-	# package-lock.json from scratch. \
-	nointegrity=""; \
-	noresolved=""; \
-	if [ -f "$@" ]; then \
-		nointegrity=$$(jq '.packages | del(."") | .[] | select(has("integrity") | not)' < $@); \
-		noresolved=$$(jq '.packages | del(."") | .[] | select(has("resolved") | not)' < $@); \
-	fi; \
-	if [ ! -f "$@" ] || [ -n "$${nointegrity}" ] || [ -n "$${noresolved}" ]; then \
-		# NOTE: package-lock.json is removed to ensure that npm includes the \
-		# integrity field. npm install will not restore this field if \
-		# missing in an existing package-lock.json file. \
-		$(RM) -f $@; \
-		# NOTE: We clean the node_modules directory to ensure that npm install \
-		#       will not desync between the package.json, package-lock.json \
-		#       and the node_modules directory. \
-		$(RM) -rf nodenv/node_modules; \
+	@echo "Installing npm dependencies..."
+	loglevel="notice"
+	if [ -n "$(DEBUG_LOGGING)" ]; then
+		loglevel="verbose"
+	fi
+	# NOTE: npm install will happily ignore the fact that integrity hashes are
+	# missing in the package-lock.json. We need to check for missing integrity
+	# fields ourselves. If any are missing, then we need to regenerate the
+	# package-lock.json from scratch.
+	nointegrity=""
+	noresolved=""
+	if [ -f "$@" ]; then
+		nointegrity=$$(jq '.packages | del(."") | .[] | select(has("integrity") | not)' < $@)
+		noresolved=$$(jq '.packages | del(."") | .[] | select(has("resolved") | not)' < $@)
+	fi
+	if [ ! -f "$@" ] || [ -n "$${nointegrity}" ] || [ -n "$${noresolved}" ]; then
+		# NOTE: package-lock.json is removed to ensure that npm includes the
+		# integrity field. npm install will not restore this field if
+		# missing in an existing package-lock.json file.
+		$(RM) -f $@
+		# NOTE: We clean the node_modules directory to ensure that npm install
+		#       will not desync between the package.json, package-lock.json
+		#       and the node_modules directory.
+		$(RM) -rf nodenv/node_modules
 		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--prefix ./nodenv \
 			--no-audit \
 			--no-fund; \
-	else \
+	else
 		$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" install \
 			--prefix ./nodenv \
 			--package-lock-only \
 			--no-audit \
-			--no-fund; \
+			--no-fund
 	fi
 
 # Installs tools in the user node_modules.
 $(XDG_DATA_HOME)/node_modules/.installed: $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed $(XDG_DATA_HOME)/.created | nodenv/package-lock.json
-	@# bash \
-	loglevel="silent"; \
-	if [ -n "$(DEBUG_LOGGING)" ]; then \
-		loglevel="verbose"; \
-	fi; \
-	cd $(REPO_ROOT)/nodenv; \
-	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" clean-install; \
-	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures; \
-	$(RM) -f $(XDG_DATA_HOME)/node_modules; \
-	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules; \
+	@echo "Installing tools in the user node_modules..."
+	loglevel="silent"
+	if [ -n "$(DEBUG_LOGGING)" ]; then
+		loglevel="verbose"
+	fi
+	cd $(REPO_ROOT)/nodenv
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" clean-install
+	$(NODENV_ROOT)/shims/npm --loglevel="$${loglevel}" audit signatures
+	$(RM) -f $(XDG_DATA_HOME)/node_modules
+	ln -sf $(REPO_ROOT)/nodenv/node_modules $(XDG_DATA_HOME)/node_modules
 	touch $@
 
 .PHONY: install-python
@@ -944,57 +949,64 @@ install-python: $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed ## Install t
 
 # Installs pyenv
 $(PYENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
-	@# bash \
-	# TODO(#609): Update dependency on configure-python. \
-	# Run this here rather than as a dependency to avoid unnecessary rebuilds. \
-	$(MAKE) configure-python; \
-	# Install pyenv. \
-	if [[ -d $(PYENV_ROOT) ]]; then \
-		git -C $(PYENV_ROOT) fetch origin "$(PYENV_INSTALL_SHA)"; \
-		git -C $(PYENV_ROOT) checkout "$(PYENV_INSTALL_SHA)"; \
-	else \
-		git clone --branch "$(PYENV_INSTALL_VERSION)" https://github.com/pyenv/pyenv.git $(PYENV_ROOT); \
-	fi; \
-	pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD); \
-	if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then \
-		echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"; \
-		$(RM) -rf $(PYENV_ROOT); \
-		exit 1; \
-	fi; \
+	@echo "Installing pyenv..."
+	# TODO(#609): Update dependency on configure-python.
+	# Run this here rather than as a dependency to avoid unnecessary rebuilds.
+	$(MAKE) configure-python
+	# Install pyenv.
+	if [[ -d $(PYENV_ROOT) ]]; then
+		git -C $(PYENV_ROOT) fetch origin "$(PYENV_INSTALL_SHA)"
+		git -C $(PYENV_ROOT) checkout "$(PYENV_INSTALL_SHA)"
+	else
+		git clone --branch "$(PYENV_INSTALL_VERSION)" https://github.com/pyenv/pyenv.git $(PYENV_ROOT)
+	fi
+	pyenv_sha=$$(git -C $(PYENV_ROOT) rev-parse HEAD)
+	if [ "$${pyenv_sha}" != "$(PYENV_INSTALL_SHA)" ]; then
+		echo "Invalid pyenv: '$${pyenv_sha}' != '$(PYENV_INSTALL_SHA)'"
+		$(RM) -rf $(PYENV_ROOT)
+		exit 1
+	fi
 	touch $@
 
 # Installs pyenv-virtualenv plugin for pyenv
 $(PYENV_ROOT)/plugins/pyenv-virtualenv/.installed: $(PYENV_ROOT)/.installed versions.mk
-	@# bash \
-	pyenv_virtualenv_path="$(PYENV_ROOT)/plugins/pyenv-virtualenv"; \
-	if [[ -d "$${pyenv_virtualenv_path}" ]]; then \
-		git -C "$${pyenv_virtualenv_path}" fetch origin "$(PYENV_VIRTUALENV_SHA)"; \
-		git -C "$${pyenv_virtualenv_path}" checkout "$(PYENV_VIRTUALENV_SHA)"; \
-	else \
-		git clone --branch "$(PYENV_VIRTUALENV_VERSION)" https://github.com/pyenv/pyenv-virtualenv.git "$${pyenv_virtualenv_path}"; \
-	fi; \
-	pyenv_virtualenv_sha=$$(git -C "$${pyenv_virtualenv_path}" rev-parse HEAD); \
-	if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then \
-		echo "Invalid pyenv-virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"; \
-		$(RM) -rf "$${pyenv_virtualenv_path}"; \
-		exit 1; \
-	fi; \
+	@echo "Installing pyenv-virtualenv plugin for pyenv..."
+	pyenv_virtualenv_path="$(PYENV_ROOT)/plugins/pyenv-virtualenv"
+	if [[ -d "$${pyenv_virtualenv_path}" ]]; then
+		git -C "$${pyenv_virtualenv_path}" fetch origin "$(PYENV_VIRTUALENV_SHA)"
+		git -C "$${pyenv_virtualenv_path}" checkout "$(PYENV_VIRTUALENV_SHA)"
+	else
+		git clone --branch "$(PYENV_VIRTUALENV_VERSION)" https://github.com/pyenv/pyenv-virtualenv.git "$${pyenv_virtualenv_path}"
+	fi
+	pyenv_virtualenv_sha=$$(git -C "$${pyenv_virtualenv_path}" rev-parse HEAD)
+	if [ "$${pyenv_virtualenv_sha}" != "$(PYENV_VIRTUALENV_SHA)" ]; then
+		echo "Invalid pyenv-virtualenv: '$${pyenv_virtualenv_sha}' != '$(PYENV_VIRTUALENV_SHA)'"
+		$(RM) -rf "$${pyenv_virtualenv_path}"
+		exit 1
+	fi
 	touch $@
 
 # Installs Python
 $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PYENV_ROOT)/plugins/pyenv-virtualenv/.installed
-	@# bash \
-	$(PYENV_ROOT)/bin/pyenv install --skip-existing; \
+	@echo "Installing Python $(PYTHON_VERSION) via pyenv..."
+	pyenv_options=(
+		# Avoid re-installing Python if it is already installed.
+		--skip-existing
+	)
+	if [ -n "$(DEBUG_LOGGING)" ]; then
+		pyenv_options+=(--verbose)
+	fi
+	$(PYENV_ROOT)/bin/pyenv install ${pyenv_options[@]}
 	touch $@
 
 # Installs Python tools in the pyenv virtualenv for the current version.
 $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.installed: requirements-dev.txt pyproject.toml $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed
-	@# bash \
-	# Install uv \
-	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes; \
-	# Install other packages \
-	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/uv pip install --python "$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/" .; \
-	$(PYENV_ROOT)/bin/pyenv rehash; \
+	@echo "Installing Python tools in pyenv virtualenv for Python $(PYTHON_VERSION)..."
+	# Install uv
+	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/pip install -r $< --require-hashes
+	# Install other packages
+	$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/bin/uv pip install --python "$(PYENV_ROOT)/versions/$(PYTHON_VERSION)/" .
+	$(PYENV_ROOT)/bin/pyenv rehash
 	touch $@
 
 # Installs Ruby
@@ -1003,47 +1015,54 @@ install-ruby: $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed ## Install the R
 
 # Installs rbenv
 $(RBENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
-	@# bash \
-	# TODO(#609): Update dependency on configure-ruby. \
-	# Run this here rather than as a dependency to avoid unnecessary rebuilds. \
-	$(MAKE) configure-ruby; \
-	# Install rbenv. \
-	if [[ -d $(RBENV_ROOT) ]]; then \
-		git -C $(RBENV_ROOT) fetch origin "$(RBENV_INSTALL_SHA)"; \
-		git -C $(RBENV_ROOT) checkout "$(RBENV_INSTALL_SHA)"; \
-	else \
-		git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT); \
-	fi; \
-	rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD); \
-	if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then \
-		echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"; \
-		$(RM) -rf $(RBENV_ROOT); \
-		exit 1; \
-	fi; \
+	@echo "Installing rbenv..."
+	# TODO(#609): Update dependency on configure-ruby.
+	# Run this here rather than as a dependency to avoid unnecessary rebuilds.
+	$(MAKE) configure-ruby
+	# Install rbenv.
+	if [[ -d $(RBENV_ROOT) ]]; then
+		git -C $(RBENV_ROOT) fetch origin "$(RBENV_INSTALL_SHA)"
+		git -C $(RBENV_ROOT) checkout "$(RBENV_INSTALL_SHA)"
+	else
+		git clone --branch "$(RBENV_INSTALL_VERSION)" https://github.com/rbenv/rbenv.git $(RBENV_ROOT)
+	fi
+	rbenv_sha=$$(git -C $(RBENV_ROOT) rev-parse HEAD)
+	if [ "$${rbenv_sha}" != "$(RBENV_INSTALL_SHA)" ]; then
+		echo "Invalid rbenv: '$${rbenv_sha}' != '$(RBENV_INSTALL_SHA)'"
+		$(RM) -rf $(RBENV_ROOT)
+		exit 1
+	fi
 	touch $@
 
 # Installs ruby-build plugin for rbenv
 $(RBENV_ROOT)/plugins/ruby-build/.installed: $(RBENV_ROOT)/.installed versions.mk
-	@# bash \
-	ruby_build_path="$(RBENV_ROOT)/plugins/ruby-build"; \
-	if [[ -d "$${ruby_build_path}" ]]; then \
-		git -C "$${ruby_build_path}" fetch origin "$(RBENV_BUILD_SHA)"; \
-		git -C "$${ruby_build_path}" checkout "$(RBENV_BUILD_SHA)"; \
-	else \
-		git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$${ruby_build_path}"; \
-	fi; \
-	rbenv_build_sha=$$(git -C "$${ruby_build_path}" rev-parse HEAD); \
-	if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then \
-		echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"; \
-		$(RM) -rf "$${ruby_build_path}"; \
-		exit 1; \
-	fi; \
+	@echo "Installing ruby-build plugin for rbenv..."
+	ruby_build_path="$(RBENV_ROOT)/plugins/ruby-build"
+	if [[ -d "$${ruby_build_path}" ]]; then
+		git -C "$${ruby_build_path}" fetch origin "$(RBENV_BUILD_SHA)"
+		git -C "$${ruby_build_path}" checkout "$(RBENV_BUILD_SHA)"
+	else
+		git clone --branch "$(RBENV_BUILD_VERSION)" https://github.com/rbenv/ruby-build.git "$${ruby_build_path}"
+	fi
+	rbenv_build_sha=$$(git -C "$${ruby_build_path}" rev-parse HEAD)
+	if [ "$${rbenv_build_sha}" != "$(RBENV_BUILD_SHA)" ]; then
+		echo "Invalid ruby-build: '$${rbenv_build_sha}' != '$(RBENV_BUILD_SHA)'"
+		$(RM) -rf "$${ruby_build_path}"
+		exit 1
+	fi
 	touch $@
 
 # Installs Ruby
 $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/plugins/ruby-build/.installed
-	@# bash \
-	$(RBENV_ROOT)/bin/rbenv install --skip-existing; \
+	@echo "Installing Ruby $(RUBY_VERSION) via rbenv..."
+	rbenv_options=(
+		# Avoid re-installing Ruby if it is already installed.
+		--skip-existing
+	)
+	if [ -n "$(DEBUG_LOGGING)" ]; then
+		rbenv_options+=(--verbose)
+	fi
+	$(RBENV_ROOT)/bin/rbenv install ${rbenv_options[@]}
 	touch $@
 
 ## Maintenance
@@ -1051,8 +1070,7 @@ $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/p
 
 .PHONY: update-versions-mk
 update-versions-mk: ## Update checksums in versions.mk.
-	@# bash \
-	echo "Updating versions.mk..."; \
+	@echo "Updating versions.mk..."
 	bash scripts/update-versions-mk.sh
 
 .PHONY: update-lockfiles
