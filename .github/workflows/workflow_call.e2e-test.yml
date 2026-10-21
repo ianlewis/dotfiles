@@ -96,7 +96,7 @@ jobs:
           persist-credentials: false
 
       # NOTE: Homebrew/actions does not publish tags.
-      - uses: Homebrew/actions/setup-homebrew@d0dd492210067c1b5f8857ab6c5dd52c29944e44 # main
+      - uses: Homebrew/actions/setup-homebrew@d0dd492210067c1b5f8857ab6c5dd52c29944e44
 
       - name: Install GNU tools
         env:
