@@ -47,6 +47,24 @@ jobs:
         with:
           python-version-file: ".python-version"
 
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+              coreutils \
+              gawk \
+              grep \
+              libbz2-dev \
+              libffi-dev \
+              liblzma-dev \
+              libreadline-dev \
+              libsqlite3-dev \
+              libssl-dev \
+              libyaml-dev \
+              make \
+              util-linux \
+              zlib1g-dev
+
       - name: update lockfiles
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
