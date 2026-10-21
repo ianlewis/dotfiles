@@ -51,18 +51,25 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+              build-essential \
               coreutils \
               gawk \
               grep \
               libbz2-dev \
               libffi-dev \
               liblzma-dev \
+              libncursesw5-dev \
               libreadline-dev \
               libsqlite3-dev \
               libssl-dev \
+              libxml2-dev \
+              libxmlsec1-dev \
               libyaml-dev \
               make \
+              pkg-config \
+              tk-dev \
               util-linux \
+              xz-utils \
               zlib1g-dev
 
       - name: update lockfiles
