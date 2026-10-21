@@ -885,10 +885,10 @@ $(NODENV_ROOT)/versions/$(NODE_VERSION)/.installed: .node-version $(NODENV_ROOT)
 	@echo "Installing Node.js $(NODE_VERSION)..."
 	nodenv_options=(
 		# Avoid re-installing Node.js if it is already installed.
-		--skip-existing
+		"--skip-existing"
 	)
 	if [ -n "$(DEBUG_LOGGING)" ]; then
-		nodenv_options+=(--verbose)
+		nodenv_options+=("--verbose")
 	fi
 	$(NODENV_ROOT)/bin/nodenv install $${nodenv_options[@]}
 	touch $@
@@ -991,10 +991,10 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 	@echo "Installing Python $(PYTHON_VERSION) via pyenv..."
 	pyenv_options=(
 		# Avoid re-installing Python if it is already installed.
-		--skip-existing
+		"--skip-existing"
 	)
 	if [ -n "$(DEBUG_LOGGING)" ]; then
-		pyenv_options+=(--verbose)
+		pyenv_options+=("--verbose")
 	fi
 	$(PYENV_ROOT)/bin/pyenv install $${pyenv_options[@]}
 	touch $@
@@ -1057,10 +1057,10 @@ $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/p
 	@echo "Installing Ruby $(RUBY_VERSION) via rbenv..."
 	rbenv_options=(
 		# Avoid re-installing Ruby if it is already installed.
-		--skip-existing
+		"--skip-existing"
 	)
 	if [ -n "$(DEBUG_LOGGING)" ]; then
-		rbenv_options+=(--verbose)
+		rbenv_options+=("--verbose")
 	fi
 	$(RBENV_ROOT)/bin/rbenv install $${rbenv_options[@]}
 	touch $@
