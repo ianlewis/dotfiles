@@ -996,7 +996,7 @@ $(PYENV_ROOT)/versions/$(PYTHON_VERSION)/.python-installed: .python-version $(PY
 	if [ -n "$(DEBUG_LOGGING)" ]; then
 		pyenv_options+=("--verbose")
 	fi
-	$(PYENV_ROOT)/bin/pyenv install $${pyenv_options[@]}
+	env -u MAKEFLAGS $(PYENV_ROOT)/bin/pyenv install $${pyenv_options[@]}
 	touch $@
 
 # Installs Python tools in the pyenv virtualenv for the current version.
