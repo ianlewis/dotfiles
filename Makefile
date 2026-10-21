@@ -1062,7 +1062,7 @@ $(RBENV_ROOT)/versions/$(RUBY_VERSION)/.installed: .ruby-version $(RBENV_ROOT)/p
 	if [ -n "$(DEBUG_LOGGING)" ]; then
 		rbenv_options+=("--verbose")
 	fi
-	$(RBENV_ROOT)/bin/rbenv install $${rbenv_options[@]}
+	env -u MAKEFLAGS $(RBENV_ROOT)/bin/rbenv install $${rbenv_options[@]}
 	touch $@
 
 ## Maintenance
