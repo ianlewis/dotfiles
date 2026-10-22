@@ -29,6 +29,28 @@
 #       https://github.com/akinomyoga/ble.sh#13-set-up-bashrc
 # shellcheck source=/dev/null
 if [[ $- =~ i ]]; then
+    # Set bash history options before sourcing ble.sh to ensure that the history
+    # is properly configured.
+    # https://www.gnu.org/software/bash/manual/html_node/Bash-History-Facilities.html
+
+    # Don't put duplicate lines in the history and ignore lines starting with
+    # space.
+    export HISTCONTROL=ignoreboth
+
+    # Set history length to a large value to avoid losing history entries.
+    # HISTSIZE sets the number of commands to save in memory in the current
+    # session.
+    export HISTSIZE=5000
+    # HISTFILESIZE sets the maximum number of lines contained in the history
+    # file.
+    export HISTFILESIZE=10000
+
+    # HISTTIMEFORMAT sets the time format for history entries.
+    export HISTTIMEFORMAT="%F %T "
+
+    # Append to the history file, don't overwrite it.
+    shopt -s histappend
+
     source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
 fi
 
@@ -380,11 +402,6 @@ function _bashrc_main() {
         # Enable colors on linux
         eval "$(dircolors -b)"
     fi
-
-    # don't put duplicate lines in the history. See bash(1) for more options
-    export HISTCONTROL=ignoredups
-    # ... and ignore same sucessive entries.
-    export HISTCONTROL=ignoreboth
 
     # check the window size after each command and, if necessary,
     # update the values of LINES and COLUMNS.
