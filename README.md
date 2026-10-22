@@ -1,6 +1,6 @@
 # Ian's dotfiles
 
-[![tests](https://github.com/ianlewis/dotfiles/actions/workflows/pull_request.tests.yml/badge.svg)](https://github.com/ianlewis/dotfiles/actions/workflows/pull_request.tests.yml)
+[![tests](https://img.shields.io/github/actions/workflow/status/ianlewis/dotfiles/pull_request.autofix.yml?label=tests)](https://github.com/ianlewis/dotfiles/actions/workflows/pull_request.autofix.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ianlewis/dotfiles/badge)](https://securityscorecards.dev/viewer/?uri=github.com%2Fianlewis%2Fdotfiles)
 
 These dotfiles were originally based on [Armin Ronacher's
