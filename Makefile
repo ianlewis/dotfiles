@@ -67,7 +67,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-nix configure-node configure-nvim configure-ssh configure-tmux configure-yamlfmt configure-yamllint
+configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-logrotate configure-nix configure-node configure-nvim configure-ssh configure-tmux configure-yamlfmt configure-yamllint
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-cosign install-aqua
@@ -570,6 +570,7 @@ install-bin: $(XDG_BIN_HOME)/.created $(XDG_CONFIG_HOME)/.created ## Install bin
 	ln -sf $(REPO_ROOT)/bin/all/randstr.bash $(XDG_BIN_HOME)/randstr
 	ln -sf $(REPO_ROOT)/bin/all/update_authorized_keys.sh $(XDG_BIN_HOME)/update_authorized_keys.sh
 	ln -sf $(REPO_ROOT)/bin/all/withpass.bash $(XDG_BIN_HOME)/withpass
+	ln -sf $(REPO_ROOT)/bin/all/logrotate.cron.bash $(XDG_BIN_HOME)/logrotate.cron.bash
 	mkdir -p $(XDG_CONFIG_HOME)/coding-assistant-docker-images
 	$(MAKE) \
 		-C third_party/ianlewis/coding-assistant-docker-images \
@@ -653,6 +654,10 @@ configure-crontab: install-bin ## Configure crontab.
 		echo "# If adding cron jobs, please add them to a file in"
 		echo "# $(HOME)/.config/dotfiles/cron.d/"
 		echo "SHELL=$$(which bash)"
+		echo "XDG_BIN_HOME=$(XDG_BIN_HOME)"
+		echo "XDG_CONFIG_HOME=$(XDG_CONFIG_HOME)"
+		echo "XDG_DATA_HOME=$(XDG_DATA_HOME)"
+		echo "XDG_STATE_HOME=$(XDG_STATE_HOME)"
 		echo ""
 		cat cron/crontab
 		echo ""
@@ -672,7 +677,7 @@ configure-crontab: install-bin ## Configure crontab.
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)/.created
 	@echo "Configuring efm-langserver..."
 	mkdir -p $(XDG_CONFIG_HOME)/efm-langserver
-	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|'< $< > $@
+	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|g'< $< > $@
 
 $(XDG_STATE_HOME)/efm-langserver/.created:
 	@echo "Creating efm-langserver state directory..."
@@ -707,6 +712,14 @@ configure-k9s: $(XDG_CONFIG_HOME)/.created ## Configure k9s.
 	@echo "Configuring k9s..."
 	mkdir -p $(XDG_CONFIG_HOME)/k9s
 	ln -sf $(REPO_ROOT)/k9s/config.yaml $(XDG_CONFIG_HOME)/k9s/config.yaml
+
+$(XDG_CONFIG_HOME)/logrotate/logrotate.conf: logrotate/logrotate.conf $(XDG_CONFIG_HOME)/.created
+	@echo "Configuring logrotate..."
+	mkdir -p $(XDG_CONFIG_HOME)/logrotate
+	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|g'< $< > $@
+
+.PHONY: configure-logrotate
+configure-logrotate: $(XDG_CONFIG_HOME)/logrotate/logrotate.conf configure-crontab ## Configure logrotate.
 
 .PHONY: configure-nix
 configure-nix: $(XDG_CONFIG_HOME)/.created ## Configure nix.
