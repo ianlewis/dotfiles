@@ -68,6 +68,7 @@ sudo apt-get install -y \
     libsqlite3-dev \
     libssl-dev \
     libyaml-dev \
+    logrotate \
     sed \
     tmux \
     util-linux \
@@ -94,6 +95,7 @@ brew install \
     bash \
     bash-completion@2 \
     libyaml \
+    logrotate \
     tmux \
     xz
 ```

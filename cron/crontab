@@ -23,3 +23,4 @@
 */10 * * * * ${HOME}/.local/bin/update_authorized_keys.sh
 35   1,7,13,19 * * * ${HOME}/.local/bin/delete_old_downloads.sh
 25   1,7,13,19 * * * ${HOME}/.local/bin/docker_prune.sh
+15   1,7,13,19 * * * ${HOME}/.local/bin/logrotate.cron.bash
