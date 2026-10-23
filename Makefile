@@ -649,7 +649,9 @@ configure-crictl: $(XDG_CONFIG_HOME)/.created ## Configure crictl.
 configure-crontab: install-bin ## Configure crontab.
 	@echo "Configuring crontab..."
 	(
-		echo '######################## MANAGED BY dotfiles; DO NOT EDIT ######################'
+		echo '##################### MANAGED BY dotfiles; DO NOT EDIT ###################'
+		echo "# If adding cron jobs, please add them to a file in"
+		echo "# $(HOME)/.config/dotfiles/cron.d/"
 		echo "SHELL=$$(which bash)"
 		echo ""
 		cat cron/crontab
@@ -664,7 +666,7 @@ configure-crontab: install-bin ## Configure crontab.
 				echo ""
 			fi
 		done
-		echo '############################## END MANAGED SECTION #############################'
+		echo '########################### END MANAGED SECTION ##########################'
 	) | crontab -
 
 $(XDG_CONFIG_HOME)/efm-langserver/config.yaml: efm-langserver/config.yaml $(XDG_CONFIG_HOME)/.created
