@@ -716,7 +716,7 @@ configure-k9s: $(XDG_CONFIG_HOME)/.created ## Configure k9s.
 $(XDG_CONFIG_HOME)/logrotate/logrotate.conf: logrotate/logrotate.conf $(XDG_CONFIG_HOME)/.created
 	@echo "Configuring logrotate..."
 	mkdir -p $(XDG_CONFIG_HOME)/logrotate
-	sed 's|$${HOME}|'$(HOME)'|g'< $< > $@
+	sed 's|$${XDG_STATE_HOME}|'$(XDG_STATE_HOME)'|g'< $< > $@
 
 .PHONY: configure-logrotate
 configure-logrotate: $(XDG_CONFIG_HOME)/logrotate/logrotate.conf configure-crontab ## Configure logrotate.
