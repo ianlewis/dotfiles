@@ -38,7 +38,7 @@ packages:
   - name: ianlewis/todos@v0.14.0
   - name: go-acme/lego@v5.2.2
   - name: astral-sh/ruff@0.15.18
-  - name: mattn/efm-langserver@v0.0.56
+  - name: mattn/efm-langserver@v0.0.57
   - name: rust-lang/rust-analyzer@2025-06-16
   - name: LuaLS/lua-language-server@3.18.2
   - name: golang.org/x/tools/gopls@v0.22.0
