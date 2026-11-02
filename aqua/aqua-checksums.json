@@ -81,18 +81,18 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-linux.zip",
-      "checksum": "DAC452422747999EC4919BBB8BB52992B66AAE533B60022BF005669DE8616671",
+      "id": "github_release/github.com/Kampfkarren/selene/0.32.0/selene-0.32.0-linux.zip",
+      "checksum": "D3773393578580074386E69337D35B7ACDDFBAA9FC38964C07FA3E28436ADE9B",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-macos.zip",
-      "checksum": "67F644E57E14CCB74A0C272BC44AF0DC7909D8BDFF58E4E59BB3524717DA5741",
+      "id": "github_release/github.com/Kampfkarren/selene/0.32.0/selene-0.32.0-macos.zip",
+      "checksum": "D8AA4701530A81334836F9C5E3BF38B91F633D9AD88F4D15CF29F63FE8589DC0",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-windows.zip",
-      "checksum": "C5D5D087DAA8E38BD71680B2202A407E5D4BC00FD584A648DEC17EF9B29A2B73",
+      "id": "github_release/github.com/Kampfkarren/selene/0.32.0/selene-0.32.0-windows.zip",
+      "checksum": "C8B693DE81D0DDC11490D8E1170DD98D775C2B21431144BD8286F738EF416109",
       "algorithm": "sha256"
     },
     {
