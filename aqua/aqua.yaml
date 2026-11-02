@@ -67,7 +67,7 @@ packages:
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.14.0
   - name: Canop/dysk@v3.6.1
-  - name: bufbuild/buf@v1.71.0
+  - name: bufbuild/buf@v1.74.0
   - name: bazelbuild/bazel@9.1.1
   - name: derailed/k9s@v0.51.0
   - name: kubernetes-sigs/krew@v0.5.0
