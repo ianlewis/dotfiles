@@ -48,7 +48,7 @@ packages:
   - name: dandavison/delta@0.20.1
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.4.2
-  - name: tree-sitter/tree-sitter@v0.26.9
+  - name: tree-sitter/tree-sitter@v0.27.1
   - name: kubernetes/kubernetes/kubectl@v1.36.2
   - name: kubernetes/kubernetes/kubeadm@v1.37.1
   - name: bitnami/sealed-secrets@v0.38.4
