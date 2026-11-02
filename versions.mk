@@ -19,7 +19,7 @@ COSIGN_CHECKSUM.linux.arm64 := c5d324e091826b0d7a78eb16fef316450b4eb9aaec045611c
 COSIGN_CHECKSUM.darwin.arm64 := 5cf948c2f4dfe59687bdd0b8523709067383e03982cc543475c8a7dc70e92a76
 
 # renovate: datasource=golang-version depName=golang versioning=loose
-GO_VERSION ?= 1.27.1
+GO_VERSION ?= 1.27.3
 GO_CHECKSUM.linux.amd64 := 63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63edaf590168445
 GO_CHECKSUM.linux.arm64 := 3450b45a3f9ee8568792736a5c5e70a1f2e9b36c35a8f74958c03e51d7d92bec
 GO_CHECKSUM.darwin.arm64 := ee215d57e0ec269c60cc9ceca68e6bda321ba9ee5afe24f4b0988703c2d87d12
