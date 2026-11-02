@@ -1,28 +1,28 @@
 {
   "checksums": [
     {
-      "id": "github_release/github.com/Automattic/harper/v2.5.0/harper-ls-aarch64-apple-darwin.tar.gz",
-      "checksum": "14835B81698F5F5CE26D4661A663D74968FB0ABFFB70E0FFA64C022EF95EC846",
+      "id": "github_release/github.com/Automattic/harper/v2.13.0/harper-ls-aarch64-apple-darwin.tar.gz",
+      "checksum": "A6CA491DB1C929426C5C0BBBF132F8D2F1F253B98680FE103E48BDE408676CC3",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Automattic/harper/v2.5.0/harper-ls-aarch64-unknown-linux-gnu.tar.gz",
-      "checksum": "51C9D196450A09B238A276BE568BFD9522D197CC95B89CFCCD83976DA9CC4D76",
+      "id": "github_release/github.com/Automattic/harper/v2.13.0/harper-ls-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "05FF6766D52FD161CF8634808D9AF51D7F0864D12A3423B12DC9EBD199B469DB",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Automattic/harper/v2.5.0/harper-ls-x86_64-apple-darwin.tar.gz",
-      "checksum": "C46405ABCDBB7E54A6A65C6BAC61449C67018114650BF0EE707562179FB8E7AA",
+      "id": "github_release/github.com/Automattic/harper/v2.13.0/harper-ls-x86_64-apple-darwin.tar.gz",
+      "checksum": "5E403A05FA785A44DA652013CB859B8AEFD3809521E37621FB94320503F1E0C5",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Automattic/harper/v2.5.0/harper-ls-x86_64-pc-windows-msvc.zip",
-      "checksum": "6923C626E2C64BCEDFAF0257A7A71AC05FD15A89EEB2D70C82E09A687670A394",
+      "id": "github_release/github.com/Automattic/harper/v2.13.0/harper-ls-x86_64-pc-windows-msvc.zip",
+      "checksum": "96449886EBCE74973CBFEB06B9C466AEF29094E89DD3D5676745F38A53951E1D",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Automattic/harper/v2.5.0/harper-ls-x86_64-unknown-linux-gnu.tar.gz",
-      "checksum": "F5F008E1D40ADF27D9E979E38B3F8E618505E8335A004374DC01AB3B82FB4EDF",
+      "id": "github_release/github.com/Automattic/harper/v2.13.0/harper-ls-x86_64-unknown-linux-gnu.tar.gz",
+      "checksum": "44EE0396E5D4A99A0DFA9756CA3AF827F9F8B34BCB5F6AD0E8CCA535B2F89021",
       "algorithm": "sha256"
     },
     {
