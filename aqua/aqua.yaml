@@ -72,7 +72,7 @@ packages:
   - name: derailed/k9s@v0.51.0
   - name: kubernetes-sigs/krew@v0.5.0
   - name: neovim/neovim@v0.12.3
-  - name: fluxcd/flux2@v2.9.2
+  - name: fluxcd/flux2@v2.9.6
   - name: controlplaneio-fluxcd/flux-operator@v0.60.0
   - name: yannh/kubeconform@v0.8.0
   - name: stackrox/kube-linter@v0.8.3
