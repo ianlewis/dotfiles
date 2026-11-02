@@ -436,33 +436,33 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_darwin_amd64.tar.gz",
-      "checksum": "4E4878FE75C5774C9759506EFDB8E37F3BA1100F0A82A0B0338A843C7A42D1E9",
+      "id": "github_release/github.com/go-acme/lego/v5.5.2/lego_v5.5.2_darwin_amd64.tar.gz",
+      "checksum": "DE950DD6EEBB9406F3546E3725B3382103F197DE67142615258B66CA067759B2",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_darwin_arm64.tar.gz",
-      "checksum": "658F9F2D06D6E24774DC3AE0BF39B8DBC49C7CCF2B2B3C96AA5464C024CC5A4D",
+      "id": "github_release/github.com/go-acme/lego/v5.5.2/lego_v5.5.2_darwin_arm64.tar.gz",
+      "checksum": "9C407AD3193DBDBFE33A202AB5D49CF8BD3FFF72E69362857AC91205295DC5B4",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_linux_amd64.tar.gz",
-      "checksum": "018DE6D3F2DA09630CAA2FBBE8C6AA459323AD0AC0A053D0E808268914B38A8B",
+      "id": "github_release/github.com/go-acme/lego/v5.5.2/lego_v5.5.2_linux_amd64.tar.gz",
+      "checksum": "2A35505089E7772C92E1E9AC144DF91151EF2ECA8568630DB0FF91FCA06D9BEF",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_linux_arm64.tar.gz",
-      "checksum": "92C9D7D2A6377CDD4702BFAF7E0F61EA167456F1686A3899A12F289FE863C49B",
+      "id": "github_release/github.com/go-acme/lego/v5.5.2/lego_v5.5.2_linux_arm64.tar.gz",
+      "checksum": "15B14EC2AB14FDE69CC8396EB0204C5CE4327E31A486953225A6059B26DB3E8C",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_windows_amd64.zip",
-      "checksum": "A39BE44CA5D837534126E7DD4B9091FFB6D4B5FB84E317390C3D9D54ED120DA7",
+      "id": "github_release/github.com/go-acme/lego/v5.5.2/lego_v5.5.2_windows_amd64.zip",
+      "checksum": "FC544130A2716329CAD73A47B674E3AEEA019C4753C3963D259BD45D946BBD34",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/go-acme/lego/v5.2.2/lego_v5.2.2_windows_arm64.zip",
-      "checksum": "81563773E548CD3F371C0284603013D3522F66A0B4380D61895B2E82A4BCF696",
+      "id": "github_release/github.com/go-acme/lego/v5.5.2/lego_v5.5.2_windows_arm64.zip",
+      "checksum": "0EEC94EC6834DB18D537646A2C2A72FA9DC1E503F65E59AB574CAAE358A31982",
       "algorithm": "sha256"
     },
     {
