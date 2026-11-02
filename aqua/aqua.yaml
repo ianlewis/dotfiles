@@ -23,7 +23,7 @@ checksum:
     - all
 registries:
   - type: standard
-    ref: v4.526.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.575.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: koalaman/shellcheck@v0.11.0
   - name: rhysd/actionlint@v1.7.12
