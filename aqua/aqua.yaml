@@ -49,7 +49,7 @@ packages:
   - name: sharkdp/bat@v0.26.1
   - name: sharkdp/fd@v10.4.2
   - name: tree-sitter/tree-sitter@v0.27.1
-  - name: kubernetes/kubernetes/kubectl@v1.36.2
+  - name: kubernetes/kubernetes/kubectl@v1.37.1
   - name: kubernetes/kubernetes/kubeadm@v1.37.1
   - name: bitnami/sealed-secrets@v0.38.4
   - name: kubernetes-sigs/kind@v0.33.0
