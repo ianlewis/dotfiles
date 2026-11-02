@@ -661,23 +661,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.36.0/crictl-v1.36.0-darwin-amd64.tar.gz",
-      "checksum": "A2814187DF38B16A58E059CDF318D9BE608D7BEBD8549C51C8E074C771194A93",
+      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.37.0/crictl-v1.37.0-darwin-amd64.tar.gz",
+      "checksum": "E274E10F7EBA3DF294869289BD13966918382252297C9665E61EB83A69786ED2",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.36.0/crictl-v1.36.0-linux-amd64.tar.gz",
-      "checksum": "83855E114566A8A8C44C548D515670F51DE3A5E1DA8B2EFFB59870E2F10C25A3",
+      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.37.0/crictl-v1.37.0-linux-amd64.tar.gz",
+      "checksum": "67C983EE8A6BBCE73D39A186E633C5FE4F8A70E62171AC3BD92A9C1B2C601670",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.36.0/crictl-v1.36.0-linux-arm64.tar.gz",
-      "checksum": "68328594CCF780A80AE2B092D9F6CE484EEC7CF540C275242E8FD954BFD95332",
+      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.37.0/crictl-v1.37.0-linux-arm64.tar.gz",
+      "checksum": "C9DFDF9EBC353A0027C88622206A5E90EE6F0E78CFABF1A9EF4DC575298FD555",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.36.0/crictl-v1.36.0-windows-amd64.tar.gz",
-      "checksum": "73EF455B8A5A1E43F19372EBA0EC40455E4ABDE3B9441A21DB32C2A3172FB7EA",
+      "id": "github_release/github.com/kubernetes-sigs/cri-tools/v1.37.0/crictl-v1.37.0-windows-amd64.tar.gz",
+      "checksum": "D83D0955008A841A4CB3291BCF78E8E2B897212250B90F75FBD14BDB3BF9A28D",
       "algorithm": "sha256"
     },
     {
