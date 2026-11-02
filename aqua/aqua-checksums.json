@@ -761,33 +761,33 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mattn/efm-langserver/v0.0.56/efm-langserver_v0.0.56_darwin_amd64.zip",
-      "checksum": "B67249F18C5EE2D68739DE39D8E375B8B9BA4BF2D0E4F5E6E683D31711937856",
+      "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_darwin_amd64.zip",
+      "checksum": "C3DE994FA89A44FA733DA9A08D31BE1E2D27575C7D7C0D00F430C82378BFCA22",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mattn/efm-langserver/v0.0.56/efm-langserver_v0.0.56_darwin_arm64.zip",
-      "checksum": "B9C8EF5F1B857F807237770E1476F85D0E6B0CCFCFDA7B07970AD03B8243F473",
+      "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_darwin_arm64.zip",
+      "checksum": "7EB4B9EE4D5AF106A539F582801F59461AEF63946F835136E036368E039F49DB",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mattn/efm-langserver/v0.0.56/efm-langserver_v0.0.56_linux_amd64.tar.gz",
-      "checksum": "19FBD69D6102B863BFB382C1771C5C5CBF350ED1284C60F3AD2B27B81C94BEC6",
+      "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_linux_amd64.tar.gz",
+      "checksum": "F01A653B5C6C252C23EC19677B040EFF961B8DA784317EE0B8B852245A3999E2",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mattn/efm-langserver/v0.0.56/efm-langserver_v0.0.56_linux_arm64.tar.gz",
-      "checksum": "D7FBD071DFB26EC20859579F907A760852BC9D769D6D1351775A97CE17DAF20E",
+      "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_linux_arm64.tar.gz",
+      "checksum": "F10AC39AC66CBE75CB6621B1D155AA479A6C6A58D91D4D0EB124D4DACD37881E",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mattn/efm-langserver/v0.0.56/efm-langserver_v0.0.56_windows_amd64.zip",
-      "checksum": "FFA124D4C9031F5911C18BFD73821B98C42C98B56B07D42D874E02DFBCA5F3AA",
+      "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_windows_amd64.zip",
+      "checksum": "21C346DD36E89206A8C0ABEA903CBC32C275068B38D7DC600BAE76F53CCE7E97",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mattn/efm-langserver/v0.0.56/efm-langserver_v0.0.56_windows_arm64.zip",
-      "checksum": "D68317877BCC2A12AE4C474A9BDE4F8C9B0961B3D6BF69AD2A404A81F4D8DBF2",
+      "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_windows_arm64.zip",
+      "checksum": "42FCE39328FA7BB5E66397FA4F5F41FD706DEE000E3DE687DA65997B9E5D5C76",
       "algorithm": "sha256"
     },
     {
