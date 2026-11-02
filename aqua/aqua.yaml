@@ -60,7 +60,7 @@ packages:
   - name: google/yamlfmt@v0.21.0
   - name: mikefarah/yq@v4.53.3
   - name: sxyazi/yazi@v26.5.6
-  - name: jqlang/jq@jq-1.8.1
+  - name: jqlang/jq@jq-1.8.2
   - name: aws/aws-cli@2.35.8
   - name: twistedpair/google-cloud-sdk@562.0.0
   - name: kubernetes-sigs/cri-tools/crictl@v1.36.0
