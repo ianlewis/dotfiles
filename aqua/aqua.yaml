@@ -52,7 +52,7 @@ packages:
   - name: kubernetes/kubernetes/kubectl@v1.36.2
   - name: kubernetes/kubernetes/kubeadm@v1.37.1
   - name: bitnami/sealed-secrets@v0.38.4
-  - name: kubernetes-sigs/kind@v0.32.0
+  - name: kubernetes-sigs/kind@v0.33.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.3
   - name: helm/helm@v4.2.2
   - name: antonmedv/fx@39.2.0
