@@ -121,33 +121,33 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/antonmedv/fx/39.2.0/fx_darwin_amd64",
-      "checksum": "2AD7D0A6E1EA67AB10A22CC06825FDC776511E8F412926D1C752B630EAC12E02",
+      "id": "github_release/github.com/antonmedv/fx/40.0.0/fx_darwin_amd64",
+      "checksum": "B071F677C13B25AA8576D7AF3A7B8E8C16488C430F5A8360A370B5CBEEC94EC2",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/antonmedv/fx/39.2.0/fx_darwin_arm64",
-      "checksum": "5D7DADBF8AC4E4A55B5B6D31BDD958B90823292997BA9DDAE395F66417BB4A9B",
+      "id": "github_release/github.com/antonmedv/fx/40.0.0/fx_darwin_arm64",
+      "checksum": "D3A93B9E78D77EBC2C8CFC9B7101E20D6E46317D5B41EE149D8FF8B6C1899D66",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/antonmedv/fx/39.2.0/fx_linux_amd64",
-      "checksum": "17EA6549C7CF0B8BE5EC109D04DA7FBF1D5DE9F7B99D957A6215081933528AFE",
+      "id": "github_release/github.com/antonmedv/fx/40.0.0/fx_linux_amd64",
+      "checksum": "C5CF146137D3D1819384356366913F1F98BCF5B334E5F100E4705C081F65ED8E",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/antonmedv/fx/39.2.0/fx_linux_arm64",
-      "checksum": "85EA8435B0A80B6D31FFA9F61AC9B67D9BB8F0FFFFABDFE5E7E587B07A0A0684",
+      "id": "github_release/github.com/antonmedv/fx/40.0.0/fx_linux_arm64",
+      "checksum": "1200EB9C7E78AAE2108C84809A90E361193B2859C2EA528AD49F2E8B690620C9",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/antonmedv/fx/39.2.0/fx_windows_amd64.exe",
-      "checksum": "00FBDDD7BD67F747A51AECC0A5BAFCC695A21DFAE7B912684510722C8E2D6D22",
+      "id": "github_release/github.com/antonmedv/fx/40.0.0/fx_windows_amd64.exe",
+      "checksum": "95AD6B786A435C7E06E15C7090F4FE0D6E92EF6F47E9A5E76F493A9626629F70",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/antonmedv/fx/39.2.0/fx_windows_arm64.exe",
-      "checksum": "10D4E3AB80B2D28EE9335979384192FB643BF1E868E3F0C29E59F77DD5AE4766",
+      "id": "github_release/github.com/antonmedv/fx/40.0.0/fx_windows_arm64.exe",
+      "checksum": "A596DF619F4126914B3E1C8367820165BA5D292FB53CDF177CFCEAF840A7D973",
       "algorithm": "sha256"
     },
     {
