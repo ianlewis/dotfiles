@@ -1,43 +1,43 @@
 {
   "checksums": [
     {
-      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-linux-aarch64.zip",
-      "checksum": "0EF2EBF0B7E5A652B65C4CB96C6D9FFB3981A98547DE3C764465BBF54A8D761A",
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.6.0/stylua-linux-aarch64.zip",
+      "checksum": "8E67539E5FDF7A81CD03CF592B0DF18D3BB96EE17A5EA5D9BF67B86387B903B0",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-linux-x86_64-musl.zip",
-      "checksum": "CA6F1CF52EAF69E6632B81ACEF9C197AA24B85EB30D2455A35E7DBE28AE77C72",
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.6.0/stylua-linux-x86_64-musl.zip",
+      "checksum": "48EE7DB28346F96F4BD545E190AB080A88A7B5A664E97649CF5D5C60426F402D",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-macos-aarch64.zip",
-      "checksum": "92FF0889E16324801BC072692974BB67F8161E62010FC90F96C62A17F81F32C7",
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.6.0/stylua-macos-aarch64.zip",
+      "checksum": "DAB9B66D340CA5FFC8225211F1DCF89B84783E09B8CBEC8C518497EBA81F3C42",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-macos-x86_64.zip",
-      "checksum": "53C50A1605D0A6345D160A1A5A21DB40BCF2BF9CD23C17F7C277A63A1BFF3A7F",
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.6.0/stylua-macos-x86_64.zip",
+      "checksum": "90779AA873837B2DFF8EB3361BD27950303914C24265A59CAE0A0D0629D71585",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.5.2/stylua-windows-x86_64.zip",
-      "checksum": "E77D0EA1226B8B389B43F702240091249A96EEA25857281F90EA24D0EB9EB969",
+      "id": "github_release/github.com/JohnnyMorganz/StyLua/v2.6.0/stylua-windows-x86_64.zip",
+      "checksum": "FD13B4014E3B779C244BBC03F2C282E357F15BC526DE6A6FA5ECBC447538313C",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-linux.zip",
-      "checksum": "DAC452422747999EC4919BBB8BB52992B66AAE533B60022BF005669DE8616671",
+      "id": "github_release/github.com/Kampfkarren/selene/0.32.0/selene-0.32.0-linux.zip",
+      "checksum": "D3773393578580074386E69337D35B7ACDDFBAA9FC38964C07FA3E28436ADE9B",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-macos.zip",
-      "checksum": "67F644E57E14CCB74A0C272BC44AF0DC7909D8BDFF58E4E59BB3524717DA5741",
+      "id": "github_release/github.com/Kampfkarren/selene/0.32.0/selene-0.32.0-macos.zip",
+      "checksum": "D8AA4701530A81334836F9C5E3BF38B91F633D9AD88F4D15CF29F63FE8589DC0",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/Kampfkarren/selene/0.31.0/selene-0.31.0-windows.zip",
-      "checksum": "C5D5D087DAA8E38BD71680B2202A407E5D4BC00FD584A648DEC17EF9B29A2B73",
+      "id": "github_release/github.com/Kampfkarren/selene/0.32.0/selene-0.32.0-windows.zip",
+      "checksum": "C8B693DE81D0DDC11490D8E1170DD98D775C2B21431144BD8286F738EF416109",
       "algorithm": "sha256"
     },
     {
@@ -151,28 +151,28 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_darwin_amd64",
-      "checksum": "6FEEDAFC72915794163114F512348E2437D080D0047EF8B8FA2EC63B575F12AF",
+      "id": "github_release/github.com/mvdan/sh/v3.14.1/shfmt_v3.14.1_darwin_amd64",
+      "checksum": "D33EEE0DA0F92835B3562E9767A05CEE7E4EAEEF47DAA03BFD09DA17B4B590A6",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_darwin_arm64",
-      "checksum": "9680526BE4A66EA1FFE988ED08AF58E1400FE1E4F4AEF5BD88B20BB9B3DA33F8",
+      "id": "github_release/github.com/mvdan/sh/v3.14.1/shfmt_v3.14.1_darwin_arm64",
+      "checksum": "B7C872DB63553CCFFC7253ABA3ED7D4885A27D83F1BA567B1138C6315A5847E5",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_linux_amd64",
-      "checksum": "FB096C5D1AC6BEABBDBAA2874D025BADB03EE07929F0C9FF67563CE8C75398B1",
+      "id": "github_release/github.com/mvdan/sh/v3.14.1/shfmt_v3.14.1_linux_amd64",
+      "checksum": "76E77641FAA025814B77F153B29796B8E6FA2FCA03E0C76A691608B86C7EA7BF",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_linux_arm64",
-      "checksum": "32D92ACAA5CD8ABB29FC49DAC123DC412442D5713967819D8AF2C29F1B3857C7",
+      "id": "github_release/github.com/mvdan/sh/v3.14.1/shfmt_v3.14.1_linux_arm64",
+      "checksum": "5F2DB09DAE91FCA848F7ADBDD014632E921A383863A2AD7E0450AD3ABA0C6489",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mvdan/sh/v3.13.1/shfmt_v3.13.1_windows_amd64.exe",
-      "checksum": "60CD368533D0AD73FA86D93D5BBF95EF40587245CE684ED138C1B31557B5FE97",
+      "id": "github_release/github.com/mvdan/sh/v3.14.1/shfmt_v3.14.1_windows_amd64.exe",
+      "checksum": "13629CE28442CA80B6B5A819F7574AB39E1C28C6E26734CA816C9714E04851DF",
       "algorithm": "sha256"
     },
     {
@@ -206,8 +206,8 @@
       "algorithm": "sha256"
     },
     {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.514.0/registry.yaml",
-      "checksum": "E6642BD2698BDAE1BAA8C17E92CAC47507CE77521B520B1ABB3C9F42416F644A",
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.575.0/registry.yaml",
+      "checksum": "340BC6F1FA7124077830D090576F9DC538212FDD7869F8DE973E81B0124EFFA1",
       "algorithm": "sha256"
     }
   ]
