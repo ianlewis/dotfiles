@@ -63,7 +63,7 @@ packages:
   - name: jqlang/jq@jq-1.8.1
   - name: aws/aws-cli@2.35.8
   - name: twistedpair/google-cloud-sdk@562.0.0
-  - name: kubernetes-sigs/cri-tools/crictl@v1.36.0
+  - name: kubernetes-sigs/cri-tools/crictl@v1.37.0
   - name: golang/tools/goimports@v0.40.0
   - name: daixiang0/gci@v0.14.0
   - name: Canop/dysk@v3.6.1
