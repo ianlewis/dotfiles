@@ -55,7 +55,7 @@ packages:
   - name: kubernetes-sigs/kind@v0.32.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.3
   - name: helm/helm@v4.2.2
-  - name: antonmedv/fx@39.2.0
+  - name: antonmedv/fx@40.0.0
   - name: checkmake/checkmake@v0.3.2
   - name: google/yamlfmt@v0.21.0
   - name: mikefarah/yq@v4.54.1
