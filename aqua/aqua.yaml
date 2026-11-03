@@ -42,7 +42,7 @@ packages:
   - name: rust-lang/rust-analyzer@2025-06-16
   - name: LuaLS/lua-language-server@3.19.2
   - name: golang.org/x/tools/gopls@v0.24.0
-  - name: mvdan/gofumpt@v0.10.0
+  - name: mvdan/gofumpt@v0.12.0
   - name: hadolint/hadolint@v2.15.1
   - name: Automattic/harper/harper-ls@v2.5.0
   - name: dandavison/delta@0.20.1
