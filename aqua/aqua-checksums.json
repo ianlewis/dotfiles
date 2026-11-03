@@ -211,28 +211,28 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-darwin-amd64.tar.gz",
-      "checksum": "209CB21DA63F546F785499D04199DD5D39E8EF4934626207D8445C7EC3664F20",
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.40.0/kubeseal-0.40.0-darwin-amd64.tar.gz",
+      "checksum": "E165574E647029A562DE2471CAFF444E06B33119F9546679E69492CDC3C6137F",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-darwin-arm64.tar.gz",
-      "checksum": "4FE9F8FBB6EC7EF27BF0F4014F2846F8B363AE787A31FC6BA9CBB00FD40FB66D",
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.40.0/kubeseal-0.40.0-darwin-arm64.tar.gz",
+      "checksum": "EC8A34B19FF8F1C1DEE6FA09E13111B3007AA9AD08DE1DA28BD65CDC1EAECF93",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-linux-amd64.tar.gz",
-      "checksum": "AB5AE808B0EFCB167A825B6CF7F3A7C0034BD99A6301D78DB2012DA651A8C0B9",
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.40.0/kubeseal-0.40.0-linux-amd64.tar.gz",
+      "checksum": "9314C35916646E9D59C8F06B1314574B4E79C4D76F079433607ED7B697BB5EB7",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-linux-arm64.tar.gz",
-      "checksum": "BCC40AC15E29A21C270E2BE8C62AF29D4B01B9111AE667723E4B6D8E4009228B",
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.40.0/kubeseal-0.40.0-linux-arm64.tar.gz",
+      "checksum": "D82F01E9226D194CA7EBC13E3619EDEFD596B5B433582BCEC3D5A8E8B1A03123",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bitnami/sealed-secrets/v0.38.4/kubeseal-0.38.4-windows-amd64.tar.gz",
-      "checksum": "A7CB5C78EBB53538862F86434C07626F3E1D0EC627ABE9A78FA3A4ED87ECDC18",
+      "id": "github_release/github.com/bitnami/sealed-secrets/v0.40.0/kubeseal-0.40.0-windows-amd64.tar.gz",
+      "checksum": "E43F3208B41709F69EEA03059FCFE5688152543184EE0D7454F0E6D709466821",
       "algorithm": "sha256"
     },
     {
