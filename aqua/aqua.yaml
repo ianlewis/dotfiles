@@ -54,7 +54,7 @@ packages:
   - name: bitnami/sealed-secrets@v0.38.4
   - name: kubernetes-sigs/kind@v0.33.0
   - name: kubernetes-sigs/kustomize@kustomize/v5.8.3
-  - name: helm/helm@v4.2.2
+  - name: helm/helm@v4.3.1
   - name: antonmedv/fx@40.0.0
   - name: checkmake/checkmake@v0.3.2
   - name: google/yamlfmt@v0.21.0
