@@ -101,9 +101,17 @@
   // are relatively low risk.
   packageRules: [
     {
-      groupName: "aqua",
+      groupName: "aqua-dev",
       matchUpdateTypes: ["minor", "patch"],
       matchFileNames: [".aqua.yaml", ".aqua-checksums.yaml"],
+
+      automerge: true,
+      platformAutomerge: true,
+    },
+    {
+      groupName: "aqua",
+      matchUpdateTypes: ["minor", "patch"],
+      matchFileNames: ["aqua/aqua.yaml", "aqua/aqua-checksums.yaml"],
 
       automerge: true,
       platformAutomerge: true,
