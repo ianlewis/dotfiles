@@ -1226,28 +1226,28 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.2-darwin-amd64.tar.gz",
-      "checksum": "10C1E36EE8C5F2E2EE25A16599CB03AB74C0953CD889CACB980A49BA4B6574BA",
+      "id": "http/get.helm.sh/helm-v4.3.1-darwin-amd64.tar.gz",
+      "checksum": "34BEC4EBA761BA5C16D1965EE6B8F5B0ABE5993974A802274E2A4F0418893D89",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.2-darwin-arm64.tar.gz",
-      "checksum": "5410A0DAE3D5D91F45653B161260D9301AABC4AE80AE50A6605D66884B6DF8EA",
+      "id": "http/get.helm.sh/helm-v4.3.1-darwin-arm64.tar.gz",
+      "checksum": "6B4E61C8CD27D99E5A801E63FF25DD5C70B36875C2CD659D3E9CE6B76FC23198",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.2-linux-amd64.tar.gz",
-      "checksum": "9ADAFECAB4D406853BBA163A70E9F104F47DBBF65CE24B7653BAE7E36150BCB6",
+      "id": "http/get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz",
+      "checksum": "0403A88AE20913D11B10A2467B50087721FEA7581736DA6B9D3992F5357FE54B",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.2-linux-arm64.tar.gz",
-      "checksum": "78803142087A0069FA4B50D3F32A84D3EF25C14D1EE8A40FBCCF86A6216D2F36",
+      "id": "http/get.helm.sh/helm-v4.3.1-linux-arm64.tar.gz",
+      "checksum": "8CF8F66ECBC252AC8F7F06CCA68ABA88508DDFDE3A6A34FEB1678AD1694B4F88",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.2-windows-amd64.tar.gz",
-      "checksum": "29589DAD546F8BCD3A6AD92261FCB4A6C9DB4A32F9E4FC4F5212DB189553DC60",
+      "id": "http/get.helm.sh/helm-v4.3.1-windows-amd64.tar.gz",
+      "checksum": "5735A2BD59071B814546C6D0A76F29A8FD3EBE06E3A4791DD2784804AE895F34",
       "algorithm": "sha256"
     },
     {
