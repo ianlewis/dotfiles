@@ -67,7 +67,7 @@ all: test install ## Run all tests, install and configure everything.
 install: install-tools install-runtimes configure ## Install and configure everything.
 
 .PHONY: configure
-configure: configure-aqua configure-bash configure-bat configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-logrotate configure-nix configure-node configure-nvim configure-ssh configure-tmux configure-yamlfmt configure-yamllint
+configure: configure-aqua configure-bash configure-bat configure-btop configure-crictl configure-crontab configure-efm-langserver configure-ghostty configure-git configure-k9s configure-logrotate configure-nix configure-node configure-nvim configure-ssh configure-tmux configure-yamlfmt configure-yamllint
 
 .PHONY: install-tools
 install-tools: install-bin install-slsa-verifier install-cosign install-aqua
@@ -639,6 +639,13 @@ configure-bat: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure bat.
 		$(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/sublime/tokyonight_moon.tmTheme \
 		"$$($${aqua_dir}/bin/bat --config-dir)/themes/tokyonight_moon.tmTheme"
 	"$${aqua_dir}/bin/bat" cache --build
+
+.PHONY: configure-btop
+configure-btop: $(XDG_CONFIG_HOME)/.created install-aqua ## Configure btop.
+	@echo "Configuring btop..."
+	mkdir -p $(XDG_CONFIG_HOME)/btop/themes
+	cp $(REPO_ROOT)/nvim/pack/nvim/start/tokyonight.nvim/extras/btop/tokyonight_moon.theme \
+		$(XDG_CONFIG_HOME)/btop/themes/tokyonight_moon.theme
 
 .PHONY: configure-crictl
 configure-crictl: $(XDG_CONFIG_HOME)/.created ## Configure crictl.

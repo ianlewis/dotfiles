@@ -76,3 +76,4 @@ packages:
   - name: controlplaneio-fluxcd/flux-operator@v0.61.0
   - name: yannh/kubeconform@v0.8.0
   - name: stackrox/kube-linter@v0.8.3
+  - name: aristocratos/btop@v1.4.8
