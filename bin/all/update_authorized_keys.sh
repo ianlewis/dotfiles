@@ -32,7 +32,7 @@ function _main() {
     # inaccessible.
     local tempfile
     tempfile=$(mktemp)
-    if curl -s https://github.com/ianlewis.keys >"${tempfile}"; then
+    if curl --fail --silent https://github.com/ianlewis.keys >"${tempfile}"; then
         cat "${tempfile}" >"${HOME}/.ssh/authorized_keys"
     fi
 
