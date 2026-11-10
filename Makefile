@@ -236,15 +236,18 @@ md-format: $(REPO_ROOT)/node_modules/.installed ## Format Markdown files.
 shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 	@echo "Formatting shell scripts..."
 	files=$$(
-		git ls-files \
-			':!:third_party' \
-			':!:.aqua-installer' \
-			| xargs file | { $(GREP) -e ':.*shell' || true; } | cut -d':' -f1
+		{
+			git ls-files \
+				':!:third_party' \
+				':!:.aqua-installer' \
+				| xargs file | { $(GREP) -e ':.*shell' || true; } | cut -d':' -f1
+			git ls-files '*.bats'
+		} | sort -u
 	)
 	if [ "$${files}" == "" ]; then
 		exit 0
 	fi
-	shfmt --write --simplify --indent 4 $${files}
+	shfmt --write --simplify --indent 2 $${files}
 
 .PHONY: yaml-format
 yaml-format: $(REPO_ROOT)/node_modules/.installed ## Format YAML files.

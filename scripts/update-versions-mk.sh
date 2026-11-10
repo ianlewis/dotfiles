@@ -24,23 +24,23 @@ VERSIONS_MK="${SCRIPT_DIR}/../versions.mk"
 
 # update_var updates a single variable in versions.mk.
 update_var() {
-    local var="$1"
-    local value="$2"
+  local var="$1"
+  local value="$2"
 
-    local sed_options=(-i)
-    # The --version flag is not supported on BSD sed, so we check for it and set
-    # the sed options accordingly.
-    sed --version >/dev/null 2>&1 || sed_options=(-i '')
+  local sed_options=(-i)
+  # The --version flag is not supported on BSD sed, so we check for it and set
+  # the sed options accordingly.
+  sed --version >/dev/null 2>&1 || sed_options=(-i '')
 
-    # Handle := assignment (binary checksums)
-    if grep -q "^${var} :=" "${VERSIONS_MK}"; then
-        sed "${sed_options[@]}" "s|^${var} :=.*|${var} := ${value}|" "${VERSIONS_MK}"
-    # Handle ?= assignment
-    elif grep -q "^${var} ?=" "${VERSIONS_MK}"; then
-        sed "${sed_options[@]}" "s|^${var} ?=.*|${var} ?= ${value}|" "${VERSIONS_MK}"
-    else
-        echo "WARNING: Variable ${var} not found in ${VERSIONS_MK}" >&2
-    fi
+  # Handle := assignment (binary checksums)
+  if grep -q "^${var} :=" "${VERSIONS_MK}"; then
+    sed "${sed_options[@]}" "s|^${var} :=.*|${var} := ${value}|" "${VERSIONS_MK}"
+  # Handle ?= assignment
+  elif grep -q "^${var} ?=" "${VERSIONS_MK}"; then
+    sed "${sed_options[@]}" "s|^${var} ?=.*|${var} ?= ${value}|" "${VERSIONS_MK}"
+  else
+    echo "WARNING: Variable ${var} not found in ${VERSIONS_MK}" >&2
+  fi
 }
 
 # Read current versions from versions.mk
@@ -56,24 +56,24 @@ echo "Updating COSIGN checksums (${COSIGN_VERSION})..."
 cosign_checksums_url="https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign_checksums.txt"
 cosign_checksums=$(curl -sSfL "${cosign_checksums_url}")
 for platform in "linux.amd64" "linux.arm64" "darwin.arm64"; do
-    os="${platform%%.*}"
-    arch="${platform#*.}"
-    checksum=$(echo "${cosign_checksums}" | grep "cosign-${os}-${arch}$" | awk '{print $1}')
-    if [ -z "${checksum}" ]; then
-        echo "ERROR: Could not find COSIGN checksum for ${os}-${arch}" >&2
-        exit 1
-    fi
-    update_var "COSIGN_CHECKSUM.${platform}" "${checksum}"
+  os="${platform%%.*}"
+  arch="${platform#*.}"
+  checksum=$(echo "${cosign_checksums}" | grep "cosign-${os}-${arch}$" | awk '{print $1}')
+  if [ -z "${checksum}" ]; then
+    echo "ERROR: Could not find COSIGN checksum for ${os}-${arch}" >&2
+    exit 1
+  fi
+  update_var "COSIGN_CHECKSUM.${platform}" "${checksum}"
 done
 
 # Update GO checksums using the Go download API.
 echo "Updating GO checksums (${GO_VERSION})..."
 go_json=$(curl -sSfL "https://go.dev/dl/?mode=json&include=all")
 for platform in "linux.amd64" "linux.arm64" "darwin.arm64"; do
-    os="${platform%%.*}"
-    arch="${platform#*.}"
-    filename="go${GO_VERSION}.${os}-${arch}.tar.gz"
-    checksum=$(echo "${go_json}" | python3 -c "
+  os="${platform%%.*}"
+  arch="${platform#*.}"
+  filename="go${GO_VERSION}.${os}-${arch}.tar.gz"
+  checksum=$(echo "${go_json}" | python3 -c "
 import sys, json
 data = json.load(sys.stdin)
 for release in data:
@@ -85,7 +85,7 @@ for release in data:
 sys.stderr.write('Could not find Go checksum for ${filename}\n')
 sys.exit(1)
 ")
-    update_var "GO_CHECKSUM.${platform}" "${checksum}"
+  update_var "GO_CHECKSUM.${platform}" "${checksum}"
 done
 
 # Update SLSA_VERIFIER checksums.
@@ -95,14 +95,14 @@ echo "Updating SLSA_VERIFIER checksums (${SLSA_VERIFIER_VERSION})..."
 tmpdir=$(mktemp -d)
 trap 'rm -rf "${tmpdir}"' EXIT
 for platform in "linux.amd64" "linux.arm64" "darwin.arm64"; do
-    os="${platform%%.*}"
-    arch="${platform#*.}"
-    filename="slsa-verifier-${os}-${arch}"
-    url="https://github.com/slsa-framework/slsa-verifier/releases/download/${SLSA_VERIFIER_VERSION}/${filename}"
-    tmpfile="${tmpdir}/${filename}"
-    curl -sSfL -o "${tmpfile}" "${url}"
-    checksum=$(sha256sum "${tmpfile}" | awk '{print $1}')
-    update_var "SLSA_VERIFIER_CHECKSUM.${platform}" "${checksum}"
+  os="${platform%%.*}"
+  arch="${platform#*.}"
+  filename="slsa-verifier-${os}-${arch}"
+  url="https://github.com/slsa-framework/slsa-verifier/releases/download/${SLSA_VERIFIER_VERSION}/${filename}"
+  tmpfile="${tmpdir}/${filename}"
+  curl -sSfL -o "${tmpfile}" "${url}"
+  checksum=$(sha256sum "${tmpfile}" | awk '{print $1}')
+  update_var "SLSA_VERIFIER_CHECKSUM.${platform}" "${checksum}"
 done
 
 echo "Done."

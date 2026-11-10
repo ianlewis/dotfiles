@@ -14,20 +14,20 @@
 # limitations under the License.
 
 setup() {
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")")" >/dev/null 2>&1 && pwd)"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/sbp/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/sbp/load"
 }
 
 @test "test a normal path_cwd segment" {
-    cd "${BATS_TEST_TMPDIR}"
-    mapfile -t result <<<"$(execute_segment "path_cwd")"
+  cd "${BATS_TEST_TMPDIR}"
+  mapfile -t result <<<"$(execute_segment "path_cwd")"
 
-    # The # of arguments should be 2, the segment type and the base directory
-    # name.
-    assert_equal "${#result[@]}" 2
-    assert_equal "${result[0]}" 'normal'
-    assert_equal "${result[1]}" "$(basename "${BATS_TEST_TMPDIR}")"
+  # The # of arguments should be 2, the segment type and the base directory
+  # name.
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" "$(basename "${BATS_TEST_TMPDIR}")"
 }

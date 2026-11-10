@@ -24,37 +24,37 @@ set -euo pipefail
 # history or in the environment of the shell after the command is run.
 
 function _main() {
-    # These variables are used by the argsparse library.
-    local program_params
-    local argsparse_usage_description
+  # These variables are used by the argsparse library.
+  local program_params
+  local argsparse_usage_description
 
-    # shellcheck source=/dev/null
-    . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
+  # shellcheck source=/dev/null
+  . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
 
-    ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
+  ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
 
-    # shellcheck source=/dev/null
-    . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
+  # shellcheck source=/dev/null
+  . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
 
-    # Command is optional and could contain many parts.
-    argsparse_describe_parameters "ENV_VAR COMMAND*"
+  # Command is optional and could contain many parts.
+  argsparse_describe_parameters "ENV_VAR COMMAND*"
 
-    # shellcheck disable=SC2034 # Used by argsparse.
-    argsparse_usage_description="Read password and pass it to the command as an environment variable."
+  # shellcheck disable=SC2034 # Used by argsparse.
+  argsparse_usage_description="Read password and pass it to the command as an environment variable."
 
-    # Command line parsing is done here.
-    argsparse_parse_options "$@"
+  # Command line parsing is done here.
+  argsparse_parse_options "$@"
 
-    local varname="${program_params[0]}"
-    local cmd=("${program_params[@]:1}")
+  local varname="${program_params[0]}"
+  local cmd=("${program_params[@]:1}")
 
-    read -r -s -p "$varname: " "${varname?}"
-    echo
+  read -r -s -p "$varname: " "${varname?}"
+  echo
 
-    export "${varname?}"
-    "${cmd[@]}"
+  export "${varname?}"
+  "${cmd[@]}"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
-    _main "$@"
+  _main "$@"
 fi

@@ -13,15 +13,15 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test "go is installed correctly" {
-    assert_file_executable "${E2E_HOME}/opt/go/bin/go"
-    assert_file_executable "${E2E_HOME}/opt/go/bin/gofmt"
+  assert_file_executable "${E2E_HOME}/opt/go/bin/go"
+  assert_file_executable "${E2E_HOME}/opt/go/bin/gofmt"
 }

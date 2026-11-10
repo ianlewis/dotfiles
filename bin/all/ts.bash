@@ -22,9 +22,9 @@
 set -euo pipefail
 
 function _main() {
-    local line
+  local line
 
-    while IFS= read -r line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')] ${line}"; done
+  while IFS= read -r line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')] ${line}"; done
 }
 
 _main "$@"

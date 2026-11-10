@@ -16,57 +16,57 @@
 # limitations under the License.
 
 function _bash_aliases() {
-    # Enable color support for ls
-    if [ "$(uname)" == "Darwin" ]; then
-        export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
-        export LC_CTYPE=en_US.utf-8
-        export LC_ALL=en_US.utf-8
-        alias ls='ls -BF'
-    elif [ "$TERM" != "dumb" ]; then
-        eval "$(dircolors -b)"
-        alias ls='ls -BF --color=auto'
-    fi
+  # Enable color support for ls
+  if [ "$(uname)" == "Darwin" ]; then
+    export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
+    export LC_CTYPE=en_US.utf-8
+    export LC_ALL=en_US.utf-8
+    alias ls='ls -BF'
+  elif [ "$TERM" != "dumb" ]; then
+    eval "$(dircolors -b)"
+    alias ls='ls -BF --color=auto'
+  fi
 
-    # alias cat to bat.
-    alias cat='bat --paging=never'
+  # alias cat to bat.
+  alias cat='bat --paging=never'
 
-    # Enable color support for grep
-    alias egrep='egrep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias grep='grep --color=auto'
+  # Enable color support for grep
+  alias egrep='egrep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias grep='grep --color=auto'
 
-    # Make rm,cp,mv interactive so you don't accidentally delete files.
-    alias rm='rm -i'
-    alias cp='cp -i'
-    alias mv='mv -i'
+  # Make rm,cp,mv interactive so you don't accidentally delete files.
+  alias rm='rm -i'
+  alias cp='cp -i'
+  alias mv='mv -i'
 
-    # Make df,du output human readable values by default.
-    alias df='df -h'
-    alias du='du -h'
+  # Make df,du output human readable values by default.
+  alias df='df -h'
+  alias du='du -h'
 
-    # Force ssh to use version 2
-    alias ssh='ssh -2'
+  # Force ssh to use version 2
+  alias ssh='ssh -2'
 
-    # Create a new dev session.
-    alias ns='tmux-sessionizer'
+  # Create a new dev session.
+  alias ns='tmux-sessionizer'
 
-    # Create a new temporary workspace.
-    alias tw='tmux-sessionizer --new --mindepth 1 --maxdepth 1 --dir "$(_bashrc_temp_workspace_dir)"'
+  # Create a new temporary workspace.
+  alias tw='tmux-sessionizer --new --mindepth 1 --maxdepth 1 --dir "$(_bashrc_temp_workspace_dir)"'
 
-    # Split window and start nvim.
-    alias pw='project-windowizer'
+  # Split window and start nvim.
+  alias pw='project-windowizer'
 
-    # Load kubectl aliases.
-    local bash_lib_dir="${HOME}/.local/share/bash/lib"
-    if [ -f "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases" ]; then
-        # shellcheck source=/dev/null
-        . "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases"
-    fi
+  # Load kubectl aliases.
+  local bash_lib_dir="${HOME}/.local/share/bash/lib"
+  if [ -f "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases" ]; then
+    # shellcheck source=/dev/null
+    . "${bash_lib_dir}/kubectl-aliases/.kubectl_aliases"
+  fi
 
-    if [ -f "${HOME}/.bash_aliases.local" ]; then
-        # shellcheck source=/dev/null
-        . "${HOME}/.bash_aliases.local"
-    fi
+  if [ -f "${HOME}/.bash_aliases.local" ]; then
+    # shellcheck source=/dev/null
+    . "${HOME}/.bash_aliases.local"
+  fi
 }
 
 _bash_aliases

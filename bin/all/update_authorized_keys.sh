@@ -21,28 +21,28 @@ set -euo pipefail
 # to authorized_keys, taking care to not overwrite any existing local keys.
 
 function _main() {
-    # Adds public certs from GitHub to authorized_keys
-    mkdir -p "${HOME}/.ssh"
-    if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
-        touch "${HOME}/.ssh/authorized_keys"
-    fi
+  # Adds public certs from GitHub to authorized_keys
+  mkdir -p "${HOME}/.ssh"
+  if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
+    touch "${HOME}/.ssh/authorized_keys"
+  fi
 
-    # Only update authorized_keys if we can contact github. We want
-    # to avoid writing an empty authorized_keys file if github.com is
-    # inaccessible.
-    local tempfile
-    tempfile=$(mktemp)
-    if curl --fail --silent https://github.com/ianlewis.keys >"${tempfile}"; then
-        cat "${tempfile}" >"${HOME}/.ssh/authorized_keys"
-    fi
+  # Only update authorized_keys if we can contact github. We want
+  # to avoid writing an empty authorized_keys file if github.com is
+  # inaccessible.
+  local tempfile
+  tempfile=$(mktemp)
+  if curl --fail --silent https://github.com/ianlewis.keys >"${tempfile}"; then
+    cat "${tempfile}" >"${HOME}/.ssh/authorized_keys"
+  fi
 
-    local key
-    # Adds local authorized_keys if not already there
-    if [ -f "${HOME}/.ssh/authorized_keys.local" ]; then
-        while read -r key; do
-            grep -qF "${key}" "${HOME}/.ssh/authorized_keys" || echo "${key}" >>"${HOME}/.ssh/authorized_keys"
-        done <"${HOME}/.ssh/authorized_keys.local"
-    fi
+  local key
+  # Adds local authorized_keys if not already there
+  if [ -f "${HOME}/.ssh/authorized_keys.local" ]; then
+    while read -r key; do
+      grep -qF "${key}" "${HOME}/.ssh/authorized_keys" || echo "${key}" >>"${HOME}/.ssh/authorized_keys"
+    done <"${HOME}/.ssh/authorized_keys.local"
+  fi
 }
 
 _main "$@"

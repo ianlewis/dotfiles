@@ -13,53 +13,53 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test ".python-version linked correctly" {
-    assert_equal "${BASE_PATH}/.python-version" "$(readlink "${E2E_HOME}/.python-version")"
+  assert_equal "${BASE_PATH}/.python-version" "$(readlink "${E2E_HOME}/.python-version")"
 }
 
 @test "ansible is installed correctly" {
-    python_version="$(cat "${E2E_HOME}/.python-version")"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-doc"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-galaxy"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-inventory"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-playbook"
+  python_version="$(cat "${E2E_HOME}/.python-version")"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-doc"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-galaxy"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-inventory"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ansible-playbook"
 }
 
 @test "pyenv is installed" {
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/bin/pyenv"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python3"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pip"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pip3"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pydoc"
-    assert_dir_exists "${E2E_HOME}/.local/share/pyenv/plugins/python-build"
-    assert_dir_exists "${E2E_HOME}/.local/share/pyenv/plugins/pyenv-virtualenv"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/bin/pyenv"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/python3"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pip"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pip3"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/shims/pydoc"
+  assert_dir_exists "${E2E_HOME}/.local/share/pyenv/plugins/python-build"
+  assert_dir_exists "${E2E_HOME}/.local/share/pyenv/plugins/pyenv-virtualenv"
 }
 
 @test "hashin installed correctly" {
-    python_version="$(cat "${E2E_HOME}/.python-version")"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/hashin"
+  python_version="$(cat "${E2E_HOME}/.python-version")"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/hashin"
 }
 
 @test "ruff installed correctly" {
-    python_version="$(cat "${E2E_HOME}/.python-version")"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ruff"
+  python_version="$(cat "${E2E_HOME}/.python-version")"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/ruff"
 }
 
 @test "yamllint installed correctly" {
-    python_version="$(cat "${E2E_HOME}/.python-version")"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/yamllint"
+  python_version="$(cat "${E2E_HOME}/.python-version")"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/yamllint"
 }
 
 @test "zizmor installed correctly" {
-    python_version="$(cat "${E2E_HOME}/.python-version")"
-    assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/zizmor"
+  python_version="$(cat "${E2E_HOME}/.python-version")"
+  assert_file_executable "${E2E_HOME}/.local/share/pyenv/versions/${python_version}/bin/zizmor"
 }

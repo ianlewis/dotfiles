@@ -18,15 +18,15 @@
 # ~/.bash_logout: executed by bash(1) when login shell exits.
 
 function _bash_logout() {
-    # When leaving the console, clear the screen to increase privacy
-    if [ "${SHLVL}" = 1 ]; then
-        [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
-    fi
+  # When leaving the console, clear the screen to increase privacy
+  if [ "${SHLVL}" = 1 ]; then
+    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+  fi
 
-    if [ -f "${HOME}/.bash_logout.local" ]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bash_logout.local"
-    fi
+  if [ -f "${HOME}/.bash_logout.local" ]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.bash_logout.local"
+  fi
 }
 
 _bash_logout
