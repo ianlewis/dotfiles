@@ -85,6 +85,10 @@ local cmp_capabilities = vim.lsp.config("*", {
 vim.lsp.enable("bashls")
 -- }}}
 
+-- {{{ cue
+vim.lsp.enable("cue")
+-- }}}
+
 -- efm-langserver {{{
 
 -- formatters {{{

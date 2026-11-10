@@ -19,6 +19,7 @@ return {
 	"cpp",
 	"css",
 	"csv",
+	"cue",
 	"dockerfile",
 	"gitcommit",
 	"gitignore",
