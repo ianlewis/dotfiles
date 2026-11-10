@@ -85,9 +85,9 @@ setup() {
 }
 
 @test "cue installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/cue" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/cue" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "dysk installed correctly" {
