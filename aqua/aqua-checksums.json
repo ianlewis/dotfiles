@@ -356,6 +356,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/cue-lang/cue/v0.17.1/cue_v0.17.1_darwin_amd64.tar.gz",
+      "checksum": "80AA026C3F47400C7BFC228B3422FD56B7C6C5EA4D70686F8D8F01CED716D3DE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cue-lang/cue/v0.17.1/cue_v0.17.1_darwin_arm64.tar.gz",
+      "checksum": "64921403F012A97F89494C03605DB2FBF7D9DAA77DC2631819AC4406CB2E8074",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cue-lang/cue/v0.17.1/cue_v0.17.1_linux_amd64.tar.gz",
+      "checksum": "A39B0C97695069D95D276D99BE0F5DBABB081D801BFDC9BA49B76EFAF94E2369",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cue-lang/cue/v0.17.1/cue_v0.17.1_linux_arm64.tar.gz",
+      "checksum": "0D729BE30D52C952CA38FC9DCB692CAA09D8463FA0B64DF5781312779183FBCD",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cue-lang/cue/v0.17.1/cue_v0.17.1_windows_amd64.zip",
+      "checksum": "9F15378DC52B9A1BB6FA1755ADC0410C9F17F330A621B784A5B31FDBC91C6D7A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cue-lang/cue/v0.17.1/cue_v0.17.1_windows_arm64.zip",
+      "checksum": "DB88B2C302BE1829E653E20EA87E3F1ADC10AE2052D58FE87D21D0ED97102E51",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/dandavison/delta/0.20.1/delta-0.20.1-aarch64-apple-darwin.tar.gz",
       "checksum": "BC1839CEA69288D4673A24FAFFBB825D408CA907E0F7D33B1678C9E6CDD5E58E",
       "algorithm": "sha256"

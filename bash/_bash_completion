@@ -208,6 +208,12 @@ function _bash_completion() {
     source <(docker completion bash)
   fi
 
+  # cue completion
+  if command -v cue >/dev/null 2>&1; then
+    # shellcheck source=/dev/null
+    source <(cue completion bash)
+  fi
+
   if [ -f ~/.bash_completion.local ]; then
     # shellcheck source=/dev/null
     source ~/.bash_completion.local
