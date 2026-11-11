@@ -984,6 +984,27 @@ $(PYENV_ROOT)/.installed: versions.mk $(XDG_DATA_HOME)/.created
 		$(RM) -rf $(PYENV_ROOT)
 		exit 1
 	fi
+	# Install pyenv-default-packages plugin for pyenv
+	@echo "Installing pyenv-default-packages..."
+	if [[ -d "$(PYENV_ROOT)/plugins/pyenv-default-packages" ]]; then
+		git -C "$(PYENV_ROOT)/plugins/pyenv-default-packages" \
+			fetch origin "$(PYENV_DEFAULT_PACKAGES_SHA)"
+		git -C "$(PYENV_ROOT)/plugins/pyenv-default-packages" \
+			checkout "$(PYENV_DEFAULT_PACKAGES_SHA)"
+	else
+		git clone \
+			--branch "$(PYENV_DEFAULT_PACKAGES_VERSION)" \
+			https://github.com/jawshooah/pyenv-default-packages.git \
+			"$(PYENV_ROOT)/plugins/pyenv-default-packages"
+	fi
+	pyenv_default_packages_sha=$$(git -C "$(PYENV_ROOT)/plugins/pyenv-default-packages" rev-parse HEAD)
+	if [ "$${pyenv_default_packages_sha}" != "$(PYENV_DEFAULT_PACKAGES_SHA)" ]; then
+		echo "Invalid pyenv-default-packages: '$${pyenv_default_packages_sha}' != '$(PYENV_DEFAULT_PACKAGES_SHA)'"
+		$(RM) -rf $(PYENV_ROOT)
+		exit 1
+	fi
+	ln -sf "$(REPO_ROOT)/pyenv/requirements.defaultpackages.txt" \
+		"$(PYENV_ROOT)/default-packages"
 	touch $@
 
 # Installs pyenv-virtualenv plugin for pyenv
