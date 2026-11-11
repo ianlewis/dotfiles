@@ -13,161 +13,161 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test "aqua is installed correctly" {
-    assert [ -n "${AQUA_VERSION}" ]
-    uname_s="$(uname -s)"
-    case "${uname_s}" in
-    Linux)
-        os="linux"
-        ;;
-    Darwin)
-        os="darwin"
-        ;;
-    *)
-        fail "unsupported OS: ${uname_s}"
-        ;;
-    esac
+  assert [ -n "${AQUA_VERSION}" ]
+  uname_s="$(uname -s)"
+  case "${uname_s}" in
+  Linux)
+    os="linux"
+    ;;
+  Darwin)
+    os="darwin"
+    ;;
+  *)
+    fail "unsupported OS: ${uname_s}"
+    ;;
+  esac
 
-    uname_m="$(uname -m)"
-    case "${uname_m}" in
-    x86_64)
-        arch="amd64"
-        ;;
-    arm64)
-        arch="arm64"
-        ;;
-    aarch64)
-        arch="arm64"
-        ;;
-    *)
-        fail "unsupported architecture: ${uname_m}"
-        ;;
-    esac
+  uname_m="$(uname -m)"
+  case "${uname_m}" in
+  x86_64)
+    arch="amd64"
+    ;;
+  arm64)
+    arch="arm64"
+    ;;
+  aarch64)
+    arch="arm64"
+    ;;
+  *)
+    fail "unsupported architecture: ${uname_m}"
+    ;;
+  esac
 
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/internal/pkgs/github_release/github.com/aquaproj/aqua/${AQUA_VERSION}/aqua_${os}_${arch}.tar.gz/aqua" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/aqua"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/internal/pkgs/github_release/github.com/aquaproj/aqua/${AQUA_VERSION}/aqua_${os}_${arch}.tar.gz/aqua" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/aqua"
 }
 
 @test "aqua configured correctly" {
-    assert_symlink_to "${BASE_PATH}/aqua/aqua.yaml" "${E2E_HOME}/.aqua.yaml"
-    assert_symlink_to "${BASE_PATH}/aqua/aqua-checksums.json" "${E2E_HOME}/.aqua-checksums.json"
+  assert_symlink_to "${BASE_PATH}/aqua/aqua.yaml" "${E2E_HOME}/.aqua.yaml"
+  assert_symlink_to "${BASE_PATH}/aqua/aqua-checksums.json" "${E2E_HOME}/.aqua-checksums.json"
 }
 
 @test "aqua root created" {
-    assert_dir_exists "${E2E_HOME}/.local/share/aquaproj-aqua/pkgs"
+  assert_dir_exists "${E2E_HOME}/.local/share/aquaproj-aqua/pkgs"
 }
 
 @test "bazel installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/bazel" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/bazel" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "buf installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/buf" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/buf" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "checkmake installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/checkmake" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/checkmake" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "cue installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/cue" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/cue" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "dysk installed correctly" {
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        skip "dysk not installed on Darwin system"
-    fi
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    skip "dysk not installed on Darwin system"
+  fi
 
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/dysk" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/dysk" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "flux installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/flux" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/flux" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "flux-operator installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/flux-operator" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/flux-operator" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "goimports installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/goimports" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "gci installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/gci" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/gci" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "helm installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/helm" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/helm" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "k9s installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/k9s" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/k9s" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "kube-linter installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kube-linter" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kube-linter" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "kubeconform installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kubeconform" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kubeconform" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "kustomize installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kustomize" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/kustomize" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "krew installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/krew" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/krew" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "nvim installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/nvim" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/nvim" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
 @test "yamlfmt installed correctly" {
-    assert_symlink_to \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/bin/yamlfmt" \
-        "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/yamlfmt" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }

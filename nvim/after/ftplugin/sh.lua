@@ -14,6 +14,11 @@
 
 -- sh-specific options.
 
+-- Indent 2 spaces.
+vim.bo.tabstop = 2
+vim.bo.softtabstop = 2
+vim.bo.shiftwidth = 2
+
 -- If the shell flavor is detected as bash, set the filetype to bash. This
 -- triggers other bash-specific options and plugins, such as tree-sitter and
 -- linters.

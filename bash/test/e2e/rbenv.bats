@@ -13,20 +13,20 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test ".ruby-version linked correctly" {
-    assert_equal "${BASE_PATH}/.ruby-version" "$(readlink "${E2E_HOME}/.ruby-version")"
+  assert_equal "${BASE_PATH}/.ruby-version" "$(readlink "${E2E_HOME}/.ruby-version")"
 }
 
 @test "rbenv is installed" {
-    assert_file_executable "${E2E_HOME}/.local/share/rbenv/bin/rbenv"
-    assert_file_executable "${E2E_HOME}/.local/share/rbenv/shims/ruby"
-    assert_dir_exists "${E2E_HOME}/.local/share/rbenv/plugins/ruby-build"
+  assert_file_executable "${E2E_HOME}/.local/share/rbenv/bin/rbenv"
+  assert_file_executable "${E2E_HOME}/.local/share/rbenv/shims/ruby"
+  assert_dir_exists "${E2E_HOME}/.local/share/rbenv/plugins/ruby-build"
 }

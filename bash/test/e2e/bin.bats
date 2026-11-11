@@ -13,46 +13,46 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test "slsa-verifier is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/slsa-verifier"
+  assert_file_executable "${E2E_HOME}/.local/bin/slsa-verifier"
 }
 
 @test "cosign is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/cosign"
+  assert_file_executable "${E2E_HOME}/.local/bin/cosign"
 }
 
 @test "claude is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/claude"
+  assert_file_executable "${E2E_HOME}/.local/bin/claude"
 }
 
 @test "codex is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/codex"
+  assert_file_executable "${E2E_HOME}/.local/bin/codex"
 }
 
 @test "copilot is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/copilot"
+  assert_file_executable "${E2E_HOME}/.local/bin/copilot"
 }
 
 @test "opencode is installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/bin/opencode"
+  assert_file_executable "${E2E_HOME}/.local/bin/opencode"
 }
 
 @test "scripts are installed correctly" {
-    assert_symlink_to "${BASE_PATH}/bin/all/clone.bash" "${E2E_HOME}/.local/bin/clone"
-    assert_symlink_to "${BASE_PATH}/bin/all/delete_old_downloads.sh" "${E2E_HOME}/.local/bin/delete_old_downloads.sh"
-    assert_symlink_to "${BASE_PATH}/bin/all/docker_prune.sh" "${E2E_HOME}/.local/bin/docker_prune.sh"
-    assert_symlink_to "${BASE_PATH}/bin/all/project-windowizer.bash" "${E2E_HOME}/.local/bin/project-windowizer"
-    assert_symlink_to "${BASE_PATH}/bin/all/tmux-sessionizer.bash" "${E2E_HOME}/.local/bin/tmux-sessionizer"
-    assert_symlink_to "${BASE_PATH}/bin/all/ts.bash" "${E2E_HOME}/.local/bin/ts"
-    assert_symlink_to "${BASE_PATH}/bin/all/randstr.bash" "${E2E_HOME}/.local/bin/randstr"
-    assert_symlink_to "${BASE_PATH}/bin/all/update_authorized_keys.sh" "${E2E_HOME}/.local/bin/update_authorized_keys.sh"
-    assert_symlink_to "${BASE_PATH}/bin/all/withpass.bash" "${E2E_HOME}/.local/bin/withpass"
+  assert_symlink_to "${BASE_PATH}/bin/all/clone.bash" "${E2E_HOME}/.local/bin/clone"
+  assert_symlink_to "${BASE_PATH}/bin/all/delete_old_downloads.sh" "${E2E_HOME}/.local/bin/delete_old_downloads.sh"
+  assert_symlink_to "${BASE_PATH}/bin/all/docker_prune.sh" "${E2E_HOME}/.local/bin/docker_prune.sh"
+  assert_symlink_to "${BASE_PATH}/bin/all/project-windowizer.bash" "${E2E_HOME}/.local/bin/project-windowizer"
+  assert_symlink_to "${BASE_PATH}/bin/all/tmux-sessionizer.bash" "${E2E_HOME}/.local/bin/tmux-sessionizer"
+  assert_symlink_to "${BASE_PATH}/bin/all/ts.bash" "${E2E_HOME}/.local/bin/ts"
+  assert_symlink_to "${BASE_PATH}/bin/all/randstr.bash" "${E2E_HOME}/.local/bin/randstr"
+  assert_symlink_to "${BASE_PATH}/bin/all/update_authorized_keys.sh" "${E2E_HOME}/.local/bin/update_authorized_keys.sh"
+  assert_symlink_to "${BASE_PATH}/bin/all/withpass.bash" "${E2E_HOME}/.local/bin/withpass"
 }

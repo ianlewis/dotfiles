@@ -29,131 +29,131 @@
 #       https://github.com/akinomyoga/ble.sh#13-set-up-bashrc
 # shellcheck source=/dev/null
 if [[ $- =~ i ]]; then
-    # Set bash history options before sourcing ble.sh to ensure that the history
-    # is properly configured.
-    # https://www.gnu.org/software/bash/manual/html_node/Bash-History-Facilities.html
+  # Set bash history options before sourcing ble.sh to ensure that the history
+  # is properly configured.
+  # https://www.gnu.org/software/bash/manual/html_node/Bash-History-Facilities.html
 
-    # Don't put duplicate lines in the history and ignore lines starting with
-    # space.
-    export HISTCONTROL=ignoreboth
+  # Don't put duplicate lines in the history and ignore lines starting with
+  # space.
+  export HISTCONTROL=ignoreboth
 
-    # Set history length to a large value to avoid losing history entries.
-    # HISTSIZE sets the number of commands to save in memory in the current
-    # session.
-    export HISTSIZE=5000
-    # HISTFILESIZE sets the maximum number of lines contained in the history
-    # file.
-    export HISTFILESIZE=10000
+  # Set history length to a large value to avoid losing history entries.
+  # HISTSIZE sets the number of commands to save in memory in the current
+  # session.
+  export HISTSIZE=5000
+  # HISTFILESIZE sets the maximum number of lines contained in the history
+  # file.
+  export HISTFILESIZE=10000
 
-    # HISTTIMEFORMAT sets the time format for history entries.
-    export HISTTIMEFORMAT="%F %T "
+  # HISTTIMEFORMAT sets the time format for history entries.
+  export HISTTIMEFORMAT="%F %T "
 
-    # Append to the history file, don't overwrite it.
-    shopt -s histappend
+  # Append to the history file, don't overwrite it.
+  shopt -s histappend
 
-    source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
+  source -- "${XDG_DATA_HOME:-${HOME}/.local/share}/bash/lib/ble.sh/out/ble.sh" --attach=none
 fi
 
 # _bashrc_setup_homebrew initializes the Homebrew environment on macOS.
 function _bashrc_setup_homebrew() {
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        local hb_prefix
-        hb_prefix="/opt/homebrew"
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    local hb_prefix
+    hb_prefix="/opt/homebrew"
 
-        # Enable homebrew if present
-        if [ -x "${hb_prefix}/bin/brew" ]; then
-            eval "$(${hb_prefix}/bin/brew shellenv)"
-        fi
+    # Enable homebrew if present
+    if [ -x "${hb_prefix}/bin/brew" ]; then
+      eval "$(${hb_prefix}/bin/brew shellenv)"
     fi
+  fi
 }
 
 # _bashrc_setup_go sets up the Go environment.
 function _bashrc_setup_go() {
-    # Go
-    GOPATH=${HOME}/go
-    GOBIN=${GOPATH}/bin
-    if [[ ":$PATH:" != *":${GOBIN}:"* ]]; then
-        PATH="${GOBIN}:${PATH}"
+  # Go
+  GOPATH=${HOME}/go
+  GOBIN=${GOPATH}/bin
+  if [[ ":$PATH:" != *":${GOBIN}:"* ]]; then
+    PATH="${GOBIN}:${PATH}"
+  fi
+  export GOPATH
+  export GOBIN
+  if [ -d "${HOME}/opt/go" ]; then
+    GOROOT=${HOME}/opt/go
+    if [[ ":$PATH:" != *":${GOROOT}/bin:"* ]]; then
+      PATH="${GOROOT}/bin:${PATH}"
     fi
-    export GOPATH
-    export GOBIN
-    if [ -d "${HOME}/opt/go" ]; then
-        GOROOT=${HOME}/opt/go
-        if [[ ":$PATH:" != *":${GOROOT}/bin:"* ]]; then
-            PATH="${GOROOT}/bin:${PATH}"
-        fi
-        export GOROOT
-    fi
+    export GOROOT
+  fi
 }
 
 # _bashrc_setup_pyenv sets up pyenv if available.
 function _bashrc_setup_pyenv() {
-    export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-    # Python
-    if [[ -d "${PYENV_ROOT}/bin" ]]; then
-        if [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]]; then
-            PATH="${PYENV_ROOT}/bin:${PATH}"
-        fi
-        eval "$(pyenv init - bash)"
+  export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+  # Python
+  if [[ -d "${PYENV_ROOT}/bin" ]]; then
+    if [[ ":$PATH:" != *":${PYENV_ROOT}/bin:"* ]]; then
+      PATH="${PYENV_ROOT}/bin:${PATH}"
     fi
+    eval "$(pyenv init - bash)"
+  fi
 }
 
 # _bashrc_setup_nodenv sets up nodenv if available.
 function _bashrc_setup_nodenv() {
-    # Nodenv
-    export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
-    if [[ -d "${NODENV_ROOT}/bin" ]]; then
-        if [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]]; then
-            PATH="${NODENV_ROOT}/bin:${PATH}"
-        fi
-        eval "$(nodenv init - bash)"
+  # Nodenv
+  export NODENV_ROOT="${XDG_DATA_HOME}/nodenv"
+  if [[ -d "${NODENV_ROOT}/bin" ]]; then
+    if [[ ":$PATH:" != *":${NODENV_ROOT}/bin:"* ]]; then
+      PATH="${NODENV_ROOT}/bin:${PATH}"
     fi
+    eval "$(nodenv init - bash)"
+  fi
 
-    # Activate the local node_modules.
-    if [[ -d "${XDG_DATA_HOME}/node_modules/.bin" ]]; then
-        if [[ ":$PATH:" != *":${XDG_DATA_HOME}/node_modules/.bin:"* ]]; then
-            PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
-        fi
+  # Activate the local node_modules.
+  if [[ -d "${XDG_DATA_HOME}/node_modules/.bin" ]]; then
+    if [[ ":$PATH:" != *":${XDG_DATA_HOME}/node_modules/.bin:"* ]]; then
+      PATH="${XDG_DATA_HOME}/node_modules/.bin:${PATH}"
     fi
+  fi
 }
 
 # _bashrc_setup_rbenv sets up rbenv if available.
 function _bashrc_setup_rbenv() {
-    # Rbenv
-    export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
-    if [[ -d "${RBENV_ROOT}/bin" ]]; then
-        if [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]]; then
-            PATH="${RBENV_ROOT}/bin:${PATH}"
-        fi
-        eval "$(rbenv init - bash)"
+  # Rbenv
+  export RBENV_ROOT="${XDG_DATA_HOME}/rbenv"
+  if [[ -d "${RBENV_ROOT}/bin" ]]; then
+    if [[ ":$PATH:" != *":${RBENV_ROOT}/bin:"* ]]; then
+      PATH="${RBENV_ROOT}/bin:${PATH}"
     fi
+    eval "$(rbenv init - bash)"
+  fi
 }
 
 # _bashrc_setup_rust sets up the Rust environment if available.
 function _bashrc_setup_rust() {
-    # Rust
-    if [[ -r "${HOME}/.cargo/env" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.cargo/env"
-    fi
+  # Rust
+  if [[ -r "${HOME}/.cargo/env" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.cargo/env"
+  fi
 }
 
 function _bashrc_setup_aqua() {
-    export AQUA_ROOT_PATH="${XDG_DATA_HOME}/aquaproj-aqua"
-    if [[ -d "${AQUA_ROOT_PATH}/bin" ]]; then
-        if [[ ":$PATH:" != *":${AQUA_ROOT_PATH}/bin:"* ]]; then
-            PATH="${AQUA_ROOT_PATH}/bin:${PATH}"
-        fi
+  export AQUA_ROOT_PATH="${XDG_DATA_HOME}/aquaproj-aqua"
+  if [[ -d "${AQUA_ROOT_PATH}/bin" ]]; then
+    if [[ ":$PATH:" != *":${AQUA_ROOT_PATH}/bin:"* ]]; then
+      PATH="${AQUA_ROOT_PATH}/bin:${PATH}"
     fi
+  fi
 }
 
 # _bashrc_setup_aliases sources the ~/.bash_aliases file if it exists.
 function _bashrc_setup_aliases() {
-    # Alias definitions.
-    if [ -r "${HOME}/.bash_aliases" ]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bash_aliases"
-    fi
+  # Alias definitions.
+  if [ -r "${HOME}/.bash_aliases" ]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.bash_aliases"
+  fi
 }
 
 # _bashrc_setup_bash_completion sets up bash completion if available. On macOS
@@ -163,80 +163,80 @@ function _bashrc_setup_aliases() {
 # system wide /etc/bash_completion file first before falling back to the local
 # ~/.bash_completion file.
 function _bashrc_setup_bash_completion() {
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        # Load the system wide homebrew bash completion if available.
-        # The system wide config should load our local config.
-        # shellcheck source=/dev/null
-        if [[ -n ${HOMEBREW_PREFIX:-} ]] && [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
-            # shellcheck source=/dev/null
-            source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-        elif [ -r "${HOME}/.bash_completion" ]; then
-            # The system wide config is not available so just load our completion
-            # shellcheck source=/dev/null
-            source "${HOME}/.bash_completion"
-        fi
-    else
-        # Load the system wide bash completion if available.
-        if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-            # The system wide config should load our local config.
-            # shellcheck source=/dev/null
-            source /etc/bash_completion
-        elif [ -r "${HOME}/.bash_completion" ]; then
-            # The system wide config is not available so just load our completion
-            # shellcheck source=/dev/null
-            source "${HOME}/.bash_completion"
-        fi
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    # Load the system wide homebrew bash completion if available.
+    # The system wide config should load our local config.
+    # shellcheck source=/dev/null
+    if [[ -n ${HOMEBREW_PREFIX:-} ]] && [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && ! shopt -oq posix; then
+      # shellcheck source=/dev/null
+      source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+    elif [ -r "${HOME}/.bash_completion" ]; then
+      # The system wide config is not available so just load our completion
+      # shellcheck source=/dev/null
+      source "${HOME}/.bash_completion"
     fi
+  else
+    # Load the system wide bash completion if available.
+    if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+      # The system wide config should load our local config.
+      # shellcheck source=/dev/null
+      source /etc/bash_completion
+    elif [ -r "${HOME}/.bash_completion" ]; then
+      # The system wide config is not available so just load our completion
+      # shellcheck source=/dev/null
+      source "${HOME}/.bash_completion"
+    fi
+  fi
 }
 
 # _bashrc_setup_crictl sets up the crictl environment.
 function _bashrc_setup_crictl() {
-    # Set a default crictl config path to squelch warnings, but only when the
-    # user has not already configured one and no system wide config exists.
-    if [[ -z ${CRI_CONFIG_FILE:-} && ! -r "/etc/crictl.yaml" ]]; then
-        export CRI_CONFIG_FILE="${XDG_CONFIG_HOME}/crictl/crictl.yaml"
-    fi
+  # Set a default crictl config path to squelch warnings, but only when the
+  # user has not already configured one and no system wide config exists.
+  if [[ -z ${CRI_CONFIG_FILE:-} && ! -r "/etc/crictl.yaml" ]]; then
+    export CRI_CONFIG_FILE="${XDG_CONFIG_HOME}/crictl/crictl.yaml"
+  fi
 }
 
 # _bashrc_update_env sets necessary environment variables.
 function _bashrc_update_env() {
-    _bashrc_setup_homebrew
+  _bashrc_setup_homebrew
 
-    _bashrc_setup_go
+  _bashrc_setup_go
 
-    _bashrc_setup_pyenv
+  _bashrc_setup_pyenv
 
-    _bashrc_setup_nodenv
+  _bashrc_setup_nodenv
 
-    _bashrc_setup_rbenv
+  _bashrc_setup_rbenv
 
-    _bashrc_setup_rust
+  _bashrc_setup_rust
 
-    _bashrc_setup_crictl
+  _bashrc_setup_crictl
 
-    # The .local/bin is used for some local installs such as applications
-    # installed via 'pip install --user'
-    if [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]]; then
-        PATH="${HOME}/.local/bin:${PATH}"
-    fi
+  # The .local/bin is used for some local installs such as applications
+  # installed via 'pip install --user'
+  if [[ ":$PATH:" != *":${HOME}/.local/bin:"* ]]; then
+    PATH="${HOME}/.local/bin:${PATH}"
+  fi
 
-    # Add krew bin path.
-    if [[ ":$PATH:" != *":${HOME}/.krew/bin:"* ]]; then
-        PATH="${HOME}/.krew/bin:${PATH}"
-    fi
+  # Add krew bin path.
+  if [[ ":$PATH:" != *":${HOME}/.krew/bin:"* ]]; then
+    PATH="${HOME}/.krew/bin:${PATH}"
+  fi
 
-    # Aqua. We want aqua to be able to override other global paths so it gets
-    # highest priority.
-    _bashrc_setup_aqua
+  # Aqua. We want aqua to be able to override other global paths so it gets
+  # highest priority.
+  _bashrc_setup_aqua
 }
 
 # _bashrc_source_local sources the ~/.bashrc.local file if it exists.
 function _bashrc_source_local() {
-    # Local settings.
-    if [[ -r "${HOME}/.bashrc.local" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bashrc.local"
-    fi
+  # Local settings.
+  if [[ -r "${HOME}/.bashrc.local" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.bashrc.local"
+  fi
 }
 
 # _bashrc_user_temp returns a directory path for temporary workspaces. It
@@ -245,61 +245,61 @@ function _bashrc_source_local() {
 # the user's ID. If the workspace directory does not exist, it is created with
 # permissions 0700.
 function _bashrc_user_temp() {
-    # if /var/tmp exists use it so that workspaces can persist across reboots.
-    local tmp_dir="/var/tmp"
-    if [[ ! -d ${tmp_dir} ]] || [[ ! -w ${tmp_dir} ]]; then
-        if [[ -n ${TMPDIR:-} ]] && [[ -d ${TMPDIR} ]] && [[ -w ${TMPDIR} ]]; then
-            tmp_dir="${TMPDIR}"
-        else
-            # Otherwise, use the default /tmp directory.
-            tmp_dir="/tmp"
-        fi
-    fi
-
-    local ws_root="${tmp_dir}/dotfiles-user-tmp-${UID}"
-    if [[ ! -d ${ws_root} ]]; then
-        mkdir -m 0700 "${ws_root}"
-        # NOTE: macOS creates the file with the 'wheel' group.
-        chown "${UID}:${GID}" "$(readlink -f "${ws_root}")"
-    fi
-
-    # test that the owner, group, and permissions of the workspace directory is
-    # correct. If not, print a warning and fall back to using a new temporary
-    # directory.
-    local stat_user_id
-    local stat_group_id
-    local stat_permissions
-    if [ "$(uname)" == "Darwin" ]; then
-        read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -f "%u %g %p" "${ws_root}")"
-        stat_permissions="${stat_permissions: -3}"
+  # if /var/tmp exists use it so that workspaces can persist across reboots.
+  local tmp_dir="/var/tmp"
+  if [[ ! -d ${tmp_dir} ]] || [[ ! -w ${tmp_dir} ]]; then
+    if [[ -n ${TMPDIR:-} ]] && [[ -d ${TMPDIR} ]] && [[ -w ${TMPDIR} ]]; then
+      tmp_dir="${TMPDIR}"
     else
-        read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -c "%u %g %a" "${ws_root}")"
+      # Otherwise, use the default /tmp directory.
+      tmp_dir="/tmp"
     fi
-    if [[ ${stat_user_id} != "${UID}" ]] || [[ ${stat_group_id} != "${GID}" ]] || [[ ${stat_permissions} != "700" ]]; then
-        echo "WARN: Workspace directory ${ws_root} has incorrect ownership or permissions." >&2
-        ws_root="$(mktemp -d -t "dotfiles-user-tmp-XXXXXXXXXX")"
+  fi
+
+  local ws_root="${tmp_dir}/dotfiles-user-tmp-${UID}"
+  if [[ ! -d ${ws_root} ]]; then
+    mkdir -m 0700 "${ws_root}"
+    # NOTE: macOS creates the file with the 'wheel' group.
+    chown "${UID}:${GID}" "$(readlink -f "${ws_root}")"
+  fi
+
+  # test that the owner, group, and permissions of the workspace directory is
+  # correct. If not, print a warning and fall back to using a new temporary
+  # directory.
+  local stat_user_id
+  local stat_group_id
+  local stat_permissions
+  if [ "$(uname)" == "Darwin" ]; then
+    read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -f "%u %g %p" "${ws_root}")"
+    stat_permissions="${stat_permissions: -3}"
+  else
+    read -r stat_user_id stat_group_id stat_permissions <<<"$(stat -c "%u %g %a" "${ws_root}")"
+  fi
+  if [[ ${stat_user_id} != "${UID}" ]] || [[ ${stat_group_id} != "${GID}" ]] || [[ ${stat_permissions} != "700" ]]; then
+    echo "WARN: Workspace directory ${ws_root} has incorrect ownership or permissions." >&2
+    ws_root="$(mktemp -d -t "dotfiles-user-tmp-XXXXXXXXXX")"
+  fi
+
+  # Link to the temporary directory from the user's home directory. We do this
+  # to pick up the user's configuration (e.g. aqua, nodenv, etc.)
+
+  local user_tmp="${HOME}/.tmp"
+  if [[ -L ${user_tmp} ]]; then
+    local canon_user_tmp
+    local canon_ws_root
+    canon_user_tmp="$(readlink -f "${user_tmp}")"
+    canon_ws_root="$(readlink -f "${ws_root}")"
+    if [[ ${canon_user_tmp} != "${canon_ws_root}" ]]; then
+      echo "WARN: ${user_tmp} is a symlink to ${canon_user_tmp} instead of ${canon_ws_root}. Updating the symlink." >&2
+      rm -f "${user_tmp}"
+      ln -sf "${ws_root}" "${user_tmp}"
     fi
+  else
+    rm -rf "${user_tmp}"
+    ln -sf "${ws_root}" "${user_tmp}"
+  fi
 
-    # Link to the temporary directory from the user's home directory. We do this
-    # to pick up the user's configuration (e.g. aqua, nodenv, etc.)
-
-    local user_tmp="${HOME}/.tmp"
-    if [[ -L ${user_tmp} ]]; then
-        local canon_user_tmp
-        local canon_ws_root
-        canon_user_tmp="$(readlink -f "${user_tmp}")"
-        canon_ws_root="$(readlink -f "${ws_root}")"
-        if [[ ${canon_user_tmp} != "${canon_ws_root}" ]]; then
-            echo "WARN: ${user_tmp} is a symlink to ${canon_user_tmp} instead of ${canon_ws_root}. Updating the symlink." >&2
-            rm -f "${user_tmp}"
-            ln -sf "${ws_root}" "${user_tmp}"
-        fi
-    else
-        rm -rf "${user_tmp}"
-        ln -sf "${ws_root}" "${user_tmp}"
-    fi
-
-    echo "${user_tmp}"
+  echo "${user_tmp}"
 }
 
 # _bashrc_temp_workspace_dir returns a directory path for temporary workspaces.
@@ -308,183 +308,183 @@ function _bashrc_user_temp() {
 # _bashrc_user_temp. If the workspace directory does not exist, it is created
 # with permissions 0700.
 function _bashrc_temp_workspace_dir() {
-    local ws_dir
-    ws_dir="$(_bashrc_user_temp)/workspace"
-    if [[ ! -d ${ws_dir} ]]; then
-        mkdir -m 0700 "${ws_dir}"
-    fi
+  local ws_dir
+  ws_dir="$(_bashrc_user_temp)/workspace"
+  if [[ ! -d ${ws_dir} ]]; then
+    mkdir -m 0700 "${ws_dir}"
+  fi
 
-    echo "${ws_dir}"
+  echo "${ws_dir}"
 }
 
 function _bashrc_main() {
-    # NOTE: bash does not set primary group ID (PGID) in the environment.
-    GID=$(id -g)
-    export GID
+  # NOTE: bash does not set primary group ID (PGID) in the environment.
+  GID=$(id -g)
+  export GID
 
-    XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
-    export XDG_CACHE_HOME
-    XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
-    export XDG_CONFIG_HOME
-    XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-    export XDG_DATA_HOME
-    XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
-    export XDG_STATE_HOME
+  XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+  export XDG_CACHE_HOME
+  XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+  export XDG_CONFIG_HOME
+  XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+  export XDG_DATA_HOME
+  XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+  export XDG_STATE_HOME
 
-    if [[ -r "${HOME}/.bashrc_init_local" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.bashrc_init_local"
-    fi
-
-    # If not running interactively, then return early.
-    # NOTE: PS1 and tty may be set even for non-interactive shells so we check
-    #       the special parameter $- for the presence of 'i'.
-    if [[ ! $- =~ i ]]; then
-        # Update the environment for non-interactive shells.
-        _bashrc_update_env
-
-        _bashrc_source_local
-
-        export PATH
-
-        return 0
-    fi
-
-    # tmux
-    # Start a tmux session if not already in one
-    # Exit directly after the tmux session is exited
-    if shopt -q login_shell; then
-        # Only run if running in a terminal.
-        if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
-            if command -v tmux >/dev/null 2>&1; then
-                # Attempt to discover a detached session
-                # Use the current username as the session name.
-                if tmux has-session -t "${USER}" 2>/dev/null; then
-                    exec tmux attach-session -t "${USER}"
-                else
-                    exec tmux new-session -s "${USER}"
-                fi
-            fi
-        else
-            # If in a tmux/screen session print the motd.
-            if [ -r "/etc/motd" ]; then
-                cat /etc/motd
-            elif [ -r "/var/run/motd" ]; then
-                cat /var/run/motd
-            elif [ -r "/var/run/motd.dynamic" ]; then
-                cat /var/run/motd.dynamic
-            fi
-        fi
-    fi
-
-    # Load system bashrc
-    # NOTE: On Debian based systems /etc/bash.bashrc is loaded before ~/.bashrc
-    #       `-DSYS_BASHRC` compile-time option and does not need to be sourced here.
-    if [ -r /etc/bashrc ]; then
-        # shellcheck source=/dev/null
-        source /etc/bashrc
-    fi
-
-    EDITOR=vim
-    if command -v nvim >/dev/null 2>&1; then
-        EDITOR=nvim
-    fi
-    VISUAL=${EDITOR}
-
-    export EDITOR
-    export VISUAL
-
-    if [ "$(uname)" == "Darwin" ]; then
-        # Enable colors on Mac OSX Terminal
-        export CLICOLOR=1
-        export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
-    else
-        # Enable colors on linux
-        eval "$(dircolors -b)"
-    fi
-
-    # check the window size after each command and, if necessary,
-    # update the values of LINES and COLUMNS.
-    shopt -s checkwinsize
-
-    # make less more friendly for non-text input files, see lesspipe(1)
-    if command -v lesspipe >/dev/null 2>&1; then
-        eval "$(lesspipe)"
-    fi
-
-    # less should never use the bell and not paginate if less than one page.
-    export LESS="qR -F -X ${LESS}"
-    export LESS
-
-    # Set the bat theme.
-    export BAT_THEME="tokyonight_moon"
-
-    local bash_lib_dir="${XDG_DATA_HOME}/bash/lib"
-    local nvim_plugin_dir="${XDG_CONFIG_HOME}/nvim/pack/nvim/start"
-
-    # Simple Bash Prompt
+  if [[ -r "${HOME}/.bashrc_init_local" ]]; then
     # shellcheck source=/dev/null
-    SBP_PATH="${bash_lib_dir}/sbp"
-    if [[ -r "${SBP_PATH}/sbp.bash" ]]; then
-        # shellcheck source=/dev/null
-        source "${SBP_PATH}/sbp.bash"
-    fi
-    export SBP_PATH
+    source "${HOME}/.bashrc_init_local"
+  fi
 
-    # fzf Theme.
-    # shellcheck source=/dev/null
-    local moon_theme_path="${nvim_plugin_dir}/tokyonight.nvim/extras/fzf/tokyonight_moon.sh"
-    if [[ -r ${moon_theme_path} ]]; then
-        # shellcheck source=/dev/null
-        source "${moon_theme_path}"
-    fi
-
-    # Set and export gpg tty
-    GPG_TTY=$(tty)
-    export GPG_TTY
-
-    # ssh-agent
-    # Start an ssh-agent instance if an existing one isn't found.
-    mkdir -p "${HOME}/.ssh"
-    if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -r "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
-        # NOTE: ssh-find-agent assumes that ~/.ssh/authorized_keys exists
-        if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
-            touch "${HOME}/.ssh/authorized_keys"
-        fi
-        # shellcheck source=/dev/null
-        source "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh"
-
-        ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
-    fi
-
-    # Update the environment.
+  # If not running interactively, then return early.
+  # NOTE: PS1 and tty may be set even for non-interactive shells so we check
+  #       the special parameter $- for the presence of 'i'.
+  if [[ ! $- =~ i ]]; then
+    # Update the environment for non-interactive shells.
     _bashrc_update_env
 
-    # Source local settings.
     _bashrc_source_local
 
     export PATH
 
-    # Setup bash aliases.
-    _bashrc_setup_aliases
+    return 0
+  fi
 
-    # Setup bash completion.
-    _bashrc_setup_bash_completion
-
-    # Print the message if reboot is required.
-    if [[ -r /var/run/reboot-required ]]; then
-        # Print the message if the file exists
-        cat /var/run/reboot-required
+  # tmux
+  # Start a tmux session if not already in one
+  # Exit directly after the tmux session is exited
+  if shopt -q login_shell; then
+    # Only run if running in a terminal.
+    if [[ (-t 1) && (${TERM} != screen*) && -z ${TMUX} ]]; then
+      if command -v tmux >/dev/null 2>&1; then
+        # Attempt to discover a detached session
+        # Use the current username as the session name.
+        if tmux has-session -t "${USER}" 2>/dev/null; then
+          exec tmux attach-session -t "${USER}"
+        else
+          exec tmux new-session -s "${USER}"
+        fi
+      fi
+    else
+      # If in a tmux/screen session print the motd.
+      if [ -r "/etc/motd" ]; then
+        cat /etc/motd
+      elif [ -r "/var/run/motd" ]; then
+        cat /var/run/motd
+      elif [ -r "/var/run/motd.dynamic" ]; then
+        cat /var/run/motd.dynamic
+      fi
     fi
+  fi
 
-    # Source the Google cloud devshell bashrc
-    if [[ -r "/google/devshell/bashrc.google" ]]; then
-        # shellcheck source=/dev/null
-        source "/google/devshell/bashrc.google"
+  # Load system bashrc
+  # NOTE: On Debian based systems /etc/bash.bashrc is loaded before ~/.bashrc
+  #       `-DSYS_BASHRC` compile-time option and does not need to be sourced here.
+  if [ -r /etc/bashrc ]; then
+    # shellcheck source=/dev/null
+    source /etc/bashrc
+  fi
+
+  EDITOR=vim
+  if command -v nvim >/dev/null 2>&1; then
+    EDITOR=nvim
+  fi
+  VISUAL=${EDITOR}
+
+  export EDITOR
+  export VISUAL
+
+  if [ "$(uname)" == "Darwin" ]; then
+    # Enable colors on Mac OSX Terminal
+    export CLICOLOR=1
+    export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
+  else
+    # Enable colors on linux
+    eval "$(dircolors -b)"
+  fi
+
+  # check the window size after each command and, if necessary,
+  # update the values of LINES and COLUMNS.
+  shopt -s checkwinsize
+
+  # make less more friendly for non-text input files, see lesspipe(1)
+  if command -v lesspipe >/dev/null 2>&1; then
+    eval "$(lesspipe)"
+  fi
+
+  # less should never use the bell and not paginate if less than one page.
+  export LESS="qR -F -X ${LESS}"
+  export LESS
+
+  # Set the bat theme.
+  export BAT_THEME="tokyonight_moon"
+
+  local bash_lib_dir="${XDG_DATA_HOME}/bash/lib"
+  local nvim_plugin_dir="${XDG_CONFIG_HOME}/nvim/pack/nvim/start"
+
+  # Simple Bash Prompt
+  # shellcheck source=/dev/null
+  SBP_PATH="${bash_lib_dir}/sbp"
+  if [[ -r "${SBP_PATH}/sbp.bash" ]]; then
+    # shellcheck source=/dev/null
+    source "${SBP_PATH}/sbp.bash"
+  fi
+  export SBP_PATH
+
+  # fzf Theme.
+  # shellcheck source=/dev/null
+  local moon_theme_path="${nvim_plugin_dir}/tokyonight.nvim/extras/fzf/tokyonight_moon.sh"
+  if [[ -r ${moon_theme_path} ]]; then
+    # shellcheck source=/dev/null
+    source "${moon_theme_path}"
+  fi
+
+  # Set and export gpg tty
+  GPG_TTY=$(tty)
+  export GPG_TTY
+
+  # ssh-agent
+  # Start an ssh-agent instance if an existing one isn't found.
+  mkdir -p "${HOME}/.ssh"
+  if [[ -z ${SSH_AUTH_SOCK} ]] && [[ -r "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh" ]]; then
+    # NOTE: ssh-find-agent assumes that ~/.ssh/authorized_keys exists
+    if [ ! -f "${HOME}/.ssh/authorized_keys" ]; then
+      touch "${HOME}/.ssh/authorized_keys"
     fi
+    # shellcheck source=/dev/null
+    source "${bash_lib_dir}/ssh-find-agent/ssh-find-agent.sh"
 
-    # Start ble.sh
-    [[ -n ${BLE_VERSION-} ]] && ble-attach
+    ssh_find_agent -a || eval "$(ssh-agent -s)" >/dev/null
+  fi
+
+  # Update the environment.
+  _bashrc_update_env
+
+  # Source local settings.
+  _bashrc_source_local
+
+  export PATH
+
+  # Setup bash aliases.
+  _bashrc_setup_aliases
+
+  # Setup bash completion.
+  _bashrc_setup_bash_completion
+
+  # Print the message if reboot is required.
+  if [[ -r /var/run/reboot-required ]]; then
+    # Print the message if the file exists
+    cat /var/run/reboot-required
+  fi
+
+  # Source the Google cloud devshell bashrc
+  if [[ -r "/google/devshell/bashrc.google" ]]; then
+    # shellcheck source=/dev/null
+    source "/google/devshell/bashrc.google"
+  fi
+
+  # Start ble.sh
+  [[ -n ${BLE_VERSION-} ]] && ble-attach
 }
 
 _bashrc_main

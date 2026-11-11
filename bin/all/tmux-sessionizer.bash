@@ -33,142 +33,142 @@ set -euo pipefail
 # https://github.com/ThePrimeagen/tmux-sessionizer
 
 function _main() {
-    # These variables are used by the argsparse library.
-    local program_params
-    local program_options
-    local argsparse_usage_description
+  # These variables are used by the argsparse library.
+  local program_params
+  local program_options
+  local argsparse_usage_description
 
-    # shellcheck source=/dev/null
-    . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
+  # shellcheck source=/dev/null
+  . "${HOME}/.local/share/bash/lib/gnu-getopt/gnu-getopt.sh"
 
-    ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
+  ARGSPARSE_GNU_GETOPT="${ARGSPARSE_GNU_GETOPT:-$(get_gnu_getopt_or_error)}"
 
-    # shellcheck source=/dev/null
-    . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
+  # shellcheck source=/dev/null
+  . "${HOME}/.local/share/bash/lib/bash-argsparse/argsparse.sh"
 
-    argsparse_use_option "dir" "Project source directory." "value" "default:${HOME}/src" "short:d" "type:directory"
-    argsparse_use_option "windows" "Number of tmux windows to open." "value" "default:1" "short:w" "type:uint"
-    # Project directories are GitHub style <user>/<repo> thus default depth of 2.
-    argsparse_use_option "mindepth" "Minimum directory search depth." "value" "default:2" "short:m" "type:uint"
-    argsparse_use_option "maxdepth" "Maximum directory search depth." "value" "default:2" "short:x" "type:uint"
-    argsparse_use_option "new" "Create a new folder if no selection." "short:n"
+  argsparse_use_option "dir" "Project source directory." "value" "default:${HOME}/src" "short:d" "type:directory"
+  argsparse_use_option "windows" "Number of tmux windows to open." "value" "default:1" "short:w" "type:uint"
+  # Project directories are GitHub style <user>/<repo> thus default depth of 2.
+  argsparse_use_option "mindepth" "Minimum directory search depth." "value" "default:2" "short:m" "type:uint"
+  argsparse_use_option "maxdepth" "Maximum directory search depth." "value" "default:2" "short:x" "type:uint"
+  argsparse_use_option "new" "Create a new folder if no selection." "short:n"
 
-    # Query is is a single optional parameter.
-    argsparse_describe_parameters "QUERY?"
+  # Query is is a single optional parameter.
+  argsparse_describe_parameters "QUERY?"
 
-    # Options are not required.
-    argsparse_allow_no_argument "true"
+  # Options are not required.
+  argsparse_allow_no_argument "true"
 
-    # shellcheck disable=SC2034 # Used by argsparse.
-    argsparse_usage_description="Open a new tmux session for a project."
+  # shellcheck disable=SC2034 # Used by argsparse.
+  argsparse_usage_description="Open a new tmux session for a project."
 
-    # Command line parsing is done here.
-    argsparse_parse_options "$@"
+  # Command line parsing is done here.
+  argsparse_parse_options "$@"
 
-    if ! command -v tmux >/dev/null 2>&1; then
-        echo "${0}: tmux is required." >&2
-        return 1
+  if ! command -v tmux >/dev/null 2>&1; then
+    echo "${0}: tmux is required." >&2
+    return 1
+  fi
+
+  if [ ! -d "${program_options['dir']}" ]; then
+    echo "${0}: '${program_options['dir']}' does not exist or is not a directory." >&2
+    return 1
+  fi
+
+  local query=${program_params[0]:-""}
+
+  local base_dir
+  local lines
+  local selected
+  local selected_name
+  local tmux_running
+  local select_option=""
+
+  # Remove trailing slashes for consistency.
+  base_dir="${program_options['dir']%%+(/)}"
+
+  # If a query is provided, select the only match automatically (if it's the
+  # only match). An empty query should always result in a list of options.
+  if [[ -n ${query} ]]; then
+    select_option="--select-1"
+  fi
+
+  # Read the all lines from fzf.
+  # NOTE: fzf --print-query always prints the query as the first line. If
+  #       there is a selection, it will be on the second line.
+  # NOTE: We cd into base_dir and use '.' as the find root so that fzf
+  #       shows relative paths (e.g. owner/repo) instead of absolute paths.
+  IFS=$'\n' readarray -t lines <<<"$(cd "${base_dir}" && find \
+    . \
+    -mindepth "${program_options['mindepth']}" \
+    -maxdepth "${program_options['maxdepth']}" \
+    -type d | sed 's|^\./||' | fzf --query="${query}" --print-query ${select_option})"
+
+  if [[ ${#lines[@]} -eq 0 ]]; then
+    return 0
+  elif [[ ${#lines[@]} -eq 1 ]]; then
+    if ! argsparse_is_option_set "new"; then
+      return 0
     fi
 
-    if [ ! -d "${program_options['dir']}" ]; then
-        echo "${0}: '${program_options['dir']}' does not exist or is not a directory." >&2
-        return 1
+    # New folder.
+    new_folder="${lines[0]}"
+    if [[ -z ${new_folder} ]]; then
+      return 0
     fi
 
-    local query=${program_params[0]:-""}
+    selected="${base_dir}/${new_folder}"
+    mkdir -p "${selected}"
+  elif [[ ${#lines[@]} -ge 2 ]]; then
+    # NOTE: First line is the query.
+    selected="${base_dir}/${lines[1]}"
+  fi
 
-    local base_dir
-    local lines
-    local selected
-    local selected_name
-    local tmux_running
-    local select_option=""
+  if [[ -z ${selected} ]]; then
+    return 0
+  fi
 
-    # Remove trailing slashes for consistency.
-    base_dir="${program_options['dir']%%+(/)}"
+  # Remove the base directory prefix and convert dots to underscores for tmux
+  # session name.
+  selected_name="${selected#"${base_dir}"}"
+  selected_name=$(echo "${selected_name##+(/)}" | tr . _)
 
-    # If a query is provided, select the only match automatically (if it's the
-    # only match). An empty query should always result in a list of options.
-    if [[ -n ${query} ]]; then
-        select_option="--select-1"
-    fi
+  tmux_running=$(pgrep tmux || true)
 
-    # Read the all lines from fzf.
-    # NOTE: fzf --print-query always prints the query as the first line. If
-    #       there is a selection, it will be on the second line.
-    # NOTE: We cd into base_dir and use '.' as the find root so that fzf
-    #       shows relative paths (e.g. owner/repo) instead of absolute paths.
-    IFS=$'\n' readarray -t lines <<<"$(cd "${base_dir}" && find \
-        . \
-        -mindepth "${program_options['mindepth']}" \
-        -maxdepth "${program_options['maxdepth']}" \
-        -type d | sed 's|^\./||' | fzf --query="${query}" --print-query ${select_option})"
+  # Session name can't be a number so add a trailing underscore.
+  if [[ ${selected_name} =~ ^[0-9]+$ ]]; then
+    selected_name="${selected_name}_"
+  fi
 
-    if [[ ${#lines[@]} -eq 0 ]]; then
-        return 0
-    elif [[ ${#lines[@]} -eq 1 ]]; then
-        if ! argsparse_is_option_set "new"; then
-            return 0
-        fi
+  # NOTE: We use -c on new-session to set the session's default working
+  #       directory so that new windows created later (e.g. with Ctrl+A c)
+  #       start in the project directory. We also pass a shell command with cd
+  #       to preserve symlinks in the shell's logical working directory
+  #       ($PWD). The -c option may resolve symlinks at the tmux level, but cd
+  #       preserves the logical path for the initial shell.
+  local shell_cmd="cd -- ${selected} && exec ${SHELL}"
+  if [[ -z ${TMUX+x} ]] && [[ -z ${tmux_running} ]]; then
+    tmux new-session -s "${selected_name}" -c "${selected}" "${shell_cmd}"
+    # NOTE: new-session opens the first window.
+    for ((i = 2; i <= program_options['windows']; i++)); do
+      tmux new-window -dt "${selected_name}" "${shell_cmd}"
+    done
+    return 0
+  fi
 
-        # New folder.
-        new_folder="${lines[0]}"
-        if [[ -z ${new_folder} ]]; then
-            return 0
-        fi
+  if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
+    tmux new-session -ds "${selected_name}" -c "${selected}" "${shell_cmd}"
+    # NOTE: new-session opens the first window.
+    for ((i = 2; i <= program_options['windows']; i++)); do
+      tmux new-window -dt "${selected_name}" "${shell_cmd}"
+    done
+  fi
 
-        selected="${base_dir}/${new_folder}"
-        mkdir -p "${selected}"
-    elif [[ ${#lines[@]} -ge 2 ]]; then
-        # NOTE: First line is the query.
-        selected="${base_dir}/${lines[1]}"
-    fi
-
-    if [[ -z ${selected} ]]; then
-        return 0
-    fi
-
-    # Remove the base directory prefix and convert dots to underscores for tmux
-    # session name.
-    selected_name="${selected#"${base_dir}"}"
-    selected_name=$(echo "${selected_name##+(/)}" | tr . _)
-
-    tmux_running=$(pgrep tmux || true)
-
-    # Session name can't be a number so add a trailing underscore.
-    if [[ ${selected_name} =~ ^[0-9]+$ ]]; then
-        selected_name="${selected_name}_"
-    fi
-
-    # NOTE: We use -c on new-session to set the session's default working
-    #       directory so that new windows created later (e.g. with Ctrl+A c)
-    #       start in the project directory. We also pass a shell command with cd
-    #       to preserve symlinks in the shell's logical working directory
-    #       ($PWD). The -c option may resolve symlinks at the tmux level, but cd
-    #       preserves the logical path for the initial shell.
-    local shell_cmd="cd -- ${selected} && exec ${SHELL}"
-    if [[ -z ${TMUX+x} ]] && [[ -z ${tmux_running} ]]; then
-        tmux new-session -s "${selected_name}" -c "${selected}" "${shell_cmd}"
-        # NOTE: new-session opens the first window.
-        for ((i = 2; i <= program_options['windows']; i++)); do
-            tmux new-window -dt "${selected_name}" "${shell_cmd}"
-        done
-        return 0
-    fi
-
-    if ! tmux has-session -t="${selected_name}" 2>/dev/null; then
-        tmux new-session -ds "${selected_name}" -c "${selected}" "${shell_cmd}"
-        # NOTE: new-session opens the first window.
-        for ((i = 2; i <= program_options['windows']; i++)); do
-            tmux new-window -dt "${selected_name}" "${shell_cmd}"
-        done
-    fi
-
-    if [[ -z $TMUX ]]; then
-        tmux attach -t "${selected_name}"
-    else
-        tmux switch-client -t "${selected_name}"
-    fi
+  if [[ -z $TMUX ]]; then
+    tmux attach -t "${selected_name}"
+  else
+    tmux switch-client -t "${selected_name}"
+  fi
 }
 
 _main "$@"

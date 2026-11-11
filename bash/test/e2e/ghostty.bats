@@ -13,32 +13,32 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test ".config/ghostty is linked correctly" {
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        assert_symlink_to "${BASE_PATH}/ghostty/config" "${E2E_HOME}/Library/Application Support/com.mitchellh.ghostty/config"
-    else
-        assert_symlink_to "${BASE_PATH}/ghostty/config" "${E2E_HOME}/.config/ghostty/config"
-    fi
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    assert_symlink_to "${BASE_PATH}/ghostty/config" "${E2E_HOME}/Library/Application Support/com.mitchellh.ghostty/config"
+  else
+    assert_symlink_to "${BASE_PATH}/ghostty/config" "${E2E_HOME}/.config/ghostty/config"
+  fi
 }
 
 @test "fonts are installed correctly" {
-    if [[ "$(uname -s)" != "Darwin" ]]; then
-        skip "fonts not installed on non-Darwin system"
-    fi
+  if [[ "$(uname -s)" != "Darwin" ]]; then
+    skip "fonts not installed on non-Darwin system"
+  fi
 
-    assert_file_exists "${E2E_HOME}/Library/Fonts/NotoSansJP-VariableFont_wght.ttf"
-    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Regular.ttf"
-    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Italic.ttf"
-    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Bold.ttf"
-    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-BoldItalic.ttf"
-    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Medium.ttf"
-    assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-MediumItalic.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/NotoSansJP-VariableFont_wght.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Regular.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Italic.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Bold.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-BoldItalic.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-Medium.ttf"
+  assert_file_exists "${E2E_HOME}/Library/Fonts/RobotoMonoNerdFontMono-MediumItalic.ttf"
 }

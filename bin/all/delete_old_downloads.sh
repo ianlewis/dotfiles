@@ -23,31 +23,31 @@
 set -euo pipefail
 
 function _main() {
-    local dirs
-    local days
+  local dirs
+  local days
 
-    # Explicitly specify the directories for safety.
-    dirs="${HOME}/Downloads/"
+  # Explicitly specify the directories for safety.
+  dirs="${HOME}/Downloads/"
 
-    days=${1:-""}
+  days=${1:-""}
 
-    if [ "${days}" = "" ]; then
-        days=28
+  if [ "${days}" = "" ]; then
+    days=28
+  fi
+
+  for d in ${dirs}; do
+    if [ -d "${d}" ]; then
+      # Delete old files
+      find "${d}" -type f -mtime +"${days}" -delete
+
+      # Delete old symbolic links
+      find "${d}" -type l -mtime +"${days}" -delete
+
+      # Delete empty directories but do not delete the top level
+      # directory.
+      find "${d}" -mindepth 1 -type d -empty -delete
     fi
-
-    for d in ${dirs}; do
-        if [ -d "${d}" ]; then
-            # Delete old files
-            find "${d}" -type f -mtime +"${days}" -delete
-
-            # Delete old symbolic links
-            find "${d}" -type l -mtime +"${days}" -delete
-
-            # Delete empty directories but do not delete the top level
-            # directory.
-            find "${d}" -mindepth 1 -type d -empty -delete
-        fi
-    done
+  done
 }
 
 _main "$@"

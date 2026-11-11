@@ -13,32 +13,32 @@
 # limitations under the License.
 
 setup() {
-    E2E_HOME="${E2E_HOME:-${HOME}}"
-    BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
+  E2E_HOME="${E2E_HOME:-${HOME}}"
+  BASE_PATH="$(cd "$(dirname "$(dirname "$(dirname "$(dirname "${BATS_TEST_FILENAME}")")")")" >/dev/null 2>&1 && pwd)"
 
-    load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
-    load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-support/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-assert/load"
+  load "${BASE_PATH}/bash/test/test_helper/bats-file/load"
 }
 
 @test ".npmrc linked correctly" {
-    assert_symlink_to "${BASE_PATH}/npm/_npmrc" "${E2E_HOME}/.npmrc"
+  assert_symlink_to "${BASE_PATH}/npm/_npmrc" "${E2E_HOME}/.npmrc"
 }
 
 @test ".node-version linked correctly" {
-    assert_symlink_to "${BASE_PATH}/.node-version" "${E2E_HOME}/.node-version"
+  assert_symlink_to "${BASE_PATH}/.node-version" "${E2E_HOME}/.node-version"
 }
 
 @test "nodenv is installed" {
-    assert_symlink_to "${E2E_HOME}/.local/share/nodenv/libexec/nodenv" "${E2E_HOME}/.local/share/nodenv/bin/nodenv"
-    assert_file_executable "${E2E_HOME}/.local/share/nodenv/libexec/nodenv"
-    assert_dir_exists "${E2E_HOME}/.local/share/nodenv/plugins/node-build"
+  assert_symlink_to "${E2E_HOME}/.local/share/nodenv/libexec/nodenv" "${E2E_HOME}/.local/share/nodenv/bin/nodenv"
+  assert_file_executable "${E2E_HOME}/.local/share/nodenv/libexec/nodenv"
+  assert_dir_exists "${E2E_HOME}/.local/share/nodenv/plugins/node-build"
 }
 
 @test "node_modules installed correctly" {
-    assert_symlink_to "${BASE_PATH}/nodenv/node_modules" "${E2E_HOME}/.local/share/node_modules"
+  assert_symlink_to "${BASE_PATH}/nodenv/node_modules" "${E2E_HOME}/.local/share/node_modules"
 }
 
 @test "yarn installed correctly" {
-    assert_file_executable "${E2E_HOME}/.local/share/node_modules/.bin/yarn"
+  assert_file_executable "${E2E_HOME}/.local/share/node_modules/.bin/yarn"
 }

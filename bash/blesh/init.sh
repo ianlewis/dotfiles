@@ -25,19 +25,19 @@ set -o vi
 #{{{ Add a sed-based commandline hook to support the "s/old/new/" in # vi-mode.
 # https://github.com/akinomyoga/ble.sh/issues/704#issuecomment-4727809586
 function ble/widget/vi-command/commandline.hook.around {
-    local ex=${ADVICE_WORDS[1]}
-    if [[ $ex == s/* ]]; then
-        local line
-        # shellcheck disable=SC2016 # the expression should not be expanded
-        ble/util/assign line 'ble/bin/sed -E "$ex" <<< "$_ble_edit_str"' || return "$?"
-        ble-edit/content/reset-and-check-dirty "$line"
-        # shellcheck disable=SC2154 # ble-edit-str is set by reset-and-check-dirty
-        _ble_edit_ind=${#_ble_edit_str}
-        ble/keymap:vi/adjust-command-mode
-        return "$?"
-    fi
+  local ex=${ADVICE_WORDS[1]}
+  if [[ $ex == s/* ]]; then
+    local line
+    # shellcheck disable=SC2016 # the expression should not be expanded
+    ble/util/assign line 'ble/bin/sed -E "$ex" <<< "$_ble_edit_str"' || return "$?"
+    ble-edit/content/reset-and-check-dirty "$line"
+    # shellcheck disable=SC2154 # ble-edit-str is set by reset-and-check-dirty
+    _ble_edit_ind=${#_ble_edit_str}
+    ble/keymap:vi/adjust-command-mode
+    return "$?"
+  fi
 
-    ble/function#advice/do
+  ble/function#advice/do
 }
 blehook/eval-after-load keymap_vi '
   ble/function#advice around ble/widget/vi-command/commandline.hook{,.around}
@@ -76,35 +76,35 @@ bleopt prompt_eol_mark=""
 
 #{{{ ble/widget/discard-and-enter-insert clears the current line.
 function ble/widget/discard-and-enter-insert {
-    # 1. Clear the current line/buffer
-    ble/widget/discard-line
-    # 2. Force switch to Insert Mode
-    ble/widget/vi_nmap/insert-mode
+  # 1. Clear the current line/buffer
+  ble/widget/discard-line
+  # 2. Force switch to Insert Mode
+  ble/widget/vi_nmap/insert-mode
 }
 #}}}
 
 #{{{ blerc/vim-load-hook sets up the keybindings for vim mode.
 function blerc/vim-load-hook {
-    # shellcheck disable=SC2154
-    ((_ble_bash >= 40300)) && builtin bind 'set keyseq-timeout 1'
+  # shellcheck disable=SC2154
+  ((_ble_bash >= 40300)) && builtin bind 'set keyseq-timeout 1'
 
-    #{{{ Dvorak keybindings for Normal and Operator-Pending Modes
-    ble-bind -m vi_nmap -f h vi-command/backward-char
-    ble-bind -m vi_nmap -f t vi-command/backward-line
-    ble-bind -m vi_nmap -f n vi-command/forward-line
-    ble-bind -m vi_nmap -f s vi-command/forward-char
+  #{{{ Dvorak keybindings for Normal and Operator-Pending Modes
+  ble-bind -m vi_nmap -f h vi-command/backward-char
+  ble-bind -m vi_nmap -f t vi-command/backward-line
+  ble-bind -m vi_nmap -f n vi-command/forward-line
+  ble-bind -m vi_nmap -f s vi-command/forward-char
 
-    ble-bind -m vi_omap -f h vi-command/backward-char
-    ble-bind -m vi_omap -f t vi-command/forward-line
-    ble-bind -m vi_omap -f n vi-command/backward-line
-    ble-bind -m vi_omap -f s vi-command/forward-char
-    #}}}
+  ble-bind -m vi_omap -f h vi-command/backward-char
+  ble-bind -m vi_omap -f t vi-command/forward-line
+  ble-bind -m vi_omap -f n vi-command/backward-line
+  ble-bind -m vi_omap -f s vi-command/forward-char
+  #}}}
 
-    # In Insert Mode, use the native discard behavior
-    ble-bind -m vi_imap -f 'C-c' discard-line
+  # In Insert Mode, use the native discard behavior
+  ble-bind -m vi_imap -f 'C-c' discard-line
 
-    # In Normal Mode, clear the buffer and force switch back to Insert Mode
-    ble-bind -m vi_nmap -f 'C-c' discard-and-enter-insert
+  # In Normal Mode, clear the buffer and force switch back to Insert Mode
+  ble-bind -m vi_nmap -f 'C-c' discard-and-enter-insert
 }
 blehook/eval-after-load keymap_vi blerc/vim-load-hook
 #}}}

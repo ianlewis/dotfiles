@@ -25,3 +25,11 @@ indent_style = tab
 [{*.json,*.yml,*.yaml}]
 indent_style = space
 indent_size = 2
+
+[{*.sh,*.bash,*.bats,*.conf,_bashrc,_bash_aliases,_bash_completion,_bash_logout,_bash_profile,_profile}]
+indent_style = space
+indent_size = 2
+
+[bash/test/fake/brew_fail/brew]
+indent_style = space
+indent_size = 2

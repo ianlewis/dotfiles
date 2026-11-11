@@ -24,11 +24,11 @@ set -euo pipefail
 nvim --version
 # NOTE: make sure treesitter parsers are installed.
 nvim \
-    --headless \
-    -u "${HOME}/.config/nvim/init.lua" \
-    '+lua print("stdpath: "..vim.inspect({config = vim.fn.stdpath("config"), data = vim.fn.stdpath("data"), cache = vim.fn.stdpath("cache"), log = vim.fn.stdpath("log")}).."\n")' \
-    '+lua print("runtimepath: "..vim.inspect(vim.api.nvim_list_runtime_paths()).."\n")' \
-    '+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' \
-    '+checkhealth' \
-    '+w!nvim-checkhealth.log' \
-    '+qa!'
+  --headless \
+  -u "${HOME}/.config/nvim/init.lua" \
+  '+lua print("stdpath: "..vim.inspect({config = vim.fn.stdpath("config"), data = vim.fn.stdpath("data"), cache = vim.fn.stdpath("cache"), log = vim.fn.stdpath("log")}).."\n")' \
+  '+lua print("runtimepath: "..vim.inspect(vim.api.nvim_list_runtime_paths()).."\n")' \
+  '+lua require("nvim-treesitter").install(require("ianlewis.parsers")):wait(300000)' \
+  '+checkhealth' \
+  '+w!nvim-checkhealth.log' \
+  '+qa!'
