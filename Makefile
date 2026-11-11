@@ -499,6 +499,7 @@ textlint: $(REPO_ROOT)/node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Ru
 			'*.md' \
 			'*.txt' \
 			':!:requirements*.txt' \
+			':!:**/requirements*.txt' \
 			':!:third_party' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done
 	)
