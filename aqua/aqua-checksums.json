@@ -821,6 +821,21 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/kubevirt/kubevirt/v1.9.1/virtctl-v1.9.1-darwin-amd64",
+      "checksum": "DD414CEA44975F573F3E635937DF766942423EC79B64E29CB91826FCC63B8056",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubevirt/kubevirt/v1.9.1/virtctl-v1.9.1-linux-amd64",
+      "checksum": "C289393C8186A258653594605F5199B4C171A3131E6E409ED204A96B491B782A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubevirt/kubevirt/v1.9.1/virtctl-v1.9.1-windows-amd64.exe",
+      "checksum": "61B4973367501BB92F9832385BDB725BC603E58630772C4EBA3A5FA92A31F4C8",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/mattn/efm-langserver/v0.0.57/efm-langserver_v0.0.57_darwin_amd64.zip",
       "checksum": "C3DE994FA89A44FA733DA9A08D31BE1E2D27575C7D7C0D00F430C82378BFCA22",
       "algorithm": "sha256"
