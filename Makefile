@@ -798,7 +798,7 @@ configure-yamlfmt: $(XDG_CONFIG_HOME)/yamlfmt/.yamlfmt.kubernetes.yaml ## Config
 ## Install Tools
 #####################################################################
 
-$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)/.created .
+$(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)/.created
 	@echo "Installing slsa-verifier..."
 	tempfile=$$($(MKTEMP) --suffix=".slsa-verifier-$(SLSA_VERIFIER_VERSION)")
 	curl -sSLo "$${tempfile}" "$(SLSA_VERIFIER_URL)"
@@ -809,7 +809,7 @@ $(XDG_BIN_HOME)/slsa-verifier: $(XDG_BIN_HOME)/.created .
 .PHONY: install-slsa-verifier
 install-slsa-verifier: $(XDG_BIN_HOME)/slsa-verifier ## Install slsa-verifier
 
-$(XDG_BIN_HOME)/cosign: $(XDG_BIN_HOME)/.created .
+$(XDG_BIN_HOME)/cosign: $(XDG_BIN_HOME)/.created
 	@echo "Installing cosign..."
 	tempfile=$$($(MKTEMP) --suffix=".cosign-$(COSIGN_VERSION)")
 	curl -sSLo "$${tempfile}" "$(COSIGN_URL)"
