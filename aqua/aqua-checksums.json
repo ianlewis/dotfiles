@@ -326,6 +326,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/cloudnative-pg/cloudnative-pg/v1.30.1/kubectl-cnpg_1.30.1_darwin_arm64.tar.gz",
+      "checksum": "74836F530B54F060126FC8CF5FD5C27E77801A6D36F61B66F4457218AA11383F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cloudnative-pg/cloudnative-pg/v1.30.1/kubectl-cnpg_1.30.1_darwin_x86_64.tar.gz",
+      "checksum": "165A49352B8A60BA2EB7BF2B56E5388FF678AC5AF36DC03129CEDEAF3A37AEE3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cloudnative-pg/cloudnative-pg/v1.30.1/kubectl-cnpg_1.30.1_linux_arm64.tar.gz",
+      "checksum": "6FFAD753BBBF5D353576967233063F2BA0ADB843A4E7EF5FF4CB7384B2716D5E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cloudnative-pg/cloudnative-pg/v1.30.1/kubectl-cnpg_1.30.1_linux_x86_64.tar.gz",
+      "checksum": "784BC46F176B24A150D5DE84D0691F10FF613B59456AF86B1A4868E1BACB9953",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cloudnative-pg/cloudnative-pg/v1.30.1/kubectl-cnpg_1.30.1_windows_arm64.tar.gz",
+      "checksum": "34145CDD1197A8FE13DCDB91138073808BCA1D2AD8A6A7ADC9F1F139752BC6BE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cloudnative-pg/cloudnative-pg/v1.30.1/kubectl-cnpg_1.30.1_windows_x86_64.tar.gz",
+      "checksum": "E0F59FD04D4842D456D8730B656517F37F6CF86862A5EF6506C742AB662391CD",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/controlplaneio-fluxcd/flux-operator/v0.61.0/flux-operator_0.61.0_darwin_amd64.tar.gz",
       "checksum": "14601C53E8F421355037651CB12C340E15B7FDB530C25E1FD24ACBF4A52B4456",
       "algorithm": "sha256"
