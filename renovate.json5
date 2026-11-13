@@ -7,10 +7,8 @@
     // https://docs.renovatebot.com/upgrade-best-practices/#whats-in-the-configbest-practices-preset
     "config:best-practices",
 
-    // Update dependencies quarterly. This strikes a balance between keeping
-    // dependencies up to date and avoiding too many PRs across many
-    // repositories.
-    "schedule:quarterly",
+    // Update dependencies monthly.
+    "schedule:monthly",
 
     // Add DCO sign-off
     ":gitSignOff",
