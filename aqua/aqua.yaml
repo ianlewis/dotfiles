@@ -77,3 +77,5 @@ packages:
   - name: yannh/kubeconform@v0.8.0
   - name: stackrox/kube-linter@v0.8.3
   - name: cue-lang/cue@v0.17.1
+  - name: cloudnative-pg/cloudnative-pg/kubectl-cnpg@v1.30.1
+  - name: kubevirt/kubevirt/virtctl@v1.9.1
