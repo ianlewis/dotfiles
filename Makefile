@@ -239,7 +239,6 @@ shfmt: $(AQUA_ROOT_DIR)/.installed ## Format bash files.
 		{
 			git ls-files \
 				':!:third_party' \
-				':!:.aqua-installer' \
 				| xargs file | { $(GREP) -e ':.*shell' || true; } | cut -d':' -f1
 			git ls-files '*.bats'
 		} | sort -u
@@ -836,7 +835,8 @@ $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.cre
 	$(RM) -f $(XDG_BIN_HOME)/aqua
 	# Explicitly set AQUA_ROOT_DIR to the default global root dir.
 	AQUA_ROOT_DIR="$(XDG_DATA_HOME)/aquaproj-aqua" \
-		./.aqua-installer -v "$(AQUA_VERSION)"
+		$(REPO_ROOT)/third_party/aquaproj/aqua-installer/aqua-installer
+			-v "$(AQUA_VERSION)"
 
 ## Language Runtimes
 #####################################################################
