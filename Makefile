@@ -835,7 +835,7 @@ $(XDG_DATA_HOME)/aquaproj-aqua/.$(AQUA_VERSION).installed: $(XDG_DATA_HOME)/.cre
 	$(RM) -f $(XDG_BIN_HOME)/aqua
 	# Explicitly set AQUA_ROOT_DIR to the default global root dir.
 	AQUA_ROOT_DIR="$(XDG_DATA_HOME)/aquaproj-aqua" \
-		$(REPO_ROOT)/third_party/aquaproj/aqua-installer/aqua-installer
+		$(REPO_ROOT)/third_party/aquaproj/aqua-installer/aqua-installer \
 			-v "$(AQUA_VERSION)"
 
 ## Language Runtimes
