@@ -73,6 +73,10 @@ setup() {
 }
 
 @test "btop installed correctly" {
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    skip "btop releases not available for Darwin system"
+  fi
+
   assert_symlink_to \
     "${E2E_HOME}/.local/share/aquaproj-aqua/bin/btop" \
     "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
