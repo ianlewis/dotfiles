@@ -194,6 +194,12 @@ function _bash_completion() {
     source <(slsa-verifier completion bash)
   fi
 
+  # step completion
+  if command -v step >/dev/null 2>&1; then
+    # shellcheck source=/dev/null
+    source <(step completion bash)
+  fi
+
   # tree-sitter completion
   if command -v tree-sitter >/dev/null 2>&1; then
     # shellcheck source=/dev/null

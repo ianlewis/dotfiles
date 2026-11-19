@@ -1116,6 +1116,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/smallstep/cli/v0.31.0/step_darwin_amd64.tar.gz",
+      "checksum": "A53286B933C16AAE2AC510B64A22C205153A9CBA3510BD3F8326649A93E1D29F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/smallstep/cli/v0.31.0/step_darwin_arm64.tar.gz",
+      "checksum": "99B118794B31357EE9938D3E566AEC73B74AFAD792477F279651A9DCEDAA2DA5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/smallstep/cli/v0.31.0/step_linux_amd64.tar.gz",
+      "checksum": "2BC654B26CA467848EDB764620D6F17FEBEA9D7D3629368B76DD20CE40C6EF32",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/smallstep/cli/v0.31.0/step_linux_arm64.tar.gz",
+      "checksum": "3252032ADED050ABE93A642681995D3E36C66EAF1979DA1980BF71B5E8973516",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/smallstep/cli/v0.31.0/step_windows_amd64.zip",
+      "checksum": "F9388AAF4C190D1BB7B5606594A8AD0924D296D4753C2475CC811A4777913B80",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/smallstep/cli/v0.31.0/step_windows_arm64.zip",
+      "checksum": "D6DA65BA1FC7CDC7373986352395BEB2281973B6E80C978C2F3736C7C36D004C",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/stackrox/kube-linter/v0.8.3/kube-linter-darwin",
       "checksum": "D935E2BC89E272C74227CDC4AC4DBA35F468E0E486E846E5892231A301C91A67",
       "algorithm": "sha256"

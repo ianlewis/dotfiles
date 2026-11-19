@@ -176,6 +176,12 @@ setup() {
     "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
 }
 
+@test "step installed correctly" {
+  assert_symlink_to \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/bin/step" \
+    "${E2E_HOME}/.local/share/aquaproj-aqua/aqua-proxy"
+}
+
 @test "yamlfmt installed correctly" {
   assert_symlink_to \
     "${E2E_HOME}/.local/share/aquaproj-aqua/bin/yamlfmt" \
