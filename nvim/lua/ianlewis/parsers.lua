@@ -39,6 +39,7 @@ return {
 	"make",
 	"markdown",
 	"markdown_inline",
+	"pem",
 	"proto",
 	"python",
 	"query",
